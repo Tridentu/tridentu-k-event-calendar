@@ -8,7 +8,8 @@ Plasma (Akonadi / holiday) calendars and iCalendar (.ics) files.
 
 This is a maintained fork of [Event Calendar](https://github.com/Zren/plasma-applet-eventcalendar)
 by Chris Holland (Zren), via [ALikesToCode's Plasma 6 port](https://github.com/ALikesToCode/plasma-applet-eventcalendar).
-It keeps the same widget id, so it replaces an existing Event Calendar and keeps its settings.
+It keeps the same widget id, so it replaces an existing Event Calendar and keeps its settings. The only thing that changes is the
+OAuth2 keys (to consolidate the API behind this widget - same is doen for KDE PIM via kio-gdrive). 
 
 ## Features
 
@@ -106,6 +107,9 @@ Optional:
 4. **Views**: choose the default view, the popup size and the hours shown in the week view.
 
 Plasma 5 is not supported; use the original [Event Calendar](https://github.com/Zren/plasma-applet-eventcalendar) there.
+## Important Notes
+
+- You **MUST** read the Terms of Service for Tridentu 2 if you want to use this widget. API abuse **WILL NEVER** be tolerated here.
 
 ## Support
 
@@ -121,4 +125,4 @@ and `python3 tests/*_test.py`. Translations live in `package/translate/` (see it
 
 ## License
 
-GPL-2.0-or-later, like the original widget.
+GPL-2.0-or-later, like the original widget (and the one indirectly forked per the GPL)
