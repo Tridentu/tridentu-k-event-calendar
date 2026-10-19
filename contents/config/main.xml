@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+	<kcfgfile name=""/>
+
+
+	<group name="General">
+		<entry name="debugging" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="pin" type="Bool">
+			<label>Whether the popup should remain open when another window is activated</label>
+			<default>false</default>
+		</entry>
+		<entry name="widgetShowMeteogram" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="widgetShowTimer" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="timerSfxEnabled" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="timerSfxFilepath" type="string">
+			<default>/usr/share/sounds/freedesktop/stereo/complete.oga</default>
+		</entry>
+		<entry name="timerRepeats" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clockFontFamily" type="string">
+			<default></default>
+		</entry>
+		<entry name="clockTimeFormat1" type="string">
+			<!-- For Testing:  '&lt;font color="#888"&gt;'ddd'&lt;&gt;'d'&lt;/font&gt;' h:m:s'&lt;'AP'&gt;' -->
+			<default></default>
+		</entry>
+		<entry name="clockTimeFormat2" type="string">
+			<default></default>
+		</entry>
+		<entry name="clockShowLine2" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clockLine2HeightRatio" type="double">
+			<default>0.4</default>
+		</entry>
+		<entry name="clockLineBold1" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clockLineBold2" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clockMaxHeight" type="int">
+			<default>0</default>
+		</entry>
+		<entry name="clockMouseWheel" type="string">
+			<default>RunCommands</default>
+		</entry>
+		<entry name="clockMouseWheelUp" type="string">
+			<default>qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "increase_volume"</default>
+		</entry>
+		<entry name="clockMouseWheelDown" type="string">
+			<default>qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "decrease_volume"</default>
+		</entry>
+		<entry name="showBackground" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="popupMode" type="string">
+			<!-- classic: agenda + calendar widgets. month: full month view with event titles, like mobile calendar apps. week: week view. today: one day. -->
+			<default>classic</default>
+		</entry>
+		<entry name="showViewTabs" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventFontScale" type="int">
+			<!-- Event text size in the views, percent of the theme font. -->
+			<default>100</default>
+		</entry>
+		<entry name="weekViewStartHour" type="int">
+			<default>7</default>
+		</entry>
+		<entry name="weekViewEndHour" type="int">
+			<default>20</default>
+		</entry>
+		<entry name="monthModeWidth" type="uint">
+			<default>700</default>
+		</entry>
+		<entry name="monthModeHeight" type="uint">
+			<default>600</default>
+		</entry>
+		<entry name="topRowHeight" type="uint">
+			<default>100</default>
+		</entry>
+		<entry name="rightColumnWidth" type="uint">
+			<default>400</default>
+		</entry>
+		<!-- Added in: v73 -->
+		<entry name="v73Migration" type="bool">
+			<default>false</default>
+		</entry>
+		<!-- Deprecated in: v72 -->
+		<entry name="v72Migration" type="bool">
+			<default>false</default>
+		</entry>
+		<!-- Deprecated in: v71 -->
+		<entry name="v71Migration" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="widget_show_meteogram" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="widget_show_timer" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="timer_sfx_enabled" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="timer_sfx_filepath" type="string">
+			<default>/usr/share/sounds/freedesktop/stereo/complete.oga</default>
+		</entry>
+		<entry name="timer_repeats" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clock_fontfamily" type="string">
+			<default></default>
+		</entry>
+		<entry name="clock_timeformat" type="string">
+			<default></default>
+		</entry>
+		<entry name="clock_timeformat_2" type="string">
+			<default></default>
+		</entry>
+		<entry name="clock_line_2" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clock_line_2_height_ratio" type="double">
+			<default>0.4</default>
+		</entry>
+		<entry name="clock_line_1_bold" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clock_line_2_bold" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clock_maxheight" type="int">
+			<default>0</default>
+		</entry>
+		<entry name="clock_mousewheel_up" type="string">
+			<default>qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "increase_volume"</default>
+		</entry>
+		<entry name="clock_mousewheel_down" type="string">
+			<default>qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "decrease_volume"</default>
+		</entry>
+		<!-- Removed in: v71
+		-->
+		<!-- Removed in: v33
+		-->
+	</group>
+
+	<group name="Tooltip">
+		<entry name="selectedTimeZones" type="StringList">
+			<label>A list of the time zones available on mouse wheel. Requires wheelChangesTimezone to be true. Format is "Europe/London". Special entry "Local" indicates system time zone.</label>
+			<default>Local</default>
+		</entry>
+		<entry name="displayTimezoneAsCode" type="Bool">
+			<label>Whether the timezone is displayed as a code i.e. "GMT" or full text i.e. "London".</label>
+			<default>true</default>
+		</entry>
+	</group>
+	
+	<group name="Calendar">
+		<entry name="monthShowWeekNumbers" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="monthDayDoubleClick" type="string">
+			<default>GoogleCalWeb</default>
+		</entry>
+		<entry name="monthEventBadgeType" type="string">
+			<default>theme</default>
+		</entry>
+		<entry name="firstDayOfWeek" type="int">
+			<!-- Enum: -1 = Locale default, 0=Sunday, 1=Monday, ..., 6=Saturday -->
+			<default>-1</default>
+		</entry>
+		<entry name="monthHeightSingleColumn" type="uint">
+			<default>300</default>
+		</entry>
+		<!-- Deprecated in: v71 -->
+		<entry name="month_show_weeknumbers" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="month_eventbadge_type" type="string">
+			<default>theme</default>
+		</entry>
+	</group>
+
+	<group name="Agenda">
+		<entry name="twoColumns" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaBreakupMultiDayEvents" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="agendaNewEventRememberCalendar" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaNewEventLastCalendarId" type="string">
+			<default></default>
+		</entry>
+		<entry name="agendaMaxDescriptionLines" type="uint">
+			<default>5</default>
+		</entry>
+		<entry name="agendaShowEventDescription" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaShowEventHangoutLink" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaCondensedAllDayEvent" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaPlaceOverdueTasksOnToday" type="bool">
+			<default>true</default>
+		</entry>
+		<!-- Deprecated in: v71 -->
+		<entry name="agenda_newevent_remember_calendar" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agenda_newevent_last_calendar_id" type="string">
+			<default></default>
+		</entry>
+		<entry name="agenda_breakup_multiday_events" type="bool">
+			<default>false</default>
+		</entry>
+	</group>
+
+
+	<group name="Events">
+		<entry name="eventsPollInterval" type="uint">
+			<default>20</default>
+		</entry>
+		<entry name="icalCalendarList" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+		<entry name="eventReminderNotificationEnabled" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventReminderSfxEnabled" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="eventReminderSfxPath" type="string">
+			<default>/usr/share/sounds/Oxygen-Im-Nudge.ogg</default>
+		</entry>
+		<entry name="eventReminderMinutesBefore" type="int">
+			<default>15</default>
+		</entry>
+		<entry name="eventStartingNotificationEnabled" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventStartingSfxEnabled" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventStartingSfxPath" type="string">
+			<default>/usr/share/sounds/Oxygen-Im-Nudge.ogg</default>
+		</entry>
+		<entry name="meetLinkCommand" type="string">
+			<!-- Command that opens Google Meet links (%u = the link), eg: a Meet web app. Empty: the default browser. -->
+			<default></default>
+		</entry>
+		<entry name="meetLinkAuthUser" type="string">
+			<!-- Google account to join Meet with: index (0, 1, ...) or email. Empty: the app's default. -->
+			<default></default>
+		</entry>
+		<entry name="clockShowNextEvent" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="clockNextEventMinutes" type="int">
+			<default>15</default>
+		</entry>
+		<entry name="clockShowMeetingProgress" type="bool">
+			<!-- A progress bar under the next meeting chip while the meeting is on -->
+			<default>true</default>
+		</entry>
+		<entry name="monthClickOpensDay" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventClickAction" type="string">
+			<!-- details: event details in the widget. browser: open in Google Calendar. -->
+			<default>details</default>
+		</entry>
+		<entry name="eventReminderUseGoogle" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventReminderTimeout" type="int">
+			<!-- Reminders: 0 = keep until dismissed, N > 0 = hide after N seconds,
+			     -1 = Plasma's popup timeout (System Settings > Notifications). -->
+			<default>-1</default>
+		</entry>
+		<entry name="eventReminderSnoozeMinutes" type="int">
+			<!-- 0 = no Snooze button. -->
+			<default>5</default>
+		</entry>
+		<entry name="eventStartingPersistent" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventStartingCritical" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventNotificationActions" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventNotifySkipAllDay" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventNotifySkipDeclined" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="enabledCalendarPlugins" type="StringList">
+			<!-- Filenames stored in: -->
+			<!-- Ubuntu: /usr/lib/x86_64-linux-gnu/qt5/plugins/plasmacalendarplugins/ -->
+			<!-- Arch: /usr/lib/qt/plugins/plasmacalendarplugins/ -->
+			<!-- Fedora: /usr/lib64/qt5/plugins/plasmacalendarplugins/ -->
+			<!-- Previously stored entire filepath before v72 migration -->
+			<label>A list of plugins where additional calendar event data can be sourced.</label>
+			<default>holidaysevents.so,pimevents.so</default>
+		</entry>
+		<entry name="enabledCalendarPluginsAllowEmpty" type="bool">
+			<label>Whether an empty enabledCalendarPlugins list is intentional and should disable all Plasma calendar plugins.</label>
+			<default>false</default>
+		</entry>
+	</group>
+
+
+	<group name="Google Calendar">
+		<entry name="googleAccounts" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+		<entry name="googleActiveAccountId" type="string">
+			<default></default>
+		</entry>
+		<entry name="googleRedirectMode" type="string">
+			<default>local</default>
+		</entry>
+		<!-- Built-in secret-based OAuth client (works without Google Cloud setup); a custom client ID
+		     in the settings overrides it. The secretless "desktop" client is rejected by Google. -->
+		<entry name="latestClientId" type="string">
+		<default>179575196194-jljdfm9usprtffue48js64h70carpchl.apps.googleusercontent.com</default>
+		</entry>
+		<entry name="latestClientSecret" type="string">
+		<default>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</default>
+		</entry>
+		<entry name="useDesktopClient" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="customClientId" type="string">
+			<default></default>
+		</entry>
+		<entry name="customClientSecret" type="string">
+			<default></default>
+		</entry>
+		<entry name="sessionClientId" type="string">
+			<default></default>
+		</entry>
+		<entry name="sessionClientSecret" type="string">
+			<default></default>
+		</entry>
+		<entry name="accessToken" type="string">
+			<default></default>
+		</entry>
+		<entry name="accessTokenType" type="string">
+			<default></default>
+		</entry>
+		<entry name="accessTokenExpiresAt" type="uint">
+			<default>0</default>
+		</entry>
+		<entry name="refreshToken" type="string">
+			<default></default>
+		</entry>
+		<entry name="calendarList" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+		<entry name="calendarIdList" type="string">
+			<default>primary</default>
+		</entry>
+		<entry name="tasklistList" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+		<entry name="tasklistIdList" type="string">
+			<default></default>
+		</entry>
+		<entry name="googleEventClickAction" type="string">
+			<!-- enum: WebEventView, WebMonthView -->
+			<default>WebEventView</default>
+		</entry>
+		<entry name="googleColorPalette" type="string">
+			<!-- current: Google Calendar's current colors; classic: the old palette the API returns; system: nearest colors of the Plasma color scheme -->
+			<default>current</default>
+		</entry>
+		<entry name="googleHideGoalsDesc" type="bool">
+			<label>Remove "This event was added from Goals in Google Calendar" from description</label>
+			<default>true</default>
+		</entry>
+
+		<!-- Deprecated in: v71 -->
+		<entry name="access_token" type="string">
+			<default></default>
+		</entry>
+		<entry name="events_pollinterval" type="uint">
+			<default>20</default>
+		</entry>
+		<!-- Removed in: v71
+		-->
+		<!-- Removed in: v62
+		-->
+	</group>
+
+	<group name="Weather">
+		<!-- OpenWeatherMap -->
+		<entry name="openWeatherMapAppId" type="string">
+			<default>99e575d9aa8a8407bcee7693d5912c6a</default>
+		</entry>
+		<entry name="openWeatherMapCityId" type="uint">
+			<default>0</default>
+		</entry>
+		<!-- WeatherCanada -->
+		<entry name="weatherCanadaCityId" type="string">
+			<default></default>
+		</entry>
+		<!-- Settings -->
+		<entry name="openMeteoLatitude" type="double">
+			<default>0</default>
+		</entry>
+		<entry name="openMeteoLongitude" type="double">
+			<default>0</default>
+		</entry>
+		<entry name="openMeteoLocationName" type="string">
+			<default></default>
+		</entry>
+		<entry name="weatherShowInViews" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="weatherService" type="string">
+			<!-- enum: OpenMeteo, OpenWeatherMap, WeatherCanada -->
+			<default>OpenWeatherMap</default>
+		</entry>
+		<entry name="weatherUnits" type="string">
+			<default>metric</default>
+		</entry>
+		<entry name="meteogramHours" type="uint">
+			<default>30</default>
+		</entry>
+		<!-- Deprecated in: v71 -->
+		<entry name="weather_app_id" type="string">
+			<default>99e575d9aa8a8407bcee7693d5912c6a</default>
+		</entry>
+		<entry name="weather_city_id" type="uint">
+			<default>0</default>
+		</entry>
+		<entry name="weather_canada_city_id" type="string">
+			<default></default>
+		</entry>
+		<entry name="weather_service" type="string">
+			<default>OpenWeatherMap</default>
+		</entry>
+		<entry name="weather_units" type="string">
+			<default>metric</default>
+		</entry>
+		<entry name="meteogram_hours" type="uint">
+			<default>30</default>
+		</entry>
+	</group>
+
+</kcfg>

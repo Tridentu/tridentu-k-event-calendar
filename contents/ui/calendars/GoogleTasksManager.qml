@@ -1,0 +1,666 @@
+import QtQuick
+import org.kde.kirigami as Kirigami
+
+import "../ErrorType.js" as ErrorType
+import "../Shared.js" as Shared
+import "../lib"
+import "../lib/Async.js" as Async
+import "../lib/Requests.js" as Requests
+
+// Google Tasks API
+// https://developers.google.com/tasks/v1/reference/tasks
+
+// You can view Google Tasks with this URL:
+// https://tasks.google.com/embed/?origin=https%3A%2F%2Fcalendar.google.com&fullWidth=1
+// Note that it redirects to /embed/list/~default which you cannot bookmark, as it'll 404.
+
+CalendarManager {
+	id: googleTasksManager
+
+	calendarManagerId: "GoogleTasks"
+
+	property var session
+	property var accountsStore
+	property string accountId: ""
+	property string accountLabel: ""
+
+	Logger {
+		id: logger
+		name: 'eventcalendar-google-tasks'
+		showDebug: plasmoid.configuration.debugging
+	}
+
+	function getAccount() {
+		if (!accountsStore || !accountId) {
+			return null
+		}
+		return accountsStore.getAccount(accountId)
+	}
+
+	function getTasklistIdList() {
+		var account = getAccount()
+		return account && account.tasklistIdList ? account.tasklistIdList : []
+	}
+
+	function scopedTasklistId(rawId) {
+		if (!accountId) {
+			return rawId
+		}
+		return accountId + "::" + rawId
+	}
+
+	function unscopedTasklistId(scopedId) {
+		if (!accountId) {
+			return scopedId
+		}
+		var prefix = accountId + "::"
+		if (scopedId.indexOf(prefix) === 0) {
+			return scopedId.substr(prefix.length)
+		}
+		return scopedId
+	}
+
+	function formatTasklistSummary(tasklist) {
+		if (accountLabel) {
+			return accountLabel + " - " + tasklist.title
+		}
+		return tasklist.title
+	}
+
+	function decorateTasklist(tasklist) {
+		return {
+			id: scopedTasklistId(tasklist.id),
+			summary: formatTasklistSummary(tasklist),
+			backgroundColor: Kirigami.Theme.highlightColor.toString(),
+			accessRole: 'owner',
+			isTasklist: true,
+		}
+	}
+
+	onFetchAllCalendars: {
+		fetchGoogleAccountData()
+	}
+
+	function fetchGoogleAccountData() {
+		// Tokens may live in the system keyring: an account is enough to start.
+		var account = getAccount()
+		if (!account) {
+			return
+		}
+		var idList = getTasklistIdList()
+		if (idList.length) { // Avoid a token refresh when nothing is selected.
+			fetchGoogleAccountTasks(idList)
+		}
+	}
+
+	//--- Errors
+	function showHttpError(httpCode, msg, suggestion, errorType) {
+		var errorMessage = i18n("HTTP Error %1: %2", httpCode, msg)
+		if (suggestion) {
+			errorMessage += '\n' + suggestion
+		}
+		googleTasksManager.error(errorMessage, errorType)
+	}
+	function handleError(err, data, xhr) {
+		var httpCode = xhr.status
+		if (httpCode === 0) {
+			var msg = i18n("Could not connect")
+			var suggestion = i18n("Will try again soon.")
+			showHttpError(httpCode, msg, suggestion, ErrorType.NetworkError)
+			return
+		}
+
+		// https://developers.google.com/tasks/reference/rest/errors
+		// On HTTP errors, err is a string and the JSON error body is in data.
+		if (!(err && err.error) && typeof data === 'string') {
+			try {
+				err = JSON.parse(data)
+			} catch (e) {
+				// Not JSON
+			}
+		}
+		if (err && err.error && err.error.errors && err.error.errors.length >= 1) {
+			httpCode = err.error.code
+			var err0 = err.error.errors[0]
+
+			if (httpCode === 401 && err0.reason === 'authError') {
+				var suggestion = i18n("Widget has been updated. Please logout and login to Google Calendar again.")
+				showHttpError(httpCode, err0.message, suggestion, ErrorType.ClientError)
+			} else if (httpCode === 403 && err0.domain === 'usageLimits') {
+				var suggestion = i18n("Too many web requests. Will try again soon.")
+				showHttpError(httpCode, err0.message, suggestion, ErrorType.ClientError)
+			} else {
+				var suggestion = i18n("Will try again soon.")
+				showHttpError(httpCode, err0.message, suggestion, ErrorType.UnknownError)
+			}
+			return
+		}
+
+		showHttpError(httpCode, String(err), i18n("Will try again soon."), ErrorType.UnknownError)
+	}
+	function handleAuthError(err, markDone, isNetworkError) {
+		if (markDone) {
+			googleTasksManager.asyncRequestsDone += 1
+		}
+		if (isNetworkError) {
+			// The token couldn't be refreshed because we're offline.
+			showHttpError(0, i18n("Could not connect"), i18n("Will try again soon."), ErrorType.NetworkError)
+			return
+		}
+		var message = i18n("Google authentication failed: %1", err)
+		googleTasksManager.error(message, ErrorType.ClientError)
+	}
+	// A whole account failed to fetch: keep showing its previous events.
+	function restorePrevious(idList) {
+		for (var i = 0; i < idList.length; i++) {
+			restorePreviousCalendar(scopedTasklistId(idList[i]))
+		}
+	}
+	function withAccessToken(action, onError) {
+		session.checkAccessToken(function(err, isNetworkError) {
+			if (err) {
+				if (onError) {
+					onError(err, isNetworkError)
+				}
+				return
+			}
+			action()
+		})
+	}
+
+	//--- Utils
+	function cloneRawTask(task) {
+		var validProperties = [
+			'kind',
+			'id',
+			'etag',
+			'title',
+			'updated',
+			'selfLink',
+			'parent',
+			'position',
+			'notes',
+			'status',
+			'due',
+			'completed',
+			'deleted',
+			'hidden',
+			'links',
+		]
+		var data = {}
+		for (var i = 0; i < validProperties.length; i++) {
+			var key = validProperties[i]
+			var value = task[key]
+			if (typeof value !== 'undefined') {
+				data[key] = value
+			}
+		}
+		return data
+	}
+
+	//-------------------------
+	// CalendarManager
+	function getCalendarList() {
+		var account = getAccount()
+		if (!account || !account.tasklistList) {
+			return []
+		}
+		var tasklistList = account.tasklistList
+		var calendarList = []
+		for (var i = 0; i < tasklistList.length; i++) {
+			calendarList.push(decorateTasklist(tasklistList[i]))
+		}
+		return calendarList
+	}
+
+	//-------------------------
+	// Tasks
+	function fetchGoogleAccountTasks(tasklistIdList) {
+		googleTasksManager.asyncRequests += 1
+		var generation = googleTasksManager.fetchGeneration
+		var func = fetchGoogleAccountTasks_run.bind(this, tasklistIdList, function(errObj, data) {
+			if (generation !== googleTasksManager.fetchGeneration) {
+				logger.debug('fetchGoogleAccountTasks', 'dropping stale response')
+				return
+			}
+			if (errObj) {
+				restorePrevious(tasklistIdList)
+				fetchGoogleAccountTasks_err(errObj.err, errObj.data, errObj.xhr)
+			} else {
+				fetchGoogleAccountTasks_done(data)
+			}
+		})
+		withAccessToken(func, function(err, isNetworkError) {
+			restorePrevious(tasklistIdList)
+			handleAuthError(err, true, isNetworkError)
+		})
+	}
+	function fetchGoogleAccountTasks_run(tasklistIdList, callback) {
+		logger.debug('fetchGoogleAccountTasks_run', tasklistIdList)
+
+		var tasks = []
+		for (var i = 0; i < tasklistIdList.length; i++) {
+			var tasklistId = tasklistIdList[i]
+			var task = fetchGoogleTasks.bind(this, tasklistId)
+			tasks.push(task)
+		}
+
+		Async.parallel(tasks, callback)
+	}
+	function fetchGoogleAccountTasks_err(err, data, xhr) {
+		logger.debug('fetchGoogleAccountTasks_err', err, data, xhr)
+		googleTasksManager.asyncRequestsDone += 1
+		return googleTasksManager.handleError(err, data, xhr)
+	}
+	function fetchGoogleAccountTasks_done(results) {
+		for (var i = 0; i < results.length; i++) {
+			var tasklistId = results[i].tasklistId
+			var tasklistData = results[i].data
+			var eventList = parseTasklistAsEvents(tasklistData)
+			var scopedId = results[i].scopedTasklistId || scopedTasklistId(tasklistId)
+			setCalendarData(scopedId, eventList)
+		}
+		googleTasksManager.asyncRequestsDone += 1
+	}
+
+	function sortTasklist(tasklist) {
+		tasklist.sort(function(a,b) {
+			if (typeof a.position !== 'undefined') {
+				if (typeof b.position !== 'undefined') {
+					var ap = a.position
+					var bp = b.position
+					if (ap == bp) {
+						return 0
+					} else if (ap < bp) {
+						return -1
+					} else { // ap > bp
+						return 1
+					}
+				} else {
+					return 1
+				}
+			} else {
+				if (typeof b.position !== 'undefined') {
+					return -1
+				} else {
+					0
+				}
+			}
+		})
+
+	}
+
+	function parseTasklistAsEvents(tasklistData) {
+		var eventList = []
+		var items = (tasklistData && tasklistData.items) || [] // Google leaves items out of empty lists
+		for (var i = 0; i < items.length; i++) {
+			var taskData = items[i]
+			var eventData = parseTaskAsEventData(taskData)
+			eventList.push(eventData)
+		}
+
+		// Note that AgendaModel will sort again in AgendaModel.parseGCalEvents,
+		// which ruins this sorting.
+		sortTasklist(eventList)
+
+		return {
+			items: eventList,
+		}
+	}
+
+	function parseTaskAsEventData(taskData) {
+		// Don't bother creating a new object.
+		var eventData = taskData
+
+		eventData.summary = taskData.title
+		eventData.canEdit = true
+
+		var editTasksUrl = 'https://tasks.google.com/embed/?origin=' + encodeURIComponent('https://calendar.google.com') + '&fullWidth=1'
+		eventData.htmlLink = editTasksUrl
+
+		eventData.isCompleted = taskData.status === "completed"
+
+		if (taskData.completed) {
+			var completedAt = new Date(taskData.completed)
+			var startDateTime = Shared.startOfDay(completedAt)
+		} else if (taskData.due) {
+			// Note: In the Google Tasks API docs:
+			// The due date only records date information; the time portion of the timestamp is discarded when setting the due date.
+			// It isn't possible to read or write the time that a task is due via the API.
+			var dueDateString = taskData.due.substring(0, 10)
+			// Use local time zone, like we do in CalendarManager.defaultEventParsing.
+			eventData.dueDate = dueDateString
+			eventData.dueDateTime = new Date(eventData.dueDate + ' 00:00:00')
+			// All day event, due at end of day.
+			eventData.dueEndOfDay = taskData.due.indexOf('T00:00:00.000Z') !== -1
+			if (eventData.dueEndOfDay) {
+				var dueEndTime = new Date(eventData.dueDateTime)
+				dueEndTime.setDate(dueEndTime.getDate() + 1)
+				eventData.dueEndTime = dueEndTime
+			} else {
+				eventData.dueEndTime = eventData.dueDateTime
+			}
+			var startDateTime = new Date(eventData.dueDateTime)
+		} else {
+			var today = new Date()
+			var startDateTime = Shared.startOfDay(today)
+		}
+		var endDateTime = new Date(startDateTime)
+		endDateTime.setDate(endDateTime.getDate() + 1)
+		eventData.start = {
+			date: Shared.localeDateString(startDateTime),
+		}
+		eventData.end = {
+			date: Shared.localeDateString(endDateTime),
+		}
+
+		if (taskData.parent) {
+			// TODO: This is a subtask
+		}
+
+		return eventData
+	}
+
+	function fetchGoogleTasks(tasklistId, callback) {
+		logger.debug('fetchGoogleTasks', tasklistId)
+		fetchGCalTasks({
+			tasklistId: tasklistId,
+			accessToken: session.accessToken,
+		}, function(err, data, xhr) {
+			if (err) {
+				logger.debugJSON('onErrorFetchingTasks: ', err)
+				var errObj = {
+					err: err,
+					data: data,
+					xhr: xhr,
+				}
+				return callback(errObj, null)
+			}
+
+			return callback(null, {
+				tasklistId: tasklistId,
+				scopedTasklistId: scopedTasklistId(tasklistId),
+				data: data,
+			})
+		})
+	}
+
+	function fetchGCalTasks(args, callback) {
+		logger.debug('fetchGCalTasks', args.tasklistId)
+		var onResponse = fetchGCalTasksPageResponse.bind(this, args, callback, null)
+		fetchGCalTasksPage(args, onResponse)
+	}
+
+	function fetchGCalTasksPageResponse(args, finishedCallback, allData, err, data, xhr) {
+		logger.debug('fetchGCalTasksPageResponse', args, finishedCallback, allData, err, data, xhr)
+		if (err) {
+			return finishedCallback(err, data, xhr)
+		}
+		if (allData) {
+			data.items = allData.items.concat(data.items)
+			delete allData.items
+			delete allData
+		}
+		allData = data
+		
+		if (allData.nextPageToken) {
+			logger.debug('fetchGCalTasksPageResponse.nextPageToken', allData.nextPageToken)
+			logger.debug('fetchGCalTasksPageResponse.nextPageToken', 'allData.items.length', allData.items && allData.items.length)
+			args.pageToken = allData.nextPageToken
+			var onResponse = fetchGCalTasksPageResponse.bind(this, args, finishedCallback, allData)
+			fetchGCalTasksPage(args, onResponse)
+		} else {
+			logger.debug('fetchGCalTasksPageResponse.finished', 'allData.items.length', allData.items && allData.items.length)
+			finishedCallback(err, allData, xhr)
+		}
+	}
+
+	function fetchGCalTasksPage(args, pageCallback) {
+		logger.debug('fetchGCalTasksPage', args.tasklistId)
+		var url = 'https://www.googleapis.com/tasks/v1'
+		url += '/lists/'
+		url += encodeURIComponent(args.tasklistId)
+		url += '/tasks'
+		url += '?showCompleted=true'
+		url += '&showHidden=true'
+		url += '&maxResults=100' // API max. Default 20 means many sequential pages.
+		if (args.pageToken) {
+			url += '&pageToken=' + encodeURIComponent(args.pageToken)
+		}
+		Requests.getJSON({
+			url: url,
+			headers: {
+				"Authorization": "Bearer " + args.accessToken,
+			}
+		}, function(err, data, xhr) {
+			logger.debug('fetchGCalTasksPage.response', args.tasklistId, err, data, xhr.status)
+			if (!err && data && data.error) {
+				return pageCallback(data, null, xhr)
+			}
+			pageCallback(err, data, xhr)
+		})
+	}
+
+	//--- Create / POST
+	function createEvent(calendarId, date, text) {
+		if (session.accessToken) {
+			var eventText = text
+
+			var func = createEvent_run.bind(this, calendarId, eventText, function(err, data, xhr) {
+				if (err) {
+					createEvent_err(err, data, xhr)
+				} else {
+					createEvent_done(calendarId, data)
+				}
+			})
+			withAccessToken(func, function(err, isNetworkError) {
+				handleAuthError(err, false, isNetworkError)
+			})
+		} else {
+			session.transactionError('attempting to "create an event" without an access token set')
+		}
+	}
+	function createEvent_run(calendarId, eventText, callback) {
+		logger.debugJSON(calendarManagerId, 'createEvent_run', calendarId, eventText)
+		var rawTasklistId = unscopedTasklistId(calendarId)
+		createGoogleTask({
+			accessToken: session.accessToken,
+			tasklistId: rawTasklistId,
+			title: eventText,
+		}, callback)
+	}
+	function createEvent_done(calendarId, data) {
+		logger.debugJSON(calendarManagerId, 'createEvent_done', calendarId, data)
+		var rawTasklistId = unscopedTasklistId(calendarId)
+		if (getTasklistIdList().indexOf(rawTasklistId) >= 0) {
+			var eventData = parseTaskAsEventData(data)
+			parseSingleEvent(calendarId, eventData)
+			addEvent(calendarId, eventData)
+			eventCreated(calendarId, eventData)
+		}
+	}
+	function createEvent_err(err, data, xhr) {
+		logger.log(calendarManagerId, 'createEvent_err', err, data, xhr)
+		return googleTasksManager.handleError(err, data, xhr)
+	}
+
+	function createGoogleTask(args, callback) {
+		// https://www.googleapis.com/tasks/v1/lists/tasklistId/tasks
+		var url = 'https://www.googleapis.com/tasks/v1'
+		url += '/lists/'
+		url += encodeURIComponent(args.tasklistId)
+		url += '/tasks'
+		var taskData = {
+			title: args.title,
+		}
+		Requests.postJSON({
+			url: url,
+			headers: {
+				"Authorization": "Bearer " + args.accessToken,
+			},
+			data: taskData,
+		}, function(err, data, xhr) {
+			logger.debug('createGoogleTask.response', err, data, xhr.status)
+			if (!err && data && data.error) {
+				return callback(data, null, xhr)
+			}
+			callback(err, data, xhr)
+		})
+	}
+
+	//--- Delete Task
+	function deleteEvent(calendarId, eventId) {
+		logger.debug(calendarManagerId, 'deleteEvent', calendarId, eventId)
+		if (session.accessToken) {
+			var event = getEvent(calendarId, eventId)
+			if (!event) {
+				session.transactionError('attempting to "delete an event" for an event that doesn\'t exist')
+				return
+			}
+
+			var func = deleteEvent_run.bind(this, calendarId, eventId, function(err, data, xhr) {
+				if (err) {
+					deleteEvent_err(err, data, xhr)
+				} else {
+					deleteEvent_done(calendarId, eventId, data)
+				}
+			})
+			withAccessToken(func, function(err, isNetworkError) {
+				handleAuthError(err, false, isNetworkError)
+			})
+		} else {
+			session.transactionError('attempting to "delete an event" without an access token set')
+		}
+	}
+	function deleteEvent_run(calendarId, eventId, callback) {
+		logger.debugJSON(calendarManagerId, 'deleteEvent_run', calendarId, eventId)
+
+		deleteGoogleTask({
+			accessToken: session.accessToken,
+			tasklistId: unscopedTasklistId(calendarId),
+			taskId: eventId,
+		}, callback)
+	}
+	function deleteEvent_done(calendarId, eventId, data) {
+		logger.debugJSON(calendarManagerId, 'deleteEvent_done', calendarId, eventId, data)
+
+		// Note: No data is returned on success
+		var event = getEvent(calendarId, eventId)
+		if (event) {
+			removeEvent(calendarId, eventId)
+			eventDeleted(calendarId, eventId, event)
+		}
+	}
+	function deleteEvent_err(err, data, xhr) {
+		logger.log(calendarManagerId, 'deleteEvent_err', err, data, xhr)
+		return googleTasksManager.handleError(err, data, xhr)
+	}
+
+	function deleteGoogleTask(args, callback) {
+		// DELETE https://www.googleapis.com/tasks/v1/lists/tasklistId/tasks/taskId
+		// Note: Success means a response of xhr.status == 204 (No Content)
+		var url = 'https://www.googleapis.com/tasks/v1'
+		url += '/lists/'
+		url += encodeURIComponent(args.tasklistId)
+		url += '/tasks/'
+		url += encodeURIComponent(args.taskId)
+		Requests.postJSON({
+			method: 'DELETE',
+			url: url,
+			headers: {
+				"Authorization": "Bearer " + args.accessToken,
+			},
+		}, function(err, data, xhr) {
+			logger.debug('deleteGoogleTask.response', err, data, xhr.status)
+			if (!err && data && data.error) {
+				return callback(data, null, xhr)
+			}
+			callback(err, data, xhr)
+		})
+	}
+
+	//--- Update Task
+	function setEventProperty(calendarId, eventId, key, value) {
+		logger.debug(calendarManagerId, 'setEventProperty', calendarId, eventId, key, value)
+		var args = {}
+		args[key] = value
+		setEventProperties(calendarId, eventId, args)
+	}
+
+	function setEventProperties(calendarId, eventId, args) {
+		logger.debugJSON(calendarManagerId, 'setEventProperties', calendarId, eventId, args)
+		if (session.accessToken) {
+			var event = getEvent(calendarId, eventId)
+			if (!event) {
+				session.transactionError('attempting to "set an event property" for an event that doesn\'t exist')
+				return
+			}
+
+			var func = setEventProperties_run.bind(this, calendarId, eventId, event, args, function(err, data, xhr) {
+				if (err) {
+					setEventProperties_err(err, data, xhr)
+				} else {
+					setEventProperties_done(calendarId, eventId, event, data)
+				}
+			})
+			withAccessToken(func, function(err, isNetworkError) {
+				handleAuthError(err, false, isNetworkError)
+			})
+		} else {
+			session.transactionError('attempting to "set an event property" without an access token set')
+		}
+	}
+	function setEventProperties_run(calendarId, eventId, event, args, callback) {
+		logger.debugJSON(calendarManagerId, 'setEventProperties_run', calendarId, eventId, event, args)
+		
+		// Merge assigned values into a cloned object
+		var data = cloneRawTask(event)
+		Shared.merge(data, args)
+		logger.debugJSON(calendarManagerId, 'setEventProperties', 'sent', data)
+
+		updateGoogleTask({
+			accessToken: session.accessToken,
+			tasklistId: unscopedTasklistId(calendarId),
+			taskId: eventId,
+			data: data,
+		}, callback)
+	}
+	function setEventProperties_done(calendarId, eventId, event, data) {
+		logger.debugJSON(calendarManagerId, 'setEventProperties_done', calendarId, data)
+
+		// Merge serialized values
+		var eventData = parseTaskAsEventData(data)
+		Shared.merge(event, eventData)
+		Shared.removeMissingKeys(event, eventData)
+
+		parseSingleEvent(calendarId, event)
+		eventUpdated(calendarId, eventId, event)
+	}
+	function setEventProperties_err(err, data, xhr) {
+		logger.log(calendarManagerId, 'setEventProperties_err', err, data, xhr)
+		return googleTasksManager.handleError(err, data, xhr)
+	}
+
+	function updateGoogleTask(args, callback) {
+		// PUT https://www.googleapis.com/tasks/v1/lists/tasklistId/tasks/taskId
+		var url = 'https://www.googleapis.com/tasks/v1'
+		url += '/lists/'
+		url += encodeURIComponent(args.tasklistId)
+		url += '/tasks/'
+		url += encodeURIComponent(args.taskId)
+		Requests.postJSON({
+			method: 'PUT',
+			url: url,
+			headers: {
+				"Authorization": "Bearer " + args.accessToken,
+			},
+			data: args.data,
+		}, function(err, data, xhr) {
+			logger.debug('updateGoogleTask.response', err, data, xhr.status)
+			if (!err && data && data.error) {
+				return callback(data, null, xhr)
+			}
+			callback(err, data, xhr)
+		})
+	}
+}
