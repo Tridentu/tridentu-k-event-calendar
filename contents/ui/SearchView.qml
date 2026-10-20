@@ -4,13 +4,12 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PlasmaComponents3
 
-import "Shared.js" as Shared
+import "LocaleFuncs.js" as LocaleFuncs
 import "EventSearch.js" as EventSearch
-import "lib/ColorUtil.js" as ColorUtil
 
 // Search events by title, location and description: the loaded events right away, then Google
 // Calendar a year back and ahead (the server also matches guests and other fields).
-Rectangle {
+Item {
 	id: searchView
 
 	signal closeRequested()
@@ -43,10 +42,6 @@ Rectangle {
 		return EventSearch.merge(localResults, remote, timeModel.currentTime, resultLimit)
 	}
 
-	color: Kirigami.Theme.backgroundColor
-	radius: Kirigami.Units.cornerRadius * 2
-	border.width: 1
-	border.color: ColorUtil.setAlpha(Kirigami.Theme.textColor, 0.15)
 	// With a query the card takes the available height, so it doesn't jump while results come in.
 	implicitHeight: actionsRow.implicitHeight + Kirigami.Units.smallSpacing * 2
 		+ (query ? Kirigami.Units.gridUnit * 40 : resultsColumn.implicitHeight + Kirigami.Units.largeSpacing)
@@ -88,22 +83,9 @@ Rectangle {
 		})
 	}
 
-	function isAllDay(e) {
-		return !!(e.start && e.start.date)
-	}
 	// "Fri 23 Oct · 12:30 – 13:30", "Fri 23 Oct · All day", or a span of days.
 	function whenText(e) {
-		var now = timeModel.currentTime
-		var span = Shared.eventSpan(e, appletConfig.timeFormat, now)
-		if (span.multiDay) {
-			return i18nc("event span, %1 = start, %2 = end", "%1 – %2", span.startText, span.endText)
-		}
-		var start = new Date(e.startDateTime)
-		var day = Qt.formatDate(start, 'ddd ' + Shared.spanDateFormat(start, start, now))
-		if (span.allDay) {
-			return i18nc("search result, %1 = date", "%1 · All day", day)
-		}
-		return i18nc("search result, %1 = date, %2 = start time, %3 = end time", "%1 · %2 – %3", day, span.startText, span.endText)
+		return LocaleFuncs.formatWhen(e, appletConfig.timeFormat, timeModel.currentTime)
 	}
 
 	Keys.onEscapePressed: closeRequested()
@@ -186,12 +168,15 @@ Rectangle {
 
 				Repeater {
 					model: searchView.results
-					// Event tile in the event color, like the day list.
+					// Event tile in the event color (outlined, striped or struck through by the user's
+					// answer), like the agenda.
 					Rectangle {
 						id: eventRow
 						readonly property var eventItem: modelData
-						readonly property color tileColor: appletConfig.eventColor(eventItem.backgroundColor)
-						readonly property color textColor: Shared.contrastTextColor(tileColor)
+						readonly property EventStyle eventStyle: EventStyle {
+							eventItem: eventRow.eventItem
+						}
+						readonly property color textColor: eventStyle.textColor
 						readonly property bool past: eventItem.endDateTime < timeModel.currentTime
 						Layout.fillWidth: true
 						Layout.leftMargin: Kirigami.Units.largeSpacing
@@ -199,10 +184,18 @@ Rectangle {
 						Layout.topMargin: index === 0 ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
 						implicitHeight: tileColumn.implicitHeight + Kirigami.Units.smallSpacing * 2 + 2
 						radius: 8
-						color: tileColor
+						color: eventStyle.fillColor
 						border.width: 1
-						border.color: appletConfig.eventBorderColor
+						border.color: eventStyle.outlineColor
 						opacity: (past ? 0.6 : 1) * (tileMouse.containsMouse ? 0.85 : 1)
+
+						StripeFill {
+							visible: eventRow.eventStyle.striped
+							anchors.fill: parent
+							anchors.margins: 1
+							radius: eventRow.radius - 1
+							stripeColor: eventRow.eventStyle.stripeColor
+						}
 
 						ColumnLayout {
 							id: tileColumn
@@ -217,6 +210,7 @@ Rectangle {
 								wrapMode: Text.Wrap
 								text: eventRow.eventItem.summary
 								color: eventRow.textColor
+								font.strikeout: eventRow.eventStyle.declined
 							}
 							PlasmaComponents3.Label {
 								Layout.fillWidth: true

@@ -24,10 +24,10 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import org.kde.ksvg as KSvg
 import org.kde.plasma.components as PlasmaComponents3
-import org.kde.plasma.core as PlasmaCore
 
 import "./badges"
 import "Shared.js" as Shared
+import "WeekDrag.js" as WeekDrag
 
 Item {
 	id: daysCalendar
@@ -107,6 +107,37 @@ Item {
 	// Multi-day events as bars across the days (EventBuckets.layoutMonth bars), in eventTitles mode.
 	property var spanBars: []
 
+	//--- Dragging events to other days (MonthView keeps the state and saves the drop).
+	// Points are in this item's coordinates.
+	property bool eventDragEnabled: false
+	// MonthView.eventDragState: { eventItem, dayIndex, targetFirst, targetCount, copy, pending }.
+	property var eventDrag: null
+	function canDragEvent(eventItem) {
+		return eventDragEnabled && eventBadgeType === 'eventTitles' && WeekDrag.canMove(eventItem) && !(eventDrag && eventDrag.pending)
+	}
+	// The day cell (index in gridModel) at a point; outside the grid: the nearest one.
+	function cellIndexAt(x, y) {
+		var step = cellWidth + root.borderWidth
+		var column = Math.max(0, Math.min(columns - 1, Math.floor((x - calendarGrid.x) / step)))
+		var top = calendarGrid.y + (headerModel ? headerHeight + root.borderWidth : 0)
+		var row = Math.max(0, Math.min(rows - 1, Math.floor((y - top) / (cellHeight + root.borderWidth))))
+		return row * columns + column
+	}
+	function eventDragBegin(eventItem, point, copy) {
+		root.eventDragBegin(eventItem, cellIndexAt(point.x, point.y), copy)
+	}
+	function eventDragMove(point, copy) {
+		root.eventDragMove(cellIndexAt(point.x, point.y), copy)
+	}
+	function eventDragDrop(copy) {
+		root.eventDragDrop(copy)
+	}
+	function eventDragCancel() {
+		root.eventDragCancel()
+	}
+	// Where the occurrence menu opens after a drop.
+	readonly property Item eventDragTarget: dragTargetGhost
+
 	property real transformScale: 1
 	property point transformOrigin: Qt.point(width / 2, height / 2)
 
@@ -115,13 +146,6 @@ Item {
 		yScale: xScale
 		origin.x: transformOrigin.x
 		origin.y: transformOrigin.y
-	}
-
-	Behavior on scale {
-		id: scaleBehavior
-		ScaleAnimator {
-			duration: Kirigami.Units.longDuration
-		}
 	}
 
 	QQC2.StackView.onStatusChanged: {
@@ -446,6 +470,7 @@ Item {
 				id: delegate
 				width: daysCalendar.cellWidth
 				height: daysCalendar.cellHeight
+				calendarView: daysCalendar
 
 				onClicked: daysCalendar.activated(index, model, delegate)
 				onDoubleClicked: daysCalendar.doubleClicked(index, model, delegate)
@@ -467,15 +492,50 @@ Item {
 					}
 				}
 
-					Connections {
-						target: daysCalendar
-						function onActivateHighlightedItem() {
-							if (delegate.containsMouse) {
-								delegate.clicked(null)
-							}
+				Connections {
+					target: daysCalendar
+					function onActivateHighlightedItem() {
+						if (delegate.containsMouse) {
+							delegate.clicked(null)
 						}
+					}
 				}
 			}
+		}
+	}
+
+	// Dragging an event: the days it would take, tinted.
+	function cellX(index) {
+		return calendarGrid.x + (index % columns) * (cellWidth + root.borderWidth)
+	}
+	function cellY(index) {
+		return calendarGrid.y + gridLineY(Math.floor(index / columns) + (headerModel ? 1 : 0))
+	}
+	function isDragSource(eventItem) {
+		var d = eventDrag
+		return !!d && !!eventItem && d.eventItem.id === eventItem.id && d.eventItem.calendarId === eventItem.calendarId
+	}
+	Repeater {
+		model: {
+			var d = daysCalendar.eventDrag
+			var cells = []
+			if (d) {
+				var last = Math.min(daysCalendar.rows * daysCalendar.columns - 1, d.targetFirst + d.targetCount - 1)
+				for (var i = Math.max(0, d.targetFirst); i <= last; i++) {
+					cells.push(i)
+				}
+			}
+			return cells
+		}
+		Rectangle {
+			x: daysCalendar.cellX(modelData)
+			y: daysCalendar.cellY(modelData)
+			width: daysCalendar.cellWidth
+			height: daysCalendar.cellHeight
+			radius: 4
+			color: Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.18)
+			border.width: 1
+			border.color: Kirigami.Theme.highlightColor
 		}
 	}
 
@@ -485,81 +545,82 @@ Item {
 	Repeater {
 		model: daysCalendar.eventBadgeType === 'eventTitles' && daysCalendar.headerModel ? daysCalendar.spanBars : []
 
-		Rectangle {
-			id: spanBar
-			readonly property var bar: modelData
-			readonly property var eventItem: bar.eventItem
-			readonly property color barColor: appletConfig.eventColor(eventItem ? eventItem.backgroundColor : null)
-			readonly property string response: Shared.myResponse(eventItem)
+		// Click opens the event, right click its menu, press and drag moves it to other days
+		// (the whole event, by the days dragged; Ctrl: a copy).
+		EventBar {
+			readonly property var span: modelData
 			readonly property int columnStep: daysCalendar.cellWidth + root.borderWidth
-			readonly property bool cutLeft: bar.continuesBefore
-			readonly property bool cutRight: bar.continuesAfter
-			readonly property real cornerRadius: Math.min(7, height / 2)
+			eventItem: span.eventItem
 
-			x: calendarGrid.x + bar.first * columnStep + 1
-			y: calendarGrid.y + daysCalendar.gridLineY(bar.week + 1) + daysCalendar.eventTitlesTopOffset
-				+ bar.lane * (daysCalendar.eventTitleRowHeight + daysCalendar.eventTitleRowSpacing)
-			width: (bar.last - bar.first + 1) * columnStep - root.borderWidth - 2
+			x: calendarGrid.x + span.first * columnStep + 1
+			y: calendarGrid.y + daysCalendar.gridLineY(span.week + 1) + daysCalendar.eventTitlesTopOffset
+				+ span.lane * (daysCalendar.eventTitleRowHeight + daysCalendar.eventTitleRowSpacing)
+			width: (span.last - span.first + 1) * columnStep - root.borderWidth - 2
 			height: daysCalendar.eventTitleRowHeight
-			// Past days are dimmed like the cells.
-			opacity: typeof timeModel !== "undefined" && Shared.isPastDay(new Date(bar.lastTime), timeModel.currentTime) ? appletConfig.pastOpacity : 1
-
 			// Square ends where the event continues in the previous / next week row.
-			radius: cornerRadius
-			topLeftRadius: cutLeft ? 0 : cornerRadius
-			bottomLeftRadius: cutLeft ? 0 : cornerRadius
-			topRightRadius: cutRight ? 0 : cornerRadius
-			bottomRightRadius: cutRight ? 0 : cornerRadius
-			color: appletConfig.eventFillColor(barColor, response)
-			border.width: 1
-			border.color: appletConfig.eventOutlineColor(barColor, response)
+			cuttable: true
+			cutLeft: span.continuesBefore
+			cutRight: span.continuesAfter
+			stripeRadius: cutLeft || cutRight ? 0 : Math.max(0, cornerRadius - 1)
+			// Past days are dimmed like the cells.
+			dimmed: typeof timeModel !== "undefined" && Shared.isPastDay(new Date(span.lastTime), timeModel.currentTime)
+			dragSource: daysCalendar.isDragSource(eventItem)
+			dragCopy: !!daysCalendar.eventDrag && daysCalendar.eventDrag.copy
+			dragPending: !!daysCalendar.eventDrag && daysCalendar.eventDrag.pending
 
-			StripeFill {
-				visible: spanBar.response === 'tentative'
-				anchors.fill: parent
-				anchors.margins: 1
-				radius: spanBar.cutLeft || spanBar.cutRight ? 0 : Math.max(0, spanBar.cornerRadius - 1)
-				stripeColor: spanBar.barColor
+			draggable: daysCalendar.canDragEvent(eventItem)
+			dragMapTo: daysCalendar
+			onDragStarted: function(from, at, copy) {
+				daysCalendar.eventDragBegin(eventItem, from, copy)
+				daysCalendar.eventDragMove(at, copy)
 			}
+			onDragMoved: function(at, copy) { daysCalendar.eventDragMove(at, copy) }
+			onDropped: function(copy) { daysCalendar.eventDragDrop(copy) }
+			onDragCanceled: daysCalendar.eventDragCancel()
+		}
+	}
 
-			// Title at the start of the bar, again in each week row.
-			Text {
-				anchors.fill: parent
-				anchors.leftMargin: 4
-				anchors.rightMargin: 1
-				verticalAlignment: Text.AlignVCenter
-				text: spanBar.eventItem ? spanBar.eventItem.summary : ""
-				color: appletConfig.eventTextColor(spanBar.barColor, spanBar.response)
-				font.strikeout: spanBar.response === 'declined'
-				font.family: appletConfig.eventFont.family
-				font.pointSize: appletConfig.eventFont.pointSize
-				// Event in progress
-				font.bold: !!spanBar.eventItem && !(spanBar.eventItem.start && spanBar.eventItem.start.date)
-					&& typeof timeModel !== "undefined"
-					&& spanBar.eventItem.startDateTime <= timeModel.currentTime && timeModel.currentTime < spanBar.eventItem.endDateTime
-				elide: Text.ElideRight
-				wrapMode: Text.NoWrap
-			}
-
-			MouseArea {
-				anchors.fill: parent
-				cursorShape: Qt.PointingHandCursor
-				acceptedButtons: Qt.LeftButton | Qt.RightButton
-				onClicked: function(mouse) {
-					if (mouse.button === Qt.RightButton) {
-						popup.showEventMenu(spanBar.eventItem, spanBar, mouse.x, mouse.y)
-					} else {
-						popup.activateEvent(spanBar.eventItem)
-					}
-				}
-			}
-
-			PlasmaCore.ToolTipArea {
-				anchors.fill: parent
-				mainText: spanBar.eventItem ? spanBar.eventItem.summary : ""
-				subText: containsMouse ? eventModel.eventDetailsText(spanBar.eventItem) : ""
-				textFormat: Text.PlainText
-			}
+	// The dragged event on its new first day (in the first event row), with its title. When it would
+	// start before the first shown day: on the first shown day it takes, with a square left end like
+	// a bar continuing from before; not shown when none of its days are shown.
+	Rectangle {
+		id: dragTargetGhost
+		readonly property var info: daysCalendar.eventDrag
+		readonly property int cell: info ? Math.max(0, info.targetFirst) : 0
+		readonly property bool shown: !!info && cell <= daysCalendar.rows * daysCalendar.columns - 1
+			&& info.targetFirst + Math.max(1, info.targetCount) - 1 >= 0
+		readonly property color barColor: appletConfig.eventColor(info ? info.eventItem.backgroundColor : null)
+		z: 2
+		visible: shown
+		x: daysCalendar.cellX(cell) + 1
+		y: daysCalendar.cellY(cell) + daysCalendar.eventTitlesTopOffset
+		width: daysCalendar.cellWidth - 2
+		height: daysCalendar.eventTitleRowHeight
+		radius: Math.min(7, height / 2)
+		topLeftRadius: info && info.targetFirst < 0 ? 0 : radius
+		bottomLeftRadius: topLeftRadius
+		color: barColor
+		border.width: 1
+		border.color: Kirigami.Theme.highlightColor
+		Text {
+			anchors.fill: parent
+			anchors.leftMargin: 4
+			anchors.rightMargin: copyBadge.visible ? copyBadge.width + 2 : 1
+			verticalAlignment: Text.AlignVCenter
+			text: dragTargetGhost.info ? dragTargetGhost.info.eventItem.summary : ""
+			color: Shared.contrastTextColor(dragTargetGhost.barColor)
+			font.family: appletConfig.eventFont.family
+			font.pointSize: appletConfig.eventFont.pointSize
+			elide: Text.ElideRight
+			wrapMode: Text.NoWrap
+		}
+		DragCopyBadge {
+			id: copyBadge
+			visible: !!dragTargetGhost.info && dragTargetGhost.info.copy
+			size: Math.min(Kirigami.Units.iconSizes.small, parent.height - 2)
+			anchors.right: parent.right
+			anchors.rightMargin: 1
+			anchors.verticalCenter: parent.verticalCenter
 		}
 	}
 }

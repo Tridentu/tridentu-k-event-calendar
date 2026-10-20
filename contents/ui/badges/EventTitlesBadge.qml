@@ -1,9 +1,7 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
-import org.kde.plasma.core as PlasmaCore
 
 import ".."
-import "../Shared.js" as Shared
 
 // Google Calendar (Android) style: event titles as colored bars below the day number.
 Item {
@@ -40,6 +38,9 @@ Item {
 	// "+N" only where there is a row left for it, not over the cell below.
 	readonly property bool showHiddenCount: hiddenEventCount > 0 && visibleEventCount < freeRows
 
+	// The month grid (DaysCalendar), for dragging events to other days.
+	readonly property Item calendarView: dayStyle.calendarView
+
 	function eventAt(i) {
 		return modelEvents && i < modelEvents.count ? modelEvents.get(i) : null
 	}
@@ -54,65 +55,29 @@ Item {
 		Repeater {
 			model: eventTitlesBadge.visibleEventCount
 
-			Rectangle {
-				id: eventBar
-				readonly property var eventItem: {
+			// Click opens the event, right click its menu, press and drag moves it to another day
+			// (Ctrl: a copy).
+			EventBar {
+				readonly property Item calendarView: eventTitlesBadge.calendarView
+				eventItem: {
 					var _ = eventTitlesBadge.eventCount // Re-evaluate when the day's events change.
 					return eventTitlesBadge.eventAt(index)
 				}
-				readonly property color barColor: appletConfig.eventColor(eventItem ? eventItem.backgroundColor : null)
-				readonly property string response: Shared.myResponse(eventItem)
+				titleFont: eventTitlesBadge.titleFont
 				width: parent.width
 				height: eventTitlesBadge.rowHeight
-				radius: Math.min(7, height / 2)
-				color: appletConfig.eventFillColor(barColor, response)
-				border.width: 1
-				border.color: appletConfig.eventOutlineColor(barColor, response)
-
-				StripeFill {
-					visible: eventBar.response === 'tentative'
-					anchors.fill: parent
-					anchors.margins: 1
-					radius: Math.max(0, eventBar.radius - 1)
-					stripeColor: eventBar.barColor
+				dragSource: !!calendarView && calendarView.isDragSource(eventItem)
+				dragCopy: !!calendarView && !!calendarView.eventDrag && calendarView.eventDrag.copy
+				dragPending: !!calendarView && !!calendarView.eventDrag && calendarView.eventDrag.pending
+				draggable: !!calendarView && calendarView.canDragEvent(eventItem)
+				dragMapTo: calendarView
+				onDragStarted: function(from, at, copy) {
+					calendarView.eventDragBegin(eventItem, from, copy)
+					calendarView.eventDragMove(at, copy)
 				}
-
-				Text {
-					anchors.fill: parent
-					anchors.leftMargin: 4
-					anchors.rightMargin: 1
-					verticalAlignment: Text.AlignVCenter
-					text: eventBar.eventItem ? eventBar.eventItem.summary : ""
-					color: appletConfig.eventTextColor(eventBar.barColor, eventBar.response)
-					font.strikeout: eventBar.response === 'declined'
-					font.family: eventTitlesBadge.titleFont.family
-					font.pointSize: eventTitlesBadge.titleFont.pointSize
-					// Event in progress
-					font.bold: !!eventBar.eventItem && !(eventBar.eventItem.start && eventBar.eventItem.start.date)
-						&& eventBar.eventItem.startDateTime <= timeModel.currentTime && timeModel.currentTime < eventBar.eventItem.endDateTime
-					elide: Text.ElideRight
-					wrapMode: Text.NoWrap
-				}
-
-				MouseArea {
-					anchors.fill: parent
-					cursorShape: Qt.PointingHandCursor
-					acceptedButtons: Qt.LeftButton | Qt.RightButton
-					onClicked: function(mouse) {
-						if (mouse.button === Qt.RightButton) {
-							popup.showEventMenu(eventBar.eventItem, eventBar, mouse.x, mouse.y)
-						} else {
-							popup.activateEvent(eventBar.eventItem)
-						}
-					}
-				}
-
-				PlasmaCore.ToolTipArea {
-					anchors.fill: parent
-					mainText: eventBar.eventItem ? eventBar.eventItem.summary : ""
-					subText: containsMouse ? eventModel.eventDetailsText(eventBar.eventItem) : ""
-					textFormat: Text.PlainText
-				}
+				onDragMoved: function(at, copy) { calendarView.eventDragMove(at, copy) }
+				onDropped: function(copy) { calendarView.eventDragDrop(copy) }
+				onDragCanceled: calendarView.eventDragCancel()
 			}
 		}
 

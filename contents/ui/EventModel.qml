@@ -2,10 +2,13 @@ import QtQuick
 
 import "./calendars"
 import "./lib"
+import "./lib/Async.js" as Async
 import "LocaleFuncs.js" as LocaleFuncs
 import "Shared.js" as Shared
 import "EventCacheUtil.js" as EventCacheUtil
 import "Guests.js" as Guests
+import "Conflicts.js" as Conflicts
+import "EventTypes.js" as EventTypes
 
 CalendarManager {
 	id: eventModel
@@ -13,6 +16,9 @@ CalendarManager {
 	property var calendarManagerList: []
 	property var calendarPluginMap: ({}) // Empty Map
 	property var eventsData: { "items": [] }
+	// Google working locations, not shown as events: { Shared.dayKey(day): "Home" / "Office" / ... }
+	// for the day headers. Only your own (calendars you can edit), not hidden ones.
+	property var workingLocations: ({})
 
 	Component.onCompleted: {
 		bindSignals(plasmaCalendarManager)
@@ -36,14 +42,6 @@ CalendarManager {
 			eventModel.eventsByCalendar[calendarId] = calendar
 		}
 		return calendar.items
-	}
-	function indexOfEvent(items, eventId) {
-		for (var i = 0; i < items.length; i++) {
-			if (items[i].id == eventId) {
-				return i
-			}
-		}
-		return -1
 	}
 	function eventAddedListener(calendarId, data) {
 		var items = ownEventList(calendarId)
@@ -112,6 +110,12 @@ CalendarManager {
 				delete eventModel.calendarPluginMap[calendarId]
 			}
 		}
+	}
+
+	// The manager of calendarId when it can do fnName (has that function), else null.
+	function managerWith(calendarId, fnName) {
+		var calendarManager = getCalendarManager(calendarId)
+		return calendarManager && typeof calendarManager[fnName] === 'function' ? calendarManager : null
 	}
 
 	function getCalendarManager(calendarId) {
@@ -296,7 +300,7 @@ CalendarManager {
 				items[i].calendarManagerId = 'GoogleCalendar'
 				items[i].description = ''
 			}
-			shown[calendarId] = { items: items }
+			shown[calendarId] = EventTypes.splitWorkingLocations({ items: items })
 			eventModel.eventsByCalendar[calendarId] = shown[calendarId]
 		}
 		eventModel.cachedEventsByCalendar = shown
@@ -385,10 +389,53 @@ CalendarManager {
 	function mergeEvents() {
 		logger.debug('eventModel.mergeEvents')
 		// Build the list first and assign once: bindings on eventsData must not see it half-filled.
-		var items = []
+		// Declined events and calendars hidden in the header's calendar menu may be left out;
+		// eventsByCalendar keeps them (lookups, undo, cache).
+		var showDeclined = plasmoid.configuration.showDeclinedEvents
+		var hiddenCalendarIds = plasmoid.configuration.hiddenCalendarIds
+		var all = []
+		var inHiddenCalendar = [] // Per item of all
+		var workingLocationItems = []
 		for (var calendarId in eventModel.eventsByCalendar) {
-			items = items.concat(eventModel.eventsByCalendar[calendarId].items)
+			var calendarData = eventModel.eventsByCalendar[calendarId]
+			var calendarItems = calendarData.items
+			var calendarHidden = Shared.isHiddenCalendar(calendarId, hiddenCalendarIds)
+			for (var j = 0; j < calendarItems.length; j++) {
+				all.push(calendarItems[j])
+				inHiddenCalendar.push(calendarHidden)
+			}
+			// Working locations (kept apart when parsed, see EventTypes.splitWorkingLocations): a
+			// label in the day headers, your own only.
+			var locations = calendarHidden ? [] : Shared.toArray(calendarData.workingLocations)
+			for (var k = 0; k < locations.length; k++) {
+				if (locations[k].canEdit) {
+					workingLocationItems.push(locations[k])
+				}
+			}
 		}
+		// Overlapping meetings, as { summary } objects (see Shared.conflictTitles). Not cached on
+		// disk, and removed before an event is sent back to Google.
+		// Only your own time counts: calendars you can edit, and meetings you're invited to. Others'
+		// calendars you only follow (a colleague's, holidays) would show false conflicts.
+		// Calendars hidden from the views don't count either: their events can't be seen.
+		var hiddenCalendars = Shared.toArray(plasmoid.configuration.hiddenCalendarIds)
+		var conflicts = Conflicts.find(all.filter(function(eventItem) {
+			return (!!eventItem.canEdit || !!Shared.myResponse(eventItem))
+				&& !Shared.isHiddenCalendar(eventItem.calendarId, hiddenCalendars)
+		}))
+		var items = []
+		for (var i = 0; i < all.length; i++) {
+			var titles = conflicts[Conflicts.eventKey(all[i])] || []
+			all[i].conflictsWith = titles.map(function(title) { return { summary: title } })
+			if (!inHiddenCalendar[i] && !Shared.isHiddenDeclined(all[i], showDeclined)) {
+				items.push(all[i])
+			}
+		}
+		eventModel.workingLocations = EventTypes.workingLocationMap(workingLocationItems, {
+			home: i18nc("working location", "Home"),
+			office: i18nc("working location", "Office"),
+			custom: i18nc("working location", "Elsewhere"),
+		})
 		eventModel.eventsData = { items: items }
 	}
 
@@ -398,11 +445,11 @@ CalendarManager {
 			plasmoid.configuration.agendaNewEventLastCalendarId = calendarId
 		}
 
-		var calendarManager = getCalendarManager(calendarId)
+		var calendarManager = managerWith(calendarId, 'createEvent')
 		if (calendarManager) {
 			calendarManager.createEvent(calendarId, date, text)
 		} else {
-			logger.log('Could not createEvent. Could not find calendarManager for calendarId = ', calendarId)
+			logger.log('Could not createEvent: no calendar manager')
 		}
 	}
 
@@ -412,24 +459,16 @@ CalendarManager {
 		var managers = calendarManagerList.filter(function(m) {
 			return typeof m.searchEvents === 'function'
 		})
-		if (!managers.length) {
-			callback(null, [])
-			return
-		}
-		var pending = managers.length
-		var found = []
-		var firstError = null
-		managers.forEach(function(m) {
-			m.searchEvents(query, timeMin, timeMax, function(err, items) {
-				if (err) {
-					firstError = firstError || err
-				}
-				found = found.concat(items || [])
-				pending -= 1
-				if (pending === 0) {
-					callback(found.length ? null : firstError, found)
-				}
+		Async.settleAll(managers.map(function(m) {
+			return m.searchEvents.bind(m, query, timeMin, timeMax)
+		}), function(results) {
+			var found = []
+			var firstError = null
+			results.forEach(function(result) {
+				firstError = firstError || result.err
+				found = found.concat(result.data || [])
 			})
+			callback(found.length ? null : firstError, found)
 		})
 	}
 
@@ -438,56 +477,59 @@ CalendarManager {
 		if (plasmoid.configuration.agendaNewEventRememberCalendar) {
 			plasmoid.configuration.agendaNewEventLastCalendarId = calendarId
 		}
-		var calendarManager = getCalendarManager(calendarId)
-		if (calendarManager && typeof calendarManager.createEventFromData === 'function') {
+		var calendarManager = managerWith(calendarId, 'createEventFromData')
+		if (calendarManager) {
 			calendarManager.createEventFromData(calendarId, eventData, done, params)
 		} else {
-			logger.log('Could not createEventFromData for calendarId = ', calendarId)
+			logger.log('Could not createEventFromData: no calendar manager')
 		}
 	}
 
 	// done(err): optional, called once the server answered (Google).
 	function deleteEvent(calendarId, eventId, done) {
-		var calendarManager = getCalendarManager(calendarId)
+		var calendarManager = managerWith(calendarId, 'deleteEvent')
 		if (calendarManager) {
 			calendarManager.deleteEvent(calendarId, eventId, done)
 		} else {
-			logger.log('Could not deleteEvent. Could not find calendarManager for calendarId = ', calendarId)
+			logger.log('Could not deleteEvent: no calendar manager')
 		}
 	}
 
 	// Whole recurring series (Google): seriesId is an occurrence's recurringEventId.
 	function deleteSeries(calendarId, seriesId, done) {
-		var calendarManager = getCalendarManager(calendarId)
-		if (calendarManager && typeof calendarManager.deleteSeries === 'function') {
+		var calendarManager = managerWith(calendarId, 'deleteSeries')
+		if (calendarManager) {
 			calendarManager.deleteSeries(calendarId, seriesId, done)
 		} else {
-			logger.log('Could not deleteSeries for calendarId = ', calendarId)
+			logger.log('Could not deleteSeries: no calendar manager')
 		}
 	}
 
 	// Deleted events can be brought back (Google): see restoreEvent.
 	function canRestore(calendarId) {
-		var calendarManager = getCalendarManager(calendarId)
-		return !!calendarManager && typeof calendarManager.restoreEvent === 'function'
+		return !!managerWith(calendarId, 'restoreEvent')
 	}
 
 	// Undo a delete. eventId: the event, the occurrence or the series (recurringEventId).
 	// copy: Undo.restoreCopy of a single event, created again if it can't be restored, or null.
 	function restoreEvent(calendarId, eventId, copy, done) {
-		var calendarManager = getCalendarManager(calendarId)
-		if (calendarManager && typeof calendarManager.restoreEvent === 'function') {
+		var calendarManager = managerWith(calendarId, 'restoreEvent')
+		if (calendarManager) {
 			calendarManager.restoreEvent(calendarId, eventId, copy, done)
 		} else {
-			logger.log('Could not restoreEvent for calendarId = ', calendarId)
+			logger.log('Could not restoreEvent: no calendar manager')
 		}
 	}
 
 	// RSVP (Google): set only the signed-in user's own attendee responseStatus ('accepted',
 	// 'tentative', 'declined'), on the occurrence or, with series, the whole recurring series.
+	// done: by default a refetch (the response, and for a series every occurrence, comes back with it).
 	function respondToEvent(eventItem, status, series, done) {
 		if (!eventItem || ['accepted', 'tentative', 'declined'].indexOf(status) < 0) {
 			return
+		}
+		if (!done) {
+			done = function() { logic.update() }
 		}
 		var eventId = series && eventItem.recurringEventId ? eventItem.recurringEventId : eventItem.id
 		updateEventFromServer(eventItem.calendarId, eventId, function(serverEvent) {
@@ -503,6 +545,12 @@ CalendarManager {
 			})
 			return { attendees: attendees }
 		}, done)
+	}
+
+	// The signed-in user can answer the invitation: invited (not organizing) on a Google calendar
+	// they can write to.
+	function canRespond(eventItem) {
+		return !!selfAttendee(eventItem) && !!eventItem.canEdit && supportsRecurrence(eventItem.calendarId)
 	}
 
 	// The signed-in user's attendee entry when invited (not when organizing), else null.
@@ -522,37 +570,25 @@ CalendarManager {
 		return Guests.knownGuests(eventModel.eventsData.items)
 	}
 
-	function setEventProperty(calendarId, eventId, key, value) {
-		logger.debug('eventModel.setEventProperty', calendarId, eventId, key, value)
-		var calendarManager = getCalendarManager(calendarId)
-		if (calendarManager) {
-			calendarManager.setEventProperty(calendarId, eventId, key, value)
-		} else {
-			logger.log('Could not setEventProperty. Could not find calendarManager for calendarId = ', calendarId)
-		}
-	}
-
 	// options: optional { params } with query params for the update (Google).
 	function setEventProperties(calendarId, eventId, args, options) {
-		logger.debugJSON('eventModel.setEventProperties', calendarId, eventId, args)
-		var calendarManager = getCalendarManager(calendarId)
+		var calendarManager = managerWith(calendarId, 'setEventProperties')
 		if (calendarManager) {
 			calendarManager.setEventProperties(calendarId, eventId, args, options)
 		} else {
-			logger.log('Could not setEventProperties. Could not find calendarManager for calendarId = ', calendarId)
+			logger.log('Could not setEventProperties: no calendar manager')
 		}
 	}
 
 	// Repeat rules can be edited (Google Calendar).
 	function supportsRecurrence(calendarId) {
-		var calendarManager = getCalendarManager(calendarId)
-		return !!calendarManager && typeof calendarManager.updateEventFromServer === 'function'
+		return !!managerWith(calendarId, 'updateEventFromServer')
 	}
 
 	// Server copy of an event, eg: the series of a recurring event. callback(err, event)
 	function fetchEvent(calendarId, eventId, callback) {
-		var calendarManager = getCalendarManager(calendarId)
-		if (calendarManager && typeof calendarManager.fetchEvent === 'function') {
+		var calendarManager = managerWith(calendarId, 'fetchEvent')
+		if (calendarManager) {
 			calendarManager.fetchEvent(calendarId, eventId, callback)
 		} else {
 			callback('fetchEvent not supported', null)
@@ -561,15 +597,116 @@ CalendarManager {
 
 	// See GoogleCalendarManager.updateEventFromServer.
 	function updateEventFromServer(calendarId, eventId, buildArgs, done, options, failed) {
-		var calendarManager = getCalendarManager(calendarId)
-		if (calendarManager && typeof calendarManager.updateEventFromServer === 'function') {
+		var calendarManager = managerWith(calendarId, 'updateEventFromServer')
+		if (calendarManager) {
 			calendarManager.updateEventFromServer(calendarId, eventId, buildArgs, done, options, failed)
 		} else {
-			logger.log('Could not updateEventFromServer for calendarId = ', calendarId)
+			logger.log('Could not updateEventFromServer: no calendar manager')
+		}
+	}
+
+	// Events can move to another calendar of the same account (Google): see moveEvent.
+	function supportsMove(calendarId) {
+		return !!managerWith(calendarId, 'moveEvent')
+	}
+
+	// Move an event, or a series (eventId = recurringEventId), to destinationCalendarId (same
+	// account). See GoogleCalendarManager.moveEvent. done(err, movedEvent)
+	function moveEvent(calendarId, eventId, destinationCalendarId, done, params) {
+		var calendarManager = managerWith(calendarId, 'moveEvent')
+		if (calendarManager) {
+			calendarManager.moveEvent(calendarId, eventId, destinationCalendarId, done, params)
+		} else {
+			logger.log('Could not moveEvent: no calendar manager')
+			if (done) {
+				done('moveEvent not supported', null)
+			}
+		}
+	}
+
+	// Events can be imported from .ics files (Google Calendar).
+	function supportsImport(calendarId) {
+		return !!managerWith(calendarId, 'importEvent')
+	}
+
+	// See GoogleCalendarManager.importEvent. done(err, data)
+	function importEvent(calendarId, eventData, done) {
+		var calendarManager = managerWith(calendarId, 'importEvent')
+		if (calendarManager) {
+			calendarManager.importEvent(calendarId, eventData, done)
+		} else {
+			done(i18n("This calendar can't import events"), null)
+		}
+	}
+
+	// Find a time: busy times of people (Google freeBusy, through the calendar's account).
+	function supportsFreeBusy(calendarId) {
+		return !!managerWith(calendarId, 'freeBusy')
+	}
+	// You in freeBusy: the id of the primary calendar of the account of calendarId, else 'primary'.
+	function ownFreeBusyId(calendarId) {
+		var calendarManager = managerWith(calendarId, 'ownFreeBusyId')
+		if (calendarManager) {
+			return calendarManager.ownFreeBusyId()
+		}
+		return 'primary'
+	}
+	// See GoogleCalendarManager.freeBusy. done(err, data)
+	function freeBusy(calendarId, ids, from, to, done) {
+		var calendarManager = managerWith(calendarId, 'freeBusy')
+		if (calendarManager) {
+			calendarManager.freeBusy(calendarId, ids, from, to, done)
+		} else {
+			done(i18n("This calendar can't show free / busy times"), null)
 		}
 	}
 
 	//--- CalendarManager: Calendar
+	// The calendars selected in settings (those with events loaded), for the popup header's
+	// calendar toggles: [{ id, name, color, group }], grouped by account (group = account label).
+	function getSelectedCalendars() {
+		var out = []
+		var listed = {}
+		for (var i = 0; i < calendarManagerList.length; i++) {
+			var calendarManager = calendarManagerList[i]
+			var group = String(calendarManager.accountLabel || "")
+			var list = calendarManager.getCalendarList()
+			for (var j = 0; j < list.length; j++) {
+				var calendar = list[j]
+				if (!calendar || !calendar.id || listed[calendar.id] || !eventModel.eventsByCalendar[calendar.id]) {
+					continue
+				}
+				listed[calendar.id] = true
+				out.push(selectedCalendarEntry(calendar.id, calendar, group))
+			}
+		}
+		// Calendars a manager doesn't list (iCalendar files): look them up by id.
+		for (var calendarId in eventModel.eventsByCalendar) {
+			if (listed[calendarId]) {
+				continue
+			}
+			var manager = eventModel.calendarPluginMap[calendarId]
+			var data = manager && typeof manager.getCalendar === 'function' ? manager.getCalendar(calendarId) : null
+			out.push(selectedCalendarEntry(calendarId, data || {}, ""))
+		}
+		return out
+	}
+	function selectedCalendarEntry(calendarId, calendar, group) {
+		var name = String(calendar.summary || calendar.name || "")
+		if (group && name.indexOf(group + " - ") === 0) {
+			name = name.substr(group.length + 3) // The account is the group heading
+		}
+		if (!name) {
+			name = calendarId === "plasma_Holidays" ? i18n("Holidays") : calendarId
+		}
+		return {
+			id: calendarId,
+			name: name,
+			color: String(calendar.backgroundColor || calendar.color || ""), // Empty: the theme's highlight
+			group: group,
+		}
+	}
+
 	function getCalendarList() {
 		var calendarList = []
 		for (var i = 0; i < calendarManagerList.length; i++) {

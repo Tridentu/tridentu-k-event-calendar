@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: eventcalendar\n"
 "Report-Msgid-Bugs-To: https://github.com/divinae/plasma-applet-"
 "eventcalendar\n"
-"POT-Creation-Date: 2026-10-19 10:04+0200\n"
+"POT-Creation-Date: 2026-10-19 15:51+0200\n"
 "PO-Revision-Date: 2018-06-07 01:37+0300\n"
 "Last-Translator: Chris P <skylin@protonmail.com>\n"
 "Language-Team: Chris P <skylin@protonmail.com>\n"
@@ -161,8 +161,8 @@ msgid "Google authentication failed: %1"
 msgstr "Αποτυχία ταυτοποίησης Google: %1"
 
 #: ../contents/ui/calendars/GoogleCalendarManager.qml
-msgid "Error fetching calendar: %1"
-msgstr "Σφάλμα λήψης ημερολογίου: %1"
+msgid "Could not get the free / busy times"
+msgstr "Δεν ήταν δυνατή η λήψη των ελεύθερων / απασχολημένων ωρών"
 
 #: ../contents/ui/calendars/ICalManager.qml
 msgid "iCalendar"
@@ -177,6 +177,7 @@ msgid "Could not load %1: %2"
 msgstr "Αδυναμία φόρτωσης %1: %2"
 
 #: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/EventModel.qml
 msgid "Holidays"
 msgstr "Αργίες"
 
@@ -188,6 +189,26 @@ msgstr "Εργασίες"
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Other"
 msgstr "Άλλο"
+
+#: ../contents/ui/CalendarToggles.qml ../contents/ui/config/ConfigEvents.qml
+#: ../contents/ui/config/ConfigGoogleCalendar.qml
+#: ../contents/ui/config/ConfigICal.qml
+msgid "Calendars"
+msgstr "Ημερολόγια"
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "No calendars selected in the settings."
+msgstr "Δεν έχουν επιλεγεί ημερολόγια στις ρυθμίσεις."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "Show All"
+msgstr "Εμφάνιση όλων"
+
+#: ../contents/ui/CardHeader.qml ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/config/ConfigGoogleCalendar.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
+msgid "Cancel"
+msgstr "Ακύρωση"
 
 #: ../contents/ui/ClockView.qml
 msgctxt "time left in the current meeting"
@@ -246,13 +267,6 @@ msgstr "Χρώμα"
 #: ../contents/ui/EventEditView.qml
 msgid "Save"
 msgstr "Αποθήκευση"
-
-#: ../contents/ui/config/CalendarEditDialog.qml
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/QuickAddView.qml
-msgid "Cancel"
-msgstr "Ακύρωση"
 
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Default (%1)"
@@ -370,12 +384,6 @@ msgstr "Γραφικό συστατικό επιφάνειας εργασίας"
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Debug logging and extra settings pages"
 msgstr "Καταγραφή αποσφαλμάτωσης και επιπλέον σελίδες ρυθμίσεων"
-
-#: ../contents/ui/config/ConfigEvents.qml
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-#: ../contents/ui/config/ConfigICal.qml
-msgid "Calendars"
-msgstr "Ημερολόγια"
 
 #: ../contents/ui/config/ConfigEvents.qml
 msgid "Refresh every"
@@ -535,12 +543,79 @@ msgstr ""
 "την προεπιλογή της εφαρμογής."
 
 #: ../contents/ui/config/ConfigEvents.qml
+msgid "Meetings"
+msgstr "Συσκέψεις"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open the meeting link when a meeting starts"
+msgstr "Άνοιγμα του συνδέσμου σύσκεψης όταν ξεκινά μια σύσκεψη"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For meetings you accepted or organize, not marked as ended."
+msgstr ""
+"Για συσκέψεις που έχετε αποδεχτεί ή οργανώνετε και δεν έχουν σημανθεί ως "
+"ολοκληρωμένες."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Do Not Disturb during meetings"
+msgstr "«Μην ενοχλείτε» κατά τις συσκέψεις"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Plasma's Do Not Disturb from the start until the end of a meeting with "
+"guests or a meeting link. Mark as Ended turns it off."
+msgstr ""
+"Το «Μην ενοχλείτε» του Plasma από την αρχή έως το τέλος μιας σύσκεψης με "
+"προσκεκλημένους ή σύνδεσμο σύσκεψης. Η «Σήμανση ως ολοκληρωμένης» το "
+"απενεργοποιεί."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only meetings I accepted"
+msgstr "Μόνο συσκέψεις που αποδέχτηκα"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Invitations"
+msgstr "Προσκλήσεις"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "New invitations for today"
+msgstr "Νέες προσκλήσεις για σήμερα"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification for each meeting today you haven't answered yet, with Yes, "
+"Maybe and No."
+msgstr ""
+"Μια ειδοποίηση για κάθε σημερινή σύσκεψη που δεν έχετε απαντήσει ακόμα, με "
+"Ναι, Ίσως και Όχι."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Daily Agenda"
+msgstr "Ημερήσια ατζέντα"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Today's events every morning"
+msgstr "Τα σημερινά συμβάντα κάθε πρωί"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification with today's events once a day, also when the computer is "
+"turned on later."
+msgstr ""
+"Μια ειδοποίηση με τα σημερινά συμβάντα μία φορά την ημέρα, ακόμα κι αν ο "
+"υπολογιστής ανοίξει αργότερα."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "At"
+msgstr "Στις"
+
+#: ../contents/ui/config/ConfigEvents.qml
 msgid "All Event Notifications"
 msgstr "Όλες οι ειδοποιήσεις συμβάντων"
 
 #: ../contents/ui/config/ConfigEvents.qml
-msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
-msgstr "Κουμπιά «Συμμετοχή στη σύσκεψη» και «Άνοιγμα στο Ημερολόγιο»"
+msgid "\"Join meeting\" button"
+msgstr "Κουμπί «Συμμετοχή στη σύσκεψη»"
 
 #: ../contents/ui/config/ConfigEvents.qml
 msgid "Skip all-day events"
@@ -581,10 +656,6 @@ msgstr "Αδυναμία προετοιμασίας σύνδεσης Google: %1"
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Waiting for browser callback..."
 msgstr "Αναμονή για απάντηση από τον περιηγητή..."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid "Waiting for the helper page to send the code..."
-msgstr "Αναμονή για αποστολή του κωδικού από τη βοηθητική σελίδα..."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Sign-in timed out. Try again."
@@ -759,17 +830,6 @@ msgstr ""
 "ολόκληρο το URL (ή μόνο τον κωδικό) και επικολλήστε το."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid ""
-"Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
-"the browser redirects to the helper page and will try to send the code back "
-"automatically. If it fails, copy the code and paste it below."
-msgstr ""
-"Πατήστε «Σύνδεση (Αυτόματη)» για να ανοίξει το <a href=\"%1\">%2</a>. Αφού "
-"δώσετε πρόσβαση, ο περιηγητής ανακατευθύνει στη βοηθητική σελίδα, η οποία θα "
-"προσπαθήσει να στείλει τον κωδικό αυτόματα. Αν αποτύχει, αντιγράψτε τον "
-"κωδικό και επικολλήστε τον παρακάτω."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "The desktop could not open the browser automatically."
 msgstr "Η επιφάνεια εργασίας δεν μπόρεσε να ανοίξει αυτόματα τον περιηγητή."
 
@@ -782,10 +842,6 @@ msgid "Helper page (optional): <a href=\"%1\">%1</a>"
 msgstr "Βοηθητική σελίδα (προαιρετικά): <a href=\"%1\">%1</a>"
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid "Helper page: <a href=\"%1\">%1</a>"
-msgstr "Βοηθητική σελίδα: <a href=\"%1\">%1</a>"
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid ""
 "If your browser shows a connection error, that's expected. Copy the URL from "
 "the address bar anyway and paste it below. If auto-capture works, you do not "
@@ -795,13 +851,6 @@ msgstr ""
 "Αντιγράψτε ούτως ή άλλως το URL από τη γραμμή διευθύνσεων και επικολλήστε το "
 "παρακάτω. Αν η αυτόματη λήψη λειτουργήσει, δεν χρειάζεται να επικολλήσετε "
 "τίποτα."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid ""
-"If auto-capture fails, copy the code from the helper page and paste it below."
-msgstr ""
-"Αν η αυτόματη λήψη αποτύχει, αντιγράψτε τον κωδικό από τη βοηθητική σελίδα "
-"και επικολλήστε τον παρακάτω."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Paste the authorization code or redirect URL here"
@@ -856,7 +905,7 @@ msgstr "URL https:// ή τοπικό αρχείο %1/*.ics"
 msgid "Browse"
 msgstr "Πλοήγηση"
 
-#: ../contents/ui/config/ConfigICal.qml
+#: ../contents/ui/config/ConfigICal.qml ../contents/ui/main.qml
 msgid "iCalendar (*.ics)"
 msgstr "iCalendar (*.ics)"
 
@@ -943,12 +992,48 @@ msgid "Week and Day"
 msgstr "Εβδομάδα και ημέρα"
 
 #: ../contents/ui/config/ConfigViews.qml
+msgctxt "week view setting"
+msgid "Days shown"
+msgstr "Εμφανιζόμενες ημέρες"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "7 days"
+msgstr "7 ημέρες"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Work week (without the weekend)"
+msgstr "Εργάσιμη εβδομάδα (χωρίς το Σαββατοκύριακο)"
+
+#: ../contents/ui/config/ConfigViews.qml
 msgid "Working hours start"
 msgstr "Έναρξη ωραρίου εργασίας"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Working hours end"
 msgstr "Λήξη ωραρίου εργασίας"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Second time zone"
+msgstr "Δεύτερη ζώνη ώρας"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "no second time zone"
+msgid "None"
+msgstr "Καμία"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "No second time zone"
+msgstr "Χωρίς δεύτερη ζώνη ώρας"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Its hours are shown next to the local ones in the Week and Day views."
+msgstr ""
+"Οι ώρες της εμφανίζονται δίπλα στις τοπικές στις προβολές Εβδομάδας και "
+"Ημέρας."
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/EventEditView.qml
+msgid "Search time zones"
+msgstr "Αναζήτηση ζωνών ώρας"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Forecast in the day headers and, in the Day view, a weather panel."
@@ -1006,6 +1091,19 @@ msgstr "Το κλικ σε μια ημέρα την ανοίγει στην πρ
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Month view"
 msgstr "Προβολή μήνα"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Declined events"
+msgstr "Απορριφθέντα συμβάντα"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show (struck through)"
+msgstr "Εμφάνιση (διαγραμμένα)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "declined events"
+msgid "Hide"
+msgstr "Απόκρυψη"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Double-clicking a day"
@@ -1188,69 +1286,30 @@ msgstr "d MMM yyyy"
 msgid "to"
 msgstr "προς"
 
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
+#: ../contents/ui/EditTaskForm.qml
 msgid "Event Title"
 msgstr "Τίτλος συμβάντος"
 
-#: ../contents/ui/EditEventForm.qml ../contents/ui/LocaleFuncs.js
-msgid "All Day"
-msgstr "Όλη την Ημέρα"
-
-#: ../contents/ui/EditEventForm.qml
-msgid "Add location"
-msgstr "Προσθήκη τοποθεσίας"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
+#: ../contents/ui/EditTaskForm.qml
 msgid "Add description"
 msgstr "Προσθήκη περιγραφής"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
-msgid "&Save"
-msgstr "Αποθήκευση"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
-#: ../contents/ui/TimerInputView.qml
-msgid "&Cancel"
-msgstr "&Ακύρωση"
 
 #: ../contents/ui/EditTaskForm.qml
 msgid "Add due date"
 msgstr "Προσθήκη προθεσμίας"
 
+#: ../contents/ui/EditTaskForm.qml
+msgid "&Save"
+msgstr "Αποθήκευση"
+
+#: ../contents/ui/EditTaskForm.qml ../contents/ui/TimerInputView.qml
+msgid "&Cancel"
+msgstr "&Ακύρωση"
+
 #: ../contents/ui/EventContextMenu.qml
 msgctxt "RSVP to an invitation"
 msgid "Respond"
 msgstr "Απάντηση"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "Yes"
-msgstr "Ναι"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "Yes to All Events"
-msgstr "Ναι σε όλα τα συμβάντα"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "Maybe"
-msgstr "Ίσως"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "Maybe to All Events"
-msgstr "Ίσως σε όλα τα συμβάντα"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "No"
-msgstr "Όχι"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "No to All Events"
-msgstr "Όχι σε όλα τα συμβάντα"
 
 #: ../contents/ui/EventContextMenu.qml
 msgid "Show Details"
@@ -1269,6 +1328,10 @@ msgstr "Άνοιγμα στο Ημερολόγιο Google"
 #: ../contents/ui/EventContextMenu.qml
 msgid "Mark as Ended"
 msgstr "Σήμανση ως ολοκληρωμένης"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Email Guests…"
+msgstr "Email στους προσκεκλημένους…"
 
 #: ../contents/ui/EventContextMenu.qml
 msgid "Edit…"
@@ -1298,12 +1361,12 @@ msgid "Delete All Events of “%1”"
 msgstr "Διαγραφή όλων των συμβάντων του «%1»"
 
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/WeekView.qml
+#: ../contents/ui/EventMover.qml
 msgid "This event"
 msgstr "Αυτό το συμβάν"
 
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/WeekView.qml
+#: ../contents/ui/EventMover.qml
 msgid "All events in the series"
 msgstr "Όλα τα συμβάντα της σειράς"
 
@@ -1343,7 +1406,8 @@ msgctxt "%1 = 10m, 2m"
 msgid "Reminders: %1 before"
 msgstr "Υπενθυμίσεις: %1 πριν"
 
-#: ../contents/ui/EventDetailsView.qml ../contents/ui/SearchView.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/FindTimeView.qml
+#: ../contents/ui/SearchView.qml
 msgid "Back"
 msgstr "Πίσω"
 
@@ -1371,19 +1435,58 @@ msgstr "Διαγράφει όλες τις επαναλήψεις αυτού τ�
 msgid "Duplicate"
 msgstr "Αντίγραφο"
 
+#: ../contents/ui/EventDetailsView.qml
+msgid "Private event"
+msgstr "Ιδιωτικό συμβάν"
+
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
 #: ../contents/ui/WeekView.qml
 msgid "All day"
 msgstr "Όλη την ημέρα"
 
-#: ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
 msgid "Repeats"
 msgstr "Επαναλαμβάνεται"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = start and end time, %2 = city, %3 = time zone id"
+msgid "%1 %2 time (%3)"
+msgstr "%1 ώρα %2 (%3)"
 
 #: ../contents/ui/EventDetailsView.qml
 msgctxt "RSVP to an invitation"
 msgid "Going?"
 msgstr "Θα παρευρεθείτε;"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Out of office"
+msgstr "Εκτός γραφείου"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Focus time"
+msgstr "Χρόνος συγκέντρωσης"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines all meetings at this time"
+msgstr "Απορρίπτει όλες τις συσκέψεις αυτό το διάστημα"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines new invitations at this time"
+msgstr "Απορρίπτει νέες προσκλήσεις αυτό το διάστημα"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = message sent when declining"
+msgid "Message: “%1”"
+msgstr "Μήνυμα: «%1»"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = titles of other events at the same time"
+msgid "Overlaps with: %1"
+msgstr "Επικαλύπτεται με: %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Write an email to the guests"
+msgstr "Γράψτε ένα email στους προσκεκλημένους"
 
 #: ../contents/ui/EventDetailsView.qml
 msgctxt "event organizer"
@@ -1404,6 +1507,11 @@ msgid "Show 1 more"
 msgid_plural "Show all %1"
 msgstr[0] "Εμφάνιση %1 ακόμη"
 msgstr[1] "Εμφάνιση όλων (%1)"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = start and end time in the local time zone"
+msgid "%1 your time"
+msgstr "%1 δική σας ώρα"
 
 #: ../contents/ui/EventEditView.qml
 msgctxt "Google Calendar event color"
@@ -1465,6 +1573,11 @@ msgid "Enter an email address, like name@example.com"
 msgstr "Εισαγάγετε μια διεύθυνση email, π.χ. name@example.com"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "you, in Find a time"
+msgid "You"
+msgstr "Εσείς"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Edit Event"
 msgstr "Επεξεργασία συμβάντος"
 
@@ -1499,14 +1612,85 @@ msgid "Title"
 msgstr "Τίτλος"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Event"
+msgstr "Συμβάν"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Out of office"
+msgstr "Εκτός γραφείου"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Focus time"
+msgstr "Χρόνος συγκέντρωσης"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Event type"
+msgstr "Τύπος συμβάντος"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Don't decline invitations"
+msgstr "Να μην απορρίπτονται προσκλήσεις"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new invitations in this time"
+msgstr "Απόρριψη νέων προσκλήσεων αυτό το διάστημα"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new and existing invitations in this time"
+msgstr "Απόρριψη νέων και υπαρχουσών προσκλήσεων αυτό το διάστημα"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Automatically decline"
+msgstr "Αυτόματη απόρριψη"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Message for declined invitations"
+msgstr "Μήνυμα για απορριφθείσες προσκλήσεις"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Do not disturb"
+msgstr "Μην ενοχλείτε"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Available"
+msgstr "Διαθέσιμος"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Do not disturb or Available"
+msgid "Chat status: %1"
+msgstr "Κατάσταση συνομιλίας: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Chat status"
+msgstr "Κατάσταση συνομιλίας"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Calendar color"
 msgstr "Χρώμα ημερολογίου"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Local time"
+msgstr "Τοπική ώρα"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = time zone id, eg: Europe/Warsaw"
+msgid "Time zone: %1"
+msgstr "Ζώνη ώρας: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Time zone"
+msgstr "Ζώνη ώρας"
 
 #: ../contents/ui/EventEditView.qml
 msgid "Does not repeat"
 msgstr "Δεν επαναλαμβάνεται"
 
-#: ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventEditView.qml ../contents/ui/ImportView.qml
 msgid "Daily"
 msgstr "Καθημερινά"
 
@@ -1622,6 +1806,49 @@ msgid "Remove video conferencing"
 msgstr "Αφαίρεση βιντεοδιάσκεψης"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Busy"
+msgstr "Απασχολημένος"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Free"
+msgstr "Διαθέσιμος"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Busy or Free"
+msgid "Show as: %1"
+msgstr "Εμφάνιση ως: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Show as"
+msgstr "Εμφάνιση ως"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Calendar default"
+msgstr "Προεπιλογή ημερολογίου"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Public"
+msgstr "Δημόσιο"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Private"
+msgstr "Ιδιωτικό"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Calendar default, Public or Private"
+msgid "Visibility: %1"
+msgstr "Ορατότητα: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Visibility"
+msgstr "Ορατότητα"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Reminders"
 msgstr "Υπενθυμίσεις"
 
@@ -1695,9 +1922,246 @@ msgctxt "guest suggestion: %1 = name, %2 = email"
 msgid "%1 <%2>"
 msgstr "%1 <%2>"
 
+#: ../contents/ui/EventEditView.qml ../contents/ui/FindTimeView.qml
+msgid "Find a Time"
+msgstr "Εύρεση ώρας"
+
 #: ../contents/ui/EventEditView.qml
 msgid "Description"
 msgstr "Περιγραφή"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Home"
+msgstr "Σπίτι"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Office"
+msgstr "Γραφείο"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Elsewhere"
+msgstr "Αλλού"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't import events"
+msgstr "Αυτό το ημερολόγιο δεν μπορεί να εισαγάγει συμβάντα"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't show free / busy times"
+msgstr ""
+"Αυτό το ημερολόγιο δεν μπορεί να εμφανίσει ελεύθερες / απασχολημένες ώρες"
+
+#: ../contents/ui/EventMover.qml
+msgid "Event moved"
+msgstr "Το συμβάν μετακινήθηκε"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "separator of names in a list"
+msgid ", "
+msgstr ", "
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No suggestions: the guests' busy times aren't available."
+msgstr ""
+"Χωρίς προτάσεις: οι απασχολημένες ώρες των προσκεκλημένων δεν είναι "
+"διαθέσιμες."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "Suggested times (not counting %1):"
+msgstr "Προτεινόμενες ώρες (χωρίς %1):"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Suggested times:"
+msgstr "Προτεινόμενες ώρες:"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "No time free in the working hours of this day (not counting %1)."
+msgstr "Καμία ελεύθερη ώρα στο ωράριο εργασίας αυτής της ημέρας (χωρίς %1)."
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No time free for everyone in the working hours of this day."
+msgstr ""
+"Καμία ώρα δεν είναι ελεύθερη για όλους στο ωράριο εργασίας αυτής της ημέρας."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time"
+msgid "Not available"
+msgstr "Μη διαθέσιμο"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time: %1 = Google's reason"
+msgid "Not available (%1)"
+msgstr "Μη διαθέσιμο (%1)"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Previous day"
+msgstr "Προηγούμενη ημέρα"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "Find a time: the day shown"
+msgid "ddd, d MMM"
+msgstr "ddd d MMM"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Next day"
+msgstr "Επόμενη ημέρα"
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file."
+msgstr "Αδυναμία ανάγνωσης του αρχείου."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Reading .ics files needs the Python icalendar module (python-icalendar)."
+msgstr ""
+"Η ανάγνωση αρχείων .ics απαιτεί το άρθρωμα Python icalendar (python-"
+"icalendar)."
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file: %1"
+msgstr "Αδυναμία ανάγνωσης του αρχείου: %1"
+
+#: ../contents/ui/ImportView.qml
+msgid "Changed occurrence of a repeating event"
+msgstr "Τροποποιημένη επανάληψη ενός επαναλαμβανόμενου συμβάντος"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 day"
+msgid_plural "Every %1 days"
+msgstr[0] "Κάθε %1 ημέρα"
+msgstr[1] "Κάθε %1 ημέρες"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "Κάθε %1 εβδομάδα"
+msgstr[1] "Κάθε %1 εβδομάδες"
+
+#: ../contents/ui/ImportView.qml
+msgid "Weekly"
+msgstr "Εβδομαδιαία"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly / Every 2 weeks, %2 = days"
+msgid "%1 on %2"
+msgstr "%1 κάθε %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 month"
+msgid_plural "Every %1 months"
+msgstr[0] "Κάθε %1 μήνα"
+msgstr[1] "Κάθε %1 μήνες"
+
+#: ../contents/ui/ImportView.qml
+msgid "Monthly"
+msgstr "Μηνιαία"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 year"
+msgid_plural "Every %1 years"
+msgstr[0] "Κάθε %1 έτος"
+msgstr[1] "Κάθε %1 έτη"
+
+#: ../contents/ui/ImportView.qml
+msgid "Yearly"
+msgstr "Ετήσια"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%2 = Weekly on Monday, ..."
+msgid "%2, %1 time"
+msgid_plural "%2, %1 times"
+msgstr[0] "%2, %1 φορά"
+msgstr[1] "%2, %1 φορές"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly on Monday, ..., %2 = date"
+msgid "%1, until %2"
+msgstr "%1, έως %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 exception"
+msgid_plural "%1 exceptions"
+msgstr[0] "%1 εξαίρεση"
+msgstr[1] "%1 εξαιρέσεις"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/main.qml
+msgid "Import Events"
+msgstr "Εισαγωγή συμβάντων"
+
+#: ../contents/ui/ImportView.qml
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#: ../contents/ui/ImportView.qml
+msgid "Import"
+msgstr "Εισαγωγή"
+
+#: ../contents/ui/ImportView.qml
+msgid "No file chosen"
+msgstr "Δεν επιλέχθηκε αρχείο"
+
+#: ../contents/ui/ImportView.qml
+msgid "Choose File…"
+msgstr "Επιλογή αρχείου…"
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading the file…"
+msgstr "Ανάγνωση του αρχείου…"
+
+#: ../contents/ui/ImportView.qml
+msgid "No events in this file"
+msgstr "Δεν υπάρχουν συμβάντα σε αυτό το αρχείο"
+
+#: ../contents/ui/ImportView.qml
+msgid "(No title)"
+msgstr "(Χωρίς τίτλο)"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 cancelled event isn't imported."
+msgid_plural "%1 cancelled events aren't imported."
+msgstr[0] "%1 ακυρωμένο συμβάν δεν εισάγεται."
+msgstr[1] "%1 ακυρωμένα συμβάντα δεν εισάγονται."
+
+#: ../contents/ui/ImportView.qml
+msgid "Calendar:"
+msgstr "Ημερολόγιο:"
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Guests and the organizer aren't imported, and no invitations are sent. "
+"Importing the same event again updates it."
+msgstr ""
+"Οι προσκεκλημένοι και ο διοργανωτής δεν εισάγονται και δεν αποστέλλονται "
+"προσκλήσεις. Αν εισαγάγετε ξανά το ίδιο συμβάν, αυτό ενημερώνεται."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Importing needs a Google Calendar you can edit. Log in to Google Calendar in "
+"the settings."
+msgstr ""
+"Η εισαγωγή απαιτεί ένα Ημερολόγιο Google που μπορείτε να επεξεργαστείτε. "
+"Συνδεθείτε στο Ημερολόγιο Google από τις ρυθμίσεις."
+
+#: ../contents/ui/ImportView.qml
+msgid "Importing… %1 of %2"
+msgstr "Εισαγωγή… %1 από %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 event imported"
+msgid_plural "%1 events imported"
+msgstr[0] "Εισήχθη %1 συμβάν"
+msgstr[1] "Εισήχθησαν %1 συμβάντα"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 failed: %2"
+msgid_plural "%1 failed, eg: %2"
+msgstr[0] "Απέτυχε %1: %2"
+msgstr[1] "Απέτυχαν %1, π.χ.: %2"
 
 #: ../contents/ui/JoinPill.qml
 msgid "Join"
@@ -1754,9 +2218,28 @@ msgid "%1, %2"
 msgstr "%1, %2"
 
 #: ../contents/ui/LocaleFuncs.js
+msgid "All Day"
+msgstr "Όλη την Ημέρα"
+
+#: ../contents/ui/LocaleFuncs.js
 msgctxt "from date/time %1 until date/time %2"
 msgid "%1 - %2"
 msgstr "%1 - %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event span, %1 = start, %2 = end"
+msgid "%1 – %2"
+msgstr "%1 – %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date"
+msgid "%1 · All day"
+msgstr "%1 · Όλη την ημέρα"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
+msgid "%1 · %2 – %3"
+msgstr "%1 · %2 – %3"
 
 #: ../contents/ui/LocaleFuncs.js
 #, no-c-format
@@ -1833,6 +2316,10 @@ msgid "New Event…"
 msgstr "Νέο συμβάν…"
 
 #: ../contents/ui/main.qml
+msgid "Import Events…"
+msgstr "Εισαγωγή συμβάντων…"
+
+#: ../contents/ui/main.qml
 msgid "Open Google Calendar"
 msgstr "Άνοιγμα Ημερολογίου Google"
 
@@ -1876,7 +2363,7 @@ msgstr "Πχ: 9πμ-5μμ Εργασία"
 msgid "Previous Day"
 msgstr "Προηγούμενη ημέρα"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Previous Week"
 msgstr "Προηγούμενη εβδομάδα"
 
@@ -1884,7 +2371,7 @@ msgstr "Προηγούμενη εβδομάδα"
 msgid "Previous Month"
 msgstr "Προηγούμενος μήνας"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Today"
 msgstr "Σήμερα"
 
@@ -1892,7 +2379,7 @@ msgstr "Σήμερα"
 msgid "Next Day"
 msgstr "Επόμενη ημέρα"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Next Week"
 msgstr "Επόμενη εβδομάδα"
 
@@ -1980,20 +2467,35 @@ msgstr ""
 msgid "More options…"
 msgstr "Περισσότερες επιλογές…"
 
-#: ../contents/ui/SearchView.qml ../contents/ui/WeekView.qml
-msgctxt "event span, %1 = start, %2 = end"
-msgid "%1 – %2"
-msgstr "%1 – %2"
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Yes"
+msgstr "Ναι"
 
-#: ../contents/ui/SearchView.qml
-msgctxt "search result, %1 = date"
-msgid "%1 · All day"
-msgstr "%1 · Όλη την ημέρα"
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Yes to All Events"
+msgstr "Ναι σε όλα τα συμβάντα"
 
-#: ../contents/ui/SearchView.qml
-msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
-msgid "%1 · %2 – %3"
-msgstr "%1 · %2 – %3"
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Maybe"
+msgstr "Ίσως"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Maybe to All Events"
+msgstr "Ίσως σε όλα τα συμβάντα"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "No"
+msgstr "Όχι"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "No to All Events"
+msgstr "Όχι σε όλα τα συμβάντα"
 
 #: ../contents/ui/SearchView.qml
 msgid "Search events…"
@@ -2091,10 +2593,6 @@ msgid "%1 mm"
 msgstr "%1 mm"
 
 #: ../contents/ui/UpcomingEvents.qml
-msgid "Open in Calendar"
-msgstr "Άνοιγμα στο Ημερολόγιο"
-
-#: ../contents/ui/UpcomingEvents.qml
 msgid "Snooze 1 minute"
 msgid_plural "Snooze %1 minutes"
 msgstr[0] "Αναβολή για %1 λεπτό"
@@ -2104,6 +2602,42 @@ msgstr[1] "Αναβολή για %1 λεπτά"
 msgctxt "%1 = 15 minutes, %2 = event title"
 msgid "In %1: %2"
 msgstr "Σε %1: %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "invitation, %1 = organizer"
+msgid "From %1"
+msgstr "Από %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title"
+msgid "Invitation: %1"
+msgstr "Πρόσκληση: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, %1 = event title"
+msgid "All day: %1"
+msgstr "Όλη την ημέρα: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, more events"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+%1 ακόμη"
+msgstr[1] "+%1 ακόμη"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Today: %1 event"
+msgid_plural "Today: %1 events"
+msgstr[0] "Σήμερα: %1 συμβάν"
+msgstr[1] "Σήμερα: %1 συμβάντα"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Nothing planned today"
+msgstr "Τίποτα προγραμματισμένο σήμερα"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Open Agenda"
+msgstr "Άνοιγμα ατζέντας"
 
 #: ../contents/ui/UpcomingEvents.qml
 msgctxt "%1 = time"
@@ -2182,8 +2716,15 @@ msgid "Next days"
 msgstr "Επόμενες ημέρες"
 
 #: ../contents/ui/WeekView.qml
-msgid "Event moved"
-msgstr "Το συμβάν μετακινήθηκε"
+msgctxt "%1 = time zone, %2 = a date"
+msgid ""
+"%1\n"
+"The time difference changes during these days: the hours shown are those of "
+"%2."
+msgstr ""
+"%1\n"
+"Η διαφορά ώρας αλλάζει αυτές τις ημέρες: οι ώρες που εμφανίζονται είναι "
+"αυτές της %2."
 
 #: ../contents/ui/WeekView.qml
 msgid "%1 day"
@@ -2195,6 +2736,64 @@ msgstr[1] "%1 ημέρες"
 msgctxt "more events not shown"
 msgid "+%1"
 msgstr "+%1"
+
+#: ../contents/ui/WorkingLocationLabel.qml
+msgctxt "%1 = Home, Office, ..."
+msgid "Working location: %1"
+msgstr "Τοποθεσία εργασίας: %1"
+
+#~ msgid "Error fetching calendar: %1"
+#~ msgstr "Σφάλμα λήψης ημερολογίου: %1"
+
+#~ msgid "Not logged in to Google Calendar"
+#~ msgstr "Δεν έχετε συνδεθεί στο Ημερολόγιο Google"
+
+#~ msgid "Waiting for the helper page to send the code..."
+#~ msgstr "Αναμονή για αποστολή του κωδικού από τη βοηθητική σελίδα..."
+
+#~ msgid ""
+#~ "Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
+#~ "the browser redirects to the helper page and will try to send the code "
+#~ "back automatically. If it fails, copy the code and paste it below."
+#~ msgstr ""
+#~ "Πατήστε «Σύνδεση (Αυτόματη)» για να ανοίξει το <a href=\"%1\">%2</a>. "
+#~ "Αφού δώσετε πρόσβαση, ο περιηγητής ανακατευθύνει στη βοηθητική σελίδα, η "
+#~ "οποία θα προσπαθήσει να στείλει τον κωδικό αυτόματα. Αν αποτύχει, "
+#~ "αντιγράψτε τον κωδικό και επικολλήστε τον παρακάτω."
+
+#~ msgid "Helper page: <a href=\"%1\">%1</a>"
+#~ msgstr "Βοηθητική σελίδα: <a href=\"%1\">%1</a>"
+
+#~ msgid ""
+#~ "If auto-capture fails, copy the code from the helper page and paste it "
+#~ "below."
+#~ msgstr ""
+#~ "Αν η αυτόματη λήψη αποτύχει, αντιγράψτε τον κωδικό από τη βοηθητική "
+#~ "σελίδα και επικολλήστε τον παρακάτω."
+
+#~ msgid "Add location"
+#~ msgstr "Προσθήκη τοποθεσίας"
+
+#~ msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
+#~ msgstr "Κουμπιά «Συμμετοχή στη σύσκεψη» και «Άνοιγμα στο Ημερολόγιο»"
+
+#~ msgid "Open in Calendar"
+#~ msgstr "Άνοιγμα στο Ημερολόγιο"
+
+#~ msgctxt "calendar view showing a year"
+#~ msgid "Year"
+#~ msgstr "Έτος"
+
+#~ msgid "Previous Year"
+#~ msgstr "Προηγούμενο έτος"
+
+#~ msgid "Next Year"
+#~ msgstr "Επόμενο έτος"
+
+#~ msgid "1 event"
+#~ msgid_plural "%1 events"
+#~ msgstr[0] "1 συμβάν"
+#~ msgstr[1] "%1 συμβάντα"
 
 #~ msgid "Vertical Panel"
 #~ msgstr "Κάθετος πίνακας"

@@ -30,6 +30,8 @@ MouseArea {
 
 	hoverEnabled: true
 	property string eventBadgeType: "bottomBar"
+	// The DaysCalendar showing this day (dragging events between days).
+	property Item calendarView: null
 	// 'eventTitles': day number at the top, event titles listed below it.
 	readonly property bool showEventTitles: eventBadgeType === 'eventTitles'
 	// Theme fonts are set in points (pixelSize is -1), so measure them.
@@ -99,6 +101,17 @@ MouseArea {
 		color: Kirigami.Theme.highlightColor
 		radius: dayStyle.radius
 		z: todayRect.z - 1
+	}
+
+	// Keyboard focus ring on the selected day (month grid, after arrow keys in the popup).
+	Rectangle {
+		anchors.fill: parent
+		visible: dayStyle.selected && !!root.keyboardActive && dateMatchingPrecision >= PlasmaCalendar.Calendar.MatchYearMonthAndDay
+		color: "transparent"
+		border.width: 2
+		border.color: Kirigami.Theme.focusColor
+		radius: dayStyle.radius
+		z: todayRect.z + 1
 	}
 
 	// model.events is a ListModel, or a plain array (Qt 6.12 sequence) from some calendar sources.
@@ -206,6 +219,17 @@ MouseArea {
 		font.pointSize: -1
 		font.bold: today // The frame marks today
 		color: Kirigami.Theme.textColor
+	}
+
+	// Month view with event titles: the Google working location ("Home", "Office", ...) left of
+	// the day number, when the cell is wide enough.
+	WorkingLocationLabel {
+		visible: dayStyle.showEventTitles && !!text && dayStyle.width >= Kirigami.Units.gridUnit * 5
+		x: 3
+		y: Math.round((dayStyle.eventTitlesHeaderHeight - height) / 2)
+		date: dayStyle.thisDate
+		maxWidth: dayStyle.width / 2 - Kirigami.Units.gridUnit
+		opacity: 0.75 * dayStyle.contentOpacity
 	}
 
 	PlasmaCore.ToolTipArea {

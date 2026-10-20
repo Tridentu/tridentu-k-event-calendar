@@ -25,6 +25,8 @@ import org.kde.plasma.workspace.calendar as PlasmaCalendar
 import org.kde.plasma.core as PlasmaCore
 
 import "EventBuckets.js" as EventBuckets
+import "Shared.js" as Shared
+import "WeekDrag.js" as WeekDrag
 
 PinchArea {
 	id: root
@@ -55,6 +57,8 @@ PinchArea {
 
 	property QtObject date
 	property date currentDate
+	// The selected day was picked with the keyboard (PopupView): it gets a focus ring.
+	property bool keyboardActive: false
 
 	property int borderWidth: 1
 	property real borderOpacity: 0.4
@@ -82,6 +86,93 @@ PinchArea {
 	property var spanBars: []
 	readonly property int eventRowCapacity: mainDaysCalendar.eventTitleRowCapacity
 	property alias daysModel : daysModel
+
+	//--- Dragging events to other days (with event titles): the event moves by whole days, timed
+	// events keep their time of day. Ctrl held at the drop: a copy instead. Opt-in (the popup).
+	property bool eventDragEnabled: false
+	property var eventDragModel: null // The popup's EventModel: loads and saves the dragged events
+	// { eventItem, pressIndex, dayIndex, days, targetFirst, targetCount, copy, pending }: day cells
+	// are indexes in daysModel. targetFirst / targetCount: the cells the moved event takes.
+	// pending: dropped and being saved; the ghost stays until the events are filled again.
+	property var eventDragState: null
+	function dayCellDate(index) {
+		var day = daysModel.get(index)
+		return new Date(day.yearNumber, day.monthNumber - 1, day.dayNumber)
+	}
+	// The loaded event for one from a day cell (those are ListModel copies).
+	function loadedEvent(eventItem) {
+		var items = eventDragModel && eventDragModel.eventsData ? eventDragModel.eventsData.items : []
+		for (var i = 0; i < items.length; i++) {
+			if (items[i].id === eventItem.id && items[i].calendarId === eventItem.calendarId) {
+				return items[i]
+			}
+		}
+		return null
+	}
+	function eventDragBegin(eventItem, cellIndex, copy) {
+		var item = loadedEvent(eventItem)
+		if (!eventDragEnabled || !item || !WeekDrag.canMove(item) || (eventDragState && eventDragState.pending)) {
+			return
+		}
+		eventDragState = {
+			eventItem: item,
+			pressIndex: cellIndex,
+			dayIndex: cellIndex,
+			days: 0,
+			targetFirst: 0,
+			targetCount: 0,
+			copy: !!copy,
+			pending: false,
+		}
+		eventDragMove(cellIndex, copy)
+	}
+	function eventDragMove(cellIndex, copy) {
+		var d = eventDragState
+		if (!d || d.pending) {
+			return
+		}
+		d.dayIndex = cellIndex
+		d.days = WeekDrag.dayDelta(dayCellDate(d.pressIndex), dayCellDate(cellIndex))
+		var times = WeekDrag.movedByDays(d.eventItem, d.days)
+		d.targetFirst = WeekDrag.dayDelta(dayCellDate(0), times.startDateTime)
+		d.targetCount = Shared.eventDayCount({ start: d.eventItem.start, startDateTime: times.startDateTime, endDateTime: times.endDateTime })
+		if (copy !== undefined) {
+			d.copy = !!copy
+		}
+		eventDragState = Object.assign({}, d) // A new object, so the preview updates
+	}
+	function eventDragDrop(copy) {
+		var d = eventDragState
+		if (!d || d.pending) {
+			return
+		}
+		if (copy !== undefined) {
+			d.copy = !!copy
+		}
+		if (d.days === 0) { // The same day: nothing to do
+			eventDragState = null
+			return
+		}
+		d.pending = true
+		eventDragState = Object.assign({}, d)
+		var times = WeekDrag.movedByDays(d.eventItem, d.days)
+		var target = mainDaysCalendar.eventDragTarget
+		eventMover.drop(d.eventItem, times.start, times.end, d.copy, target, 0, target.height)
+	}
+	function eventDragCancel() {
+		eventDragState = null
+	}
+	EventMover {
+		id: eventMover
+		eventModel: root.eventDragModel
+		onCanceled: root.eventDragCancel()
+	}
+	// The drag was reset (eg: the days were filled again) while the occurrence menu is open: no save.
+	onEventDragStateChanged: {
+		if (!eventDragState) {
+			eventMover.abandon()
+		}
+	}
 
 	signal dateSelected(date selectedDate)
 	// The day cells were recreated (other month, first open, ...): their events must be filled again.
@@ -138,7 +229,6 @@ PinchArea {
 
 	function updateMonthOverview() {
 		var date = calendarBackend.displayedDate
-		var day = date.getDate()
 		var month = date.getMonth() // 0-11
 		var year = date.getFullYear()
 
@@ -219,6 +309,8 @@ PinchArea {
 	// Bucket events per visible day in plain JS first, then write each day to the model once.
 	// https://github.com/KDE/plasma-framework/blob/master/src/declarativeimports/calendar/daysmodel.h
 	function setEvents(items) {
+		// The days are filled again (eg: with a dropped event saved): a drag in progress ends.
+		eventDragState = null
 		// Not laid out yet (eg: just switched to the month view): fill once the cells have a size,
 		// see onEventRowCapacityChanged, so they aren't filled twice in different orders.
 		if (spanBarsActive && eventRowCapacity <= 0) {
@@ -253,9 +345,7 @@ PinchArea {
 	}
 
 	function updateYearOverview() {
-		var date = calendarBackend.displayedDate
-		var day = date.getDate()
-		var year = date.getFullYear()
+		var year = calendarBackend.displayedDate.getFullYear()
 
 		for (var i = 0, j = monthModel.count; i < j; ++i) {
 			monthModel.setProperty(i, "yearNumber", year)
@@ -263,10 +353,7 @@ PinchArea {
 	}
 
 	function updateDecadeOverview() {
-		var date = calendarBackend.displayedDate
-		var day = date.getDate()
-		var month = date.getMonth() + 1
-		var year = date.getFullYear()
+		var year = calendarBackend.displayedDate.getFullYear()
 		var decade = year - year % 10
 
 		for (var i = 0, j = yearModel.count; i < j; ++i) {
@@ -291,7 +378,6 @@ PinchArea {
 		}
 
 		Component.onCompleted: {
-
 			// Bind after configuration is loaded to prevent calling updateMonthOverview a 3rd time.
 			calendarBackend.firstDayOfWeekChanged.connect(function(){
 				updateMonthOverview()
@@ -445,6 +531,8 @@ PinchArea {
 
 			showWeekNumbers: root.showWeekNumbers
 			spanBars: root.spanBarsActive ? root.spanBars : []
+			eventDragEnabled: root.eventDragEnabled
+			eventDrag: root.eventDragState
 			eventBadgeType: plasmoid.configuration.popupMode === 'month' ? 'eventTitles' : plasmoid.configuration.monthEventBadgeType
 
 			headerModel: calendarBackend.days
@@ -460,15 +548,15 @@ PinchArea {
 			onHeaderClicked: {
 				stack.push(yearOverview)
 			}
-				onActivated: function(index, date, item) {
-					root.date = date
-					var dt = new Date(date.yearNumber, date.monthNumber - 1, date.dayNumber)
-					root.setSelectedDate(dt)
-					root.dateClicked(dt)
-				}
-				onDoubleClicked: function(index, date, item) {
-					root.dayDoubleClicked(date)
-				}
+			onActivated: function(index, date, item) {
+				root.date = date
+				var dt = new Date(date.yearNumber, date.monthNumber - 1, date.dayNumber)
+				root.setSelectedDate(dt)
+				root.dateClicked(dt)
+			}
+			onDoubleClicked: function(index, date, item) {
+				root.dayDoubleClicked(date)
+			}
 		}
 	}
 

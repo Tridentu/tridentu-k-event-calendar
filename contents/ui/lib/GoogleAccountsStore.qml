@@ -5,6 +5,7 @@ import "ConfigUtils.js" as ConfigUtils
 import "GoogleAccountState.js" as GoogleAccountState
 import "Requests.js" as Requests
 import "SafeConfig.js" as SafeConfig
+import "../ScriptPath.js" as ScriptPath
 
 Item {
 	id: store
@@ -15,10 +16,7 @@ Item {
 
 	property var configBridge: null
 	property bool debugEnabled: false
-	property string secretStorePath: {
-		var resolved = String(Qt.resolvedUrl("../../scripts/secret_store.py"))
-		return resolved.indexOf("file://") === 0 ? resolved.slice(7) : resolved
-	}
+	property string secretStorePath: ScriptPath.scriptPath("secret_store.py")
 
 	property var accountsConfigValue: ""
 	property string activeAccountId: ""
@@ -236,6 +234,29 @@ Item {
 			}
 		}
 		return []
+	}
+
+	// A calendar list fetched from Google: stored, and the account's first one picks the default
+	// selection (see defaultCalendarIdList). patch: other changes to save with it (eg: a label).
+	// callback: see updateAccount. Does nothing for an unknown account.
+	function applyCalendarList(accountId, calendarList, patch, callback) {
+		var account = getAccount(accountId)
+		if (!account) {
+			return
+		}
+		var next = {}
+		for (var key in (patch || {})) {
+			next[key] = patch[key]
+		}
+		next.calendarList = calendarList
+		if (!account.calendarSelectionInitialized && !ensureStringArray(account.calendarIdList).length) {
+			var defaultList = defaultCalendarIdList(calendarList)
+			if (defaultList.length) {
+				next.calendarIdList = defaultList
+				next.calendarSelectionInitialized = true
+			}
+		}
+		updateAccount(accountId, next, callback)
 	}
 
 	function accountCanFetch(account) {
@@ -640,25 +661,10 @@ Item {
 		}
 	}
 
-	function localFileUrl(path) {
-		return path.indexOf("file://") === 0 ? path : "file://" + path
-	}
-
 	function generateTempFilePath(prefix) {
 		var timePart = Date.now().toString(36)
 		var randPart = Math.floor(Math.random() * 1000000).toString(36)
 		return "/tmp/" + prefix + "-" + timePart + "-" + randPart + ".json"
-	}
-
-	function delay(delayTime, callback) {
-		var timer = Qt.createQmlObject("import QtQuick; Timer {}", store)
-		timer.interval = delayTime
-		timer.repeat = false
-		timer.triggered.connect(function() {
-			timer.destroy()
-			callback()
-		})
-		timer.start()
 	}
 
 	function waitForReadyFile(readyFile, callback, attemptsLeft) {

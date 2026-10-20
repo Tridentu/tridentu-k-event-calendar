@@ -17,6 +17,16 @@ FormComboBox {
 		return selectedCalendar.isTasklist === true
 	}
 
+	// Select a calendar of the list by id (eg: back to the event's own calendar).
+	function selectCalendar(calendarId) {
+		for (var i = 0; i < model.length; i++) {
+			if (model[i].calendarId === calendarId) {
+				currentIndex = i
+				return
+			}
+		}
+	}
+
 	function populate(calendarList, initialCalendarId) {
 		var list = []
 		var selectedIndex = 0
@@ -32,9 +42,10 @@ FormComboBox {
 				list.push({
 					'calendarId': calendar.id,
 					'text': calendar.summary,
-					'backgroundColor': plasmoid.configuration.googleColorPalette !== 'classic' ? GooglePalette.calendarColor(calendar) : calendar.backgroundColor,
+					'backgroundColor': GooglePalette.displayCalendarColor(calendar, plasmoid.configuration.googleColorPalette),
 					'isTasklist': calendar.isTasklist,
 					'timeZone': calendar.timeZone || '', // Needed for recurring events
+					'primary': calendar.primary === true, // Google: out of office / focus time only there
 					// Video conferencing the calendar allows, eg: ['hangoutsMeet']; null when unknown.
 					'conferenceTypes': calendar.conferenceProperties && calendar.conferenceProperties.allowedConferenceSolutionTypes || null,
 				})

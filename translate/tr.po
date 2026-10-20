@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: eventcalendar\n"
 "Report-Msgid-Bugs-To: https://github.com/divinae/plasma-applet-"
 "eventcalendar\n"
-"POT-Creation-Date: 2026-10-19 10:04+0200\n"
+"POT-Creation-Date: 2026-10-19 15:51+0200\n"
 "PO-Revision-Date: 2019-06-02 22:28+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -161,8 +161,8 @@ msgid "Google authentication failed: %1"
 msgstr "Google kimlik doğrulaması başarısız: %1"
 
 #: ../contents/ui/calendars/GoogleCalendarManager.qml
-msgid "Error fetching calendar: %1"
-msgstr "Takvim alınırken hata: %1"
+msgid "Could not get the free / busy times"
+msgstr "Meşgul / müsait zamanlar alınamadı"
 
 #: ../contents/ui/calendars/ICalManager.qml
 msgid "iCalendar"
@@ -177,6 +177,7 @@ msgid "Could not load %1: %2"
 msgstr "%1 yüklenemedi: %2"
 
 #: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/EventModel.qml
 msgid "Holidays"
 msgstr "Tatiller"
 
@@ -188,6 +189,26 @@ msgstr "Yapılacaklar"
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Other"
 msgstr "Diğer"
+
+#: ../contents/ui/CalendarToggles.qml ../contents/ui/config/ConfigEvents.qml
+#: ../contents/ui/config/ConfigGoogleCalendar.qml
+#: ../contents/ui/config/ConfigICal.qml
+msgid "Calendars"
+msgstr "Takvimler"
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "No calendars selected in the settings."
+msgstr "Ayarlarda hiç takvim seçilmedi."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "Show All"
+msgstr "Tümünü Göster"
+
+#: ../contents/ui/CardHeader.qml ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/config/ConfigGoogleCalendar.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
+msgid "Cancel"
+msgstr "İptal"
 
 #: ../contents/ui/ClockView.qml
 msgctxt "time left in the current meeting"
@@ -245,13 +266,6 @@ msgstr "Renk"
 #: ../contents/ui/EventEditView.qml
 msgid "Save"
 msgstr "Kaydet"
-
-#: ../contents/ui/config/CalendarEditDialog.qml
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/QuickAddView.qml
-msgid "Cancel"
-msgstr "İptal"
 
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Default (%1)"
@@ -366,12 +380,6 @@ msgstr "Masaüstü araç takımı"
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Debug logging and extra settings pages"
 msgstr "Hata ayıklama günlüğü ve ek ayar sayfaları"
-
-#: ../contents/ui/config/ConfigEvents.qml
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-#: ../contents/ui/config/ConfigICal.qml
-msgid "Calendars"
-msgstr "Takvimler"
 
 #: ../contents/ui/config/ConfigEvents.qml
 msgid "Refresh every"
@@ -529,12 +537,78 @@ msgstr ""
 "1, …) veya e-postası; boşsa uygulamanın varsayılanı kullanılır."
 
 #: ../contents/ui/config/ConfigEvents.qml
+msgid "Meetings"
+msgstr "Toplantılar"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open the meeting link when a meeting starts"
+msgstr "Toplantı başladığında toplantı bağlantısını aç"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For meetings you accepted or organize, not marked as ended."
+msgstr ""
+"Kabul ettiğiniz veya düzenlediğiniz, bitti olarak işaretlenmemiş toplantılar "
+"için."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Do Not Disturb during meetings"
+msgstr "Toplantılar sırasında Rahatsız Etmeyin"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Plasma's Do Not Disturb from the start until the end of a meeting with "
+"guests or a meeting link. Mark as Ended turns it off."
+msgstr ""
+"Konuklu veya toplantı bağlantılı bir toplantının başından sonuna kadar "
+"Plasma'nın Rahatsız Etmeyin kipi. Bitti olarak işaretle bunu kapatır."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only meetings I accepted"
+msgstr "Yalnızca kabul ettiğim toplantılar"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Invitations"
+msgstr "Davetler"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "New invitations for today"
+msgstr "Bugün için yeni davetler"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification for each meeting today you haven't answered yet, with Yes, "
+"Maybe and No."
+msgstr ""
+"Henüz yanıtlamadığınız bugünkü her toplantı için Evet, Belki ve Hayır "
+"seçenekli bir bildirim."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Daily Agenda"
+msgstr "Günlük Ajanda"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Today's events every morning"
+msgstr "Her sabah bugünün etkinlikleri"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification with today's events once a day, also when the computer is "
+"turned on later."
+msgstr ""
+"Günde bir kez bugünün etkinliklerini içeren bir bildirim; bilgisayar daha "
+"sonra açıldığında da."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "At"
+msgstr "Saat"
+
+#: ../contents/ui/config/ConfigEvents.qml
 msgid "All Event Notifications"
 msgstr "Tüm Etkinlik Bildirimleri"
 
 #: ../contents/ui/config/ConfigEvents.qml
-msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
-msgstr "\"Toplantıya katıl\" ve \"Takvimde aç\" düğmeleri"
+msgid "\"Join meeting\" button"
+msgstr "\"Toplantıya katıl\" düğmesi"
 
 #: ../contents/ui/config/ConfigEvents.qml
 msgid "Skip all-day events"
@@ -575,10 +649,6 @@ msgstr "Google oturum açma işlemi hazırlanamadı: %1"
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Waiting for browser callback..."
 msgstr "Tarayıcı geri çağrısı bekleniyor..."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid "Waiting for the helper page to send the code..."
-msgstr "Yardımcı sayfanın kodu göndermesi bekleniyor..."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Sign-in timed out. Try again."
@@ -750,17 +820,6 @@ msgstr ""
 "yapıştırın."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid ""
-"Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
-"the browser redirects to the helper page and will try to send the code back "
-"automatically. If it fails, copy the code and paste it below."
-msgstr ""
-"<a href=\"%1\">%2</a> adresini açmak için Oturum Aç (Otomatik) düğmesine "
-"tıklayın. Erişim izni verdikten sonra tarayıcı yardımcı sayfaya yönlendirir "
-"ve kodu otomatik olarak geri göndermeyi dener. Başarısız olursa kodu "
-"kopyalayıp aşağıya yapıştırın."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "The desktop could not open the browser automatically."
 msgstr "Masaüstü tarayıcıyı otomatik olarak açamadı."
 
@@ -773,10 +832,6 @@ msgid "Helper page (optional): <a href=\"%1\">%1</a>"
 msgstr "Yardımcı sayfa (isteğe bağlı): <a href=\"%1\">%1</a>"
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid "Helper page: <a href=\"%1\">%1</a>"
-msgstr "Yardımcı sayfa: <a href=\"%1\">%1</a>"
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid ""
 "If your browser shows a connection error, that's expected. Copy the URL from "
 "the address bar anyway and paste it below. If auto-capture works, you do not "
@@ -785,13 +840,6 @@ msgstr ""
 "Tarayıcınız bir bağlantı hatası gösterirse bu beklenen bir durumdur. Yine de "
 "adres çubuğundaki URL'yi kopyalayıp aşağıya yapıştırın. Otomatik yakalama "
 "çalışırsa hiçbir şey yapıştırmanız gerekmez."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid ""
-"If auto-capture fails, copy the code from the helper page and paste it below."
-msgstr ""
-"Otomatik yakalama başarısız olursa kodu yardımcı sayfadan kopyalayıp aşağıya "
-"yapıştırın."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Paste the authorization code or redirect URL here"
@@ -845,7 +893,7 @@ msgstr "https:// URL'si veya yerel %1/*.ics dosyası"
 msgid "Browse"
 msgstr "Tara"
 
-#: ../contents/ui/config/ConfigICal.qml
+#: ../contents/ui/config/ConfigICal.qml ../contents/ui/main.qml
 msgid "iCalendar (*.ics)"
 msgstr "iCalendar (*.ics)"
 
@@ -932,12 +980,47 @@ msgid "Week and Day"
 msgstr "Hafta ve Gün"
 
 #: ../contents/ui/config/ConfigViews.qml
+msgctxt "week view setting"
+msgid "Days shown"
+msgstr "Gösterilen günler"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "7 days"
+msgstr "7 gün"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Work week (without the weekend)"
+msgstr "İş haftası (hafta sonu hariç)"
+
+#: ../contents/ui/config/ConfigViews.qml
 msgid "Working hours start"
 msgstr "Mesai başlangıcı"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Working hours end"
 msgstr "Mesai bitişi"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Second time zone"
+msgstr "İkinci saat dilimi"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "no second time zone"
+msgid "None"
+msgstr "Yok"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "No second time zone"
+msgstr "İkinci saat dilimi yok"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Its hours are shown next to the local ones in the Week and Day views."
+msgstr ""
+"Saatleri, Hafta ve Gün görünümlerinde yerel saatlerin yanında gösterilir."
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/EventEditView.qml
+msgid "Search time zones"
+msgstr "Saat dilimlerinde ara"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Forecast in the day headers and, in the Day view, a weather panel."
@@ -993,6 +1076,19 @@ msgstr "Bir güne tıklamak onu Gün görünümünde açar"
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Month view"
 msgstr "Ay görünümü"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Declined events"
+msgstr "Reddedilen etkinlikler"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show (struck through)"
+msgstr "Göster (üstü çizili)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "declined events"
+msgid "Hide"
+msgstr "Gizle"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Double-clicking a day"
@@ -1175,69 +1271,30 @@ msgstr "d MMM yyyy"
 msgid "to"
 msgstr "dan"
 
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
+#: ../contents/ui/EditTaskForm.qml
 msgid "Event Title"
 msgstr "Etkinlik Başlığı"
 
-#: ../contents/ui/EditEventForm.qml ../contents/ui/LocaleFuncs.js
-msgid "All Day"
-msgstr "Tüm Gün"
-
-#: ../contents/ui/EditEventForm.qml
-msgid "Add location"
-msgstr "Konum ekle"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
+#: ../contents/ui/EditTaskForm.qml
 msgid "Add description"
 msgstr "Açıklama ekle"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
-msgid "&Save"
-msgstr "Kaydet"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
-#: ../contents/ui/TimerInputView.qml
-msgid "&Cancel"
-msgstr "İptal"
 
 #: ../contents/ui/EditTaskForm.qml
 msgid "Add due date"
 msgstr "Bitiş tarihi ekle"
 
+#: ../contents/ui/EditTaskForm.qml
+msgid "&Save"
+msgstr "Kaydet"
+
+#: ../contents/ui/EditTaskForm.qml ../contents/ui/TimerInputView.qml
+msgid "&Cancel"
+msgstr "İptal"
+
 #: ../contents/ui/EventContextMenu.qml
 msgctxt "RSVP to an invitation"
 msgid "Respond"
 msgstr "Yanıtla"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "Yes"
-msgstr "Evet"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "Yes to All Events"
-msgstr "Tüm Etkinliklere Evet"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "Maybe"
-msgstr "Belki"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "Maybe to All Events"
-msgstr "Tüm Etkinliklere Belki"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "No"
-msgstr "Hayır"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "No to All Events"
-msgstr "Tüm Etkinliklere Hayır"
 
 #: ../contents/ui/EventContextMenu.qml
 msgid "Show Details"
@@ -1256,6 +1313,10 @@ msgstr "Google Takvim'de Aç"
 #: ../contents/ui/EventContextMenu.qml
 msgid "Mark as Ended"
 msgstr "Bitti olarak işaretle"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Email Guests…"
+msgstr "Konuklara E-posta Gönder…"
 
 #: ../contents/ui/EventContextMenu.qml
 msgid "Edit…"
@@ -1285,12 +1346,12 @@ msgid "Delete All Events of “%1”"
 msgstr "Tüm “%1” Etkinliklerini Sil"
 
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/WeekView.qml
+#: ../contents/ui/EventMover.qml
 msgid "This event"
 msgstr "Bu etkinlik"
 
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/WeekView.qml
+#: ../contents/ui/EventMover.qml
 msgid "All events in the series"
 msgstr "Serideki tüm etkinlikler"
 
@@ -1330,7 +1391,8 @@ msgctxt "%1 = 10m, 2m"
 msgid "Reminders: %1 before"
 msgstr "Anımsatıcılar: %1 önce"
 
-#: ../contents/ui/EventDetailsView.qml ../contents/ui/SearchView.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/FindTimeView.qml
+#: ../contents/ui/SearchView.qml
 msgid "Back"
 msgstr "Geri"
 
@@ -1358,19 +1420,58 @@ msgstr "Bu yinelenen etkinliğin tüm tekrarlarını siler."
 msgid "Duplicate"
 msgstr "Çoğalt"
 
+#: ../contents/ui/EventDetailsView.qml
+msgid "Private event"
+msgstr "Gizli etkinlik"
+
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
 #: ../contents/ui/WeekView.qml
 msgid "All day"
 msgstr "Tüm gün"
 
-#: ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
 msgid "Repeats"
 msgstr "Tekrarlanır"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = start and end time, %2 = city, %3 = time zone id"
+msgid "%1 %2 time (%3)"
+msgstr "%1 %2 saatiyle (%3)"
 
 #: ../contents/ui/EventDetailsView.qml
 msgctxt "RSVP to an invitation"
 msgid "Going?"
 msgstr "Katılıyor musunuz?"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Out of office"
+msgstr "Ofis dışında"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Focus time"
+msgstr "Odaklanma zamanı"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines all meetings at this time"
+msgstr "Bu zamandaki tüm toplantıları reddeder"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines new invitations at this time"
+msgstr "Bu zamandaki yeni davetleri reddeder"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = message sent when declining"
+msgid "Message: “%1”"
+msgstr "Mesaj: “%1”"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = titles of other events at the same time"
+msgid "Overlaps with: %1"
+msgstr "Çakıştığı etkinlikler: %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Write an email to the guests"
+msgstr "Konuklara e-posta yaz"
 
 #: ../contents/ui/EventDetailsView.qml
 msgctxt "event organizer"
@@ -1391,6 +1492,11 @@ msgid "Show 1 more"
 msgid_plural "Show all %1"
 msgstr[0] "1 tane daha göster"
 msgstr[1] "Tümünü göster (%1)"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = start and end time in the local time zone"
+msgid "%1 your time"
+msgstr "%1 sizin saatinizle"
 
 #: ../contents/ui/EventEditView.qml
 msgctxt "Google Calendar event color"
@@ -1452,6 +1558,11 @@ msgid "Enter an email address, like name@example.com"
 msgstr "Bir e-posta adresi girin, örneğin ad@example.com"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "you, in Find a time"
+msgid "You"
+msgstr "Siz"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Edit Event"
 msgstr "Etkinliği Düzenle"
 
@@ -1486,14 +1597,85 @@ msgid "Title"
 msgstr "Başlık"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Event"
+msgstr "Etkinlik"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Out of office"
+msgstr "Ofis dışında"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Focus time"
+msgstr "Odaklanma zamanı"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Event type"
+msgstr "Etkinlik türü"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Don't decline invitations"
+msgstr "Davetleri reddetme"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new invitations in this time"
+msgstr "Bu zamandaki yeni davetleri reddet"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new and existing invitations in this time"
+msgstr "Bu zamandaki yeni ve mevcut davetleri reddet"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Automatically decline"
+msgstr "Otomatik olarak reddet"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Message for declined invitations"
+msgstr "Reddedilen davetler için mesaj"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Do not disturb"
+msgstr "Rahatsız etmeyin"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Available"
+msgstr "Müsait"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Do not disturb or Available"
+msgid "Chat status: %1"
+msgstr "Sohbet durumu: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Chat status"
+msgstr "Sohbet durumu"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Calendar color"
 msgstr "Takvim rengi"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Local time"
+msgstr "Yerel saat"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = time zone id, eg: Europe/Warsaw"
+msgid "Time zone: %1"
+msgstr "Saat dilimi: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Time zone"
+msgstr "Saat dilimi"
 
 #: ../contents/ui/EventEditView.qml
 msgid "Does not repeat"
 msgstr "Tekrarlanmaz"
 
-#: ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventEditView.qml ../contents/ui/ImportView.qml
 msgid "Daily"
 msgstr "Her gün"
 
@@ -1609,6 +1791,49 @@ msgid "Remove video conferencing"
 msgstr "Görüntülü toplantıyı kaldır"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Busy"
+msgstr "Meşgul"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Free"
+msgstr "Müsait"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Busy or Free"
+msgid "Show as: %1"
+msgstr "Durum: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Show as"
+msgstr "Durum"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Calendar default"
+msgstr "Takvimin varsayılanı"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Public"
+msgstr "Herkese açık"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Private"
+msgstr "Gizli"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Calendar default, Public or Private"
+msgid "Visibility: %1"
+msgstr "Görünürlük: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Visibility"
+msgstr "Görünürlük"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Reminders"
 msgstr "Hatırlatıcılar"
 
@@ -1682,9 +1907,242 @@ msgctxt "guest suggestion: %1 = name, %2 = email"
 msgid "%1 <%2>"
 msgstr "%1 <%2>"
 
+#: ../contents/ui/EventEditView.qml ../contents/ui/FindTimeView.qml
+msgid "Find a Time"
+msgstr "Zaman Bul"
+
 #: ../contents/ui/EventEditView.qml
 msgid "Description"
 msgstr "Açıklama"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Home"
+msgstr "Ev"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Office"
+msgstr "Ofis"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Elsewhere"
+msgstr "Başka bir yer"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't import events"
+msgstr "Bu takvim etkinlikleri içe aktaramaz"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't show free / busy times"
+msgstr "Bu takvim meşgul / müsait zamanları gösteremiyor"
+
+#: ../contents/ui/EventMover.qml
+msgid "Event moved"
+msgstr "Etkinlik taşındı"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "separator of names in a list"
+msgid ", "
+msgstr ", "
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No suggestions: the guests' busy times aren't available."
+msgstr "Öneri yok: konukların meşgul saatleri alınamıyor."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "Suggested times (not counting %1):"
+msgstr "Önerilen saatler (%1 hariç):"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Suggested times:"
+msgstr "Önerilen zamanlar:"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "No time free in the working hours of this day (not counting %1)."
+msgstr "Bu günün çalışma saatlerinde boş zaman yok (%1 hariç)."
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No time free for everyone in the working hours of this day."
+msgstr "Bu günün mesai saatlerinde herkesin müsait olduğu bir zaman yok."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time"
+msgid "Not available"
+msgstr "Uygun değil"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time: %1 = Google's reason"
+msgid "Not available (%1)"
+msgstr "Uygun değil (%1)"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Previous day"
+msgstr "Önceki gün"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "Find a time: the day shown"
+msgid "ddd, d MMM"
+msgstr "d MMM ddd"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Next day"
+msgstr "Sonraki gün"
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file."
+msgstr "Dosya okunamadı."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Reading .ics files needs the Python icalendar module (python-icalendar)."
+msgstr ""
+".ics dosyalarını okumak için Python icalendar modülü (python-icalendar) "
+"gerekir."
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file: %1"
+msgstr "Dosya okunamadı: %1"
+
+#: ../contents/ui/ImportView.qml
+msgid "Changed occurrence of a repeating event"
+msgstr "Yinelenen bir etkinliğin değiştirilmiş tekrarı"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 day"
+msgid_plural "Every %1 days"
+msgstr[0] "%1 günde bir"
+msgstr[1] "%1 günde bir"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "%1 haftada bir"
+msgstr[1] "%1 haftada bir"
+
+#: ../contents/ui/ImportView.qml
+msgid "Weekly"
+msgstr "Her hafta"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly / Every 2 weeks, %2 = days"
+msgid "%1 on %2"
+msgstr "%1 %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 month"
+msgid_plural "Every %1 months"
+msgstr[0] "%1 ayda bir"
+msgstr[1] "%1 ayda bir"
+
+#: ../contents/ui/ImportView.qml
+msgid "Monthly"
+msgstr "Her ay"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 year"
+msgid_plural "Every %1 years"
+msgstr[0] "%1 yılda bir"
+msgstr[1] "%1 yılda bir"
+
+#: ../contents/ui/ImportView.qml
+msgid "Yearly"
+msgstr "Her yıl"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%2 = Weekly on Monday, ..."
+msgid "%2, %1 time"
+msgid_plural "%2, %1 times"
+msgstr[0] "%2, %1 kez"
+msgstr[1] "%2, %1 kez"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly on Monday, ..., %2 = date"
+msgid "%1, until %2"
+msgstr "%1, %2 tarihine kadar"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 exception"
+msgid_plural "%1 exceptions"
+msgstr[0] "%1 istisna"
+msgstr[1] "%1 istisna"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/main.qml
+msgid "Import Events"
+msgstr "Etkinlikleri İçe Aktar"
+
+#: ../contents/ui/ImportView.qml
+msgid "Close"
+msgstr "Kapat"
+
+#: ../contents/ui/ImportView.qml
+msgid "Import"
+msgstr "İçe Aktar"
+
+#: ../contents/ui/ImportView.qml
+msgid "No file chosen"
+msgstr "Dosya seçilmedi"
+
+#: ../contents/ui/ImportView.qml
+msgid "Choose File…"
+msgstr "Dosya Seç…"
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading the file…"
+msgstr "Dosya okunuyor…"
+
+#: ../contents/ui/ImportView.qml
+msgid "No events in this file"
+msgstr "Bu dosyada etkinlik yok"
+
+#: ../contents/ui/ImportView.qml
+msgid "(No title)"
+msgstr "(Başlıksız)"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 cancelled event isn't imported."
+msgid_plural "%1 cancelled events aren't imported."
+msgstr[0] "%1 iptal edilmiş etkinlik içe aktarılmaz."
+msgstr[1] "%1 iptal edilmiş etkinlik içe aktarılmaz."
+
+#: ../contents/ui/ImportView.qml
+msgid "Calendar:"
+msgstr "Takvim:"
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Guests and the organizer aren't imported, and no invitations are sent. "
+"Importing the same event again updates it."
+msgstr ""
+"Konuklar ve düzenleyen içe aktarılmaz, davet de gönderilmez. Aynı etkinliği "
+"yeniden içe aktarmak onu günceller."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Importing needs a Google Calendar you can edit. Log in to Google Calendar in "
+"the settings."
+msgstr ""
+"İçe aktarmak için düzenleyebileceğiniz bir Google Takvim gerekir. Ayarlardan "
+"Google Takvim'de oturum açın."
+
+#: ../contents/ui/ImportView.qml
+msgid "Importing… %1 of %2"
+msgstr "İçe aktarılıyor… %1 / %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 event imported"
+msgid_plural "%1 events imported"
+msgstr[0] "%1 etkinlik içe aktarıldı"
+msgstr[1] "%1 etkinlik içe aktarıldı"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 failed: %2"
+msgid_plural "%1 failed, eg: %2"
+msgstr[0] "%1 başarısız: %2"
+msgstr[1] "%1 başarısız, örn.: %2"
 
 #: ../contents/ui/JoinPill.qml
 msgid "Join"
@@ -1741,9 +2199,28 @@ msgid "%1, %2"
 msgstr "%1, %2"
 
 #: ../contents/ui/LocaleFuncs.js
+msgid "All Day"
+msgstr "Tüm Gün"
+
+#: ../contents/ui/LocaleFuncs.js
 msgctxt "from date/time %1 until date/time %2"
 msgid "%1 - %2"
 msgstr "%1 - %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event span, %1 = start, %2 = end"
+msgid "%1 – %2"
+msgstr "%1 – %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date"
+msgid "%1 · All day"
+msgstr "%1 · Tüm gün"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
+msgid "%1 · %2 – %3"
+msgstr "%1 · %2 – %3"
 
 #: ../contents/ui/LocaleFuncs.js
 #, no-c-format
@@ -1820,6 +2297,10 @@ msgid "New Event…"
 msgstr "Yeni Etkinlik…"
 
 #: ../contents/ui/main.qml
+msgid "Import Events…"
+msgstr "Etkinlikleri İçe Aktar…"
+
+#: ../contents/ui/main.qml
 msgid "Open Google Calendar"
 msgstr "Google Takvim'i Aç"
 
@@ -1863,7 +2344,7 @@ msgstr "Örn: 9-5 arası iş"
 msgid "Previous Day"
 msgstr "Önceki Gün"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Previous Week"
 msgstr "Önceki Hafta"
 
@@ -1871,7 +2352,7 @@ msgstr "Önceki Hafta"
 msgid "Previous Month"
 msgstr "Önceki Ay"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Today"
 msgstr "Bugün"
 
@@ -1879,7 +2360,7 @@ msgstr "Bugün"
 msgid "Next Day"
 msgstr "Sonraki Gün"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Next Week"
 msgstr "Sonraki Hafta"
 
@@ -1967,20 +2448,35 @@ msgstr ""
 msgid "More options…"
 msgstr "Daha fazla seçenek…"
 
-#: ../contents/ui/SearchView.qml ../contents/ui/WeekView.qml
-msgctxt "event span, %1 = start, %2 = end"
-msgid "%1 – %2"
-msgstr "%1 – %2"
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Yes"
+msgstr "Evet"
 
-#: ../contents/ui/SearchView.qml
-msgctxt "search result, %1 = date"
-msgid "%1 · All day"
-msgstr "%1 · Tüm gün"
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Yes to All Events"
+msgstr "Tüm Etkinliklere Evet"
 
-#: ../contents/ui/SearchView.qml
-msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
-msgid "%1 · %2 – %3"
-msgstr "%1 · %2 – %3"
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Maybe"
+msgstr "Belki"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Maybe to All Events"
+msgstr "Tüm Etkinliklere Belki"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "No"
+msgstr "Hayır"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "No to All Events"
+msgstr "Tüm Etkinliklere Hayır"
 
 #: ../contents/ui/SearchView.qml
 msgid "Search events…"
@@ -2077,10 +2573,6 @@ msgid "%1 mm"
 msgstr "%1 mm"
 
 #: ../contents/ui/UpcomingEvents.qml
-msgid "Open in Calendar"
-msgstr "Takvimde Aç"
-
-#: ../contents/ui/UpcomingEvents.qml
 msgid "Snooze 1 minute"
 msgid_plural "Snooze %1 minutes"
 msgstr[0] "1 dakika ertele"
@@ -2090,6 +2582,42 @@ msgstr[1] "%1 dakika ertele"
 msgctxt "%1 = 15 minutes, %2 = event title"
 msgid "In %1: %2"
 msgstr "%1 içinde: %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "invitation, %1 = organizer"
+msgid "From %1"
+msgstr "Gönderen: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title"
+msgid "Invitation: %1"
+msgstr "Davet: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, %1 = event title"
+msgid "All day: %1"
+msgstr "Tüm gün: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, more events"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+%1 tane daha"
+msgstr[1] "+%1 tane daha"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Today: %1 event"
+msgid_plural "Today: %1 events"
+msgstr[0] "Bugün: %1 etkinlik"
+msgstr[1] "Bugün: %1 etkinlik"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Nothing planned today"
+msgstr "Bugün planlanmış bir şey yok"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Open Agenda"
+msgstr "Ajandayı Aç"
 
 #: ../contents/ui/UpcomingEvents.qml
 msgctxt "%1 = time"
@@ -2169,8 +2697,14 @@ msgid "Next days"
 msgstr "Sonraki günler"
 
 #: ../contents/ui/WeekView.qml
-msgid "Event moved"
-msgstr "Etkinlik taşındı"
+msgctxt "%1 = time zone, %2 = a date"
+msgid ""
+"%1\n"
+"The time difference changes during these days: the hours shown are those of "
+"%2."
+msgstr ""
+"%1\n"
+"Saat farkı bu günlerde değişiyor: gösterilen saatler %2 içindir."
 
 #: ../contents/ui/WeekView.qml
 msgid "%1 day"
@@ -2182,6 +2716,64 @@ msgstr[1] "%1 gün"
 msgctxt "more events not shown"
 msgid "+%1"
 msgstr "+%1"
+
+#: ../contents/ui/WorkingLocationLabel.qml
+msgctxt "%1 = Home, Office, ..."
+msgid "Working location: %1"
+msgstr "Çalışma konumu: %1"
+
+#~ msgid "Error fetching calendar: %1"
+#~ msgstr "Takvim alınırken hata: %1"
+
+#~ msgid "Not logged in to Google Calendar"
+#~ msgstr "Google Takvim'de oturum açılmadı"
+
+#~ msgid "Waiting for the helper page to send the code..."
+#~ msgstr "Yardımcı sayfanın kodu göndermesi bekleniyor..."
+
+#~ msgid ""
+#~ "Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
+#~ "the browser redirects to the helper page and will try to send the code "
+#~ "back automatically. If it fails, copy the code and paste it below."
+#~ msgstr ""
+#~ "<a href=\"%1\">%2</a> adresini açmak için Oturum Aç (Otomatik) düğmesine "
+#~ "tıklayın. Erişim izni verdikten sonra tarayıcı yardımcı sayfaya "
+#~ "yönlendirir ve kodu otomatik olarak geri göndermeyi dener. Başarısız "
+#~ "olursa kodu kopyalayıp aşağıya yapıştırın."
+
+#~ msgid "Helper page: <a href=\"%1\">%1</a>"
+#~ msgstr "Yardımcı sayfa: <a href=\"%1\">%1</a>"
+
+#~ msgid ""
+#~ "If auto-capture fails, copy the code from the helper page and paste it "
+#~ "below."
+#~ msgstr ""
+#~ "Otomatik yakalama başarısız olursa kodu yardımcı sayfadan kopyalayıp "
+#~ "aşağıya yapıştırın."
+
+#~ msgid "Add location"
+#~ msgstr "Konum ekle"
+
+#~ msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
+#~ msgstr "\"Toplantıya katıl\" ve \"Takvimde aç\" düğmeleri"
+
+#~ msgid "Open in Calendar"
+#~ msgstr "Takvimde Aç"
+
+#~ msgctxt "calendar view showing a year"
+#~ msgid "Year"
+#~ msgstr "Yıl"
+
+#~ msgid "Previous Year"
+#~ msgstr "Önceki Yıl"
+
+#~ msgid "Next Year"
+#~ msgstr "Sonraki Yıl"
+
+#~ msgid "1 event"
+#~ msgid_plural "%1 events"
+#~ msgstr[0] "1 etkinlik"
+#~ msgstr[1] "%1 etkinlik"
 
 #~ msgid "Vertical Panel"
 #~ msgstr "Dikey panel"

@@ -1,321 +1,278 @@
 import QtQuick
 
 import "../lib/Requests.js" as Requests
+import "../lib/GoogleOAuthConfig.js" as GoogleOAuthConfig
 import "../lib/GoogleOAuthToken.js" as GoogleOAuthToken
 
 QtObject {
-    id: googleApiSession
+	id: googleApiSession
 
-    property var accountsStore
-    property string accountId: ""
-    property int accountRevision: 0
-    property var connectedStore: null
-    property string defaultClientId: "179575196194-jljdfm9usprtffue48js64h70carpchl.apps.googleusercontent.com"
+	property var accountsStore
+	property string accountId: ""
+	property int accountRevision: 0
+	property var connectedStore: null
 
-    readonly property string accessToken: {
-        // Ensure refreshes propagate when account data updates.
-        var _accountId = accountId;
-        var _ = accountRevision;
-        var account = getAccount();
-        return account ? account.accessToken : "";
-    }
+	readonly property string accessToken: {
+		// Ensure refreshes propagate when account data updates.
+		var _accountId = accountId
+		var _ = accountRevision
+		var account = getAccount()
+		return account ? account.accessToken : ""
+	}
 
-    function getAccount() {
-        if (!accountsStore || !accountId) {
-            return null;
-        }
-        return accountsStore.getAccount(accountId);
-    }
+	function getAccount() {
+		if (!accountsStore || !accountId) {
+			return null
+		}
+		return accountsStore.getAccount(accountId)
+	}
 
-    function readConfig(key, fallback) {
-        if (typeof plasmoid !== "undefined" && plasmoid.configuration) {
-            var value = plasmoid.configuration[key];
-            return (value === undefined || value === null) ? fallback : value;
-        }
-        return fallback;
-    }
+	function readConfig(key, fallback) {
+		if (typeof plasmoid !== "undefined" && plasmoid.configuration) {
+			var value = plasmoid.configuration[key]
+			return (value === undefined || value === null) ? fallback : value
+		}
+		return fallback
+	}
 
-    function normalizedClientValue(value) {
-        return value ? String(value).trim() : "";
-    }
+	// The client secret to refresh the account's token with: its own, else the configured one of
+	// its client. "" for PKCE sessions and the built-in client.
+	function resolveRefreshClientSecret(account) {
+		if (!account || account.sessionUsesPkce === true) {
+			return ""
+		}
+		var normalized = GoogleOAuthConfig.normalizedClientValue
+		if (account.sessionClientSecret) {
+			return normalized(account.sessionClientSecret)
+		}
+		if (account.sessionClientId === normalized(readConfig("customClientId", ""))) {
+			return normalized(readConfig("customClientSecret", ""))
+		}
+		if (account.sessionClientId === normalized(readConfig("latestClientId", ""))) {
+			return normalized(readConfig("latestClientSecret", ""))
+		}
+		return ""
+	}
 
-    function resolveRefreshClientSecret(account) {
-        if (!account || account.sessionUsesPkce === true) {
-            return "";
-        }
-        if (account.sessionClientSecret) {
-            return normalizedClientValue(account.sessionClientSecret);
-        }
-        var customClientId = normalizedClientValue(readConfig("customClientId", ""));
-        var customClientSecret = normalizedClientValue(readConfig("customClientSecret", ""));
-        var latestClientId = normalizedClientValue(readConfig("latestClientId", ""));
-        var latestClientSecret = normalizedClientValue(readConfig("latestClientSecret", ""));
-        if (account.sessionClientId === customClientId) {
-            return customClientSecret;
-        }
-        if (account.sessionClientId === latestClientId && latestClientSecret) {
-            return latestClientSecret;
-        }
-        if (account.sessionClientId === defaultClientId) {
-            return "";
-        }
-        return "";
-    }
+	//--- Refresh Credentials
+	property var pendingTokenCallbacks: null
+	function checkAccessToken(callback) {
+		logger.debug('checkAccessToken')
+		var account = getAccount()
+		if (!account) {
+			logger.log('checkAccessToken', 'No Google account', accountId)
+			return callback('No Google account.')
+		}
+		if (account.reauthRequired) {
+			return callback(GoogleOAuthToken.refreshErrorMessage(null, {
+				error: "invalid_grant",
+				error_subtype: account.reauthReason || "",
+			}))
+		}
+		if (!account.accessToken && account.refreshToken) {
+			updateAccessToken(callback)
+			return
+		}
+		if (!account.accessToken) {
+			logger.log('checkAccessToken', 'No refresh token', accountId)
+			return callback('No refresh token. Please login again.')
+		}
+		if (account.accessTokenExpiresAt < Date.now() + 5000) {
+			// Calendar and Tasks managers share this session and ask at the same time.
+			// Refresh once and notify every waiting caller.
+			if (pendingTokenCallbacks) {
+				pendingTokenCallbacks.push(callback)
+				return
+			}
+			pendingTokenCallbacks = [callback]
+			updateAccessToken(function(err, isNetworkError) {
+				var callbacks = pendingTokenCallbacks
+				pendingTokenCallbacks = null
+				for (var i = 0; i < callbacks.length; i++) {
+					callbacks[i](err, isNetworkError)
+				}
+			})
+		} else {
+			callback(null)
+		}
+	}
 
-    //--- Refresh Credentials
-    property var pendingTokenCallbacks: null
-    function checkAccessToken(callback) {
-        logger.debug('checkAccessToken');
-        var account = getAccount();
-        if (!account) {
-            logger.log('checkAccessToken', 'No Google account', accountId);
-            return callback('No Google account.');
-        }
-        if (account.reauthRequired) {
-            return callback(GoogleOAuthToken.refreshErrorMessage(null, {
-                error: "invalid_grant",
-                error_subtype: account.reauthReason || ""
-            }));
-        }
-        if (!account.accessToken && account.refreshToken) {
-            updateAccessToken(callback);
-            return;
-        }
-        if (!account.accessToken) {
-            logger.log('checkAccessToken', 'No refresh token', accountId);
-            return callback('No refresh token. Please login again.');
-        }
-        if (account.accessTokenExpiresAt < Date.now() + 5000) {
-            // Calendar and Tasks managers share this session and ask at the same time.
-            // Refresh once and notify every waiting caller.
-            if (pendingTokenCallbacks) {
-                pendingTokenCallbacks.push(callback);
-                return;
-            }
-            pendingTokenCallbacks = [callback];
-            updateAccessToken(function (err, isNetworkError) {
-                var callbacks = pendingTokenCallbacks;
-                pendingTokenCallbacks = null;
-                for (var i = 0; i < callbacks.length; i++) {
-                    callbacks[i](err, isNetworkError);
-                }
-            });
-        } else {
-            callback(null);
-        }
-    }
+	function updateAccessToken(callback) {
+		var account = getAccount()
+		if (!(account && account.refreshToken)) {
+			logger.log('updateAccessToken', 'No refresh token', accountId)
+			callback('No refresh token. Cannot update access token.')
+			return
+		}
+		if (refreshInFlight) {
+			refreshCallbacks.push(callback)
+			return
+		}
+		refreshInFlight = true
+		refreshCallbacks = [callback]
+		logger.debug('updateAccessToken')
+		fetchNewAccessToken(function(err, data, xhr) {
+			if (err && xhr && Requests.isNetworkError(xhr)) {
+				// Offline: not an authentication problem, the refresh is retried later.
+				logger.log('Token refresh failed: no connection')
+				finishRefresh(err, true)
+				return
+			}
+			var parsed = GoogleOAuthToken.parseTokenResponse(data)
+			if (err || (parsed && parsed.error)) {
+				var refreshError = GoogleOAuthToken.refreshErrorMessage(err, parsed)
+				var summary = GoogleOAuthToken.errorSummary(parsed)
+				logger.logJSON('Error when using refreshToken:', {
+					status: xhr ? xhr.status : 0,
+					error: summary.error,
+					errorSubtype: summary.errorSubtype,
+					hasDescription: summary.hasDescription,
+				})
+				finishRefresh(refreshError)
+				if (GoogleOAuthToken.requiresReauthorization(parsed)) {
+					markReauthorizationRequired(summary.errorSubtype || summary.error)
+				}
+				return
+			}
 
-    function updateAccessToken(callback) {
-        var account = getAccount();
-        if (!(account && account.refreshToken)) {
-            logger.log('updateAccessToken', 'No refresh token', accountId);
-            callback('No refresh token. Cannot update access token.');
-            return;
-        }
-        if (refreshInFlight) {
-            refreshCallbacks.push(callback);
-            return;
-        }
-        refreshInFlight = true;
-        refreshCallbacks = [callback];
-        logger.debug('updateAccessToken');
-        fetchNewAccessToken(function (err, data, xhr) {
-            if (err && xhr && Requests.isNetworkError(xhr)) {
-                // Offline: not an authentication problem, the refresh is retried later.
-                logger.log('Token refresh failed: no connection');
-                finishRefresh(err, true);
-                return;
-            }
-            var parsed = GoogleOAuthToken.parseTokenResponse(data);
-            if (err || (parsed && parsed.error)) {
-                var refreshError = GoogleOAuthToken.refreshErrorMessage(err, parsed);
-                var summary = GoogleOAuthToken.errorSummary(parsed);
-                logger.logJSON('Error when using refreshToken:', {
-                    status: xhr ? xhr.status : 0,
-                    error: summary.error,
-                    errorSubtype: summary.errorSubtype,
-                    hasDescription: summary.hasDescription
-                });
-                finishRefresh(refreshError);
-                if (GoogleOAuthToken.requiresReauthorization(parsed)) {
-                    markReauthorizationRequired(summary.errorSubtype || summary.error);
-                }
-                return;
-            }
+			if (!parsed) {
+				logger.log('Error parsing Google token refresh response.')
+				finishRefresh('Invalid refresh response.')
+				return
+			}
+			if (!parsed.access_token) {
+				logger.log('Missing access token in refresh response. Keys:', Object.keys(parsed).join(','))
+				finishRefresh('Missing access token.')
+				return
+			}
 
-            if (!parsed) {
-                logger.log('Error parsing Google token refresh response.');
-                finishRefresh('Invalid refresh response.');
-                return;
-            }
-            if (!parsed.access_token) {
-                logger.log('Missing access token in refresh response. Keys:', Object.keys(parsed).join(','));
-                finishRefresh('Missing access token.');
-                return;
-            }
+			logger.debugJSON('onAccessToken', {
+				tokenType: parsed.token_type || '',
+				expiresIn: parsed.expires_in || 0,
+				hasAccessToken: !!parsed.access_token,
+			})
+			var callbacks = refreshCallbacks.slice(0)
+			refreshCallbacks = []
+			refreshInFlight = false
+			googleApiSession.applyAccessToken(parsed)
+			for (var i = 0; i < callbacks.length; i++) {
+				callbacks[i](null)
+			}
+		})
+	}
 
-            logger.debugJSON('onAccessToken', {
-                tokenType: parsed.token_type || '',
-                expiresIn: parsed.expires_in || 0,
-                hasAccessToken: !!parsed.access_token
-            });
-            var callbacks = refreshCallbacks.slice(0);
-            refreshCallbacks = [];
-            refreshInFlight = false;
-            googleApiSession.applyAccessToken(parsed);
-            for (var i = 0; i < callbacks.length; i++) {
-                callbacks[i](null);
-            }
-        });
-    }
+	function markReauthorizationRequired(reason) {
+		if (!accountsStore || !accountId) {
+			return
+		}
+		accountsStore.updateAccount(accountId, {
+			reauthRequired: true,
+			reauthReason: reason || "invalid_grant",
+		})
+	}
 
-    function markReauthorizationRequired(reason) {
-        if (!accountsStore || !accountId) {
-            return;
-        }
-        accountsStore.updateAccount(accountId, {
-            reauthRequired: true,
-            reauthReason: reason || "invalid_grant"
-        });
-    }
+	// isNetworkError: the refresh failed because we're offline (retried, not an auth problem).
+	function finishRefresh(err, isNetworkError) {
+		var callbacks = refreshCallbacks.slice(0)
+		refreshCallbacks = []
+		refreshInFlight = false
+		for (var i = 0; i < callbacks.length; i++) {
+			callbacks[i](err, !!isNetworkError)
+		}
+	}
 
-    // isNetworkError: the refresh failed because we're offline (retried, not an auth problem).
-    function finishRefresh(err, isNetworkError) {
-        var callbacks = refreshCallbacks.slice(0);
-        refreshCallbacks = [];
-        refreshInFlight = false;
-        for (var i = 0; i < callbacks.length; i++) {
-            callbacks[i](err, !!isNetworkError);
-        }
-    }
+	signal transactionError(string msg)
 
-    signal accessTokenError(string msg)
-    signal newAccessToken
-    signal transactionError(string msg)
+	property bool refreshInFlight: false
+	property var refreshCallbacks: []
 
-    property bool refreshInFlight: false
-    property var refreshCallbacks: []
+	onTransactionError: logger.log(msg)
 
-    onTransactionError: logger.log(msg)
+	function applyAccessToken(data) {
+		if (!accountsStore || !accountId) {
+			return
+		}
+		var patch = {
+			accessToken: data.access_token,
+			accessTokenType: data.token_type,
+			accessTokenExpiresAt: Date.now() + data.expires_in * 1000,
+		}
+		if (data.refresh_token) {
+			patch.refreshToken = data.refresh_token
+		}
+		accountsStore.updateAccount(accountId, patch)
+	}
 
-    function applyAccessToken(data) {
-        if (!accountsStore || !accountId) {
-            return;
-        }
-        var patch = {
-            accessToken: data.access_token,
-            accessTokenType: data.token_type,
-            accessTokenExpiresAt: Date.now() + data.expires_in * 1000
-        };
-        if (data.refresh_token) {
-            patch.refreshToken = data.refresh_token;
-        }
-        accountsStore.updateAccount(accountId, patch);
-        newAccessToken();
-    }
+	function fetchNewAccessToken(callback) {
+		logger.debug('fetchNewAccessToken')
+		var account = getAccount()
+		var refreshClientSecret = resolveRefreshClientSecret(account)
+		if (account && account.sessionUsesPkce !== true && !refreshClientSecret) {
+			return callback('Saved Google session requires a configured client secret. Please login again.')
+		}
+		var url = 'https://oauth2.googleapis.com/token'
+		var data = {
+			client_id: account ? account.sessionClientId : "",
+			refresh_token: account ? account.refreshToken : "",
+			grant_type: 'refresh_token',
+		}
+		if (refreshClientSecret) {
+			data.client_secret = refreshClientSecret
+		}
+		Requests.post({
+			url: url,
+			data: data,
+		}, callback)
+	}
 
-    function fetchNewAccessToken(callback) {
-        logger.debug('fetchNewAccessToken');
-        var account = getAccount();
-        var refreshClientSecret = resolveRefreshClientSecret(account);
-        if (account && account.sessionUsesPkce !== true && !refreshClientSecret) {
-            return callback('Saved Google session requires a configured client secret. Please login again.');
-        }
-        var url = 'https://oauth2.googleapis.com/token';
-        var data = {
-            client_id: account ? account.sessionClientId : "",
-            refresh_token: account ? account.refreshToken : "",
-            grant_type: 'refresh_token'
-        };
-        if (refreshClientSecret) {
-            data.client_secret = refreshClientSecret;
-        }
-        Requests.post({
-            url: url,
-            data: data
-        }, callback);
-    }
+	function handleAccountUpdated(updatedId) {
+		if (updatedId === accountId) {
+			accountRevision += 1
+		}
+	}
 
-    //---
-    property int errorCount: 0
-    function getErrorTimeout(n) {
-        // Exponential Backoff
-        // 43200 seconds is 12 hours, which is a reasonable polling limit when the API is down.
-        // After 6 errors, we wait an entire minute.
-        // After 11 errors, we wait an entire hour.
-        // After 15 errors, we will have waited 9 hours.
-        // 16 errors and above uses the upper limit of 12 hour intervals.
-        return 1000 * Math.min(43200, Math.pow(2, n));
-    }
-    // https://stackoverflow.com/questions/28507619/how-to-create-delay-function-in-qml
-    function delay(delayTime, callback) {
-        var timer = Qt.createQmlObject("import QtQuick; Timer {}", googleCalendarManager);
-        timer.interval = delayTime;
-        timer.repeat = false;
-        timer.triggered.connect(callback);
-        timer.triggered.connect(function release() {
-            timer.triggered.disconnect(callback);
-            timer.triggered.disconnect(release);
-            timer.destroy();
-        });
-        timer.start();
-    }
-    function waitForErrorTimeout(callback) {
-        errorCount += 1;
-        var timeout = getErrorTimeout(errorCount);
-        delay(timeout, function () {
-            callback();
-        });
-    }
+	function handleAccountsChanged() {
+		accountRevision += 1
+	}
 
-    function handleAccountUpdated(updatedId) {
-        if (updatedId === accountId) {
-            accountRevision += 1;
-        }
-    }
+	function disconnectStore(store) {
+		if (!store) {
+			return
+		}
+		try {
+			store.accountUpdated.disconnect(handleAccountUpdated)
+		} catch (e) {}
+		try {
+			store.accountsChanged.disconnect(handleAccountsChanged)
+		} catch (e) {}
+	}
 
-    function handleAccountsChanged() {
-        accountRevision += 1;
-    }
+	function connectStore(store) {
+		if (!store) {
+			return
+		}
+		store.accountUpdated.connect(handleAccountUpdated)
+		store.accountsChanged.connect(handleAccountsChanged)
+	}
 
-    function disconnectStore(store) {
-        if (!store) {
-            return;
-        }
-        try {
-            store.accountUpdated.disconnect(handleAccountUpdated);
-        } catch (e) {}
-        try {
-            store.accountsChanged.disconnect(handleAccountsChanged);
-        } catch (e) {}
-    }
+	onAccountsStoreChanged: {
+		if (connectedStore === accountsStore) {
+			return
+		}
+		disconnectStore(connectedStore)
+		connectedStore = accountsStore
+		connectStore(connectedStore)
+	}
 
-    function connectStore(store) {
-        if (!store) {
-            return;
-        }
-        store.accountUpdated.connect(handleAccountUpdated);
-        store.accountsChanged.connect(handleAccountsChanged);
-    }
+	Component.onCompleted: {
+		if (connectedStore !== accountsStore) {
+			connectStore(accountsStore)
+			connectedStore = accountsStore
+		}
+	}
 
-    onAccountsStoreChanged: {
-        if (connectedStore === accountsStore) {
-            return;
-        }
-        disconnectStore(connectedStore);
-        connectedStore = accountsStore;
-        connectStore(connectedStore);
-    }
-
-    Component.onCompleted: {
-        if (connectedStore !== accountsStore) {
-            connectStore(accountsStore);
-            connectedStore = accountsStore;
-        }
-    }
-
-    Component.onDestruction: {
-        disconnectStore(connectedStore);
-        connectedStore = null;
-    }
+	Component.onDestruction: {
+		disconnectStore(connectedStore)
+		connectedStore = null
+	}
 }

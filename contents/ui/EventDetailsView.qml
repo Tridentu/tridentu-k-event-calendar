@@ -4,10 +4,14 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PlasmaComponents3
 
+import "Attachments.js" as Attachments
+import "EventTypes.js" as EventTypes
 import "LocaleFuncs.js" as LocaleFuncs
 import "MeetingLink.js" as MeetingLink
+import "Responses.js" as Responses
 import "Guests.js" as Guests
 import "Shared.js" as Shared
+import "TimeZone.js" as TimeZone
 import "lib/ColorUtil.js" as ColorUtil
 import "code/GooglePalette.js" as GooglePalette
 
@@ -43,6 +47,11 @@ Rectangle {
 			return rank(a) - rank(b)
 		})
 	}
+	readonly property var attachments: Attachments.list(eventItem)
+	readonly property bool isOutOfOffice: EventTypes.isOutOfOffice(eventItem)
+	readonly property bool isFocusTime: EventTypes.isFocusTime(eventItem)
+	// "Email Guests…": everyone invited except you and rooms.
+	readonly property string mailtoUrl: Guests.eventMailtoUrl(eventItem)
 	readonly property int collapsedGuestCount: 5
 	property bool showAllGuests: false
 	property bool confirmingDelete: false
@@ -55,8 +64,7 @@ Rectangle {
 
 	//--- RSVP: only the signed-in user's own response, on events they were invited to.
 	readonly property var selfAttendee: eventItem && typeof eventModel !== "undefined" ? eventModel.selfAttendee(eventItem) : null
-	readonly property bool canRespond: !!selfAttendee && !!(eventItem && eventItem.canEdit)
-		&& eventModel.supportsRecurrence(eventItem.calendarId)
+	readonly property bool canRespond: !!eventItem && typeof eventModel !== "undefined" && eventModel.canRespond(eventItem)
 	property string pendingResponse: "" // Shown right away, until the refetch brings the saved one
 	readonly property string currentResponse: pendingResponse || (selfAttendee ? selfAttendee.responseStatus || "" : "")
 	function respond(status) {
@@ -69,11 +77,7 @@ Rectangle {
 	}
 	function saveResponse(status, series) {
 		pendingResponse = status
-		eventModel.respondToEvent(eventItem, status, series, function() {
-			if (typeof logic !== "undefined") {
-				logic.update() // The response (and, for a series, every occurrence) comes back with the refetch
-			}
-		})
+		eventModel.respondToEvent(eventItem, status, series) // The saved response comes with the refetch
 	}
 	PlasmaComponents3.Menu {
 		id: rsvpScopeMenu
@@ -234,11 +238,32 @@ Rectangle {
 					ColumnLayout {
 						Layout.fillWidth: true
 						spacing: Kirigami.Units.smallSpacing
-						Kirigami.Heading {
+						RowLayout {
 							Layout.fillWidth: true
-							level: 2
-							wrapMode: Text.Wrap
-							text: details.eventItem ? details.eventItem.summary : ""
+							Kirigami.Heading {
+								Layout.fillWidth: true
+								level: 2
+								wrapMode: Text.Wrap
+								text: details.eventItem ? details.eventItem.summary : ""
+							}
+							// Private event (Google visibility): only you see its details.
+							Kirigami.Icon {
+								id: privateIcon
+								readonly property string visibility: details.eventItem && details.eventItem.visibility || ""
+								visible: visibility === 'private' || visibility === 'confidential'
+								source: "object-locked"
+								Layout.preferredWidth: Kirigami.Units.iconSizes.small
+								Layout.preferredHeight: Kirigami.Units.iconSizes.small
+								Layout.alignment: Qt.AlignTop
+								opacity: 0.7
+								Accessible.name: i18n("Private event")
+								HoverHandler {
+									id: privateHover
+								}
+								PlasmaComponents3.ToolTip.text: i18n("Private event")
+								PlasmaComponents3.ToolTip.visible: privateHover.hovered
+								PlasmaComponents3.ToolTip.delay: Kirigami.Units.toolTipDelay
+							}
 						}
 						PlasmaComponents3.Label {
 							Layout.fillWidth: true
@@ -260,6 +285,27 @@ Rectangle {
 								return when
 							}
 							opacity: 0.8
+						}
+						// The event's own time zone, when its clock differs from the local one.
+						PlasmaComponents3.Label {
+							readonly property string zone: details.eventItem && !details.isAllDay && details.eventItem.start
+								&& details.eventItem.start.timeZone ? String(details.eventItem.start.timeZone) : ""
+							readonly property double startMs: details.eventItem ? new Date(details.eventItem.startDateTime).getTime() : 0
+							visible: text !== ""
+							Layout.fillWidth: true
+							wrapMode: Text.Wrap
+							opacity: 0.6
+							text: {
+								if (!zone || !TimeZone.knows(zone) || TimeZone.matchesLocal(zone, startMs)) {
+									return ""
+								}
+								var format = { clock24h: appletConfig.clock24h }
+								var start = TimeZone.toWallDate(zone, startMs)
+								var end = TimeZone.toWallDate(zone, new Date(details.eventItem.endDateTime).getTime())
+								return i18nc("%1 = start and end time, %2 = city, %3 = time zone id", "%1 %2 time (%3)",
+									LocaleFuncs.formatEventTime(start, format) + "–" + LocaleFuncs.formatEventTime(end, format),
+									TimeZone.cityName(zone), zone)
+							}
 						}
 					}
 				}
@@ -285,11 +331,7 @@ Rectangle {
 						Layout.rightMargin: Kirigami.Units.smallSpacing
 					}
 					Repeater {
-						model: [
-							{ status: 'accepted', text: i18nc("RSVP", "Yes"), icon: "dialog-ok-apply" },
-							{ status: 'tentative', text: i18nc("RSVP", "Maybe"), icon: "question" },
-							{ status: 'declined', text: i18nc("RSVP", "No"), icon: "dialog-cancel" },
-						]
+						model: Responses.choices()
 						PlasmaComponents3.ToolButton {
 							text: modelData.text
 							icon.name: modelData.icon
@@ -317,6 +359,51 @@ Rectangle {
 					columns: 2
 					columnSpacing: Kirigami.Units.largeSpacing
 					rowSpacing: Kirigami.Units.largeSpacing
+
+					// Out of office / focus time (Google event types), with their auto-decline.
+					Kirigami.Icon {
+						visible: eventTypeLabel.visible
+						source: details.isOutOfOffice ? Shared.EVENT_INDICATOR_ICONS.outOfOffice : Shared.EVENT_INDICATOR_ICONS.focusTime
+						Layout.preferredWidth: Kirigami.Units.iconSizes.small
+						Layout.preferredHeight: Kirigami.Units.iconSizes.small
+						Layout.alignment: Qt.AlignTop
+					}
+					PlasmaComponents3.Label {
+						id: eventTypeLabel
+						readonly property var decline: EventTypes.autoDecline(details.eventItem)
+						visible: details.isOutOfOffice || details.isFocusTime
+						Layout.fillWidth: true
+						wrapMode: Text.Wrap
+						text: {
+							var lines = [details.isOutOfOffice ? i18n("Out of office") : i18n("Focus time")]
+							if (decline.declines === 'all') {
+								lines.push(i18n("Declines all meetings at this time"))
+							} else if (decline.declines === 'new') {
+								lines.push(i18n("Declines new invitations at this time"))
+							}
+							if (decline.message) {
+								lines.push(i18nc("%1 = message sent when declining", "Message: “%1”", decline.message))
+							}
+							return lines.join("\n")
+						}
+					}
+
+					// Overlapping meetings
+					Kirigami.Icon {
+						visible: conflictLabel.visible
+						source: Shared.EVENT_INDICATOR_ICONS.conflict
+						Layout.preferredWidth: Kirigami.Units.iconSizes.small
+						Layout.preferredHeight: Kirigami.Units.iconSizes.small
+						Layout.alignment: Qt.AlignTop
+					}
+					PlasmaComponents3.Label {
+						id: conflictLabel
+						readonly property var titles: Shared.conflictTitles(details.eventItem)
+						visible: titles.length > 0
+						Layout.fillWidth: true
+						wrapMode: Text.Wrap
+						text: i18nc("%1 = titles of other events at the same time", "Overlaps with: %1", titles.join(", "))
+					}
 
 					// Location
 					Kirigami.Icon {
@@ -368,7 +455,7 @@ Rectangle {
 						Layout.alignment: Qt.AlignTop
 						radius: width / 2
 						color: details.calendar && details.calendar.backgroundColor
-							? (plasmoid.configuration.googleColorPalette !== 'classic' ? GooglePalette.calendarColor(details.calendar) : details.calendar.backgroundColor)
+							? GooglePalette.displayCalendarColor(details.calendar, plasmoid.configuration.googleColorPalette)
 							: details.eventColor
 					}
 					PlasmaComponents3.Label {
@@ -398,6 +485,50 @@ Rectangle {
 						Layout.fillWidth: true
 						wrapMode: Text.Wrap
 						text: details.reminderText()
+					}
+
+					// File attachments (Google Drive): each opens in the browser.
+					Kirigami.Icon {
+						visible: attachmentList.visible
+						source: "mail-attachment"
+						Layout.preferredWidth: Kirigami.Units.iconSizes.small
+						Layout.preferredHeight: Kirigami.Units.iconSizes.small
+						Layout.alignment: Qt.AlignTop
+					}
+					ColumnLayout {
+						id: attachmentList
+						visible: details.attachments.length > 0
+						Layout.fillWidth: true
+						spacing: Kirigami.Units.smallSpacing
+						Repeater {
+							model: details.attachments
+							RowLayout {
+								Layout.fillWidth: true
+								spacing: Kirigami.Units.smallSpacing
+								Kirigami.Icon {
+									source: modelData.icon
+									fallback: "text-x-generic"
+									Layout.preferredWidth: Kirigami.Units.iconSizes.small
+									Layout.preferredHeight: Kirigami.Units.iconSizes.small
+								}
+								PlasmaComponents3.Label {
+									Layout.fillWidth: true
+									elide: Text.ElideMiddle
+									text: modelData.title
+									color: Kirigami.Theme.linkColor
+									font.underline: attachmentMouse.containsMouse
+									MouseArea {
+										id: attachmentMouse
+										anchors.fill: parent
+										hoverEnabled: true
+										cursorShape: Qt.PointingHandCursor
+										onClicked: Shared.openExternalUrl(modelData.url)
+									}
+									Accessible.role: Accessible.Link
+									Accessible.name: modelData.title
+								}
+							}
+						}
 					}
 
 				}
@@ -430,6 +561,15 @@ Rectangle {
 							wrapMode: Text.Wrap
 							font.weight: Font.DemiBold
 							text: details.attendeeSummary()
+						}
+						PlasmaComponents3.ToolButton {
+							visible: !!details.mailtoUrl
+							icon.name: "mail-message-new"
+							text: i18n("Email Guests…")
+							display: details.width < Kirigami.Units.gridUnit * 22 ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
+							onClicked: Shared.openMailtoUrl(details.mailtoUrl)
+							PlasmaComponents3.ToolTip.text: i18n("Write an email to the guests")
+							PlasmaComponents3.ToolTip.visible: hovered
 						}
 					}
 					Repeater {

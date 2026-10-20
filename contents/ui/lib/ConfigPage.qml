@@ -58,38 +58,6 @@ KCM.SimpleKCM {
 	property var cfg_v73MigrationDefault
 	property var cfg_v72Migration
 	property var cfg_v72MigrationDefault
-	property var cfg_v71Migration
-	property var cfg_v71MigrationDefault
-	property var cfg_widget_show_meteogram
-	property var cfg_widget_show_meteogramDefault
-	property var cfg_widget_show_timer
-	property var cfg_widget_show_timerDefault
-	property var cfg_timer_sfx_enabled
-	property var cfg_timer_sfx_enabledDefault
-	property var cfg_timer_sfx_filepath
-	property var cfg_timer_sfx_filepathDefault
-	property var cfg_timer_repeats
-	property var cfg_timer_repeatsDefault
-	property var cfg_clock_fontfamily
-	property var cfg_clock_fontfamilyDefault
-	property var cfg_clock_timeformat
-	property var cfg_clock_timeformatDefault
-	property var cfg_clock_timeformat_2
-	property var cfg_clock_timeformat_2Default
-	property var cfg_clock_line_2
-	property var cfg_clock_line_2Default
-	property var cfg_clock_line_2_height_ratio
-	property var cfg_clock_line_2_height_ratioDefault
-	property var cfg_clock_line_1_bold
-	property var cfg_clock_line_1_boldDefault
-	property var cfg_clock_line_2_bold
-	property var cfg_clock_line_2_boldDefault
-	property var cfg_clock_maxheight
-	property var cfg_clock_maxheightDefault
-	property var cfg_clock_mousewheel_up
-	property var cfg_clock_mousewheel_upDefault
-	property var cfg_clock_mousewheel_down
-	property var cfg_clock_mousewheel_downDefault
 	property var cfg_selectedTimeZones
 	property var cfg_selectedTimeZonesDefault
 	property var cfg_displayTimezoneAsCode
@@ -102,14 +70,6 @@ KCM.SimpleKCM {
 	property var cfg_monthEventBadgeTypeDefault
 	property var cfg_firstDayOfWeek
 	property var cfg_firstDayOfWeekDefault
-	property var cfg_monthHeightSingleColumn
-	property var cfg_monthHeightSingleColumnDefault
-	property var cfg_month_show_weeknumbers
-	property var cfg_month_show_weeknumbersDefault
-	property var cfg_month_eventbadge_type
-	property var cfg_month_eventbadge_typeDefault
-	property var cfg_twoColumns
-	property var cfg_twoColumnsDefault
 	property var cfg_agendaBreakupMultiDayEvents
 	property var cfg_agendaBreakupMultiDayEventsDefault
 	property var cfg_agendaNewEventRememberCalendar
@@ -126,12 +86,6 @@ KCM.SimpleKCM {
 	property var cfg_agendaCondensedAllDayEventDefault
 	property var cfg_agendaPlaceOverdueTasksOnToday
 	property var cfg_agendaPlaceOverdueTasksOnTodayDefault
-	property var cfg_agenda_newevent_remember_calendar
-	property var cfg_agenda_newevent_remember_calendarDefault
-	property var cfg_agenda_newevent_last_calendar_id
-	property var cfg_agenda_newevent_last_calendar_idDefault
-	property var cfg_agenda_breakup_multiday_events
-	property var cfg_agenda_breakup_multiday_eventsDefault
 	property var cfg_eventsPollInterval
 	property var cfg_eventsPollIntervalDefault
 	property var cfg_icalCalendarList
@@ -160,14 +114,22 @@ KCM.SimpleKCM {
 	property var cfg_weatherShowInViewsDefault
 	property var cfg_monthClickOpensDay
 	property var cfg_monthClickOpensDayDefault
+	property var cfg_showDeclinedEvents
+	property var cfg_showDeclinedEventsDefault
+	property var cfg_hiddenCalendarIds
+	property var cfg_hiddenCalendarIdsDefault
 	property var cfg_eventClickAction
 	property var cfg_eventClickActionDefault
 	property var cfg_eventFontScale
 	property var cfg_eventFontScaleDefault
+	property var cfg_weekViewWorkWeek
+	property var cfg_weekViewWorkWeekDefault
 	property var cfg_weekViewStartHour
 	property var cfg_weekViewStartHourDefault
 	property var cfg_weekViewEndHour
 	property var cfg_weekViewEndHourDefault
+	property var cfg_weekViewSecondTimeZone
+	property var cfg_weekViewSecondTimeZoneDefault
 	property var cfg_showViewTabs
 	property var cfg_showViewTabsDefault
 	property var cfg_popupMode
@@ -182,6 +144,22 @@ KCM.SimpleKCM {
 	property var cfg_meetLinkCommandDefault
 	property var cfg_meetLinkAuthUser
 	property var cfg_meetLinkAuthUserDefault
+	property var cfg_invitationNotificationEnabled
+	property var cfg_invitationNotificationEnabledDefault
+	property var cfg_invitationsNotified
+	property var cfg_invitationsNotifiedDefault
+	property var cfg_meetingAutoJoin
+	property var cfg_meetingAutoJoinDefault
+	property var cfg_meetingDoNotDisturb
+	property var cfg_meetingDoNotDisturbDefault
+	property var cfg_meetingDoNotDisturbAcceptedOnly
+	property var cfg_meetingDoNotDisturbAcceptedOnlyDefault
+	property var cfg_dailyAgendaEnabled
+	property var cfg_dailyAgendaEnabledDefault
+	property var cfg_dailyAgendaTime
+	property var cfg_dailyAgendaTimeDefault
+	property var cfg_dailyAgendaDay
+	property var cfg_dailyAgendaDayDefault
 	property var cfg_clockShowNextEvent
 	property var cfg_clockShowNextEventDefault
 	property var cfg_clockNextEventMinutes
@@ -210,8 +188,6 @@ KCM.SimpleKCM {
 	property var cfg_googleAccountsDefault
 	property var cfg_googleActiveAccountId
 	property var cfg_googleActiveAccountIdDefault
-	property var cfg_googleRedirectMode
-	property var cfg_googleRedirectModeDefault
 	property var cfg_latestClientId
 	property var cfg_latestClientIdDefault
 	property var cfg_latestClientSecret
@@ -250,8 +226,6 @@ KCM.SimpleKCM {
 	property var cfg_googleHideGoalsDescDefault
 	property var cfg_access_token
 	property var cfg_access_tokenDefault
-	property var cfg_events_pollinterval
-	property var cfg_events_pollintervalDefault
 	property var cfg_openWeatherMapAppId
 	property var cfg_openWeatherMapAppIdDefault
 	property var cfg_openWeatherMapCityId
@@ -264,18 +238,6 @@ KCM.SimpleKCM {
 	property var cfg_weatherUnitsDefault
 	property var cfg_meteogramHours
 	property var cfg_meteogramHoursDefault
-	property var cfg_weather_app_id
-	property var cfg_weather_app_idDefault
-	property var cfg_weather_city_id
-	property var cfg_weather_city_idDefault
-	property var cfg_weather_canada_city_id
-	property var cfg_weather_canada_city_idDefault
-	property var cfg_weather_service
-	property var cfg_weather_serviceDefault
-	property var cfg_weather_units
-	property var cfg_weather_unitsDefault
-	property var cfg_meteogram_hours
-	property var cfg_meteogram_hoursDefault
 	// END AUTO CFG PROPS
 
 	property QtObject configBridge: QtObject {

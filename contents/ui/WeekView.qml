@@ -5,10 +5,10 @@ import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents3
 
 import "EventBuckets.js" as EventBuckets
+import "LocaleFuncs.js" as LocaleFuncs
 import "MeetingLink.js" as MeetingLink
-import "SeriesEdit.js" as SeriesEdit
-import "Undo.js" as Undo
 import "Shared.js" as Shared
+import "TimeZone.js" as TimeZone
 import "WeekDrag.js" as WeekDrag
 import "lib/ColorUtil.js" as ColorUtil
 
@@ -17,8 +17,7 @@ Item {
 	id: weekView
 
 	property var eventModel
-	// false: the popup shows title and navigation in its own header.
-	property bool showHeader: true
+	// The popup header shows the title and the navigation (goPrevious, goNext, goToday).
 	function goPrevious() {
 		weekStart = dayDate(-dayCount)
 	}
@@ -40,7 +39,21 @@ Item {
 	// 7: week view. 1: today / day view (the same hour grid with one wide column).
 	property int dayCount: 7
 	readonly property bool singleDay: dayCount === 1
-	// One day stretched over a wide popup looks wrong: cap its width and center it.
+	// Week view without the weekend (the locale's working days). Still whole weeks: navigation and
+	// weekStart (the first day of week setting) stay the same, only the columns change.
+	property bool workWeek: false
+	// The shown days, as offsets from weekStart, one per column in week order.
+	readonly property var columnDays: {
+		if (workWeek && !singleDay) {
+			return Shared.workDayOffsets(weekStart.getDay(), Qt.locale().weekDays)
+		}
+		var all = []
+		for (var i = 0; i < dayCount; i++) {
+			all.push(i)
+		}
+		return all
+	}
+	readonly property int columnCount: columnDays.length
 	// Weather from the popup (Logic). weatherByDay: Shared.dayKey -> daily item.
 	property var weatherByDay: ({})
 	property var weatherHourly: []
@@ -116,10 +129,20 @@ Item {
 	property int rangeFirstHour: workStartHour
 	readonly property int minHourHeight: lineHeight + 6
 	readonly property real hourHeight: Math.max(minHourHeight, flickable.height / (workEndHour - workStartHour))
-	readonly property int gutterWidth: Math.ceil(Math.max(smallFontMetrics.advanceWidth(formatHour(23)), smallFontMetrics.advanceWidth(formatHour(12)))) + Kirigami.Units.smallSpacing * 2
+	// Hour labels: the local ones next to the grid, a second time zone's (settings) left of them.
+	readonly property string secondZone: {
+		var zone = String(plasmoid.configuration.weekViewSecondTimeZone || "")
+		return TimeZone.knows(zone) ? zone : ""
+	}
+	readonly property int localGutterWidth: Math.ceil(Math.max(smallFontMetrics.advanceWidth(formatHour(23)), smallFontMetrics.advanceWidth(formatHour(12)),
+		secondZone ? smallFontMetrics.advanceWidth(zoneAbbreviation("")) + Kirigami.Units.smallSpacing : 0)) + Kirigami.Units.smallSpacing * 2
+	readonly property int secondGutterWidth: secondZone ? Math.ceil(Math.max(
+		smallFontMetrics.advanceWidth(formatZoneTime(23, 45)), smallFontMetrics.advanceWidth(formatZoneTime(12, 45)),
+		smallFontMetrics.advanceWidth(zoneAbbreviation(secondZone)))) + Kirigami.Units.smallSpacing : 0
+	readonly property int gutterWidth: localGutterWidth + secondGutterWidth
 	// The scroll bar gets its own room right of the grid instead of covering the last day.
 	readonly property real scrollBarSpace: hourScrollBar.visible ? hourScrollBar.width : 0
-	readonly property real columnWidth: Math.max(1, (timeGrid.width - gutterWidth - scrollBarSpace) / dayCount)
+	readonly property real columnWidth: Math.max(1, (timeGrid.width - gutterWidth - scrollBarSpace) / columnCount)
 	readonly property int allDayRowHeight: Math.round(lineHeight * 2.2) + 6 // Title + date span
 	readonly property int maxVisibleAllDayRows: 3
 	// Same faint lines as the month grid.
@@ -141,9 +164,55 @@ Item {
 	function dayDate(i) {
 		return new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i)
 	}
+	// The day shown in column `column`.
+	function columnDate(column) {
+		return dayDate(columnDays[column])
+	}
+	// The column showing the day starting at `dayStart` (ms), -1 when it isn't shown.
+	function columnOfDay(dayStart) {
+		for (var i = 0; i < columnCount; i++) {
+			if (columnDate(i).getTime() === dayStart) {
+				return i
+			}
+		}
+		return -1
+	}
 	function formatHour(hour) {
-		var d = new Date(2000, 0, 1, hour)
-		return Qt.formatTime(d, appletConfig.clock24h ? 'HH:mm' : 'h AP')
+		return formatZoneTime(hour, 0)
+	}
+	function formatZoneTime(hours, minutes) {
+		var d = new Date(2000, 0, 1, hours, minutes)
+		return Qt.formatTime(d, appletConfig.clock24h ? 'HH:mm' : (minutes ? 'h:mm AP' : 'h AP'))
+	}
+	// The second zone's clock at a local hour of the first shown day. When the time difference
+	// changes during the shown days (a DST switch), the header says so (secondZoneShifts).
+	function secondZoneLabel(hour) {
+		var day = columnDate(0)
+		var instant = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour).getTime()
+		var wall = TimeZone.wallClock(secondZone, instant)
+		return wall ? formatZoneTime(wall.hours, wall.minutes) : ""
+	}
+	// Short zone names for the hour column header: the local one from Qt, the other from tz rules.
+	// Both names when it changes between the first and last shown day (eg: "EDT/EST").
+	function zoneAbbreviationAt(zone, ms) {
+		return zone ? TimeZone.abbreviation(zone, ms) : Qt.formatDateTime(new Date(ms), "t")
+	}
+	function zoneAbbreviation(zone) {
+		var first = zoneAbbreviationAt(zone, columnDate(0).getTime() + 12 * 3600000)
+		var last = zoneAbbreviationAt(zone, columnDate(columnCount - 1).getTime() + 12 * 3600000)
+		return first === last ? first : first + "/" + last
+	}
+	// Whether the second zone's hour labels (of the first shown day) are off for some shown days.
+	readonly property bool secondZoneShifts: {
+		if (!secondZone || columnCount < 2) {
+			return false
+		}
+		var first = columnDate(0).getTime() + 12 * 3600000
+		var last = columnDate(columnCount - 1).getTime() + 12 * 3600000
+		var difference = function(ms) {
+			return TimeZone.offsetAt(secondZone, ms) + new Date(ms).getTimezoneOffset()
+		}
+		return difference(first) !== difference(last)
 	}
 	function isToday(d) {
 		return Shared.isSameDate(d, currentTime)
@@ -153,8 +222,8 @@ Item {
 		if (singleDay) {
 			return Qt.formatDate(weekStart, Qt.locale().dateFormat(Locale.LongFormat))
 		}
-		var first = weekStart
-		var last = dayDate(dayCount - 1)
+		var first = columnDate(0)
+		var last = columnDate(columnCount - 1)
 		if (first.getFullYear() !== last.getFullYear()) {
 			return Qt.formatDate(first, 'd MMM yyyy') + ' – ' + Qt.formatDate(last, 'd MMM yyyy')
 		} else if (first.getMonth() !== last.getMonth()) {
@@ -167,12 +236,11 @@ Item {
 	function rebuild() {
 		// The blocks are recreated: a drag in progress ends, a dropped one shows its saved times.
 		dragState = null
-		dropTimeout.stop()
 		var items = eventModel && eventModel.eventsData ? eventModel.eventsData.items : []
 		var result = []
-		for (var i = 0; i < dayCount; i++) {
-			var dayStart = dayDate(i).getTime()
-			var dayEnd = dayDate(i + 1).getTime()
+		for (var i = 0; i < columnCount; i++) {
+			var dayStart = columnDate(i).getTime()
+			var dayEnd = dayDate(columnDays[i] + 1).getTime()
 			var allDay = []
 			var timed = []
 			for (var j = 0; j < items.length; j++) {
@@ -287,6 +355,7 @@ Item {
 		resetScroll()
 		rebuild()
 	}
+	onWorkWeekChanged: rebuild()
 	Component.onCompleted: {
 		rebuild()
 		Qt.callLater(scrollToWorkingHours) // Once the grid has its height
@@ -314,10 +383,6 @@ Item {
 		return ((ms - dayStart) / 3600000 - firstHour) * hourHeight
 	}
 
-	function openEvent(eventItem) {
-		popup.activateEvent(eventItem)
-	}
-
 	//--- Drag & drop: move a timed block (to another time or day) or resize it from its bottom edge.
 	// { eventItem, mode: 'move' | 'resize', block, pressY, start, end, dayIndex, pending }.
 	// pending: dropped and being saved; the preview stays where it was dropped until the views
@@ -328,13 +393,18 @@ Item {
 		return WeekDrag.timeAtY(y, dayStart, firstHour, hourHeight)
 	}
 	function dayIndexAtX(x) {
-		return WeekDrag.dayIndexAtX(x, gutterWidth, columnWidth, dayCount)
+		return WeekDrag.dayIndexAtX(x, gutterWidth, columnWidth, columnCount)
 	}
-	// Pieces of events continuing into another day and all-day events can't be dragged (yet).
+	// Pieces of timed events continuing into another day can't be dragged.
 	function canDrag(block) {
-		return !!block.eventItem.canEdit && !block.continued && !block.continues && !(dragState && dragState.pending)
+		return WeekDrag.canMove(block.eventItem) && !block.continued && !block.continues && !(dragState && dragState.pending)
 	}
-	function dragBegin(block, mode, viewportPoint) {
+	// All-day bars (also cut ones: the whole event moves by the days dragged).
+	function canDragBar(bar) {
+		return WeekDrag.canMove(bar.eventItem) && !(dragState && dragState.pending)
+	}
+	// copy: Ctrl held (the drop makes a copy); only for moves, not resizing.
+	function dragBegin(block, mode, viewportPoint, copy) {
 		var item = block.eventItem
 		dragState = {
 			eventItem: item,
@@ -343,13 +413,14 @@ Item {
 			pressY: viewportPoint.y + flickable.contentY,
 			start: item.startDateTime,
 			end: item.endDateTime,
-			dayIndex: Math.round((block.dayStart - weekStart.getTime()) / 86400000),
+			dayIndex: Math.max(0, columnOfDay(block.dayStart)), // Column
+			copy: mode === 'move' && !!copy,
 			pending: false,
 		}
-		dragMove(viewportPoint)
+		dragMove(viewportPoint, copy)
 	}
-	function dragMove(viewportPoint) {
-		if (!dragState || dragState.pending) {
+	function dragMove(viewportPoint, copy) {
+		if (!dragState || dragState.pending || dragState.mode === 'days') {
 			return
 		}
 		dragPointer = viewportPoint
@@ -358,10 +429,13 @@ Item {
 		var dy = viewportPoint.y + flickable.contentY - d.pressY
 		var item = d.eventItem
 		var times
+		if (copy !== undefined) {
+			d.copy = d.mode === 'move' && !!copy
+		}
 		if (d.mode === 'move') {
 			d.dayIndex = dayIndexAtX(viewportPoint.x)
 			var top = Math.max(0, Math.min(flickable.contentHeight - hourHeight / 4, hourY(block.start, block.dayStart) + dy))
-			times = WeekDrag.moved(item.startDateTime, item.endDateTime, timeAtY(top, dayDate(d.dayIndex).getTime()))
+			times = WeekDrag.moved(item.startDateTime, item.endDateTime, timeAtY(top, columnDate(d.dayIndex).getTime()))
 		} else {
 			var bottom = Math.max(0, Math.min(flickable.contentHeight, hourY(block.end, block.dayStart) + dy))
 			times = WeekDrag.resized(item.startDateTime, item.endDateTime, timeAtY(bottom, block.dayStart))
@@ -370,122 +444,89 @@ Item {
 		d.end = times.end
 		dragState = Object.assign({}, d) // A new object, so the preview updates
 	}
-	function dragDrop() {
+	// copy: Ctrl held at the drop (moves only): a copy at the new times instead of moving the event.
+	function dragDrop(copy) {
 		var d = dragState
 		if (!d || d.pending) {
 			return
 		}
-		if (d.start.getTime() === d.eventItem.startDateTime.getTime() && d.end.getTime() === d.eventItem.endDateTime.getTime()) {
-			dragState = null
-			return
+		if (copy !== undefined) {
+			d.copy = d.mode !== 'resize' && !!copy
+		}
+		var times
+		if (d.mode === 'days') {
+			if (d.days === 0) {
+				dragState = null
+				return
+			}
+			times = WeekDrag.movedByDays(d.eventItem, d.days)
+		} else {
+			if (d.start.getTime() === d.eventItem.startDateTime.getTime() && d.end.getTime() === d.eventItem.endDateTime.getTime()) {
+				dragState = null
+				return
+			}
+			times = WeekDrag.timedTimes(d.eventItem, d.start, d.end)
 		}
 		d.pending = true
 		dragState = Object.assign({}, d)
-		if (d.eventItem.recurringEventId) {
-			dropScopeMenu.chosen = false
-			dropScopeMenu.popup(dragPreview, 0, dragPreview.height)
-		} else {
-			saveDrop(false)
-		}
+		var menuParent = d.mode === 'days' ? allDayDragPreview : dragPreview
+		eventMover.drop(d.eventItem, times.start, times.end, d.copy, menuParent, 0, menuParent.height)
 	}
 	function dragCancel() {
 		dragState = null
 	}
-	function saveDrop(wholeSeries) {
-		var item = dragState.eventItem
-		var start = { dateTime: Shared.dateTimeString(dragState.start) }
-		var end = { dateTime: Shared.dateTimeString(dragState.end) }
-		dropTimeout.restart()
-		var calendarId = item.calendarId
-		if (!wholeSeries) {
-			// Undo puts the old times back, offered once the move is saved (onEventUpdated).
-			moveUndo = eventModel.canRestore(calendarId) ? {
-				calendarId: calendarId,
-				eventId: item.id,
-				times: Undo.savedTimes(item),
-			} : null
-			eventModel.setEventProperties(calendarId, item.id, { start: start, end: end })
+
+	// All-day bars: dragged between the day columns, the event moves by whole days.
+	// dragState { eventItem, mode: 'days', bar, pressIndex, dayIndex, days, start, end, copy, pending }.
+	// x: in the all-day row (the same as the hour grid's).
+	function dragBeginDays(bar, x, copy) {
+		var pressIndex = dayIndexAtX(x)
+		dragState = {
+			eventItem: bar.eventItem,
+			mode: 'days',
+			bar: bar,
+			pressIndex: pressIndex,
+			dayIndex: pressIndex,
+			days: 0,
+			start: bar.eventItem.startDateTime,
+			end: bar.eventItem.endDateTime,
+			copy: !!copy,
+			pending: false,
+		}
+		dragMoveDays(x, copy)
+	}
+	function dragMoveDays(x, copy) {
+		var d = dragState
+		if (!d || d.pending || d.mode !== 'days') {
 			return
 		}
-		moveUndo = null
-		var seriesId = item.recurringEventId
-		var occurrenceStart = new Date(item.startDateTime)
-		var calendar = eventModel.getCalendarList().filter(function(c) { return c.id === calendarId })[0]
-		var timeZone = (calendar && calendar.timeZone) || 'UTC'
-		var seriesTimes = null // The series' times before the move, for undo.
-		eventModel.updateEventFromServer(calendarId, seriesId, function(series) {
-			seriesTimes = Undo.savedTimes(series)
-			return SeriesEdit.shiftedTimes(series, occurrenceStart, start, end, timeZone)
-		}, function() {
-			logic.update() // The occurrences come from a refetch.
-			popup.offerUndo(i18n("Event moved"), function() {
-				eventModel.updateEventFromServer(calendarId, seriesId, function() {
-					return seriesTimes
-				}, function() {
-					logic.update()
-				})
-			})
-		})
+		d.dayIndex = dayIndexAtX(x)
+		d.days = WeekDrag.dayDelta(columnDate(d.pressIndex), columnDate(d.dayIndex))
+		var times = WeekDrag.movedByDays(d.eventItem, d.days)
+		d.start = times.startDateTime
+		d.end = times.endDateTime
+		if (copy !== undefined) {
+			d.copy = !!copy
+		}
+		dragState = Object.assign({}, d)
 	}
-	// A saved single move: { calendarId, eventId, times } until its update arrives.
-	property var moveUndo: null
-	function offerMoveUndo(calendarId, eventId) {
-		var u = moveUndo
-		if (!u || u.calendarId !== calendarId || u.eventId !== eventId) {
-			return
-		}
-		moveUndo = null
-		popup.offerUndo(i18n("Event moved"), function() {
-			eventModel.setEventProperties(u.calendarId, u.eventId, u.times)
-		})
+
+	EventMover {
+		id: eventMover
+		eventModel: weekView.eventModel
+		onCanceled: weekView.dragCancel()
 	}
-	// No answer at all (eg: signed out): put the block back.
-	Timer {
-		id: dropTimeout
-		interval: 20000
-		onTriggered: weekView.dragState = null
-	}
-	Connections {
-		target: weekView.eventModel
-		function onError() {
-			weekView.moveUndo = null
-			if (weekView.dragState && weekView.dragState.pending) {
-				weekView.dragState = null
-			}
+	// The drag was reset (eg: the blocks were rebuilt) while the occurrence menu is open: no save.
+	onDragStateChanged: {
+		if (!dragState) {
+			eventMover.abandon()
 		}
-		function onEventUpdated(calendarId, eventId, data) {
-			weekView.offerMoveUndo(calendarId, eventId)
-		}
-	}
-	PlasmaComponents3.Menu {
-		id: dropScopeMenu
-		property bool chosen: false
-		PlasmaComponents3.MenuItem {
-			text: i18n("This event")
-			onTriggered: {
-				dropScopeMenu.chosen = true
-				weekView.saveDrop(false)
-			}
-		}
-		PlasmaComponents3.MenuItem {
-			text: i18n("All events in the series")
-			onTriggered: {
-				dropScopeMenu.chosen = true
-				weekView.saveDrop(true)
-			}
-		}
-		// Closed without a choice: nothing changes. (closed comes before triggered.)
-		onClosed: Qt.callLater(function() {
-			if (!dropScopeMenu.chosen) {
-				weekView.dragCancel()
-			}
-		})
 	}
 	// Dragging near the top / bottom edge scrolls the grid.
 	Timer {
 		interval: 30
 		repeat: true
-		running: !!weekView.dragState && !weekView.dragState.pending
+		running: !!weekView.dragState && !weekView.dragState.pending && weekView.dragState.mode !== 'days'
 		onTriggered: {
 			var edge = Math.min(weekView.hourHeight, flickable.height / 4)
 			var step = 0
@@ -509,8 +550,8 @@ Item {
 	Repeater {
 		model: {
 			var flags = []
-			for (var i = 0; i < weekView.dayCount; i++) {
-				flags.push(Shared.isWeekend(weekView.dayDate(i)))
+			for (var i = 0; i < weekView.columnCount; i++) {
+				flags.push(Shared.isWeekend(weekView.columnDate(i)))
 			}
 			return Shared.runsOf(flags)
 		}
@@ -525,21 +566,25 @@ Item {
 		}
 	}
 
-	WeatherPanel {
+	// Day view: the shown day's weather, beside the grid or (too narrow) as a compact row above it.
+	component DayWeatherPanel: WeatherPanel {
+		isSetup: weekView.weatherIsSetup
+		loading: weekView.weatherLoading
+		errorText: weekView.weatherError
+		onRetryRequested: weekView.weatherRetryRequested()
+		isToday: weekView.showingToday
+		current: weekView.showingToday ? weekView.weatherCurrent : null
+		today: weekView.dayWeather(weekView.weekStart)
+	}
+
+	DayWeatherPanel {
 		visible: weekView.weatherBeside
 		x: weekView.contentX + weekView.contentWidth + weekView.weatherGap * 2
 		// Top aligned with the day header, like the grid, with a little padding.
 		y: dayNamesRow.y + Kirigami.Units.largeSpacing
 		width: weekView.weatherPanelWidth - Kirigami.Units.largeSpacing
 		height: parent.height - y - Kirigami.Units.largeSpacing
-		isSetup: weekView.weatherIsSetup
-		loading: weekView.weatherLoading
-		errorText: weekView.weatherError
-		onRetryRequested: weekView.weatherRetryRequested()
 		locationName: plasmoid.configuration.weatherService === 'OpenMeteo' ? plasmoid.configuration.openMeteoLocationName : ""
-		isToday: weekView.showingToday
-		current: weekView.showingToday ? weekView.weatherCurrent : null
-		today: weekView.dayWeather(weekView.weekStart)
 		hourly: weekView.showingToday ? weekView.weatherHourly : weekView.dayHours(weekView.weekStart)
 		nextDays: {
 			var list = []
@@ -559,60 +604,55 @@ Item {
 		height: parent.height
 		spacing: Kirigami.Units.smallSpacing
 
-		WeatherPanel {
+		DayWeatherPanel {
 			visible: weekView.singleDay && weekView.showWeather && !weekView.weatherBeside && weekView.weatherIsSetup
 			Layout.fillWidth: true
 			compact: true
-			isSetup: weekView.weatherIsSetup
-			loading: weekView.weatherLoading
-			errorText: weekView.weatherError
-			onRetryRequested: weekView.weatherRetryRequested()
-			isToday: weekView.showingToday
-			current: weekView.showingToday ? weekView.weatherCurrent : null
-			today: weekView.dayWeather(weekView.weekStart)
-		}
-
-		RowLayout {
-			Layout.fillWidth: true
-			visible: weekView.showHeader
-			PlasmaComponents3.ToolButton {
-				icon.name: "go-previous"
-				onClicked: weekView.weekStart = weekView.dayDate(-7)
-				PlasmaComponents3.ToolTip.text: i18n("Previous Week")
-				PlasmaComponents3.ToolTip.visible: hovered
-			}
-			PlasmaComponents3.ToolButton {
-				text: i18n("Today")
-				onClicked: weekView.goToday()
-			}
-			PlasmaComponents3.ToolButton {
-				icon.name: "go-next"
-				onClicked: weekView.weekStart = weekView.dayDate(7)
-				PlasmaComponents3.ToolTip.text: i18n("Next Week")
-				PlasmaComponents3.ToolTip.visible: hovered
-			}
-			Kirigami.Heading {
-				Layout.fillWidth: true
-				level: 3
-				text: weekView.title
-				elide: Text.ElideRight
-			}
 		}
 
 		// Day names. Not in the Today view: the popup header shows the date.
 		Row {
 			id: dayNamesRow
 			Layout.fillWidth: true
-			Layout.preferredHeight: weekView.singleDay ? 0 : implicitHeight
+			// The Day view: only the time zone names (second time zone).
+			Layout.preferredHeight: weekView.singleDay && !weekView.secondZone ? 0 : implicitHeight
 			Item {
 				width: weekView.gutterWidth
-				height: 1
+				height: weekView.secondZone ? zoneNamesRow.implicitHeight : 1
+				// Time zone names above the hour labels (second time zone).
+				Row {
+					id: zoneNamesRow
+					visible: !!weekView.secondZone
+					anchors.bottom: parent.bottom
+					PlasmaComponents3.Label {
+						width: weekView.secondGutterWidth
+						horizontalAlignment: Text.AlignRight
+						text: weekView.secondZone ? weekView.zoneAbbreviation(weekView.secondZone) : ""
+						font: Kirigami.Theme.smallFont
+						opacity: 0.6
+						PlasmaComponents3.ToolTip.text: weekView.secondZoneShifts
+							? i18nc("%1 = time zone, %2 = a date", "%1\nThe time difference changes during these days: the hours shown are those of %2.",
+								weekView.secondZone.replace(/_/g, ' '), Qt.formatDate(weekView.columnDate(0), Qt.locale().dateFormat(Locale.ShortFormat)))
+							: weekView.secondZone.replace(/_/g, ' ')
+						PlasmaComponents3.ToolTip.visible: secondZoneHover.hovered
+						HoverHandler {
+							id: secondZoneHover
+						}
+					}
+					PlasmaComponents3.Label {
+						width: weekView.localGutterWidth - Kirigami.Units.smallSpacing
+						horizontalAlignment: Text.AlignRight
+						text: weekView.secondZone ? weekView.zoneAbbreviation("") : ""
+						font: Kirigami.Theme.smallFont
+						opacity: 0.6
+					}
+				}
 			}
 			Repeater {
-				model: weekView.dayCount
+				model: weekView.columnCount
 				Item {
 					id: dayHeaderCell
-					readonly property date date: weekView.dayDate(index)
+					readonly property date date: weekView.columnDate(index)
 					readonly property bool today: weekView.isToday(date)
 					readonly property var weather: weekView.dayWeather(date)
 					visible: !weekView.singleDay
@@ -650,6 +690,13 @@ Item {
 								color: dayHeaderCell.today ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
 							}
 						}
+						// Google working location ("Home", "Office", ...)
+						WorkingLocationLabel {
+							anchors.horizontalCenter: parent.horizontalCenter
+							date: dayHeaderCell.date
+							maxWidth: parent.width - 4
+							showIcon: dayHeaderCell.width >= Kirigami.Units.gridUnit * 4
+						}
 					}
 
 					// Week view: small icon and high temperature in the top right corner of the day header.
@@ -677,6 +724,14 @@ Item {
 			}
 		}
 
+		// Day view: the day's working location (the week view has it in the day header).
+		WorkingLocationLabel {
+			Layout.leftMargin: weekView.gutterWidth + Kirigami.Units.smallSpacing
+			visible: weekView.singleDay && !!text
+			date: weekView.columnDate(0)
+			maxWidth: weekView.width - weekView.gutterWidth
+		}
+
 		// All-day events
 		Item {
 			id: allDayArea
@@ -691,35 +746,41 @@ Item {
 				Rectangle {
 					readonly property var bar: modelData
 					readonly property var eventItem: bar.eventItem
+					readonly property EventStyle eventStyle: EventStyle {
+						eventItem: bar.eventItem
+					}
 					// Light tint of the event color with a full-color stripe and theme text: reads better
 					// than a solid bar, also with pastel or (dark theme) darkened colors.
-					readonly property color stripeColor: appletConfig.eventColor(eventItem.backgroundColor)
-					readonly property string response: Shared.myResponse(eventItem)
-					readonly property bool unconfirmed: Shared.isUnconfirmedResponse(response)
 					x: weekView.gutterWidth + bar.first * weekView.columnWidth + 2
 					y: 3 + bar.lane * (weekView.allDayRowHeight + 2)
-					opacity: bar.eventItem.endDateTime <= weekView.todayStart ? appletConfig.pastOpacity : 1
+					// Being dragged: faded where it was (not for a copy); dropped: the preview stands in for it.
+					readonly property bool dragSource: !!weekView.dragState && weekView.dragState.mode === 'days' && weekView.dragState.eventItem === eventItem
+					opacity: dragSource && !weekView.dragState.copy ? (weekView.dragState.pending ? 0 : 0.35)
+						: bar.eventItem.endDateTime <= weekView.todayStart ? appletConfig.pastOpacity : 1
 					width: (bar.last - bar.first + 1) * weekView.columnWidth - 4
 					height: weekView.allDayRowHeight
 					// Square ends where the event continues before or after this week.
-					readonly property bool cutLeft: bar.eventItem.startDateTime < weekView.weekStart
-					readonly property bool cutRight: bar.eventItem.endDateTime > weekView.dayDate(weekView.dayCount)
+					// Before the first or after the last shown day (work week: the weekend too).
+					readonly property bool cutLeft: bar.eventItem.startDateTime < weekView.columnDate(bar.first)
+					readonly property bool cutRight: bar.eventItem.endDateTime > weekView.dayDate(weekView.columnDays[bar.last] + 1)
 					readonly property real cornerRadius: Math.min(8, height / 2)
 					radius: cornerRadius
 					topLeftRadius: cutLeft ? 0 : cornerRadius
 					bottomLeftRadius: cutLeft ? 0 : cornerRadius
 					topRightRadius: cutRight ? 0 : cornerRadius
 					bottomRightRadius: cutRight ? 0 : cornerRadius
-					color: unconfirmed ? Kirigami.Theme.backgroundColor : ColorUtil.setAlpha(stripeColor, appletConfig.darkTheme ? 0.3 : 0.22)
+					color: eventStyle.unconfirmed ? Kirigami.Theme.backgroundColor : ColorUtil.setAlpha(eventStyle.color, appletConfig.darkTheme ? 0.3 : 0.22)
 					border.width: 1
-					border.color: unconfirmed ? appletConfig.eventOutlineColor(stripeColor, response) : ColorUtil.setAlpha(stripeColor, 0.45)
+					border.color: eventStyle.unconfirmed ? eventStyle.outlineColor : ColorUtil.setAlpha(eventStyle.color, 0.45)
 					clip: true
+					// Maybe, or out of office (hatched like Google Calendar). On the light tint, always in
+					// the event color (EventStyle.stripeColor is for filled bars).
 					StripeFill {
-						visible: parent.response === 'tentative'
+						visible: parent.eventStyle.striped
 						anchors.fill: parent
 						anchors.margins: 1
 						radius: Math.max(0, parent.cornerRadius - 1)
-						stripeColor: parent.stripeColor
+						stripeColor: parent.eventStyle.color
 					}
 					// Stripe on the start side (not when the event began before this week), inset so it
 					// stays inside the rounded corners.
@@ -730,7 +791,7 @@ Item {
 						width: 3
 						height: parent.height - 6
 						radius: width / 2
-						color: parent.stripeColor
+						color: parent.eventStyle.color
 					}
 					// Title, then the date span ("14 – 16 Oct · 3 days") or "All day".
 					// Long timed events (24 h+) are in this row too: Shared.eventSpan handles both.
@@ -739,7 +800,7 @@ Item {
 						if (span.allDay && !span.multiDay) {
 							return i18n("All day")
 						}
-						var range = i18nc("event span, %1 = start, %2 = end", "%1 – %2", span.startText, span.endText)
+						var range = LocaleFuncs.formatRange(span.startText, span.endText)
 						return span.allDay ? range + " · " + i18np("%1 day", "%1 days", span.days) : range
 					}
 					Column {
@@ -755,7 +816,7 @@ Item {
 							font.family: appletConfig.eventFont.family
 							font.pointSize: appletConfig.eventFont.pointSize
 							font.weight: Font.DemiBold
-							font.strikeout: response === 'declined'
+							font.strikeout: eventStyle.declined
 							elide: Text.ElideRight
 						}
 						PlasmaComponents3.Label {
@@ -767,17 +828,20 @@ Item {
 							elide: Text.ElideRight
 						}
 					}
-					MouseArea {
+					// Click opens the event, right click its menu, press and drag moves it by days (Ctrl: copies).
+					DragMouseArea {
+						id: barMouse
 						anchors.fill: parent
-						cursorShape: Qt.PointingHandCursor
-						acceptedButtons: Qt.LeftButton | Qt.RightButton
-						onClicked: function(mouse) {
-							if (mouse.button === Qt.RightButton) {
-								popup.showEventMenu(parent.eventItem, parent, mouse.x, mouse.y)
-							} else {
-								weekView.openEvent(parent.eventItem)
-							}
+						eventItem: parent.eventItem
+						draggable: weekView.canDragBar(parent.bar)
+						mapTo: allDayArea
+						onDragStarted: function(from, at, copy) {
+							weekView.dragBeginDays(parent.bar, from.x, copy)
+							weekView.dragMoveDays(at.x, copy)
 						}
+						onDragMoved: function(at, copy) { weekView.dragMoveDays(at.x, copy) }
+						onDropped: function(copy) { weekView.dragDrop(copy) }
+						onDragCanceled: weekView.dragCancel()
 					}
 					PlasmaCore.ToolTipArea {
 						anchors.fill: parent
@@ -788,9 +852,61 @@ Item {
 				}
 			}
 
+			// Where a dragged all-day bar would go (its lane, moved by the columns dragged), with its new days.
+			Rectangle {
+				id: allDayDragPreview
+				readonly property var info: weekView.dragState && weekView.dragState.mode === 'days' ? weekView.dragState : null
+				readonly property int shift: info ? info.dayIndex - info.pressIndex : 0
+				readonly property int first: info ? Math.max(0, Math.min(weekView.columnCount - 1, info.bar.first + shift)) : 0
+				readonly property int last: info ? Math.max(0, Math.min(weekView.columnCount - 1, info.bar.last + shift)) : 0
+				readonly property color stripeColor: info ? appletConfig.eventColor(info.eventItem.backgroundColor) : "transparent"
+				readonly property var span: info ? Shared.eventSpan({ start: info.eventItem.start, startDateTime: info.start, endDateTime: info.end }, appletConfig.timeFormat, weekView.currentTime) : null
+				z: 3
+				visible: !!info
+				x: weekView.gutterWidth + first * weekView.columnWidth + 2
+				y: info ? 3 + Math.min(info.bar.lane, allDayArea.rows - 1) * (weekView.allDayRowHeight + 2) : 0
+				width: (last - first + 1) * weekView.columnWidth - 4
+				height: weekView.allDayRowHeight
+				radius: Math.min(8, height / 2)
+				color: Qt.tint(Kirigami.Theme.backgroundColor, ColorUtil.setAlpha(stripeColor, appletConfig.darkTheme ? 0.45 : 0.35))
+				border.width: 1
+				border.color: Kirigami.Theme.highlightColor
+				Column {
+					anchors.left: parent.left
+					anchors.right: parent.right
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.leftMargin: 8
+					anchors.rightMargin: 4
+					PlasmaComponents3.Label {
+						width: parent.width
+						text: allDayDragPreview.info ? allDayDragPreview.info.eventItem.summary : ""
+						font.family: appletConfig.eventFont.family
+						font.pointSize: appletConfig.eventFont.pointSize
+						font.weight: Font.DemiBold
+						elide: Text.ElideRight
+					}
+					PlasmaComponents3.Label {
+						width: parent.width
+						readonly property var span: allDayDragPreview.span
+						// The new day(s): one day just its date.
+						text: !span ? "" : span.allDay && !span.multiDay ? span.startText
+							: LocaleFuncs.formatRange(span.startText, span.endText)
+						opacity: 0.75
+						font: appletConfig.eventSmallFont
+						elide: Text.ElideRight
+					}
+				}
+				DragCopyBadge {
+					visible: !!allDayDragPreview.info && allDayDragPreview.info.copy
+					anchors.right: parent.right
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.rightMargin: 3
+				}
+			}
+
 			// "+N" per day for events in lanes that don't fit.
 			Repeater {
-				model: allDayArea.hasHiddenRow ? weekView.dayCount : 0
+				model: allDayArea.hasHiddenRow ? weekView.columnCount : 0
 				PlasmaComponents3.Label {
 					readonly property int hiddenCount: weekView.allDayHiddenPerDay[index] || 0
 					visible: hiddenCount > 0
@@ -817,14 +933,13 @@ Item {
 			Rectangle {
 				z: 1
 				x: weekView.gutterWidth
-				width: weekView.columnWidth * weekView.dayCount
+				width: weekView.columnWidth * weekView.columnCount
 				height: parent.height
 				radius: 6
 				color: "transparent"
 				border.width: 1
 				border.color: weekView.gridLineColor
 			}
-
 
 			Flickable {
 				id: flickable
@@ -868,14 +983,24 @@ Item {
 							Rectangle {
 								visible: parent.hour < weekView.workStartHour || parent.hour >= weekView.workEndHour
 								x: weekView.gutterWidth + 1
-								width: weekView.columnWidth * weekView.dayCount - 2
+								width: weekView.columnWidth * weekView.columnCount - 2
 								height: parent.height
 								color: Kirigami.Theme.textColor
 								opacity: 0.025
 							}
 							PlasmaComponents3.Label {
+								visible: index > 0 && !!weekView.secondZone
+								width: weekView.secondGutterWidth
+								y: -height / 2
+								horizontalAlignment: Text.AlignRight
+								text: weekView.secondZone ? weekView.secondZoneLabel(parent.hour) : ""
+								font: Kirigami.Theme.smallFont
+								opacity: 0.45
+							}
+							PlasmaComponents3.Label {
 								visible: index > 0
-								width: weekView.gutterWidth - Kirigami.Units.smallSpacing
+								x: weekView.secondGutterWidth
+								width: weekView.localGutterWidth - Kirigami.Units.smallSpacing
 								y: -height / 2
 								horizontalAlignment: Text.AlignRight
 								text: weekView.formatHour(parent.hour)
@@ -886,7 +1011,7 @@ Item {
 								visible: index > 0
 								// Inside the frame, so lines don't darken where they meet it.
 								x: weekView.gutterWidth + 1
-								width: weekView.columnWidth * weekView.dayCount - 2
+								width: weekView.columnWidth * weekView.columnCount - 2
 								height: 1
 								color: weekView.gridLineColor
 							}
@@ -896,8 +1021,8 @@ Item {
 					// Where a dragged block would go, with its new times.
 					Rectangle {
 						id: dragPreview
-						readonly property var info: weekView.dragState
-						readonly property real dayStart: info ? weekView.dayDate(info.dayIndex).getTime() : 0
+						readonly property var info: weekView.dragState && weekView.dragState.mode !== 'days' ? weekView.dragState : null
+						readonly property real dayStart: info ? weekView.columnDate(info.dayIndex).getTime() : 0
 						readonly property color barColor: info ? appletConfig.eventColor(info.eventItem.backgroundColor) : "transparent"
 						readonly property real topY: info ? Math.max(0, weekView.hourY(info.start.getTime(), dayStart)) : 0
 						readonly property real bottomY: info ? Math.min(parent.height, weekView.hourY(info.end.getTime(), dayStart)) : 0
@@ -933,6 +1058,12 @@ Item {
 								font: appletConfig.eventSmallFont
 								elide: Text.ElideRight
 							}
+						}
+						DragCopyBadge {
+							visible: !!dragPreview.info && dragPreview.info.copy
+							anchors.right: parent.right
+							anchors.top: parent.top
+							anchors.margins: 2
 						}
 					}
 
@@ -1022,23 +1153,32 @@ Item {
 
 							Repeater {
 								model: dayColumn.day.timed
-								Rectangle {
+								// Click opens the event, right click its menu, press and drag moves it.
+								EventBar {
 									id: eventBlock
 									readonly property var block: modelData
-									readonly property var eventItem: block.eventItem
-									readonly property color barColor: appletConfig.eventColor(eventItem.backgroundColor)
-									readonly property string response: Shared.myResponse(eventItem)
-									readonly property color textColor: appletConfig.eventTextColor(barColor, response)
+									eventItem: block.eventItem
+									detailsModel: weekView.eventModel
+									showTitle: false
 									readonly property real slotWidth: (dayColumn.width - 3) / block.columns
 									// Clip to the visible hour range.
 									readonly property real rangeStart: block.dayStart + weekView.firstHour * 3600000
 									readonly property real rangeEnd: block.dayStart + weekView.lastHour * 3600000
 									readonly property real visibleStart: Math.max(block.start, rangeStart)
 									readonly property real visibleEnd: Math.min(Math.max(block.end, block.start + 15 * 60000), rangeEnd)
-									// Being dragged: faded where it was; dropped: the preview stands in for it.
-									readonly property bool dragSource: !!weekView.dragState && weekView.dragState.eventItem === eventItem
-									opacity: dragSource ? (weekView.dragState.pending ? 0 : 0.35)
-										: eventItem.endDateTime <= weekView.currentTime ? appletConfig.pastOpacity : 1
+									dragSource: !!weekView.dragState && weekView.dragState.eventItem === eventItem
+									dragCopy: !!weekView.dragState && weekView.dragState.copy
+									dragPending: !!weekView.dragState && weekView.dragState.pending
+									dimmed: eventItem.endDateTime <= weekView.currentTime
+									draggable: weekView.canDrag(block)
+									dragMapTo: flickable
+									onDragStarted: function(from, at, copy) {
+										weekView.dragBegin(block, 'move', from, copy)
+										weekView.dragMove(at, copy)
+									}
+									onDragMoved: function(at, copy) { weekView.dragMove(at, copy) }
+									onDropped: function(copy) { weekView.dragDrop(copy) } // Ctrl: a copy
+									onDragCanceled: weekView.dragCancel()
 									visible: visibleEnd > visibleStart
 									x: 2 + block.column * slotWidth
 									y: weekView.hourY(visibleStart, block.dayStart) + 1
@@ -1046,25 +1186,10 @@ Item {
 									height: Math.max(weekView.lineHeight + 2, (visibleEnd - visibleStart) / 3600000 * weekView.hourHeight - 2)
 									// Square edges where the event continues beyond what's shown
 									// (from the previous day / before the first hour, or past the last one).
-									readonly property bool cutTop: block.continued || block.start < rangeStart
-									readonly property bool cutBottom: block.continues || block.end > rangeEnd
-									readonly property real cornerRadius: Math.min(10, height / 2)
-									radius: cornerRadius
-									topLeftRadius: cutTop ? 0 : cornerRadius
-									topRightRadius: cutTop ? 0 : cornerRadius
-									bottomLeftRadius: cutBottom ? 0 : cornerRadius
-									bottomRightRadius: cutBottom ? 0 : cornerRadius
-									color: appletConfig.eventFillColor(barColor, response)
-									border.width: 1
-									border.color: appletConfig.eventOutlineColor(barColor, response)
-
-									StripeFill {
-										visible: eventBlock.response === 'tentative'
-										anchors.fill: parent
-										anchors.margins: 1
-										radius: Math.max(0, eventBlock.cornerRadius - 1)
-										stripeColor: eventBlock.barColor
-									}
+									cuttable: true
+									cutTop: block.continued || block.start < rangeStart
+									cutBottom: block.continues || block.end > rangeEnd
+									maxRadius: 10
 
 									// Today view: join button for meetings that haven't ended.
 									readonly property var meetingLink: weekView.singleDay && plasmoid.configuration.agendaShowEventHangoutLink && eventItem.endDateTime > weekView.currentTime ? MeetingLink.find(eventItem) : null
@@ -1091,12 +1216,11 @@ Item {
 												}
 												return parts.join(' · ')
 											}
-											color: eventBlock.textColor
+											color: eventBlock.eventStyle.textColor
 											font.family: appletConfig.eventFont.family
 											font.pointSize: appletConfig.eventFont.pointSize
-											font.strikeout: eventBlock.response === 'declined'
-											// Event in progress
-											font.bold: eventBlock.eventItem.startDateTime <= weekView.currentTime && weekView.currentTime < eventBlock.eventItem.endDateTime
+											font.strikeout: eventBlock.eventStyle.declined
+											font.bold: eventBlock.inProgress // Event in progress
 											elide: Text.ElideRight
 											wrapMode: Text.WordWrap
 											maximumLineCount: Math.max(1, Math.floor((eventBlock.height - 4) / weekView.lineHeight) - 1)
@@ -1121,9 +1245,9 @@ Item {
 													return Qt.formatTime(item.startDateTime, format)
 												}
 												textFormat: Text.StyledText
-												linkColor: eventBlock.textColor
+												linkColor: eventBlock.eventStyle.textColor
 												onLinkActivated: function(link) { Shared.openExternalUrl(link) }
-												color: eventBlock.textColor
+												color: eventBlock.eventStyle.textColor
 												font: appletConfig.eventSmallFont
 												elide: Text.ElideRight
 											}
@@ -1131,7 +1255,7 @@ Item {
 												anchors.verticalCenter: parent.verticalCenter
 												maxWidth: parent.width - blockTimeLabel.width - parent.spacing
 												eventItem: eventBlock.eventItem
-												color: eventBlock.textColor
+												color: eventBlock.eventStyle.textColor
 												iconSize: 2 * Math.round(eventSmallFontMetrics.height / 2)
 												opacity: 0.85
 												// The day view shows the location as text and has a Join button.
@@ -1141,60 +1265,6 @@ Item {
 												showRepeat: weekView.singleDay
 											}
 										}
-									}
-									// Click opens the event, right click its menu, press and drag moves it.
-									MouseArea {
-										id: blockMouse
-										anchors.fill: parent
-										cursorShape: dragged ? Qt.ClosedHandCursor : Qt.PointingHandCursor
-										acceptedButtons: Qt.LeftButton | Qt.RightButton
-										readonly property bool draggable: weekView.canDrag(eventBlock.block)
-										preventStealing: draggable // The grid doesn't scroll while dragging
-										property point pressPoint
-										property bool dragged: false
-										onPressed: function(mouse) {
-											dragged = false
-											pressPoint = Qt.point(mouse.x, mouse.y)
-										}
-										onPositionChanged: function(mouse) {
-											if (!draggable || !(pressedButtons & Qt.LeftButton)) {
-												return
-											}
-											var viewportPoint = mapToItem(flickable, mouse.x, mouse.y)
-											if (dragged) {
-												weekView.dragMove(viewportPoint)
-											} else if (Math.abs(mouse.x - pressPoint.x) + Math.abs(mouse.y - pressPoint.y) >= Qt.styleHints.startDragDistance) {
-												dragged = true
-												weekView.dragBegin(eventBlock.block, 'move', mapToItem(flickable, pressPoint.x, pressPoint.y))
-												weekView.dragMove(viewportPoint)
-											}
-										}
-										onReleased: {
-											if (dragged) {
-												weekView.dragDrop()
-											}
-										}
-										onCanceled: {
-											if (dragged) {
-												dragged = false
-												weekView.dragCancel()
-											}
-										}
-										onClicked: function(mouse) {
-											if (dragged) { // The end of a drag, not a click
-												dragged = false
-											} else if (mouse.button === Qt.RightButton) {
-												popup.showEventMenu(eventBlock.eventItem, eventBlock, mouse.x, mouse.y)
-											} else {
-												weekView.openEvent(eventBlock.eventItem)
-											}
-										}
-									}
-									PlasmaCore.ToolTipArea {
-										anchors.fill: parent
-										mainText: eventBlock.eventItem.summary
-										subText: containsMouse ? weekView.eventModel.eventDetailsText(eventBlock.eventItem) : ""
-										textFormat: Text.PlainText
 									}
 									JoinPill {
 										id: joinPill
@@ -1208,12 +1278,12 @@ Item {
 										anchors.topMargin: Kirigami.Units.smallSpacing
 										verticalPadding: compact ? 0 : Kirigami.Units.smallSpacing / 2
 										meetingLink: eventBlock.meetingLink
-										textColor: Shared.contrastTextColor(eventBlock.barColor)
+										textColor: Shared.contrastTextColor(eventBlock.eventStyle.color)
 									}
 									// Bottom edge: drag to change the end time.
 									MouseArea {
 										z: 2
-										visible: blockMouse.draggable && !eventBlock.cutBottom && eventBlock.height >= weekView.lineHeight * 1.5
+										visible: eventBlock.draggable && !eventBlock.cutBottom && eventBlock.height >= weekView.lineHeight * 1.5
 										anchors.left: parent.left
 										anchors.right: parent.right
 										anchors.bottom: parent.bottom
@@ -1226,7 +1296,7 @@ Item {
 										onPositionChanged: function(mouse) {
 											weekView.dragMove(mapToItem(flickable, mouse.x, mouse.y))
 										}
-										onReleased: weekView.dragDrop()
+										onReleased: weekView.dragDrop(false)
 										onCanceled: weekView.dragCancel()
 									}
 								}

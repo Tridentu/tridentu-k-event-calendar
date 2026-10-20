@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: eventcalendar\n"
 "Report-Msgid-Bugs-To: https://github.com/divinae/plasma-applet-"
 "eventcalendar\n"
-"POT-Creation-Date: 2026-10-19 10:04+0200\n"
+"POT-Creation-Date: 2026-10-19 15:51+0200\n"
 "PO-Revision-Date: 2022-04-05 13:49+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <>\n"
@@ -159,8 +159,8 @@ msgid "Google authentication failed: %1"
 msgstr "Google-authenticatie mislukt: %1"
 
 #: ../contents/ui/calendars/GoogleCalendarManager.qml
-msgid "Error fetching calendar: %1"
-msgstr "Fout bij ophalen van agenda: %1"
+msgid "Could not get the free / busy times"
+msgstr "Kan de beschikbaarheid niet ophalen"
 
 #: ../contents/ui/calendars/ICalManager.qml
 msgid "iCalendar"
@@ -175,6 +175,7 @@ msgid "Could not load %1: %2"
 msgstr "Kan %1 niet laden: %2"
 
 #: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/EventModel.qml
 msgid "Holidays"
 msgstr "Feestdagen"
 
@@ -186,6 +187,26 @@ msgstr "Te doen"
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Other"
 msgstr "Overig"
+
+#: ../contents/ui/CalendarToggles.qml ../contents/ui/config/ConfigEvents.qml
+#: ../contents/ui/config/ConfigGoogleCalendar.qml
+#: ../contents/ui/config/ConfigICal.qml
+msgid "Calendars"
+msgstr "Agenda's"
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "No calendars selected in the settings."
+msgstr "Geen agenda's geselecteerd in de instellingen."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "Show All"
+msgstr "Alles tonen"
+
+#: ../contents/ui/CardHeader.qml ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/config/ConfigGoogleCalendar.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
+msgid "Cancel"
+msgstr "Annuleren"
 
 #: ../contents/ui/ClockView.qml
 msgctxt "time left in the current meeting"
@@ -243,13 +264,6 @@ msgstr "Kleur"
 #: ../contents/ui/EventEditView.qml
 msgid "Save"
 msgstr "Opslaan"
-
-#: ../contents/ui/config/CalendarEditDialog.qml
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/QuickAddView.qml
-msgid "Cancel"
-msgstr "Annuleren"
 
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Default (%1)"
@@ -367,12 +381,6 @@ msgstr "Bureaubladwidget"
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Debug logging and extra settings pages"
 msgstr "Foutopsporingslogboek en extra instellingenpagina's"
-
-#: ../contents/ui/config/ConfigEvents.qml
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-#: ../contents/ui/config/ConfigICal.qml
-msgid "Calendars"
-msgstr "Agenda's"
 
 #: ../contents/ui/config/ConfigEvents.qml
 msgid "Refresh every"
@@ -531,12 +539,78 @@ msgstr ""
 "accountwisselaar; leeg gebruikt de standaard van de app."
 
 #: ../contents/ui/config/ConfigEvents.qml
+msgid "Meetings"
+msgstr "Vergaderingen"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open the meeting link when a meeting starts"
+msgstr "Vergaderlink openen wanneer een vergadering begint"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For meetings you accepted or organize, not marked as ended."
+msgstr ""
+"Voor vergaderingen die je hebt geaccepteerd of organiseert en die niet als "
+"afgelopen zijn gemarkeerd."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Do Not Disturb during meetings"
+msgstr "Niet storen tijdens vergaderingen"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Plasma's Do Not Disturb from the start until the end of a meeting with "
+"guests or a meeting link. Mark as Ended turns it off."
+msgstr ""
+"‘Niet storen’ van Plasma vanaf het begin tot het einde van een vergadering "
+"met gasten of een vergaderlink. ‘Markeren als afgelopen’ schakelt het uit."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only meetings I accepted"
+msgstr "Alleen vergaderingen die ik heb geaccepteerd"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Invitations"
+msgstr "Uitnodigingen"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "New invitations for today"
+msgstr "Nieuwe uitnodigingen voor vandaag"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification for each meeting today you haven't answered yet, with Yes, "
+"Maybe and No."
+msgstr ""
+"Een melding voor elke vergadering van vandaag die je nog niet hebt "
+"beantwoord, met Ja, Misschien en Nee."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Daily Agenda"
+msgstr "Dagelijkse agenda"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Today's events every morning"
+msgstr "Elke ochtend de afspraken van vandaag"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification with today's events once a day, also when the computer is "
+"turned on later."
+msgstr ""
+"Eén keer per dag een melding met de afspraken van vandaag, ook als de "
+"computer later wordt aangezet."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "At"
+msgstr "Om"
+
+#: ../contents/ui/config/ConfigEvents.qml
 msgid "All Event Notifications"
 msgstr "Alle afspraakmeldingen"
 
 #: ../contents/ui/config/ConfigEvents.qml
-msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
-msgstr "Knoppen ‘Deelnemen aan vergadering’ en ‘Openen in agenda’"
+msgid "\"Join meeting\" button"
+msgstr "Knop ‘Deelnemen aan vergadering’"
 
 #: ../contents/ui/config/ConfigEvents.qml
 msgid "Skip all-day events"
@@ -577,10 +651,6 @@ msgstr "Kan Google-login niet voorbereiden: %1"
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Waiting for browser callback..."
 msgstr "Bezig met wachten op terugkoppeling van webbrowser..."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid "Waiting for the helper page to send the code..."
-msgstr "Bezig met wachten tot de hulppagina de code verstuurt..."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Sign-in timed out. Try again."
@@ -753,17 +823,6 @@ msgstr ""
 "anders de volledige url (of alleen de code) en plak die."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid ""
-"Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
-"the browser redirects to the helper page and will try to send the code back "
-"automatically. If it fails, copy the code and paste it below."
-msgstr ""
-"Klik op Inloggen (automatisch) om <a href=\"%1\">%2</a> te openen. Nadat je "
-"toegang hebt verleend, stuurt de webbrowser je door naar de hulppagina, die "
-"de code automatisch probeert terug te sturen. Als dat mislukt, kopieer dan "
-"de code en plak die hieronder."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "The desktop could not open the browser automatically."
 msgstr "De webbrowser kan niet automatisch worden geopend."
 
@@ -776,10 +835,6 @@ msgid "Helper page (optional): <a href=\"%1\">%1</a>"
 msgstr "Hulppagina (optioneel): <a href=\"%1\">%1</a>"
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid "Helper page: <a href=\"%1\">%1</a>"
-msgstr "Hulppagina: <a href=\"%1\">%1</a>"
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid ""
 "If your browser shows a connection error, that's expected. Copy the URL from "
 "the address bar anyway and paste it below. If auto-capture works, you do not "
@@ -788,13 +843,6 @@ msgstr ""
 "Als je webbrowser een verbindingsfout toont, is dat normaal. Kopieer toch de "
 "url uit de adresbalk en plak die hieronder. Als automatisch vastleggen "
 "werkt, hoef je niets te plakken."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid ""
-"If auto-capture fails, copy the code from the helper page and paste it below."
-msgstr ""
-"Als automatisch vastleggen mislukt, kopieer dan de code van de hulppagina en "
-"plak die hieronder."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Paste the authorization code or redirect URL here"
@@ -847,7 +895,7 @@ msgstr "https://-url of lokaal %1/*.ics-bestand"
 msgid "Browse"
 msgstr "Bladeren"
 
-#: ../contents/ui/config/ConfigICal.qml
+#: ../contents/ui/config/ConfigICal.qml ../contents/ui/main.qml
 msgid "iCalendar (*.ics)"
 msgstr "iCalendar (*.ics)"
 
@@ -934,12 +982,47 @@ msgid "Week and Day"
 msgstr "Week en dag"
 
 #: ../contents/ui/config/ConfigViews.qml
+msgctxt "week view setting"
+msgid "Days shown"
+msgstr "Getoonde dagen"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "7 days"
+msgstr "7 dagen"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Work week (without the weekend)"
+msgstr "Werkweek (zonder weekend)"
+
+#: ../contents/ui/config/ConfigViews.qml
 msgid "Working hours start"
 msgstr "Begin werktijd"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Working hours end"
 msgstr "Einde werktijd"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Second time zone"
+msgstr "Tweede tijdzone"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "no second time zone"
+msgid "None"
+msgstr "Geen"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "No second time zone"
+msgstr "Geen tweede tijdzone"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Its hours are shown next to the local ones in the Week and Day views."
+msgstr ""
+"De uren ervan worden naast de lokale getoond in de week- en dagweergave."
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/EventEditView.qml
+msgid "Search time zones"
+msgstr "Tijdzones zoeken"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Forecast in the day headers and, in the Day view, a weather panel."
@@ -995,6 +1078,19 @@ msgstr "Klikken op een dag opent deze in de dagweergave"
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Month view"
 msgstr "Maandweergave"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Declined events"
+msgstr "Afgewezen afspraken"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show (struck through)"
+msgstr "Tonen (doorgestreept)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "declined events"
+msgid "Hide"
+msgstr "Verbergen"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Double-clicking a day"
@@ -1177,69 +1273,30 @@ msgstr "d MMM yyyy"
 msgid "to"
 msgstr "tot"
 
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
+#: ../contents/ui/EditTaskForm.qml
 msgid "Event Title"
 msgstr "Titel"
 
-#: ../contents/ui/EditEventForm.qml ../contents/ui/LocaleFuncs.js
-msgid "All Day"
-msgstr "Hele dag"
-
-#: ../contents/ui/EditEventForm.qml
-msgid "Add location"
-msgstr "Locatie toevoegen"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
+#: ../contents/ui/EditTaskForm.qml
 msgid "Add description"
 msgstr "Omschrijving toevoegen"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
-msgid "&Save"
-msgstr "Op&slaan"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
-#: ../contents/ui/TimerInputView.qml
-msgid "&Cancel"
-msgstr "&Annuleren"
 
 #: ../contents/ui/EditTaskForm.qml
 msgid "Add due date"
 msgstr "Einddatum toevoegen"
 
+#: ../contents/ui/EditTaskForm.qml
+msgid "&Save"
+msgstr "Op&slaan"
+
+#: ../contents/ui/EditTaskForm.qml ../contents/ui/TimerInputView.qml
+msgid "&Cancel"
+msgstr "&Annuleren"
+
 #: ../contents/ui/EventContextMenu.qml
 msgctxt "RSVP to an invitation"
 msgid "Respond"
 msgstr "Reageren"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "Yes"
-msgstr "Ja"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "Yes to All Events"
-msgstr "Ja voor alle afspraken"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "Maybe"
-msgstr "Misschien"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "Maybe to All Events"
-msgstr "Misschien voor alle afspraken"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "No"
-msgstr "Nee"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "No to All Events"
-msgstr "Nee voor alle afspraken"
 
 #: ../contents/ui/EventContextMenu.qml
 msgid "Show Details"
@@ -1258,6 +1315,10 @@ msgstr "Openen in Google Agenda"
 #: ../contents/ui/EventContextMenu.qml
 msgid "Mark as Ended"
 msgstr "Markeren als afgelopen"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Email Guests…"
+msgstr "Gasten e-mailen…"
 
 #: ../contents/ui/EventContextMenu.qml
 msgid "Edit…"
@@ -1287,12 +1348,12 @@ msgid "Delete All Events of “%1”"
 msgstr "Alle afspraken van ‘%1’ verwijderen"
 
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/WeekView.qml
+#: ../contents/ui/EventMover.qml
 msgid "This event"
 msgstr "Deze afspraak"
 
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/WeekView.qml
+#: ../contents/ui/EventMover.qml
 msgid "All events in the series"
 msgstr "Alle afspraken in de reeks"
 
@@ -1332,7 +1393,8 @@ msgctxt "%1 = 10m, 2m"
 msgid "Reminders: %1 before"
 msgstr "Herinneringen: %1 vooraf"
 
-#: ../contents/ui/EventDetailsView.qml ../contents/ui/SearchView.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/FindTimeView.qml
+#: ../contents/ui/SearchView.qml
 msgid "Back"
 msgstr "Terug"
 
@@ -1360,19 +1422,58 @@ msgstr "Verwijdert elke herhaling van deze terugkerende afspraak."
 msgid "Duplicate"
 msgstr "Dupliceren"
 
+#: ../contents/ui/EventDetailsView.qml
+msgid "Private event"
+msgstr "Privéafspraak"
+
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
 #: ../contents/ui/WeekView.qml
 msgid "All day"
 msgstr "Hele dag"
 
-#: ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
 msgid "Repeats"
 msgstr "Herhaalt"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = start and end time, %2 = city, %3 = time zone id"
+msgid "%1 %2 time (%3)"
+msgstr "%1 tijd in %2 (%3)"
 
 #: ../contents/ui/EventDetailsView.qml
 msgctxt "RSVP to an invitation"
 msgid "Going?"
 msgstr "Ga je?"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Out of office"
+msgstr "Niet op kantoor"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Focus time"
+msgstr "Focustijd"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines all meetings at this time"
+msgstr "Weigert alle vergaderingen in deze periode"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines new invitations at this time"
+msgstr "Weigert nieuwe uitnodigingen in deze periode"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = message sent when declining"
+msgid "Message: “%1”"
+msgstr "Bericht: ‘%1’"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = titles of other events at the same time"
+msgid "Overlaps with: %1"
+msgstr "Overlapt met: %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Write an email to the guests"
+msgstr "Een e-mail naar de gasten schrijven"
 
 #: ../contents/ui/EventDetailsView.qml
 msgctxt "event organizer"
@@ -1393,6 +1494,11 @@ msgid "Show 1 more"
 msgid_plural "Show all %1"
 msgstr[0] "Nog 1 tonen"
 msgstr[1] "Alle %1 tonen"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = start and end time in the local time zone"
+msgid "%1 your time"
+msgstr "%1 (jouw tijd)"
 
 #: ../contents/ui/EventEditView.qml
 msgctxt "Google Calendar event color"
@@ -1454,6 +1560,11 @@ msgid "Enter an email address, like name@example.com"
 msgstr "Voer een e-mailadres in, zoals name@example.com"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "you, in Find a time"
+msgid "You"
+msgstr "Jij"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Edit Event"
 msgstr "Afspraak aanpassen"
 
@@ -1488,14 +1599,85 @@ msgid "Title"
 msgstr "Titel"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Event"
+msgstr "Afspraak"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Out of office"
+msgstr "Niet op kantoor"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Focus time"
+msgstr "Focustijd"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Event type"
+msgstr "Type afspraak"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Don't decline invitations"
+msgstr "Uitnodigingen niet weigeren"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new invitations in this time"
+msgstr "Nieuwe uitnodigingen in deze periode weigeren"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new and existing invitations in this time"
+msgstr "Nieuwe en bestaande uitnodigingen in deze periode weigeren"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Automatically decline"
+msgstr "Automatisch weigeren"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Message for declined invitations"
+msgstr "Bericht bij geweigerde uitnodigingen"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Do not disturb"
+msgstr "Niet storen"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Available"
+msgstr "Beschikbaar"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Do not disturb or Available"
+msgid "Chat status: %1"
+msgstr "Chatstatus: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Chat status"
+msgstr "Chatstatus"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Calendar color"
 msgstr "Kalenderkleur"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Local time"
+msgstr "Lokale tijd"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = time zone id, eg: Europe/Warsaw"
+msgid "Time zone: %1"
+msgstr "Tijdzone: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Time zone"
+msgstr "Tijdzone"
 
 #: ../contents/ui/EventEditView.qml
 msgid "Does not repeat"
 msgstr "Wordt niet herhaald"
 
-#: ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventEditView.qml ../contents/ui/ImportView.qml
 msgid "Daily"
 msgstr "Dagelijks"
 
@@ -1611,6 +1793,49 @@ msgid "Remove video conferencing"
 msgstr "Videovergadering verwijderen"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Busy"
+msgstr "Bezet"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Free"
+msgstr "Beschikbaar"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Busy or Free"
+msgid "Show as: %1"
+msgstr "Weergeven als: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Show as"
+msgstr "Weergeven als"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Calendar default"
+msgstr "Standaard van agenda"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Public"
+msgstr "Openbaar"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Private"
+msgstr "Privé"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Calendar default, Public or Private"
+msgid "Visibility: %1"
+msgstr "Zichtbaarheid: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Visibility"
+msgstr "Zichtbaarheid"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Reminders"
 msgstr "Herinneringen"
 
@@ -1684,9 +1909,245 @@ msgctxt "guest suggestion: %1 = name, %2 = email"
 msgid "%1 <%2>"
 msgstr "%1 <%2>"
 
+#: ../contents/ui/EventEditView.qml ../contents/ui/FindTimeView.qml
+msgid "Find a Time"
+msgstr "Tijd zoeken"
+
 #: ../contents/ui/EventEditView.qml
 msgid "Description"
 msgstr "Omschrijving"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Home"
+msgstr "Thuis"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Office"
+msgstr "Kantoor"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Elsewhere"
+msgstr "Elders"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't import events"
+msgstr "Deze agenda kan geen afspraken importeren"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't show free / busy times"
+msgstr "Deze agenda kan geen beschikbaarheid tonen"
+
+#: ../contents/ui/EventMover.qml
+msgid "Event moved"
+msgstr "Afspraak verplaatst"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "separator of names in a list"
+msgid ", "
+msgstr ", "
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No suggestions: the guests' busy times aren't available."
+msgstr ""
+"Geen suggesties: de bezette tijden van de gasten zijn niet beschikbaar."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "Suggested times (not counting %1):"
+msgstr "Voorgestelde tijden (zonder %1):"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Suggested times:"
+msgstr "Voorgestelde tijden:"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "No time free in the working hours of this day (not counting %1)."
+msgstr "Geen vrije tijd tijdens de werktijd van deze dag (zonder %1)."
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No time free for everyone in the working hours of this day."
+msgstr ""
+"Geen tijd waarop iedereen beschikbaar is binnen de werktijden van deze dag."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time"
+msgid "Not available"
+msgstr "Niet beschikbaar"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time: %1 = Google's reason"
+msgid "Not available (%1)"
+msgstr "Niet beschikbaar (%1)"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Previous day"
+msgstr "Vorige dag"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "Find a time: the day shown"
+msgid "ddd, d MMM"
+msgstr "ddd d MMM"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Next day"
+msgstr "Volgende dag"
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file."
+msgstr "Kan het bestand niet lezen."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Reading .ics files needs the Python icalendar module (python-icalendar)."
+msgstr ""
+"Voor het lezen van .ics-bestanden is de Python-module icalendar (python-"
+"icalendar) nodig."
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file: %1"
+msgstr "Kan het bestand niet lezen: %1"
+
+#: ../contents/ui/ImportView.qml
+msgid "Changed occurrence of a repeating event"
+msgstr "Gewijzigde instantie van een terugkerende afspraak"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 day"
+msgid_plural "Every %1 days"
+msgstr[0] "Elke %1 dag"
+msgstr[1] "Elke %1 dagen"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "Elke %1 week"
+msgstr[1] "Elke %1 weken"
+
+#: ../contents/ui/ImportView.qml
+msgid "Weekly"
+msgstr "Wekelijks"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly / Every 2 weeks, %2 = days"
+msgid "%1 on %2"
+msgstr "%1 op %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 month"
+msgid_plural "Every %1 months"
+msgstr[0] "Elke %1 maand"
+msgstr[1] "Elke %1 maanden"
+
+#: ../contents/ui/ImportView.qml
+msgid "Monthly"
+msgstr "Maandelijks"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 year"
+msgid_plural "Every %1 years"
+msgstr[0] "Elk %1 jaar"
+msgstr[1] "Elke %1 jaar"
+
+#: ../contents/ui/ImportView.qml
+msgid "Yearly"
+msgstr "Jaarlijks"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%2 = Weekly on Monday, ..."
+msgid "%2, %1 time"
+msgid_plural "%2, %1 times"
+msgstr[0] "%2, %1 keer"
+msgstr[1] "%2, %1 keer"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly on Monday, ..., %2 = date"
+msgid "%1, until %2"
+msgstr "%1, tot %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 exception"
+msgid_plural "%1 exceptions"
+msgstr[0] "%1 uitzondering"
+msgstr[1] "%1 uitzonderingen"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/main.qml
+msgid "Import Events"
+msgstr "Afspraken importeren"
+
+#: ../contents/ui/ImportView.qml
+msgid "Close"
+msgstr "Sluiten"
+
+#: ../contents/ui/ImportView.qml
+msgid "Import"
+msgstr "Importeren"
+
+#: ../contents/ui/ImportView.qml
+msgid "No file chosen"
+msgstr "Geen bestand gekozen"
+
+#: ../contents/ui/ImportView.qml
+msgid "Choose File…"
+msgstr "Bestand kiezen…"
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading the file…"
+msgstr "Bestand wordt gelezen…"
+
+#: ../contents/ui/ImportView.qml
+msgid "No events in this file"
+msgstr "Geen afspraken in dit bestand"
+
+#: ../contents/ui/ImportView.qml
+msgid "(No title)"
+msgstr "(Geen titel)"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 cancelled event isn't imported."
+msgid_plural "%1 cancelled events aren't imported."
+msgstr[0] "%1 geannuleerde afspraak wordt niet geïmporteerd."
+msgstr[1] "%1 geannuleerde afspraken worden niet geïmporteerd."
+
+#: ../contents/ui/ImportView.qml
+msgid "Calendar:"
+msgstr "Agenda:"
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Guests and the organizer aren't imported, and no invitations are sent. "
+"Importing the same event again updates it."
+msgstr ""
+"Gasten en de organisator worden niet geïmporteerd en er worden geen "
+"uitnodigingen verstuurd. Als u dezelfde afspraak opnieuw importeert, wordt "
+"deze bijgewerkt."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Importing needs a Google Calendar you can edit. Log in to Google Calendar in "
+"the settings."
+msgstr ""
+"Voor importeren is een Google-agenda nodig die u kunt bewerken. Log in bij "
+"Google Agenda in de instellingen."
+
+#: ../contents/ui/ImportView.qml
+msgid "Importing… %1 of %2"
+msgstr "Importeren… %1 van %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 event imported"
+msgid_plural "%1 events imported"
+msgstr[0] "%1 afspraak geïmporteerd"
+msgstr[1] "%1 afspraken geïmporteerd"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 failed: %2"
+msgid_plural "%1 failed, eg: %2"
+msgstr[0] "%1 mislukt: %2"
+msgstr[1] "%1 mislukt, bijv.: %2"
 
 #: ../contents/ui/JoinPill.qml
 msgid "Join"
@@ -1743,9 +2204,28 @@ msgid "%1, %2"
 msgstr "%1, %2"
 
 #: ../contents/ui/LocaleFuncs.js
+msgid "All Day"
+msgstr "Hele dag"
+
+#: ../contents/ui/LocaleFuncs.js
 msgctxt "from date/time %1 until date/time %2"
 msgid "%1 - %2"
 msgstr "%1 - %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event span, %1 = start, %2 = end"
+msgid "%1 – %2"
+msgstr "%1 – %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date"
+msgid "%1 · All day"
+msgstr "%1 · Hele dag"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
+msgid "%1 · %2 – %3"
+msgstr "%1 · %2 – %3"
 
 #: ../contents/ui/LocaleFuncs.js
 #, no-c-format
@@ -1822,6 +2302,10 @@ msgid "New Event…"
 msgstr "Nieuwe afspraak…"
 
 #: ../contents/ui/main.qml
+msgid "Import Events…"
+msgstr "Afspraken importeren…"
+
+#: ../contents/ui/main.qml
 msgid "Open Google Calendar"
 msgstr "Google Agenda openen"
 
@@ -1865,7 +2349,7 @@ msgstr "Bijv.: 9-17: werk"
 msgid "Previous Day"
 msgstr "Vorige dag"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Previous Week"
 msgstr "Vorige week"
 
@@ -1873,7 +2357,7 @@ msgstr "Vorige week"
 msgid "Previous Month"
 msgstr "Vorige maand"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Today"
 msgstr "Vandaag"
 
@@ -1881,7 +2365,7 @@ msgstr "Vandaag"
 msgid "Next Day"
 msgstr "Volgende dag"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Next Week"
 msgstr "Volgende week"
 
@@ -1967,20 +2451,35 @@ msgstr ""
 msgid "More options…"
 msgstr "Meer opties…"
 
-#: ../contents/ui/SearchView.qml ../contents/ui/WeekView.qml
-msgctxt "event span, %1 = start, %2 = end"
-msgid "%1 – %2"
-msgstr "%1 – %2"
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Yes"
+msgstr "Ja"
 
-#: ../contents/ui/SearchView.qml
-msgctxt "search result, %1 = date"
-msgid "%1 · All day"
-msgstr "%1 · Hele dag"
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Yes to All Events"
+msgstr "Ja voor alle afspraken"
 
-#: ../contents/ui/SearchView.qml
-msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
-msgid "%1 · %2 – %3"
-msgstr "%1 · %2 – %3"
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Maybe"
+msgstr "Misschien"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Maybe to All Events"
+msgstr "Misschien voor alle afspraken"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "No"
+msgstr "Nee"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "No to All Events"
+msgstr "Nee voor alle afspraken"
 
 #: ../contents/ui/SearchView.qml
 msgid "Search events…"
@@ -2074,10 +2573,6 @@ msgid "%1 mm"
 msgstr "%1 mm"
 
 #: ../contents/ui/UpcomingEvents.qml
-msgid "Open in Calendar"
-msgstr "Openen in agenda"
-
-#: ../contents/ui/UpcomingEvents.qml
 msgid "Snooze 1 minute"
 msgid_plural "Snooze %1 minutes"
 msgstr[0] "1 minuut sluimeren"
@@ -2087,6 +2582,42 @@ msgstr[1] "%1 minuten sluimeren"
 msgctxt "%1 = 15 minutes, %2 = event title"
 msgid "In %1: %2"
 msgstr "Over %1: %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "invitation, %1 = organizer"
+msgid "From %1"
+msgstr "Van %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title"
+msgid "Invitation: %1"
+msgstr "Uitnodiging: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, %1 = event title"
+msgid "All day: %1"
+msgstr "Hele dag: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, more events"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+%1 meer"
+msgstr[1] "+%1 meer"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Today: %1 event"
+msgid_plural "Today: %1 events"
+msgstr[0] "Vandaag: %1 afspraak"
+msgstr[1] "Vandaag: %1 afspraken"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Nothing planned today"
+msgstr "Vandaag niets gepland"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Open Agenda"
+msgstr "Agenda openen"
 
 #: ../contents/ui/UpcomingEvents.qml
 msgctxt "%1 = time"
@@ -2166,8 +2697,14 @@ msgid "Next days"
 msgstr "Komende dagen"
 
 #: ../contents/ui/WeekView.qml
-msgid "Event moved"
-msgstr "Afspraak verplaatst"
+msgctxt "%1 = time zone, %2 = a date"
+msgid ""
+"%1\n"
+"The time difference changes during these days: the hours shown are those of "
+"%2."
+msgstr ""
+"%1\n"
+"Het tijdsverschil verandert in deze dagen: de getoonde uren zijn die van %2."
 
 #: ../contents/ui/WeekView.qml
 msgid "%1 day"
@@ -2179,6 +2716,64 @@ msgstr[1] "%1 dagen"
 msgctxt "more events not shown"
 msgid "+%1"
 msgstr "+%1"
+
+#: ../contents/ui/WorkingLocationLabel.qml
+msgctxt "%1 = Home, Office, ..."
+msgid "Working location: %1"
+msgstr "Werklocatie: %1"
+
+#~ msgid "Error fetching calendar: %1"
+#~ msgstr "Fout bij ophalen van agenda: %1"
+
+#~ msgid "Not logged in to Google Calendar"
+#~ msgstr "Niet ingelogd bij Google Agenda"
+
+#~ msgid "Waiting for the helper page to send the code..."
+#~ msgstr "Bezig met wachten tot de hulppagina de code verstuurt..."
+
+#~ msgid ""
+#~ "Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
+#~ "the browser redirects to the helper page and will try to send the code "
+#~ "back automatically. If it fails, copy the code and paste it below."
+#~ msgstr ""
+#~ "Klik op Inloggen (automatisch) om <a href=\"%1\">%2</a> te openen. Nadat "
+#~ "je toegang hebt verleend, stuurt de webbrowser je door naar de "
+#~ "hulppagina, die de code automatisch probeert terug te sturen. Als dat "
+#~ "mislukt, kopieer dan de code en plak die hieronder."
+
+#~ msgid "Helper page: <a href=\"%1\">%1</a>"
+#~ msgstr "Hulppagina: <a href=\"%1\">%1</a>"
+
+#~ msgid ""
+#~ "If auto-capture fails, copy the code from the helper page and paste it "
+#~ "below."
+#~ msgstr ""
+#~ "Als automatisch vastleggen mislukt, kopieer dan de code van de hulppagina "
+#~ "en plak die hieronder."
+
+#~ msgid "Add location"
+#~ msgstr "Locatie toevoegen"
+
+#~ msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
+#~ msgstr "Knoppen ‘Deelnemen aan vergadering’ en ‘Openen in agenda’"
+
+#~ msgid "Open in Calendar"
+#~ msgstr "Openen in agenda"
+
+#~ msgctxt "calendar view showing a year"
+#~ msgid "Year"
+#~ msgstr "Jaar"
+
+#~ msgid "Previous Year"
+#~ msgstr "Vorig jaar"
+
+#~ msgid "Next Year"
+#~ msgstr "Volgend jaar"
+
+#~ msgid "1 event"
+#~ msgid_plural "%1 events"
+#~ msgstr[0] "1 afspraak"
+#~ msgstr[1] "%1 afspraken"
 
 #~ msgid "Vertical Panel"
 #~ msgstr "Verticaal paneel"

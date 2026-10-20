@@ -6,6 +6,7 @@ import org.kde.kirigamiaddons.formcard as FormCard
 
 import "../lib"
 import "../calendars/PlasmaCalendarUtils.js" as PlasmaCalendarUtils
+import "../ScriptPath.js" as ScriptPath
 
 // Event sources, clicking events, notifications.
 ConfigPage {
@@ -17,7 +18,7 @@ ConfigPage {
 	property bool meetAppsLoaded: false // Until then a saved app's command can't be matched
 	ExecUtil { id: meetAppFinder }
 	function findMeetApps() {
-		var script = decodeURIComponent(String(Qt.resolvedUrl("../../scripts/find_meet_apps.py")).replace(/^file:\/\//, ""))
+		var script = ScriptPath.scriptPath("find_meet_apps.py")
 		meetAppFinder.execArgv(["python3", "-I", script], function(cmd, exitCode, exitStatus, stdout, stderr) {
 			var apps = []
 			try {
@@ -187,7 +188,13 @@ ConfigPage {
 					var n = parseInt(text, 10)
 					return isNaN(n) ? 0 : n
 				}
-				onValueModified: page.configBridge.write("eventReminderTimeout", value > 0 ? value : -1)
+				// onValueChanged (see FormConfigSpin): only a value that differs from the saved one, so
+				// 0 ("keep", shown as 0 here) isn't turned into -1.
+				onValueChanged: {
+					if (value !== Math.max(0, page.configBridge.read("eventReminderTimeout", -1))) {
+						page.configBridge.write("eventReminderTimeout", value > 0 ? value : -1)
+					}
+				}
 			}
 			FormCard.FormSectionText {
 				visible: reminderHideAfter.enabled
@@ -281,7 +288,8 @@ ConfigPage {
 					}
 					currentIndex = model.length - 1
 				}
-				onModelChanged: syncIndex()
+				// Later: the inner ComboBox gets the new model after this handler and resets its index.
+				onModelChanged: Qt.callLater(syncIndex)
 				Component.onCompleted: syncIndex()
 				onActivated: function(index) {
 					var entry = model[index]
@@ -318,13 +326,90 @@ ConfigPage {
 			text: i18n("Join buttons open Google Meet links there; other meeting links open in the default browser. In a command, %u stands for the meeting link. Google account: its number (0, 1, …) or email, as in Google's account switcher; empty uses the app's default.")
 		}
 
+		//--- Meetings
+		FormCard.FormHeader {
+			title: i18n("Meetings")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				text: i18n("Open the meeting link when a meeting starts")
+				description: i18n("For meetings you accepted or organize, not marked as ended.")
+				configKey: 'meetingAutoJoin'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				id: meetingDoNotDisturb
+				text: i18n("Do Not Disturb during meetings")
+				description: i18n("Plasma's Do Not Disturb from the start until the end of a meeting with guests or a meeting link. Mark as Ended turns it off.")
+				configKey: 'meetingDoNotDisturb'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				enabled: meetingDoNotDisturb.checked
+				text: i18n("Only meetings I accepted")
+				configKey: 'meetingDoNotDisturbAcceptedOnly'
+			}
+		}
+
+		//--- Invitations
+		FormCard.FormHeader {
+			title: i18n("Invitations")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				text: i18n("New invitations for today")
+				description: i18n("A notification for each meeting today you haven't answered yet, with Yes, Maybe and No.")
+				configKey: 'invitationNotificationEnabled'
+			}
+		}
+
+		//--- Daily agenda: today's events once a day (DailyAgenda.js)
+		FormCard.FormHeader {
+			title: i18n("Daily Agenda")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				id: dailyAgendaEnabled
+				text: i18n("Today's events every morning")
+				description: i18n("A notification with today's events once a day, also when the computer is turned on later.")
+				configKey: 'dailyAgendaEnabled'
+			}
+			FormCard.FormDelegateSeparator {}
+			// dailyAgendaTime: minutes since midnight, shown as a time.
+			FormCard.FormSpinBoxDelegate {
+				enabled: dailyAgendaEnabled.checked
+				label: i18n("At")
+				value: page.configBridge.read("dailyAgendaTime", 480)
+				from: 0
+				to: 24 * 60 - 15
+				stepSize: 15
+				textFromValue: function(value, locale) {
+					return Qt.formatTime(new Date(2000, 0, 1, Math.floor(value / 60), value % 60), Qt.locale().timeFormat(Locale.ShortFormat))
+				}
+				valueFromText: function(text, locale) {
+					var match = /(\d{1,2})\D*(\d{2})?\s*(am|pm)?/i.exec(String(text))
+					if (!match) {
+						return 480
+					}
+					var hours = Number(match[1]) % 24
+					if (match[3] && match[3].toLowerCase() === 'pm' && hours < 12) {
+						hours += 12
+					} else if (match[3] && match[3].toLowerCase() === 'am' && hours === 12) {
+						hours = 0
+					}
+					return Math.min(24 * 60 - 1, hours * 60 + Number(match[2] || 0))
+				}
+				onValueChanged: page.configBridge.write("dailyAgendaTime", value) // See FormConfigSpin
+			}
+		}
+
 		//--- Both
 		FormCard.FormHeader {
 			title: i18n("All Event Notifications")
 		}
 		FormCard.FormCard {
 			FormConfigSwitch {
-				text: i18n("\"Join meeting\" and \"Open in Calendar\" buttons")
+				text: i18n("\"Join meeting\" button")
 				configKey: 'eventNotificationActions'
 			}
 			FormCard.FormDelegateSeparator {}

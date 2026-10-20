@@ -1,4 +1,6 @@
+import QtCore
 import QtQuick
+import QtQuick.Dialogs
 import QtQuick.Layouts
 
 import org.kde.kirigami as Kirigami
@@ -10,6 +12,7 @@ import org.kde.config as KConfig
 import org.kde.kcmutils as KCMUtils
 
 import "./lib"
+import "DayWeather.js" as DayWeather
 
 PlasmoidItem {
 	id: root
@@ -24,6 +27,7 @@ PlasmoidItem {
 	AppletConfig { id: appletConfig }
 	NotificationManager { id: notificationManager }
 	MeetingOpener { id: meetingOpener }
+	FocusMode { id: focusMode }
 	NetworkMonitor { id: networkMonitor }
 
 	property alias eventModel: eventModel
@@ -36,11 +40,12 @@ PlasmoidItem {
 	UpcomingEvents { id: upcomingEvents }
 	AgendaModel {
 		id: agendaModel
-		eventModel: eventModel
 		timeModel: timeModel
 		Component.onCompleted: logger.debug('AgendaModel.onCompleted')
 	}
 	Logic { id: logic }
+	// The daily forecast by day (Shared.dayKey): the views, the agenda and the tooltip.
+	readonly property var weatherByDay: DayWeather.byDay(logic.dailyWeatherData)
 
 	FontLoader {
 		source: "../fonts/weathericons-regular-webfont.ttf"
@@ -159,6 +164,7 @@ PlasmoidItem {
 
 		eventModel: root.eventModel
 		agendaModel: root.agendaModel
+		onImportFileRequested: root.chooseImportFile()
 
 		// If pin is enabled, we need to add some padding around the popup unless
 		// * we're a desktop widget (no need)
@@ -174,11 +180,12 @@ PlasmoidItem {
 		onIsExpandedChanged: {
 			logger.debug('isExpanded', isExpanded)
 			if (!isExpanded && !plasmoid.configuration.pin) {
-				closeOverlays() // Don't come back to a stale day list or event card.
+				closeOverlays() // Don't come back to a stale search or event card.
 			}
 			if (isExpanded) {
 				updateToday()
 				logic.updateWeather()
+				Qt.callLater(focusForKeys) // Keyboard shortcuts (PopupView Keys)
 			}
 		}
 
@@ -224,6 +231,27 @@ PlasmoidItem {
 	}
 	readonly property bool hasGoogleAccounts: logic.parseGoogleAccounts().length > 0
 
+	// Import a .ics file: pick it, then the popup shows its events in the import card.
+	// The dialog is here, not in the popup: the popup may close while the dialog is open.
+	function chooseImportFile() {
+		importFileDialog.open()
+	}
+	FileDialog {
+		id: importFileDialog
+		title: i18n("Import Events")
+		nameFilters: [ i18n("iCalendar (*.ics)") ]
+		currentFolder: StandardPaths.standardLocations(StandardPaths.DownloadLocation)[0]
+		onAccepted: {
+			var fileUrl = String(selectedFile)
+			root.expanded = true
+			Qt.callLater(function() {
+				if (root.fullRepresentationItem && typeof root.fullRepresentationItem.openImport === 'function') {
+					root.fullRepresentationItem.openImport(fileUrl)
+				}
+			})
+		}
+	}
+
 	Plasmoid.contextualActions: [
 		PlasmaCore.Action {
 			text: upcomingEvents.nextEventMeetingLink && upcomingEvents.nextEvent
@@ -247,6 +275,12 @@ PlasmoidItem {
 			text: i18n("New Event…")
 			icon.name: "list-add"
 			onTriggered: root.openPopupAndNewEvent()
+		},
+		PlasmaCore.Action {
+			text: i18n("Import Events…")
+			icon.name: "document-import"
+			visible: root.hasGoogleAccounts
+			onTriggered: root.chooseImportFile()
 		},
 		PlasmaCore.Action {
 			text: i18n("Open Google Calendar")

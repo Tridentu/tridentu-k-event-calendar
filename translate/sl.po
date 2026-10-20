@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: eventcalendar\n"
 "Report-Msgid-Bugs-To: https://github.com/divinae/plasma-applet-"
 "eventcalendar\n"
-"POT-Creation-Date: 2026-10-19 10:04+0200\n"
+"POT-Creation-Date: 2026-10-19 15:51+0200\n"
 "PO-Revision-Date: 2021-07-29 01:08+0200\n"
 "Last-Translator: Ugo Ugowsky <ugowsky@gmail.com>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -161,8 +161,8 @@ msgid "Google authentication failed: %1"
 msgstr "Overitev pri Googlu ni uspela: %1"
 
 #: ../contents/ui/calendars/GoogleCalendarManager.qml
-msgid "Error fetching calendar: %1"
-msgstr "Napaka pri pridobivanju koledarja: %1"
+msgid "Could not get the free / busy times"
+msgstr "Ni bilo mogoče pridobiti zasedenih / prostih terminov"
 
 #: ../contents/ui/calendars/ICalManager.qml
 msgid "iCalendar"
@@ -177,6 +177,7 @@ msgid "Could not load %1: %2"
 msgstr "Ni bilo mogoče naložiti %1: %2"
 
 #: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/EventModel.qml
 msgid "Holidays"
 msgstr "Prazniki"
 
@@ -188,6 +189,26 @@ msgstr "Opravila"
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Other"
 msgstr "Drugo"
+
+#: ../contents/ui/CalendarToggles.qml ../contents/ui/config/ConfigEvents.qml
+#: ../contents/ui/config/ConfigGoogleCalendar.qml
+#: ../contents/ui/config/ConfigICal.qml
+msgid "Calendars"
+msgstr "Koledar"
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "No calendars selected in the settings."
+msgstr "V nastavitvah ni izbranih koledarjev."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "Show All"
+msgstr "Prikaži vse"
+
+#: ../contents/ui/CardHeader.qml ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/config/ConfigGoogleCalendar.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
+msgid "Cancel"
+msgstr "Prekliči"
 
 #: ../contents/ui/ClockView.qml
 msgctxt "time left in the current meeting"
@@ -248,13 +269,6 @@ msgstr "Barva"
 #: ../contents/ui/EventEditView.qml
 msgid "Save"
 msgstr "Shrani"
-
-#: ../contents/ui/config/CalendarEditDialog.qml
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/QuickAddView.qml
-msgid "Cancel"
-msgstr "Prekliči"
 
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Default (%1)"
@@ -370,12 +384,6 @@ msgstr "Gradnik namizja"
 #: ../contents/ui/config/ConfigClock.qml
 msgid "Debug logging and extra settings pages"
 msgstr "Beleženje za razhroščevanje in dodatne strani nastavitev"
-
-#: ../contents/ui/config/ConfigEvents.qml
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-#: ../contents/ui/config/ConfigICal.qml
-msgid "Calendars"
-msgstr "Koledar"
 
 #: ../contents/ui/config/ConfigEvents.qml
 msgid "Refresh every"
@@ -536,12 +544,78 @@ msgstr ""
 "Googlovem preklopniku računov; prazno uporabi privzeto vrednost programa."
 
 #: ../contents/ui/config/ConfigEvents.qml
+msgid "Meetings"
+msgstr "Sestanki"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open the meeting link when a meeting starts"
+msgstr "Ob začetku sestanka odpri povezavo do sestanka"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For meetings you accepted or organize, not marked as ended."
+msgstr ""
+"Za sestanke, ki ste jih sprejeli ali jih organizirate in niso označeni kot "
+"končani."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Do Not Disturb during meetings"
+msgstr "Ne moti med sestanki"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Plasma's Do Not Disturb from the start until the end of a meeting with "
+"guests or a meeting link. Mark as Ended turns it off."
+msgstr ""
+"Način Ne moti v Plasmi od začetka do konca sestanka z gosti ali s povezavo "
+"do sestanka. Označi kot končano ga izklopi."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only meetings I accepted"
+msgstr "Samo sestanki, ki sem jih sprejel"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Invitations"
+msgstr "Povabila"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "New invitations for today"
+msgstr "Nova povabila za danes"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification for each meeting today you haven't answered yet, with Yes, "
+"Maybe and No."
+msgstr ""
+"Obvestilo za vsak današnji sestanek, na katerega še niste odgovorili, z "
+"možnostmi Da, Morda in Ne."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Daily Agenda"
+msgstr "Dnevni red za danes"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Today's events every morning"
+msgstr "Današnji dogodki vsako jutro"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification with today's events once a day, also when the computer is "
+"turned on later."
+msgstr ""
+"Obvestilo z današnjimi dogodki enkrat na dan, tudi če računalnik vklopite "
+"pozneje."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "At"
+msgstr "Ob"
+
+#: ../contents/ui/config/ConfigEvents.qml
 msgid "All Event Notifications"
 msgstr "Vsa obvestila o dogodkih"
 
 #: ../contents/ui/config/ConfigEvents.qml
-msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
-msgstr "Gumba »Pridruži se sestanku« in »Odpri v koledarju«"
+msgid "\"Join meeting\" button"
+msgstr "Gumb »Pridruži se sestanku«"
 
 #: ../contents/ui/config/ConfigEvents.qml
 msgid "Skip all-day events"
@@ -582,10 +656,6 @@ msgstr "Ni bilo mogoče pripraviti prijave v Google: %1"
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Waiting for browser callback..."
 msgstr "Čakanje na odziv brskalnika..."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid "Waiting for the helper page to send the code..."
-msgstr "Čakanje, da pomožna stran pošlje kodo..."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Sign-in timed out. Try again."
@@ -756,16 +826,6 @@ msgstr ""
 "ga prilepite."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid ""
-"Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
-"the browser redirects to the helper page and will try to send the code back "
-"automatically. If it fails, copy the code and paste it below."
-msgstr ""
-"Kliknite Prijava (samodejna), da odprete <a href=\"%1\">%2</a>. Ko odobrite "
-"dostop, vas brskalnik preusmeri na pomožno stran, ki bo poskusila samodejno "
-"poslati kodo nazaj. Če ne uspe, kopirajte kodo in jo prilepite spodaj."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "The desktop could not open the browser automatically."
 msgstr "Namizje ni moglo samodejno odpreti brskalnika."
 
@@ -778,10 +838,6 @@ msgid "Helper page (optional): <a href=\"%1\">%1</a>"
 msgstr "Pomožna stran (izbirno): <a href=\"%1\">%1</a>"
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid "Helper page: <a href=\"%1\">%1</a>"
-msgstr "Pomožna stran: <a href=\"%1\">%1</a>"
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid ""
 "If your browser shows a connection error, that's expected. Copy the URL from "
 "the address bar anyway and paste it below. If auto-capture works, you do not "
@@ -790,13 +846,6 @@ msgstr ""
 "Če brskalnik prikaže napako povezave, je to pričakovano. Vseeno kopirajte "
 "URL iz naslovne vrstice in ga prilepite spodaj. Če samodejni zajem deluje, "
 "vam ni treba ničesar prilepiti."
-
-#: ../contents/ui/config/ConfigGoogleCalendar.qml
-msgid ""
-"If auto-capture fails, copy the code from the helper page and paste it below."
-msgstr ""
-"Če samodejni zajem ne uspe, kopirajte kodo s pomožne strani in jo prilepite "
-"spodaj."
 
 #: ../contents/ui/config/ConfigGoogleCalendar.qml
 msgid "Paste the authorization code or redirect URL here"
@@ -849,7 +898,7 @@ msgstr "URL https:// ali krajevna datoteka %1/*.ics"
 msgid "Browse"
 msgstr "Brskaj"
 
-#: ../contents/ui/config/ConfigICal.qml
+#: ../contents/ui/config/ConfigICal.qml ../contents/ui/main.qml
 msgid "iCalendar (*.ics)"
 msgstr "iCalendar (*.ics)"
 
@@ -936,12 +985,47 @@ msgid "Week and Day"
 msgstr "Teden in dan"
 
 #: ../contents/ui/config/ConfigViews.qml
+msgctxt "week view setting"
+msgid "Days shown"
+msgstr "Prikazani dnevi"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "7 days"
+msgstr "7 dni"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Work week (without the weekend)"
+msgstr "Delovni teden (brez vikenda)"
+
+#: ../contents/ui/config/ConfigViews.qml
 msgid "Working hours start"
 msgstr "Začetek delovnega časa"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Working hours end"
 msgstr "Konec delovnega časa"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Second time zone"
+msgstr "Drugi časovni pas"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "no second time zone"
+msgid "None"
+msgstr "Brez"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "No second time zone"
+msgstr "Brez drugega časovnega pasu"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Its hours are shown next to the local ones in the Week and Day views."
+msgstr ""
+"Njegove ure so prikazane poleg krajevnih v tedenskem in dnevnem pogledu."
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/EventEditView.qml
+msgid "Search time zones"
+msgstr "Iskanje časovnih pasov"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Forecast in the day headers and, in the Day view, a weather panel."
@@ -996,6 +1080,19 @@ msgstr "Klik na dan ga odpre v dnevnem pogledu"
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Month view"
 msgstr "Mesečni pogled"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Declined events"
+msgstr "Zavrnjeni dogodki"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show (struck through)"
+msgstr "Prikaži (prečrtano)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "declined events"
+msgid "Hide"
+msgstr "Skrij"
 
 #: ../contents/ui/config/ConfigViews.qml
 msgid "Double-clicking a day"
@@ -1178,69 +1275,30 @@ msgstr "d. MMM yyyy"
 msgid "to"
 msgstr "do"
 
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
+#: ../contents/ui/EditTaskForm.qml
 msgid "Event Title"
 msgstr "Ime dogodka"
 
-#: ../contents/ui/EditEventForm.qml ../contents/ui/LocaleFuncs.js
-msgid "All Day"
-msgstr "Ves dan"
-
-#: ../contents/ui/EditEventForm.qml
-msgid "Add location"
-msgstr "Dodaj lokacijo"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
+#: ../contents/ui/EditTaskForm.qml
 msgid "Add description"
 msgstr "Dodaj opis"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
-msgid "&Save"
-msgstr "&Shrani"
-
-#: ../contents/ui/EditEventForm.qml ../contents/ui/EditTaskForm.qml
-#: ../contents/ui/TimerInputView.qml
-msgid "&Cancel"
-msgstr "&Prekliči"
 
 #: ../contents/ui/EditTaskForm.qml
 msgid "Add due date"
 msgstr "Dodaj rok"
 
+#: ../contents/ui/EditTaskForm.qml
+msgid "&Save"
+msgstr "&Shrani"
+
+#: ../contents/ui/EditTaskForm.qml ../contents/ui/TimerInputView.qml
+msgid "&Cancel"
+msgstr "&Prekliči"
+
 #: ../contents/ui/EventContextMenu.qml
 msgctxt "RSVP to an invitation"
 msgid "Respond"
 msgstr "Odgovori"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "Yes"
-msgstr "Da"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "Yes to All Events"
-msgstr "Da za vse dogodke"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "Maybe"
-msgstr "Mogoče"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "Maybe to All Events"
-msgstr "Mogoče za vse dogodke"
-
-#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
-msgctxt "RSVP"
-msgid "No"
-msgstr "Ne"
-
-#: ../contents/ui/EventContextMenu.qml
-msgctxt "RSVP"
-msgid "No to All Events"
-msgstr "Ne za vse dogodke"
 
 #: ../contents/ui/EventContextMenu.qml
 msgid "Show Details"
@@ -1259,6 +1317,10 @@ msgstr "Odpri v Googlovem koledarju"
 #: ../contents/ui/EventContextMenu.qml
 msgid "Mark as Ended"
 msgstr "Označi kot končano"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Email Guests…"
+msgstr "Pošlji e-pošto gostom…"
 
 #: ../contents/ui/EventContextMenu.qml
 msgid "Edit…"
@@ -1288,12 +1350,12 @@ msgid "Delete All Events of “%1”"
 msgstr "Izbriši vse dogodke »%1«"
 
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/WeekView.qml
+#: ../contents/ui/EventMover.qml
 msgid "This event"
 msgstr "Ta dogodek"
 
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
-#: ../contents/ui/WeekView.qml
+#: ../contents/ui/EventMover.qml
 msgid "All events in the series"
 msgstr "Vse dogodke v nizu"
 
@@ -1335,7 +1397,8 @@ msgctxt "%1 = 10m, 2m"
 msgid "Reminders: %1 before"
 msgstr "Opomniki: %1 prej"
 
-#: ../contents/ui/EventDetailsView.qml ../contents/ui/SearchView.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/FindTimeView.qml
+#: ../contents/ui/SearchView.qml
 msgid "Back"
 msgstr "Nazaj"
 
@@ -1363,19 +1426,58 @@ msgstr "Izbriše vse ponovitve tega ponavljajočega se dogodka."
 msgid "Duplicate"
 msgstr "Podvoji"
 
+#: ../contents/ui/EventDetailsView.qml
+msgid "Private event"
+msgstr "Zasebni dogodek"
+
 #: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
 #: ../contents/ui/WeekView.qml
 msgid "All day"
 msgstr "Ves dan"
 
-#: ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
 msgid "Repeats"
 msgstr "Ponavljanje"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = start and end time, %2 = city, %3 = time zone id"
+msgid "%1 %2 time (%3)"
+msgstr "%1, čas %2 (%3)"
 
 #: ../contents/ui/EventDetailsView.qml
 msgctxt "RSVP to an invitation"
 msgid "Going?"
 msgstr "Se udeležite?"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Out of office"
+msgstr "Odsotnost"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Focus time"
+msgstr "Čas za osredotočenost"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines all meetings at this time"
+msgstr "Zavrne vse sestanke v tem času"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines new invitations at this time"
+msgstr "Zavrne nova vabila v tem času"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = message sent when declining"
+msgid "Message: “%1”"
+msgstr "Sporočilo: »%1«"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = titles of other events at the same time"
+msgid "Overlaps with: %1"
+msgstr "Prekriva se z: %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Write an email to the guests"
+msgstr "Napišite e-poštno sporočilo gostom"
 
 #: ../contents/ui/EventDetailsView.qml
 msgctxt "event organizer"
@@ -1398,6 +1500,11 @@ msgstr[0] "Prikaži še %1"
 msgstr[1] "Prikaži vse %1"
 msgstr[2] "Prikaži vse %1"
 msgstr[3] "Prikaži vseh %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = start and end time in the local time zone"
+msgid "%1 your time"
+msgstr "%1 po vašem času"
 
 #: ../contents/ui/EventEditView.qml
 msgctxt "Google Calendar event color"
@@ -1459,6 +1566,11 @@ msgid "Enter an email address, like name@example.com"
 msgstr "Vpišite e-poštni naslov, npr. ime@example.com"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "you, in Find a time"
+msgid "You"
+msgstr "Vi"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Edit Event"
 msgstr "Uredi dogodek"
 
@@ -1493,14 +1605,85 @@ msgid "Title"
 msgstr "Naslov"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Event"
+msgstr "Dogodek"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Out of office"
+msgstr "Odsotnost"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Focus time"
+msgstr "Čas za osredotočenost"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Event type"
+msgstr "Vrsta dogodka"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Don't decline invitations"
+msgstr "Ne zavrni vabil"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new invitations in this time"
+msgstr "Zavrni nova vabila v tem času"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new and existing invitations in this time"
+msgstr "Zavrni nova in obstoječa vabila v tem času"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Automatically decline"
+msgstr "Samodejno zavrni"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Message for declined invitations"
+msgstr "Sporočilo za zavrnjena vabila"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Do not disturb"
+msgstr "Ne moti"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Available"
+msgstr "Na voljo"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Do not disturb or Available"
+msgid "Chat status: %1"
+msgstr "Stanje v klepetu: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Chat status"
+msgstr "Stanje v klepetu"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Calendar color"
 msgstr "Barva koledarja"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Local time"
+msgstr "Krajevni čas"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = time zone id, eg: Europe/Warsaw"
+msgid "Time zone: %1"
+msgstr "Časovni pas: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Time zone"
+msgstr "Časovni pas"
 
 #: ../contents/ui/EventEditView.qml
 msgid "Does not repeat"
 msgstr "Se ne ponavlja"
 
-#: ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventEditView.qml ../contents/ui/ImportView.qml
 msgid "Daily"
 msgstr "Dnevno"
 
@@ -1626,6 +1809,49 @@ msgid "Remove video conferencing"
 msgstr "Odstrani videokonferenco"
 
 #: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Busy"
+msgstr "Zaseden"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Free"
+msgstr "Prost"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Busy or Free"
+msgid "Show as: %1"
+msgstr "Prikaži kot: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Show as"
+msgstr "Prikaži kot"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Calendar default"
+msgstr "Privzeto za koledar"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Public"
+msgstr "Javno"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Private"
+msgstr "Zasebno"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Calendar default, Public or Private"
+msgid "Visibility: %1"
+msgstr "Vidnost: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Visibility"
+msgstr "Vidnost"
+
+#: ../contents/ui/EventEditView.qml
 msgid "Reminders"
 msgstr "Opomniki"
 
@@ -1707,9 +1933,259 @@ msgctxt "guest suggestion: %1 = name, %2 = email"
 msgid "%1 <%2>"
 msgstr "%1 <%2>"
 
+#: ../contents/ui/EventEditView.qml ../contents/ui/FindTimeView.qml
+msgid "Find a Time"
+msgstr "Najdi termin"
+
 #: ../contents/ui/EventEditView.qml
 msgid "Description"
 msgstr "Opis"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Home"
+msgstr "Doma"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Office"
+msgstr "Pisarna"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Elsewhere"
+msgstr "Drugje"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't import events"
+msgstr "Ta koledar ne more uvoziti dogodkov"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't show free / busy times"
+msgstr "Ta koledar ne more prikazati zasedenih / prostih terminov"
+
+#: ../contents/ui/EventMover.qml
+msgid "Event moved"
+msgstr "Dogodek premaknjen"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "separator of names in a list"
+msgid ", "
+msgstr ", "
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No suggestions: the guests' busy times aren't available."
+msgstr "Ni predlogov: zasedenost gostov ni na voljo."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "Suggested times (not counting %1):"
+msgstr "Predlagani termini (brez %1):"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Suggested times:"
+msgstr "Predlagani termini:"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "No time free in the working hours of this day (not counting %1)."
+msgstr "Ta dan v delovnem času ni prostega časa (brez %1)."
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No time free for everyone in the working hours of this day."
+msgstr "Ta dan v delovnem času ni prostega termina za vse."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time"
+msgid "Not available"
+msgstr "Ni na voljo"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time: %1 = Google's reason"
+msgid "Not available (%1)"
+msgstr "Ni na voljo (%1)"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Previous day"
+msgstr "Prejšnji dan"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "Find a time: the day shown"
+msgid "ddd, d MMM"
+msgstr "ddd, d. MMM"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Next day"
+msgstr "Naslednji dan"
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file."
+msgstr "Datoteke ni bilo mogoče prebrati."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Reading .ics files needs the Python icalendar module (python-icalendar)."
+msgstr ""
+"Za branje datotek .ics je potreben modul Python icalendar (python-icalendar)."
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file: %1"
+msgstr "Datoteke ni bilo mogoče prebrati: %1"
+
+#: ../contents/ui/ImportView.qml
+msgid "Changed occurrence of a repeating event"
+msgstr "Spremenjena ponovitev ponavljajočega se dogodka"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 day"
+msgid_plural "Every %1 days"
+msgstr[0] "Vsak %1 dan"
+msgstr[1] "Vsaka %1 dneva"
+msgstr[2] "Vsake %1 dni"
+msgstr[3] "Vsakih %1 dni"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "Vsak %1 teden"
+msgstr[1] "Vsaka %1 tedna"
+msgstr[2] "Vsake %1 tedne"
+msgstr[3] "Vsakih %1 tednov"
+
+#: ../contents/ui/ImportView.qml
+msgid "Weekly"
+msgstr "Tedensko"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly / Every 2 weeks, %2 = days"
+msgid "%1 on %2"
+msgstr "%1: %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 month"
+msgid_plural "Every %1 months"
+msgstr[0] "Vsak %1 mesec"
+msgstr[1] "Vsaka %1 meseca"
+msgstr[2] "Vsake %1 mesece"
+msgstr[3] "Vsakih %1 mesecev"
+
+#: ../contents/ui/ImportView.qml
+msgid "Monthly"
+msgstr "Mesečno"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 year"
+msgid_plural "Every %1 years"
+msgstr[0] "Vsako %1 leto"
+msgstr[1] "Vsaki %1 leti"
+msgstr[2] "Vsaka %1 leta"
+msgstr[3] "Vsakih %1 let"
+
+#: ../contents/ui/ImportView.qml
+msgid "Yearly"
+msgstr "Letno"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%2 = Weekly on Monday, ..."
+msgid "%2, %1 time"
+msgid_plural "%2, %1 times"
+msgstr[0] "%2, %1-krat"
+msgstr[1] "%2, %1-krat"
+msgstr[2] "%2, %1-krat"
+msgstr[3] "%2, %1-krat"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly on Monday, ..., %2 = date"
+msgid "%1, until %2"
+msgstr "%1, do %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 exception"
+msgid_plural "%1 exceptions"
+msgstr[0] "%1 izjema"
+msgstr[1] "%1 izjemi"
+msgstr[2] "%1 izjeme"
+msgstr[3] "%1 izjem"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/main.qml
+msgid "Import Events"
+msgstr "Uvozi dogodke"
+
+#: ../contents/ui/ImportView.qml
+msgid "Close"
+msgstr "Zapri"
+
+#: ../contents/ui/ImportView.qml
+msgid "Import"
+msgstr "Uvozi"
+
+#: ../contents/ui/ImportView.qml
+msgid "No file chosen"
+msgstr "Nobena datoteka ni izbrana"
+
+#: ../contents/ui/ImportView.qml
+msgid "Choose File…"
+msgstr "Izberi datoteko…"
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading the file…"
+msgstr "Branje datoteke…"
+
+#: ../contents/ui/ImportView.qml
+msgid "No events in this file"
+msgstr "V tej datoteki ni dogodkov"
+
+#: ../contents/ui/ImportView.qml
+msgid "(No title)"
+msgstr "(Brez naslova)"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 cancelled event isn't imported."
+msgid_plural "%1 cancelled events aren't imported."
+msgstr[0] "%1 preklican dogodek ni uvožen."
+msgstr[1] "%1 preklicana dogodka nista uvožena."
+msgstr[2] "%1 preklicani dogodki niso uvoženi."
+msgstr[3] "%1 preklicanih dogodkov ni uvoženih."
+
+#: ../contents/ui/ImportView.qml
+msgid "Calendar:"
+msgstr "Koledar:"
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Guests and the organizer aren't imported, and no invitations are sent. "
+"Importing the same event again updates it."
+msgstr ""
+"Gostje in organizator niso uvoženi, vabila pa niso poslana. Ponovni uvoz "
+"istega dogodka ga posodobi."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Importing needs a Google Calendar you can edit. Log in to Google Calendar in "
+"the settings."
+msgstr ""
+"Za uvoz je potreben Googlov koledar, ki ga lahko urejate. V nastavitvah se "
+"prijavite v Googlov koledar."
+
+#: ../contents/ui/ImportView.qml
+msgid "Importing… %1 of %2"
+msgstr "Uvažanje… %1 od %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 event imported"
+msgid_plural "%1 events imported"
+msgstr[0] "%1 dogodek uvožen"
+msgstr[1] "%1 dogodka uvožena"
+msgstr[2] "%1 dogodki uvoženi"
+msgstr[3] "%1 dogodkov uvoženih"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 failed: %2"
+msgid_plural "%1 failed, eg: %2"
+msgstr[0] "%1 ni uspel: %2"
+msgstr[1] "%1 nista uspela, npr.: %2"
+msgstr[2] "%1 niso uspeli, npr.: %2"
+msgstr[3] "%1 ni uspelo, npr.: %2"
 
 #: ../contents/ui/JoinPill.qml
 msgid "Join"
@@ -1766,9 +2242,28 @@ msgid "%1, %2"
 msgstr "%1, %2"
 
 #: ../contents/ui/LocaleFuncs.js
+msgid "All Day"
+msgstr "Ves dan"
+
+#: ../contents/ui/LocaleFuncs.js
 msgctxt "from date/time %1 until date/time %2"
 msgid "%1 - %2"
 msgstr "%1 - %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event span, %1 = start, %2 = end"
+msgid "%1 – %2"
+msgstr "%1 – %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date"
+msgid "%1 · All day"
+msgstr "%1 · Ves dan"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
+msgid "%1 · %2 – %3"
+msgstr "%1 · %2 – %3"
 
 #: ../contents/ui/LocaleFuncs.js
 #, no-c-format
@@ -1845,6 +2340,10 @@ msgid "New Event…"
 msgstr "Nov dogodek…"
 
 #: ../contents/ui/main.qml
+msgid "Import Events…"
+msgstr "Uvozi dogodke…"
+
+#: ../contents/ui/main.qml
 msgid "Open Google Calendar"
 msgstr "Odpri Googlov koledar"
 
@@ -1888,7 +2387,7 @@ msgstr "npr.: 9.00-17.00 služba"
 msgid "Previous Day"
 msgstr "Prejšnji dan"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Previous Week"
 msgstr "Prejšnji teden"
 
@@ -1896,7 +2395,7 @@ msgstr "Prejšnji teden"
 msgid "Previous Month"
 msgstr "Prejšnji mesec"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Today"
 msgstr "Danes"
 
@@ -1904,7 +2403,7 @@ msgstr "Danes"
 msgid "Next Day"
 msgstr "Naslednji dan"
 
-#: ../contents/ui/PopupHeader.qml ../contents/ui/WeekView.qml
+#: ../contents/ui/PopupHeader.qml
 msgid "Next Week"
 msgstr "Naslednji teden"
 
@@ -1992,20 +2491,35 @@ msgstr "Vpišite kaj, kdaj in kje. Če dan ni naveden, je dogodek dodan dne %1."
 msgid "More options…"
 msgstr "Več možnosti…"
 
-#: ../contents/ui/SearchView.qml ../contents/ui/WeekView.qml
-msgctxt "event span, %1 = start, %2 = end"
-msgid "%1 – %2"
-msgstr "%1 – %2"
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Yes"
+msgstr "Da"
 
-#: ../contents/ui/SearchView.qml
-msgctxt "search result, %1 = date"
-msgid "%1 · All day"
-msgstr "%1 · Ves dan"
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Yes to All Events"
+msgstr "Da za vse dogodke"
 
-#: ../contents/ui/SearchView.qml
-msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
-msgid "%1 · %2 – %3"
-msgstr "%1 · %2 – %3"
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Maybe"
+msgstr "Mogoče"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Maybe to All Events"
+msgstr "Mogoče za vse dogodke"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "No"
+msgstr "Ne"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "No to All Events"
+msgstr "Ne za vse dogodke"
 
 #: ../contents/ui/SearchView.qml
 msgid "Search events…"
@@ -2100,10 +2614,6 @@ msgid "%1 mm"
 msgstr "%1 mm"
 
 #: ../contents/ui/UpcomingEvents.qml
-msgid "Open in Calendar"
-msgstr "Odpri v koledarju"
-
-#: ../contents/ui/UpcomingEvents.qml
 msgid "Snooze 1 minute"
 msgid_plural "Snooze %1 minutes"
 msgstr[0] "Dremež %1 minuto"
@@ -2115,6 +2625,46 @@ msgstr[3] "Dremež %1 minut"
 msgctxt "%1 = 15 minutes, %2 = event title"
 msgid "In %1: %2"
 msgstr "Čez %1: %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "invitation, %1 = organizer"
+msgid "From %1"
+msgstr "Od %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title"
+msgid "Invitation: %1"
+msgstr "Povabilo: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, %1 = event title"
+msgid "All day: %1"
+msgstr "Ves dan: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, more events"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+še %1"
+msgstr[1] "+še %1"
+msgstr[2] "+še %1"
+msgstr[3] "+še %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Today: %1 event"
+msgid_plural "Today: %1 events"
+msgstr[0] "Danes: %1 dogodek"
+msgstr[1] "Danes: %1 dogodka"
+msgstr[2] "Danes: %1 dogodki"
+msgstr[3] "Danes: %1 dogodkov"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Nothing planned today"
+msgstr "Danes ni ničesar načrtovanega"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Open Agenda"
+msgstr "Odpri dnevni red"
 
 #: ../contents/ui/UpcomingEvents.qml
 msgctxt "%1 = time"
@@ -2192,8 +2742,14 @@ msgid "Next days"
 msgstr "Naslednji dnevi"
 
 #: ../contents/ui/WeekView.qml
-msgid "Event moved"
-msgstr "Dogodek premaknjen"
+msgctxt "%1 = time zone, %2 = a date"
+msgid ""
+"%1\n"
+"The time difference changes during these days: the hours shown are those of "
+"%2."
+msgstr ""
+"%1\n"
+"Časovna razlika se v teh dneh spremeni: prikazane ure veljajo za %2."
 
 #: ../contents/ui/WeekView.qml
 msgid "%1 day"
@@ -2207,6 +2763,66 @@ msgstr[3] "%1 dni"
 msgctxt "more events not shown"
 msgid "+%1"
 msgstr "+%1"
+
+#: ../contents/ui/WorkingLocationLabel.qml
+msgctxt "%1 = Home, Office, ..."
+msgid "Working location: %1"
+msgstr "Delovna lokacija: %1"
+
+#~ msgid "Error fetching calendar: %1"
+#~ msgstr "Napaka pri pridobivanju koledarja: %1"
+
+#~ msgid "Not logged in to Google Calendar"
+#~ msgstr "Niste prijavljeni v Googlov koledar"
+
+#~ msgid "Waiting for the helper page to send the code..."
+#~ msgstr "Čakanje, da pomožna stran pošlje kodo..."
+
+#~ msgid ""
+#~ "Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
+#~ "the browser redirects to the helper page and will try to send the code "
+#~ "back automatically. If it fails, copy the code and paste it below."
+#~ msgstr ""
+#~ "Kliknite Prijava (samodejna), da odprete <a href=\"%1\">%2</a>. Ko "
+#~ "odobrite dostop, vas brskalnik preusmeri na pomožno stran, ki bo "
+#~ "poskusila samodejno poslati kodo nazaj. Če ne uspe, kopirajte kodo in jo "
+#~ "prilepite spodaj."
+
+#~ msgid "Helper page: <a href=\"%1\">%1</a>"
+#~ msgstr "Pomožna stran: <a href=\"%1\">%1</a>"
+
+#~ msgid ""
+#~ "If auto-capture fails, copy the code from the helper page and paste it "
+#~ "below."
+#~ msgstr ""
+#~ "Če samodejni zajem ne uspe, kopirajte kodo s pomožne strani in jo "
+#~ "prilepite spodaj."
+
+#~ msgid "Add location"
+#~ msgstr "Dodaj lokacijo"
+
+#~ msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
+#~ msgstr "Gumba »Pridruži se sestanku« in »Odpri v koledarju«"
+
+#~ msgid "Open in Calendar"
+#~ msgstr "Odpri v koledarju"
+
+#~ msgctxt "calendar view showing a year"
+#~ msgid "Year"
+#~ msgstr "Leto"
+
+#~ msgid "Previous Year"
+#~ msgstr "Prejšnje leto"
+
+#~ msgid "Next Year"
+#~ msgstr "Naslednje leto"
+
+#~ msgid "1 event"
+#~ msgid_plural "%1 events"
+#~ msgstr[0] "%1 dogodek"
+#~ msgstr[1] "%1 dogodka"
+#~ msgstr[2] "%1 dogodki"
+#~ msgstr[3] "%1 dogodkov"
 
 #~ msgid "Vertical Panel"
 #~ msgstr "Navpična plošča"

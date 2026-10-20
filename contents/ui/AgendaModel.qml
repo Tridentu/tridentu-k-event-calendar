@@ -4,7 +4,6 @@ import "Shared.js" as Shared
 
 ListModel {
 	id: agendaModel
-	property var eventModel
 	property var timeModel
 
 	dynamicRoles: false
@@ -13,14 +12,12 @@ ListModel {
 	property int parseGeneration: 0
 	property int parseChunkSize: 50
 
-	property bool showDailyWeather: false
-	property var lastWeatherData: null
-	property var pendingWeatherData: null
+	// The daily forecast by day (main.qml weatherByDay), applied once the days are filled.
+	property var lastWeatherByDay: null
+	property var pendingWeatherByDay: null
 
 	property int showNextNumDays: 14
 	property bool showAllDaysInMonth: true
-	property bool clipPastEvents: false
-	property bool clipPastEventsToday: false
 	property bool clipEventsOutsideLimits: true
 	property bool clipEventsFromOtherMonths: true
 	property date visibleDateMin: new Date()
@@ -70,14 +67,14 @@ ListModel {
 			agendaItem.date.getTime(),
 			agendaItem.events.map(function(e) {
 				return [e.id, e.calendarId, e.etag || e.updated || '', e.summary, e.location || '',
-					(e.description || '').length, time(e.startDateTime), time(e.endDateTime), e.backgroundColor || '', !!e.canEdit, Shared.myResponse(e)]
+					(e.description || '').length, time(e.startDateTime), time(e.endDateTime), e.backgroundColor || '', !!e.canEdit, Shared.myResponse(e),
+					Shared.conflictTitles(e)]
 			}),
 			agendaItem.tasks.map(function(t) {
 				return [t.id, t.calendarId, t.etag || t.updated || '', t.summary, !!t.isCompleted, t.parent || '',
 					(t.notes || '').length, time(t.startDateTime), t.backgroundColor || '']
 			}),
 			agendaItem.showWeather, agendaItem.tempLow, agendaItem.tempHigh, agendaItem.weatherIcon,
-			agendaItem.weatherText, agendaItem.weatherDescription, agendaItem.weatherNotes,
 		])
 	}
 
@@ -90,9 +87,6 @@ ListModel {
 			tempLow: 0,
 			tempHigh: 0,
 			weatherIcon: "",
-			weatherText: "",
-			weatherDescription: "",
-			weatherNotes: "",
 		};
 	}
 
@@ -297,17 +291,6 @@ ListModel {
 					addAgendaItemIfMissing(agendaItemList, byDay, day)
 				}
 			}
-			
-			if (clipPastEvents) {
-				// Remove calendar events before today.
-				var minDate = today
-				if (!clipPastEventsToday) {
-					minDate = Shared.startOfDay(today)
-				}
-				agendaItemList = agendaItemList.filter(function(agendaItem) {
-					return !(agendaItem.date < minDate)
-				})
-			}
 
 			// Make sure the agendaItemList is sorted.
 			// When we have a in-progress multiday event on the current date,
@@ -316,19 +299,13 @@ ListModel {
 			agendaItemList.sort(function(a,b) { return a.date - b.date })
 
 			// Fill in weather before writing to the model so the weather column doesn't flicker.
-			var weatherData = agendaModel.pendingWeatherData || agendaModel.lastWeatherData
-			agendaModel.pendingWeatherData = null
-			var weatherByDay = agendaModel.weatherFieldsByDay(weatherData)
-			var showWeatherColumn = false
+			var weatherByDay = agendaModel.pendingWeatherByDay || agendaModel.lastWeatherByDay
+			agendaModel.pendingWeatherByDay = null
 			for (var i = 0; i < agendaItemList.length; i++) {
-				var weatherFields = weatherByDay[Shared.dayKey(agendaItemList[i].date)]
+				var weatherFields = agendaModel.weatherFields(weatherByDay, agendaItemList[i].date)
 				if (weatherFields) {
 					Object.assign(agendaItemList[i], weatherFields)
-					showWeatherColumn = true
 				}
-			}
-			if (weatherData) {
-				agendaModel.showDailyWeather = showWeatherColumn
 			}
 
 			var minCount = Math.min(agendaItemList.length, agendaModel.count)
@@ -407,57 +384,43 @@ ListModel {
 		processChunk()
 	}
 
-	function weatherFieldsByDay(data) {
-		var byDay = {}
-		if (!(data && data.list)) {
-			return byDay
+	// The agenda day's weather fields, or null without a forecast for that day.
+	function weatherFields(weatherByDay, date) {
+		var forecastItem = weatherByDay ? weatherByDay[Shared.dayKey(date)] : null
+		if (!forecastItem) {
+			return null
 		}
-		for (var j = 0; j < data.list.length; j++) {
-			var forecastItem = data.list[j]
-			var key = Shared.dayKey(new Date(forecastItem.dt * 1000))
-			byDay[key] = {
-				tempLow: Math.floor(forecastItem.temp.min),
-				tempHigh: Math.ceil(forecastItem.temp.max),
-				weatherIcon: forecastItem.iconName || 'weather-severe-alert',
-				weatherText: forecastItem.text || '',
-				weatherDescription: forecastItem.description || '',
-				weatherNotes: forecastItem.notes || '',
-				showWeather: true,
-			}
+		return {
+			tempLow: Math.floor(forecastItem.temp.min),
+			tempHigh: Math.ceil(forecastItem.temp.max),
+			weatherIcon: forecastItem.iconName || 'weather-severe-alert',
+			showWeather: true,
 		}
-		return byDay
 	}
 
-	function applyWeatherForecast(data) {
-		if (!(data && data.list)) {
-			return
-		}
-
-		var weatherByDay = weatherFieldsByDay(data)
-		var showWeatherColumn = false
+	function applyWeatherForecast(weatherByDay) {
 		for (var i = 0; i < agendaModel.count; i++) {
-			var weatherFields = weatherByDay[Shared.dayKey(agendaModel.get(i).date)]
+			var weatherFields = agendaModel.weatherFields(weatherByDay, agendaModel.get(i).date)
 			if (weatherFields) {
-				agendaModel.set(i, weatherFields) // One change signal per row instead of seven.
+				agendaModel.set(i, weatherFields) // One change signal per row instead of four.
 				agendaModel.rowSignatures[i] = null // Row changed outside finalizeAgendaItems.
-				showWeatherColumn = true
 			}
 		}
-		agendaModel.showDailyWeather = showWeatherColumn
 	}
 
-	function parseWeatherForecast(data) {
-		agendaModel.lastWeatherData = data
+	// weatherByDay: { Shared.dayKey: daily forecast item } (DayWeather.byDay).
+	function parseWeatherForecast(weatherByDay) {
+		agendaModel.lastWeatherByDay = weatherByDay
 		if (agendaModel.populating) {
-			agendaModel.pendingWeatherData = data
+			agendaModel.pendingWeatherByDay = weatherByDay
 			return
 		}
-		agendaModel.pendingWeatherData = null
-		agendaModel.applyWeatherForecast(data)
+		agendaModel.pendingWeatherByDay = null
+		agendaModel.applyWeatherForecast(weatherByDay)
 	}
 
 	Component.onCompleted: {
 		parseGCalEvents({ "items": [] })
-		parseWeatherForecast({ "list": [] })
+		parseWeatherForecast({})
 	}
 }

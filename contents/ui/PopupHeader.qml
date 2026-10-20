@@ -11,7 +11,9 @@ PlasmaExtras.PlasmoidHeading {
 	id: header
 
 	property Item monthViewItem
-	property Item weekViewItem // Week and Day views, null otherwise
+	// Week and Day views (their own title and navigation: goPrevious, goNext, goToday), null: the
+	// month view.
+	property Item weekViewItem
 	property bool showViewTabs: true
 	property bool showPinButton: true
 	property bool refreshing: false
@@ -21,11 +23,35 @@ PlasmaExtras.PlasmoidHeading {
 	signal searchClicked()
 	signal refreshClicked()
 
-	// Left: view switcher. Center: navigation and title. Right: search, new event, refresh, pin.
+	// Left: view switcher. Center: navigation and title. Right: calendars, search, new event, refresh, pin.
 	contentItem: Item {
 		id: topBar
 		implicitHeight: Math.max(leftGroup.implicitHeight, centerGroup.implicitHeight, rightGroup.implicitHeight)
 		readonly property real sideWidth: Math.max(leftGroup.implicitWidth, rightGroup.implicitWidth)
+		// Not enough room for the view names next to the title: icons only (names in tooltips).
+		readonly property bool compactTabs: header.showViewTabs
+			&& width < Math.max(fullTabsMeasure.implicitWidth, rightGroup.implicitWidth) * 2 + centerGroup.implicitWidth + Kirigami.Units.largeSpacing * 2
+
+		readonly property var viewTabs: [
+			{ mode: 'month', icon: "view-calendar-month", text: i18n("Month") },
+			{ mode: 'week', icon: "view-calendar-week", text: i18n("Week") },
+			{ mode: 'today', icon: "view-calendar-day", text: i18nc("calendar view showing one day", "Day") },
+			{ mode: 'classic', icon: "view-calendar-agenda", text: i18n("Agenda") },
+		]
+		// The view switcher's width with names, measured off screen.
+		Row {
+			id: fullTabsMeasure
+			visible: false
+			spacing: 2
+			Repeater {
+				model: topBar.viewTabs
+				PlasmaComponents3.ToolButton {
+					icon.name: modelData.icon
+					text: modelData.text
+					display: QQC2.AbstractButton.TextBesideIcon
+				}
+			}
+		}
 
 		RowLayout {
 			id: leftGroup
@@ -39,12 +65,7 @@ PlasmaExtras.PlasmoidHeading {
 				spacing: 2
 
 				Repeater {
-					model: [
-						{ mode: 'month', icon: "view-calendar-month", text: i18n("Month") },
-						{ mode: 'week', icon: "view-calendar-week", text: i18n("Week") },
-						{ mode: 'today', icon: "view-calendar-day", text: i18nc("calendar view showing one day", "Day") },
-						{ mode: 'classic', icon: "view-calendar-agenda", text: i18n("Agenda") },
-					]
+					model: topBar.viewTabs
 					Item {
 						readonly property bool current: plasmoid.configuration.popupMode === modelData.mode
 						implicitWidth: viewButton.implicitWidth
@@ -63,7 +84,9 @@ PlasmaExtras.PlasmoidHeading {
 							anchors.fill: parent
 							icon.name: modelData.icon
 							text: modelData.text
-							display: QQC2.AbstractButton.TextBesideIcon
+							display: topBar.compactTabs ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
+							PlasmaComponents3.ToolTip.text: modelData.text
+							PlasmaComponents3.ToolTip.visible: topBar.compactTabs && hovered
 							// Not checkable: the style's checked look changes the size and elides the text.
 							onClicked: header.viewSelected(modelData.mode)
 							Accessible.name: modelData.text
@@ -126,6 +149,9 @@ PlasmaExtras.PlasmoidHeading {
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
 			spacing: 0
+			CalendarToggles {
+				id: calendarToggles
+			}
 			PlasmaComponents3.ToolButton {
 				icon.name: "search"
 				onClicked: header.searchClicked()

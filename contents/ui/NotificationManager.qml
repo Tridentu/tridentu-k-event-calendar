@@ -8,7 +8,7 @@ import "./NotificationState.js" as NotificationState
 // actions handled in QML.
 //
 // notify({ summary, body, appName, appIcon, event, urgency, expireTimeout, soundFile, actions }, callback)
-// - event: notifyrc event id (reminder, eventStarting, timer, syncProblem); each can be
+// - event: notifyrc event id (reminder, eventStarting, invitation, dailyAgenda, timer, syncProblem); each can be
 //   configured in System Settings > Notifications > Event Calendar.
 // - expireTimeout: 0 = keep until dismissed; > 0 = closed after that many ms; else (-1) Plasma's
 //   popup timeout.
@@ -56,7 +56,7 @@ QtObject {
 	}
 
 	function notify(args, callback) {
-		logger.debugJSON('NotificationManager.notify', args.event, args.summary)
+		logger.debug('NotificationManager.notify', args.event) // No event titles in logs
 		var answered = false
 		function answer(actionId) {
 			if (answered) {

@@ -74,11 +74,19 @@
 			<!-- Event text size in the views, percent of the theme font. -->
 			<default>100</default>
 		</entry>
+		<entry name="weekViewWorkWeek" type="bool">
+			<!-- Week view: only the locale's working days (Monday to Friday), in week order. -->
+			<default>false</default>
+		</entry>
 		<entry name="weekViewStartHour" type="int">
 			<default>7</default>
 		</entry>
 		<entry name="weekViewEndHour" type="int">
 			<default>20</default>
+		</entry>
+		<entry name="weekViewSecondTimeZone" type="String">
+			<!-- Week and Day views: hour labels of a second time zone (IANA id) in the hour column. Empty: none. -->
+			<default></default>
 		</entry>
 		<entry name="monthModeWidth" type="uint">
 			<default>700</default>
@@ -99,55 +107,6 @@
 		<!-- Deprecated in: v72 -->
 		<entry name="v72Migration" type="bool">
 			<default>false</default>
-		</entry>
-		<!-- Deprecated in: v71 -->
-		<entry name="v71Migration" type="bool">
-			<default>false</default>
-		</entry>
-		<entry name="widget_show_meteogram" type="bool">
-			<default>true</default>
-		</entry>
-		<entry name="widget_show_timer" type="bool">
-			<default>true</default>
-		</entry>
-		<entry name="timer_sfx_enabled" type="bool">
-			<default>true</default>
-		</entry>
-		<entry name="timer_sfx_filepath" type="string">
-			<default>/usr/share/sounds/freedesktop/stereo/complete.oga</default>
-		</entry>
-		<entry name="timer_repeats" type="bool">
-			<default>false</default>
-		</entry>
-		<entry name="clock_fontfamily" type="string">
-			<default></default>
-		</entry>
-		<entry name="clock_timeformat" type="string">
-			<default></default>
-		</entry>
-		<entry name="clock_timeformat_2" type="string">
-			<default></default>
-		</entry>
-		<entry name="clock_line_2" type="bool">
-			<default>false</default>
-		</entry>
-		<entry name="clock_line_2_height_ratio" type="double">
-			<default>0.4</default>
-		</entry>
-		<entry name="clock_line_1_bold" type="bool">
-			<default>false</default>
-		</entry>
-		<entry name="clock_line_2_bold" type="bool">
-			<default>false</default>
-		</entry>
-		<entry name="clock_maxheight" type="int">
-			<default>0</default>
-		</entry>
-		<entry name="clock_mousewheel_up" type="string">
-			<default>qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "increase_volume"</default>
-		</entry>
-		<entry name="clock_mousewheel_down" type="string">
-			<default>qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "decrease_volume"</default>
 		</entry>
 		<!-- Removed in: v71
 		-->
@@ -180,22 +139,9 @@
 			<!-- Enum: -1 = Locale default, 0=Sunday, 1=Monday, ..., 6=Saturday -->
 			<default>-1</default>
 		</entry>
-		<entry name="monthHeightSingleColumn" type="uint">
-			<default>300</default>
-		</entry>
-		<!-- Deprecated in: v71 -->
-		<entry name="month_show_weeknumbers" type="bool">
-			<default>false</default>
-		</entry>
-		<entry name="month_eventbadge_type" type="string">
-			<default>theme</default>
-		</entry>
 	</group>
 
 	<group name="Agenda">
-		<entry name="twoColumns" type="bool">
-			<default>true</default>
-		</entry>
 		<entry name="agendaBreakupMultiDayEvents" type="bool">
 			<default>false</default>
 		</entry>
@@ -219,16 +165,6 @@
 		</entry>
 		<entry name="agendaPlaceOverdueTasksOnToday" type="bool">
 			<default>true</default>
-		</entry>
-		<!-- Deprecated in: v71 -->
-		<entry name="agenda_newevent_remember_calendar" type="bool">
-			<default>true</default>
-		</entry>
-		<entry name="agenda_newevent_last_calendar_id" type="string">
-			<default></default>
-		</entry>
-		<entry name="agenda_breakup_multiday_events" type="bool">
-			<default>false</default>
 		</entry>
 	</group>
 
@@ -269,6 +205,38 @@
 			<!-- Google account to join Meet with: index (0, 1, ...) or email. Empty: the app's default. -->
 			<default></default>
 		</entry>
+		<entry name="invitationNotificationEnabled" type="bool">
+			<!-- Notify about unanswered invitations for today, with Yes / Maybe / No. -->
+			<default>true</default>
+		</entry>
+		<entry name="invitationsNotified" type="StringList">
+			<!-- "day|calendar|event|start" of invitations notified today, so they aren't repeated. -->
+			<default></default>
+		</entry>
+		<entry name="meetingAutoJoin" type="bool">
+			<!-- Open the meeting link when a meeting (accepted or own, timed) starts. -->
+			<default>false</default>
+		</entry>
+		<entry name="meetingDoNotDisturb" type="bool">
+			<!-- Plasma's Do Not Disturb until a meeting's end, at its start (see FocusMode.qml). -->
+			<default>false</default>
+		</entry>
+		<entry name="meetingDoNotDisturbAcceptedOnly" type="bool">
+			<!-- Do Not Disturb only for meetings accepted or organized (else any not declined). -->
+			<default>true</default>
+		</entry>
+		<entry name="dailyAgendaEnabled" type="bool">
+			<!-- A notification with today's events once a day (see DailyAgenda.js). -->
+			<default>false</default>
+		</entry>
+		<entry name="dailyAgendaTime" type="int">
+			<!-- When the daily agenda is shown: minutes since midnight. -->
+			<default>480</default>
+		</entry>
+		<entry name="dailyAgendaDay" type="string">
+			<!-- "yyyy-m-d" of the last daily agenda shown, so it's shown once a day. -->
+			<default></default>
+		</entry>
 		<entry name="clockShowNextEvent" type="bool">
 			<default>true</default>
 		</entry>
@@ -281,6 +249,15 @@
 		</entry>
 		<entry name="monthClickOpensDay" type="bool">
 			<default>true</default>
+		</entry>
+		<entry name="showDeclinedEvents" type="bool">
+			<!-- Events the user declined: shown struck through (true) or left out of the views (false) -->
+			<default>true</default>
+		</entry>
+		<entry name="hiddenCalendarIds" type="StringList">
+			<!-- Calendars hidden in the popup's views (header calendars menu). A view filter only:
+			     their events are still fetched, and reminders still come. -->
+			<default></default>
 		</entry>
 		<entry name="eventClickAction" type="string">
 			<!-- details: event details in the widget. browser: open in Google Calendar. -->
@@ -336,17 +313,14 @@
 		<entry name="googleActiveAccountId" type="string">
 			<default></default>
 		</entry>
-		<entry name="googleRedirectMode" type="string">
-			<default>local</default>
-		</entry>
 		<!-- Built-in secret-based OAuth client (works without Google Cloud setup); a custom client ID
 		     in the settings overrides it. The secretless "desktop" client is rejected by Google. -->
 		<entry name="latestClientId" type="string">
 		<default>179575196194-jljdfm9usprtffue48js64h70carpchl.apps.googleusercontent.com</default>
-		</entry>
-		<entry name="latestClientSecret" type="string">
-		<default>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</default>
-		</entry>
+	</entry>
+	<entry name="latestClientSecret" type="string">
+	<default>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</default>
+</entry>
 		<entry name="useDesktopClient" type="bool">
 			<default>false</default>
 		</entry>
@@ -403,9 +377,6 @@
 		<entry name="access_token" type="string">
 			<default></default>
 		</entry>
-		<entry name="events_pollinterval" type="uint">
-			<default>20</default>
-		</entry>
 		<!-- Removed in: v71
 		-->
 		<!-- Removed in: v62
@@ -445,25 +416,6 @@
 			<default>metric</default>
 		</entry>
 		<entry name="meteogramHours" type="uint">
-			<default>30</default>
-		</entry>
-		<!-- Deprecated in: v71 -->
-		<entry name="weather_app_id" type="string">
-			<default>99e575d9aa8a8407bcee7693d5912c6a</default>
-		</entry>
-		<entry name="weather_city_id" type="uint">
-			<default>0</default>
-		</entry>
-		<entry name="weather_canada_city_id" type="string">
-			<default></default>
-		</entry>
-		<entry name="weather_service" type="string">
-			<default>OpenWeatherMap</default>
-		</entry>
-		<entry name="weather_units" type="string">
-			<default>metric</default>
-		</entry>
-		<entry name="meteogram_hours" type="uint">
 			<default>30</default>
 		</entry>
 	</group>

@@ -34,7 +34,23 @@ function copyDate(obj) {
 	return result
 }
 
-var PLAIN_FIELDS = ['location', 'colorId', 'backgroundColor', 'recurringEventId', 'status', 'htmlLink', 'hangoutLink']
+var PLAIN_FIELDS = ['location', 'colorId', 'backgroundColor', 'recurringEventId', 'status', 'htmlLink', 'hangoutLink', 'transparency', 'visibility', 'eventType']
+
+// Working location (day header label): its type and office / custom label only (no building,
+// floor or desk ids).
+function copyWorkingLocation(props) {
+	var result = {}
+	if (props.type) result.type = String(props.type)
+	if (props.homeOffice) result.homeOffice = {}
+	var places = ['officeLocation', 'customLocation']
+	for (var i = 0; i < places.length; i++) {
+		var place = props[places[i]]
+		if (place) {
+			result[places[i]] = place.label ? { label: String(place.label) } : {}
+		}
+	}
+	return result
+}
 
 // The cached copy of one event (whitelisted fields only).
 function pickEvent(event) {
@@ -82,6 +98,9 @@ function pickEvent(event) {
 			}
 		}
 	}
+	if (event.workingLocationProperties && typeof event.workingLocationProperties === 'object') {
+		picked.workingLocationProperties = copyWorkingLocation(event.workingLocationProperties)
+	}
 	// Not the whole event: changing it must start from the server copy (GoogleCalendarManager).
 	picked.fromCache = true
 	return picked
@@ -101,7 +120,10 @@ function serialize(eventsByCalendar, dateMin, dateMax, now) {
 			continue
 		}
 		var data = eventsByCalendar[calendarId]
-		calendars[calendarId] = toList(data && data.items).filter(isCacheableEvent).map(pickEvent)
+		// Working locations (kept apart, see EventTypes.splitWorkingLocations) are stored with the
+		// events and split again when read (EventModel.showCachedEvents).
+		var events = toList(data && data.items).concat(toList(data && data.workingLocations))
+		calendars[calendarId] = events.filter(isCacheableEvent).map(pickEvent)
 	}
 	return JSON.stringify({
 		version: VERSION,

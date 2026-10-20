@@ -139,6 +139,24 @@ function isWeekend(date) {
 	return workingDays.indexOf(day) < 0 && !(day === 0 && workingDays.indexOf(7) >= 0)
 }
 
+// Work week columns: the offsets (0..6) from a week's first day of its working days, in week
+// order. firstWeekday: Date.getDay() of the week's first day (0 = Sunday). workingDays:
+// Qt.locale().weekDays (1..7, Monday..Sunday); none given: Monday to Friday.
+function workDayOffsets(firstWeekday, workingDays) {
+	var days = workingDays && workingDays.length ? workingDays : [1, 2, 3, 4, 5]
+	var working = {}
+	for (var i = 0; i < days.length; i++) {
+		working[Number(days[i]) % 7] = true // 7 (Sunday) -> 0, like getDay()
+	}
+	var offsets = []
+	for (var offset = 0; offset < 7; offset++) {
+		if (working[(firstWeekday + offset) % 7]) {
+			offsets.push(offset)
+		}
+	}
+	return offsets.length ? offsets : [0, 1, 2, 3, 4, 5, 6]
+}
+
 // Consecutive runs of true values: [true, false, true, true] -> [{ first: 0, count: 1 }, { first: 2, count: 2 }]
 // Used to draw adjacent weekend days as one strip.
 function runsOf(flags) {
@@ -184,11 +202,53 @@ function myResponse(eventItem) {
 	return ''
 }
 
-// What an event has set, as small icons after its time: 'location', 'meeting' (a join link,
-// found by the caller with MeetingLink.find), 'guests' (anyone besides the user), 'repeat' and
-// 'description'. Keys in hide are left out, eg: when the view already shows the location.
-// attendees may be an array or a ListModel (agenda).
+// Left out of the views (and the panel's next meeting) when declined events are set to Hide.
+function isHiddenDeclined(eventItem, showDeclined) {
+	return !showDeclined && myResponse(eventItem) === 'declined'
+}
+
+// Hidden with the popup header's calendar toggles (hiddenCalendarIds). A view filter: the events
+// are still fetched and their reminders still come.
+function isHiddenCalendar(calendarId, hiddenCalendarIds) {
+	if (!hiddenCalendarIds || !calendarId) {
+		return false
+	}
+	for (var i = 0; i < hiddenCalendarIds.length; i++) {
+		if (hiddenCalendarIds[i] === String(calendarId)) {
+			return true
+		}
+	}
+	return false
+}
+
+// Titles of the events this one overlaps (EventModel sets conflictsWith, see Conflicts.js). It holds
+// { summary } objects, not strings: a ListModel (agenda) drops plain strings from nested lists.
+function conflictTitles(eventItem) {
+	var list = eventItem ? eventItem.conflictsWith : null
+	if (!list) {
+		return []
+	}
+	var isModel = typeof list.get === 'function' && typeof list.count === 'number'
+	var count = isModel ? list.count : (isList(list) ? list.length : 0)
+	var titles = []
+	for (var i = 0; i < count; i++) {
+		var entry = isModel ? list.get(i) : list[i]
+		if (entry) {
+			titles.push(String(entry.summary || ''))
+		}
+	}
+	return titles
+}
+
+// What an event is or has set, as small icons after its time: 'outOfOffice' / 'focusTime' (Google
+// event types, see EventTypes.js), 'conflict' (overlaps another meeting),
+// 'location', 'meeting' (a join link, found by the caller with MeetingLink.find), 'guests' (anyone
+// besides the user), 'repeat' and 'description'. Keys in hide are left out, eg: when the view
+// already shows the location. attendees may be an array or a ListModel (agenda).
 var EVENT_INDICATOR_ICONS = {
+	outOfOffice: 'im-user-away',
+	focusTime: 'audio-headphones',
+	conflict: 'dialog-warning',
 	location: 'mark-location',
 	meeting: 'call-start',
 	guests: 'group',
@@ -227,6 +287,9 @@ function eventIndicatorKeys(eventItem, hasMeeting, hide) {
 			keys.push(key)
 		}
 	}
+	add('outOfOffice', eventItem.eventType === 'outOfOffice')
+	add('focusTime', eventItem.eventType === 'focusTime')
+	add('conflict', conflictTitles(eventItem).length > 0)
 	add('location', !!eventItem.location)
 	add('meeting', !!hasMeeting)
 	add('guests', guestCount > 0)
@@ -243,6 +306,25 @@ function isUnconfirmedResponse(response) {
 // Number identifying a calendar day, eg: for weather lookups. Month is 0-based like Date.
 function dayKey(d) {
 	return d.getFullYear() * 10000 + d.getMonth() * 100 + d.getDate()
+}
+
+function pad2(n) {
+	return (n < 10 ? '0' : '') + n
+}
+// "2026-10-19" of the local date of d (an all-day event's Google date).
+function localDateString(d) {
+	return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate())
+}
+// Local midnight of a "2026-10-19" date.
+function parseLocalDate(s) {
+	var p = s.split('-')
+	return new Date(+p[0], +p[1] - 1, +p[2])
+}
+// d moved by `days` calendar days, keeping its local time of day (also over a daylight saving change).
+function addDays(d, days) {
+	var r = new Date(d)
+	r.setDate(r.getDate() + days)
+	return r
 }
 
 // Before today (midnight).
@@ -298,6 +380,14 @@ function openExternalUrl(url) {
 		return false
 	}
 	Qt.openUrlExternally(url.trim())
+	return true
+}
+// A mailto: link (eg: Guests.mailtoUrl) in the user's mail app. Nothing else, no spaces.
+function openMailtoUrl(url) {
+	if (typeof url !== 'string' || !/^mailto:[^\s]+$/i.test(url)) {
+		return false
+	}
+	Qt.openUrlExternally(url)
 	return true
 }
 // A URL location opens as is, anything else as a Google Maps search.
