@@ -22,6 +22,15 @@ QtObject {
 			logMigration('popupMode year => month')
 		}
 
+		// 1.4: Open-Meteo became the default weather service (was OpenWeatherMap). Keep OpenWeatherMap
+		// for those who set its city but never picked a service (the old default isn't saved).
+		if (plasmoid.configuration.weatherService === 'OpenMeteo'
+			&& !plasmoid.configuration.openMeteoLatitude && !plasmoid.configuration.openMeteoLongitude
+			&& plasmoid.configuration.openWeatherMapCityId > 0) {
+			plasmoid.configuration.weatherService = 'OpenWeatherMap'
+			logMigration('weatherService => OpenWeatherMap (its city is set)')
+		}
+
 		// Modified in: v72
 		if (!plasmoid.configuration.v72Migration) {
 			var oldValue = plasmoid.configuration.enabledCalendarPlugins
@@ -46,6 +55,24 @@ QtObject {
 			}
 
 			plasmoid.configuration.v73Migration = true
+		}
+
+		// Added in 1.8.2: the view switcher can't be hidden any more, hidden became the small one.
+		if (!plasmoid.configuration.v182Migration) {
+			if (plasmoid.configuration.showViewTabs === false) {
+				plasmoid.configuration.viewSwitcher = 'menu'
+				logMigration('showViewTabs false => viewSwitcher menu')
+			}
+			plasmoid.configuration.v182Migration = true
+		}
+
+		// Another (broken) Plasma 6 port stored the plugin list one character per entry: put it
+		// back together, or the default plugins when nothing usable is left.
+		var plugins = PlasmaCalendarUtils.toArray(plasmoid.configuration.enabledCalendarPlugins)
+		var repairedPlugins = PlasmaCalendarUtils.repairPluginList(plugins)
+		if (plugins.length > 0 && JSON.stringify(repairedPlugins) !== JSON.stringify(Array.prototype.slice.call(plugins))) {
+			plasmoid.configuration.enabledCalendarPlugins = repairedPlugins.length > 0 ? repairedPlugins : ['holidaysevents.so', 'pimevents.so']
+			logMigration('repair enabledCalendarPlugins (' + plugins + ' => ' + plasmoid.configuration.enabledCalendarPlugins + ')')
 		}
 	}
 

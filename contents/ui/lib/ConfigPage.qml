@@ -86,6 +86,26 @@ KCM.SimpleKCM {
 	property var cfg_agendaCondensedAllDayEventDefault
 	property var cfg_agendaPlaceOverdueTasksOnToday
 	property var cfg_agendaPlaceOverdueTasksOnTodayDefault
+	property var cfg_dayTasksListId
+	property var cfg_dayTasksListIdDefault
+	property var cfg_tasksSmartHiddenLists
+	property var cfg_tasksSmartHiddenListsDefault
+	property var cfg_tasksSidebarCollapsed
+	property var cfg_tasksSidebarCollapsedDefault
+	property var cfg_tasksShowCompleted
+	property var cfg_tasksShowCompletedDefault
+	property var cfg_tasksGroupBy
+	property var cfg_tasksGroupByDefault
+	property var cfg_tasksFilter
+	property var cfg_tasksFilterDefault
+	property var cfg_tasksSortBy
+	property var cfg_tasksSortByDefault
+	property var cfg_tasksShowDetails
+	property var cfg_tasksShowDetailsDefault
+	property var cfg_tasksLastListId
+	property var cfg_tasksLastListIdDefault
+	property var cfg_tasksSmartQuickAdd
+	property var cfg_tasksSmartQuickAddDefault
 	property var cfg_eventsPollInterval
 	property var cfg_eventsPollIntervalDefault
 	property var cfg_icalCalendarList
@@ -130,10 +150,18 @@ KCM.SimpleKCM {
 	property var cfg_weekViewEndHourDefault
 	property var cfg_weekViewSecondTimeZone
 	property var cfg_weekViewSecondTimeZoneDefault
+	property var cfg_hiddenViewTabs
+	property var cfg_hiddenViewTabsDefault
 	property var cfg_showViewTabs
 	property var cfg_showViewTabsDefault
+	property var cfg_viewSwitcher
+	property var cfg_viewSwitcherDefault
+	property var cfg_v182Migration
+	property var cfg_v182MigrationDefault
 	property var cfg_popupMode
 	property var cfg_popupModeDefault
+	property var cfg_popupOpenLastView
+	property var cfg_popupOpenLastViewDefault
 	property var cfg_monthModeWidth
 	property var cfg_monthModeWidthDefault
 	property var cfg_monthModeHeight
@@ -148,6 +176,8 @@ KCM.SimpleKCM {
 	property var cfg_invitationNotificationEnabledDefault
 	property var cfg_invitationsNotified
 	property var cfg_invitationsNotifiedDefault
+	property var cfg_meetingPauseMedia
+	property var cfg_meetingPauseMediaDefault
 	property var cfg_meetingAutoJoin
 	property var cfg_meetingAutoJoinDefault
 	property var cfg_meetingDoNotDisturb
@@ -160,10 +190,30 @@ KCM.SimpleKCM {
 	property var cfg_dailyAgendaTimeDefault
 	property var cfg_dailyAgendaDay
 	property var cfg_dailyAgendaDayDefault
+	property var cfg_dailyAgendaTasks
+	property var cfg_dailyAgendaTasksDefault
+	property var cfg_taskRemindersEnabled
+	property var cfg_taskRemindersEnabledDefault
+	property var cfg_taskSummaryDay
+	property var cfg_taskSummaryDayDefault
 	property var cfg_clockShowNextEvent
 	property var cfg_clockShowNextEventDefault
 	property var cfg_clockNextEventMinutes
 	property var cfg_clockNextEventMinutesDefault
+	property var cfg_clockNextEventSkipAllDay
+	property var cfg_clockNextEventSkipAllDayDefault
+	property var cfg_hideDuplicateEvents
+	property var cfg_hideDuplicateEventsDefault
+	property var cfg_meetingFullScreenAlert
+	property var cfg_meetingFullScreenAlertDefault
+	property var cfg_meetingFullScreenAlertLinkOnly
+	property var cfg_meetingFullScreenAlertLinkOnlyDefault
+	property var cfg_clockNextEventLinkOnly
+	property var cfg_clockNextEventLinkOnlyDefault
+	property var cfg_clockNextEventAcceptedOnly
+	property var cfg_clockNextEventAcceptedOnlyDefault
+	property var cfg_clockNextEventMaxTitle
+	property var cfg_clockNextEventMaxTitleDefault
 	property var cfg_clockShowMeetingProgress
 	property var cfg_clockShowMeetingProgressDefault
 	property var cfg_eventReminderTimeout
@@ -184,6 +234,8 @@ KCM.SimpleKCM {
 	property var cfg_enabledCalendarPluginsDefault
 	property var cfg_enabledCalendarPluginsAllowEmpty
 	property var cfg_enabledCalendarPluginsAllowEmptyDefault
+	property var cfg_tickTickAccounts
+	property var cfg_tickTickAccountsDefault
 	property var cfg_googleAccounts
 	property var cfg_googleAccountsDefault
 	property var cfg_googleActiveAccountId
@@ -220,6 +272,10 @@ KCM.SimpleKCM {
 	property var cfg_tasklistIdListDefault
 	property var cfg_googleEventClickAction
 	property var cfg_googleEventClickActionDefault
+	property var cfg_eventLook
+	property var cfg_eventLookDefault
+	property var cfg_uiStyle
+	property var cfg_uiStyleDefault
 	property var cfg_googleColorPalette
 	property var cfg_googleColorPaletteDefault
 	property var cfg_googleHideGoalsDesc
@@ -238,6 +294,18 @@ KCM.SimpleKCM {
 	property var cfg_weatherUnitsDefault
 	property var cfg_meteogramHours
 	property var cfg_meteogramHoursDefault
+	property var cfg_eventCacheEnabled
+	property var cfg_eventCacheEnabledDefault
+	property var cfg_tasksInProgress
+	property var cfg_tasksInProgressDefault
+	property var cfg_dayShowMiniMonth
+	property var cfg_dayShowMiniMonthDefault
+	property var cfg_dayShowUpNext
+	property var cfg_dayShowUpNextDefault
+	property var cfg_dayShowWeather
+	property var cfg_dayShowWeatherDefault
+	property var cfg_dayShowTasks
+	property var cfg_dayShowTasksDefault
 	// END AUTO CFG PROPS
 
 	property QtObject configBridge: QtObject {

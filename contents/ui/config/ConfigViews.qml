@@ -30,28 +30,181 @@ ConfigPage {
 					{ value: 'week', text: i18n("Week") },
 					{ value: 'today', text: i18nc("calendar view showing one day", "Day") },
 					{ value: 'classic', text: i18n("Agenda") },
+					// Shown when task lists are selected (Tasks settings), else the month.
+					{ value: 'tasks', text: i18n("Tasks") },
+				]
+			}
+			FormCard.FormDelegateSeparator {}
+			// On: the Default view is only for the first time it opens.
+			FormConfigSwitch {
+				text: i18n("Open in the last used view")
+				configKey: 'popupOpenLastView'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigCombo {
+				text: i18n("View switcher")
+				configKey: 'viewSwitcher'
+				model: [
+					{ value: 'tabs', text: i18n("Tabs") },
+					// One button with the view shown and a menu: little room taken.
+					{ value: 'menu', text: i18n("Drop-down menu") },
+				]
+			}
+			// The views the switcher offers, as one row of checkboxes (at least one calendar view
+			// stays; Tasks is only offered with task lists selected).
+			FormCard.AbstractFormDelegate {
+				id: tabsRow
+				readonly property var hidden: page.configBridge.read("hiddenViewTabs", []) || []
+				readonly property int calendarViewsShown: ['month', 'week', 'today', 'classic'].filter(function(mode) {
+					return hidden.indexOf(mode) < 0
+				}).length
+				background: null
+				contentItem: ColumnLayout {
+					spacing: Kirigami.Units.smallSpacing
+					QQC2.Label {
+						text: i18n("Views offered")
+						textFormat: Text.PlainText
+					}
+					Flow {
+						Layout.fillWidth: true
+						spacing: Kirigami.Units.largeSpacing
+						Repeater {
+							model: [
+								{ mode: 'month', text: i18n("Month") },
+								{ mode: 'week', text: i18n("Week") },
+								{ mode: 'today', text: i18nc("calendar view showing one day", "Day") },
+								{ mode: 'classic', text: i18n("Agenda") },
+								{ mode: 'tasks', text: i18n("Tasks") },
+							]
+							QQC2.CheckBox {
+								text: modelData.text
+								checked: tabsRow.hidden.indexOf(modelData.mode) < 0
+								enabled: !checked || modelData.mode === 'tasks' || tabsRow.calendarViewsShown > 1
+								onToggled: {
+									var list = Array.prototype.slice.call(tabsRow.hidden).filter(function(mode) {
+										return mode !== modelData.mode
+									})
+									if (!checked) {
+										list.push(modelData.mode)
+									}
+									page.configBridge.write("hiddenViewTabs", list)
+								}
+							}
+						}
+					}
+				}
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigRange {
+				label: i18n("Popup size")
+				firstKey: 'monthModeWidth'
+				firstFrom: 300
+				firstTo: 3000
+				secondKey: 'monthModeHeight'
+				secondFrom: 250
+				secondTo: 3000
+				stepSize: 10
+				separator: "×"
+				suffix: i18n(" px")
+			}
+		}
+
+		//--- Appearance
+		FormCard.FormHeader {
+			title: i18n("Appearance")
+		}
+		FormCard.FormCard {
+			FormConfigCombo {
+				text: i18n("Style")
+				description: i18n("Islands: the calendar grids, the Day view's panels, the agenda days and the task sections each sit in a rounded card.")
+				configKey: 'uiStyle'
+				model: [
+					{ value: 'islands', text: i18n("Islands (cards)") },
+					{ value: 'flat', text: i18n("Flat") },
+				]
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigCombo {
+				text: i18n("Event look")
+				configKey: 'eventLook'
+				model: [
+					{ value: 'bar', text: i18n("All-day filled, timed light with a color bar") },
+					{ value: 'solid', text: i18n("Filled in the event color") },
+				]
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigCombo {
+				text: i18n("Event colors")
+				description: i18n("Google's API still returns an older palette; \"As in Google Calendar\" shows the current one. \"Follow the system color scheme\" uses the nearest colors of your Plasma color scheme.")
+				configKey: 'googleColorPalette'
+				model: [
+					{ value: 'current', text: i18n("As in Google Calendar") },
+					{ value: 'classic', text: i18n("Classic (as returned by Google)") },
+					{ value: 'system', text: i18n("Follow the system color scheme") },
+				]
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSpin {
+				label: i18n("Event text size")
+				configKey: 'eventFontScale'
+				suffix: "%"
+				from: 70
+				to: 160
+				stepSize: 10
+			}
+		}
+
+		//--- Calendar
+		FormCard.FormHeader {
+			title: i18n("Calendar")
+		}
+		FormCard.FormCard {
+			FormConfigCombo {
+				text: i18n("First day of week")
+				configKey: 'firstDayOfWeek'
+				// -1 = locale default, 0..6 = Sunday..Saturday
+				model: {
+					var list = [{ text: i18n("Default"), value: -1 }]
+					for (var i = 0; i < 7; i++) {
+						list.push({ text: Qt.locale().dayName(i), value: i })
+					}
+					return list
+				}
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("Week numbers")
+				configKey: 'monthShowWeekNumbers'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("Clicking a day opens it in the Day view")
+				description: i18n("Month view")
+				configKey: 'monthClickOpensDay'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigCombo {
+				text: i18n("Double-clicking a day")
+				configKey: 'monthDayDoubleClick'
+				model: [
+					{ value: 'GoogleCalWeb', text: i18n("New event in Google Calendar (browser)") },
+					{ value: 'DoNothing', text: i18n("Do nothing") },
+				]
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigCombo {
+				text: i18n("Declined events")
+				configKey: 'showDeclinedEvents'
+				model: [
+					{ value: true, text: i18n("Show (struck through)") },
+					{ value: false, text: i18nc("declined events", "Hide") },
 				]
 			}
 			FormCard.FormDelegateSeparator {}
 			FormConfigSwitch {
-				text: i18n("View switcher in the header")
-				configKey: 'showViewTabs'
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigSpin {
-				label: i18n("Popup width")
-				configKey: 'monthModeWidth'
-				suffix: i18n(" px")
-				from: 300
-				to: 3000
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigSpin {
-				label: i18n("Popup height")
-				configKey: 'monthModeHeight'
-				suffix: i18n(" px")
-				from: 250
-				to: 3000
+				text: i18n("Show an event in several calendars once")
+				description: i18n("A meeting in your calendar and in a shared one, for example.")
+				configKey: 'hideDuplicateEvents'
 			}
 		}
 
@@ -69,20 +222,15 @@ ConfigPage {
 				]
 			}
 			FormCard.FormDelegateSeparator {}
-			FormConfigSpin {
-				label: i18n("Working hours start")
-				configKey: 'weekViewStartHour'
+			FormConfigRange {
+				label: i18n("Working hours")
+				firstKey: 'weekViewStartHour'
+				firstFrom: 0
+				firstTo: 23
+				secondKey: 'weekViewEndHour'
+				secondFrom: 1
+				secondTo: 24
 				suffix: ":00"
-				from: 0
-				to: 23
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigSpin {
-				label: i18n("Working hours end")
-				configKey: 'weekViewEndHour'
-				suffix: ":00"
-				from: 1
-				to: 24
 			}
 			FormCard.FormDelegateSeparator {}
 			// An extra column of hour labels in another time zone.
@@ -149,73 +297,35 @@ ConfigPage {
 				description: i18n("Forecast in the day headers and, in the Day view, a weather panel.")
 				configKey: 'weatherShowInViews'
 			}
-		}
-
-		//--- Calendar
-		FormCard.FormHeader {
-			title: i18n("Calendar")
-		}
-		FormCard.FormCard {
-			FormConfigCombo {
-				text: i18n("First day of week")
-				configKey: 'firstDayOfWeek'
-				// -1 = locale default, 0..6 = Sunday..Saturday
-				model: {
-					var list = [{ text: i18n("Default"), value: -1 }]
-					for (var i = 0; i < 7; i++) {
-						list.push({ text: Qt.locale().dayName(i), value: i })
+			FormCard.FormDelegateSeparator {}
+			// The Day view's panels beside the hours, one row of checkboxes.
+			FormCard.AbstractFormDelegate {
+				background: null
+				contentItem: ColumnLayout {
+					spacing: Kirigami.Units.smallSpacing
+					QQC2.Label {
+						Layout.fillWidth: true
+						text: i18n("Day view shows")
+						textFormat: Text.PlainText
 					}
-					return list
+					Flow {
+						Layout.fillWidth: true
+						spacing: Kirigami.Units.largeSpacing
+						Repeater {
+							model: [
+								{ key: 'dayShowMiniMonth', text: i18n("Small calendar") },
+								{ key: 'dayShowUpNext', text: i18n("Up next") },
+								{ key: 'dayShowWeather', text: i18n("Weather") },
+								{ key: 'dayShowTasks', text: i18n("Tasks") },
+							]
+							QQC2.CheckBox {
+								text: modelData.text
+								checked: page.configBridge.read(modelData.key, true) !== false
+								onToggled: page.configBridge.write(modelData.key, checked)
+							}
+						}
+					}
 				}
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigCombo {
-				text: i18n("Event colors")
-				description: i18n("Google's API still returns an older palette; \"As in Google Calendar\" shows the current one. \"Follow the system color scheme\" uses the nearest colors of your Plasma color scheme.")
-				configKey: 'googleColorPalette'
-				model: [
-					{ value: 'current', text: i18n("As in Google Calendar") },
-					{ value: 'classic', text: i18n("Classic (as returned by Google)") },
-					{ value: 'system', text: i18n("Follow the system color scheme") },
-				]
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigSpin {
-				label: i18n("Event text size")
-				configKey: 'eventFontScale'
-				suffix: "%"
-				from: 70
-				to: 160
-				stepSize: 10
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigSwitch {
-				text: i18n("Week numbers")
-				configKey: 'monthShowWeekNumbers'
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigSwitch {
-				text: i18n("Clicking a day opens it in the Day view")
-				description: i18n("Month view")
-				configKey: 'monthClickOpensDay'
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigCombo {
-				text: i18n("Declined events")
-				configKey: 'showDeclinedEvents'
-				model: [
-					{ value: true, text: i18n("Show (struck through)") },
-					{ value: false, text: i18nc("declined events", "Hide") },
-				]
-			}
-			FormCard.FormDelegateSeparator {}
-			FormConfigCombo {
-				text: i18n("Double-clicking a day")
-				configKey: 'monthDayDoubleClick'
-				model: [
-					{ value: 'GoogleCalWeb', text: i18n("New event in Google Calendar (browser)") },
-					{ value: 'DoNothing', text: i18n("Do nothing") },
-				]
 			}
 		}
 
@@ -267,7 +377,7 @@ ConfigPage {
 						label: ""
 						sfxEnabledKey: 'timerSfxEnabled'
 						sfxPathKey: 'timerSfxFilepath'
-						sfxPathDefaultValue: '/usr/share/sounds/freedesktop/stereo/complete.oga'
+						sfxPathDefaultValue: '/usr/share/sounds/ocean/stereo/alarm-clock-elapsed.oga'
 					}
 				}
 			}
@@ -278,6 +388,18 @@ ConfigPage {
 				suffix: i18n(" px")
 				from: 50
 				to: 3000
+			}
+		}
+
+		//--- Offline start (EventCache.qml)
+		FormCard.FormHeader {
+			title: i18n("Offline")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				text: i18n("Keep events and tasks for offline start")
+				description: i18n("The last loaded events and tasks (no descriptions or notes) are stored in ~/.cache/plasma-eventcalendar and shown until the first refresh. Off: nothing is stored, and the stored copy is deleted.")
+				configKey: 'eventCacheEnabled'
 			}
 		}
 	}

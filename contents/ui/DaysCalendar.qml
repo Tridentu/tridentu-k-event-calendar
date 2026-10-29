@@ -103,7 +103,11 @@ Item {
 	readonly property int eventTitleRowHeight: Math.ceil(eventTitleFontMetrics.height) + 4
 	readonly property int eventTitleRowSpacing: 1
 	// Event rows (titles, bars, "+N") that fit in a day cell.
-	readonly property int eventTitleRowCapacity: Math.max(0, Math.floor((cellHeight - eventTitlesTopOffset) / (eventTitleRowHeight + eventTitleRowSpacing)))
+	// Event rows keep clear of the cell's edges (today's frame is 2 px): 3 px at the sides, 2 px at
+	// the bottom. EventTitlesBadge uses the same insets.
+	readonly property int eventRowInset: 3
+	readonly property int eventRowBottomInset: 2
+	readonly property int eventTitleRowCapacity: Math.max(0, Math.floor((cellHeight - eventTitlesTopOffset - eventRowBottomInset) / (eventTitleRowHeight + eventTitleRowSpacing)))
 	// Multi-day events as bars across the days (EventBuckets.layoutMonth bars), in eventTitles mode.
 	property var spanBars: []
 
@@ -253,9 +257,11 @@ Item {
 		}
 	}
 
-	// Outer frame of the grid (below the weekday names), with rounded corners.
+	// Outer frame of the grid (below the weekday names), with rounded corners. Islands: the card's
+	// edge instead.
 	Rectangle {
 		id: gridFrame
+		visible: !root.islands
 		readonly property int frameTop: daysCalendar.headerModel ? root.borderWidth + daysCalendar.headerHeight : 0
 		x: canvas.x
 		y: canvas.y + frameTop
@@ -552,18 +558,19 @@ Item {
 			readonly property int columnStep: daysCalendar.cellWidth + root.borderWidth
 			eventItem: span.eventItem
 
-			x: calendarGrid.x + span.first * columnStep + 1
+			x: calendarGrid.x + span.first * columnStep + daysCalendar.eventRowInset
 			y: calendarGrid.y + daysCalendar.gridLineY(span.week + 1) + daysCalendar.eventTitlesTopOffset
 				+ span.lane * (daysCalendar.eventTitleRowHeight + daysCalendar.eventTitleRowSpacing)
-			width: (span.last - span.first + 1) * columnStep - root.borderWidth - 2
+			width: (span.last - span.first + 1) * columnStep - root.borderWidth - 2 * daysCalendar.eventRowInset
 			height: daysCalendar.eventTitleRowHeight
 			// Square ends where the event continues in the previous / next week row.
 			cuttable: true
 			cutLeft: span.continuesBefore
 			cutRight: span.continuesAfter
 			stripeRadius: cutLeft || cutRight ? 0 : Math.max(0, cornerRadius - 1)
-			// Past days are dimmed like the cells.
-			dimmed: typeof timeModel !== "undefined" && Shared.isPastDay(new Date(span.lastTime), timeModel.currentTime)
+			// Dimmed like past days once over (also when it ended earlier today).
+			dimmed: typeof timeModel !== "undefined" && (Shared.isPastDay(new Date(span.lastTime), timeModel.currentTime)
+				|| (!!eventItem.endDateTime && eventItem.endDateTime <= timeModel.currentTime))
 			dragSource: daysCalendar.isDragSource(eventItem)
 			dragCopy: !!daysCalendar.eventDrag && daysCalendar.eventDrag.copy
 			dragPending: !!daysCalendar.eventDrag && daysCalendar.eventDrag.pending
@@ -592,9 +599,9 @@ Item {
 		readonly property color barColor: appletConfig.eventColor(info ? info.eventItem.backgroundColor : null)
 		z: 2
 		visible: shown
-		x: daysCalendar.cellX(cell) + 1
+		x: daysCalendar.cellX(cell) + daysCalendar.eventRowInset
 		y: daysCalendar.cellY(cell) + daysCalendar.eventTitlesTopOffset
-		width: daysCalendar.cellWidth - 2
+		width: daysCalendar.cellWidth - 2 * daysCalendar.eventRowInset
 		height: daysCalendar.eventTitleRowHeight
 		radius: Math.min(7, height / 2)
 		topLeftRadius: info && info.targetFirst < 0 ? 0 : radius
@@ -608,6 +615,7 @@ Item {
 			anchors.rightMargin: copyBadge.visible ? copyBadge.width + 2 : 1
 			verticalAlignment: Text.AlignVCenter
 			text: dragTargetGhost.info ? dragTargetGhost.info.eventItem.summary : ""
+			textFormat: Text.PlainText // User text: never parsed as HTML
 			color: Shared.contrastTextColor(dragTargetGhost.barColor)
 			font.family: appletConfig.eventFont.family
 			font.pointSize: appletConfig.eventFont.pointSize

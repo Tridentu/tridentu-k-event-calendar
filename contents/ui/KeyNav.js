@@ -8,6 +8,7 @@ var Key = {
 	Tab: 0x01000001,
 	Return: 0x01000004,
 	Enter: 0x01000005,
+	Delete: 0x01000007,
 	Home: 0x01000010,
 	Left: 0x01000012,
 	Up: 0x01000013,
@@ -15,9 +16,12 @@ var Key = {
 	Down: 0x01000015,
 	PageUp: 0x01000016,
 	PageDown: 0x01000017,
+	Space: 0x20,
 	Slash: 0x2f,
 	Digit1: 0x31,
+	E: 0x45,
 	F: 0x46,
+	G: 0x47,
 	N: 0x4e,
 	T: 0x54,
 }
@@ -30,16 +34,18 @@ var Modifier = {
 	Keypad: 0x20000000,
 }
 
-// The view tabs in header order: the number keys 1-4 pick them.
-var VIEW_MODES = ['month', 'week', 'today', 'classic']
+// The view tabs in header order: the number keys 1-5 pick them (Tasks: when shown).
+var VIEW_MODES = ['month', 'week', 'today', 'classic', 'tasks']
 
 // Actions:
 //   { type: 'previous' } / { type: 'next' }: the previous / next month, week or day
 //   { type: 'move', days: n }: move the selected day by n days
 //   { type: 'open' }: open the selected day (Day view)
 //   { type: 'new' }: new event on the selected day
-//   { type: 'search' }, { type: 'today' }
+//   { type: 'search' }, { type: 'today' }, { type: 'goToDate' } (G: type the day to go to)
 //   { type: 'view', mode: 'month' }: switch the view
+//   Tasks tab: { type: 'taskMove', delta: -1 | 1 } (Up / Down: the highlighted task), 'taskOpen'
+//   (Enter), 'taskToggle' (Space), 'taskEdit' (E), 'taskDelete' (Delete); N ('new') is "Add a task…"
 // null: not a shortcut, the key goes on to Plasma (eg: Esc closes the popup).
 function actionFor(key, modifiers, mode) {
 	var mods = (modifiers || 0) & ~Modifier.Keypad
@@ -61,29 +67,45 @@ function actionFor(key, modifiers, mode) {
 		return null
 	}
 
+	if (mode === 'tasks') {
+		switch (key) {
+			case Key.Up: return { type: 'taskMove', delta: -1 }
+			case Key.Down: return { type: 'taskMove', delta: 1 }
+			case Key.Return:
+			case Key.Enter: return { type: 'taskOpen' }
+			case Key.Space: return { type: 'taskToggle' }
+			case Key.E: return { type: 'taskEdit' }
+			case Key.Delete: return { type: 'taskDelete' }
+		}
+	}
+
 	var grid = mode === 'month'
 	var agenda = mode === 'classic'
+	// Tasks: no days to move through; the arrows scroll the list.
+	var dated = mode !== 'tasks'
 	switch (key) {
 		case Key.Left:
-			return grid || agenda ? { type: 'move', days: -1 } : { type: 'previous' }
+			return !dated ? null : grid || agenda ? { type: 'move', days: -1 } : { type: 'previous' }
 		case Key.Right:
-			return grid || agenda ? { type: 'move', days: 1 } : { type: 'next' }
+			return !dated ? null : grid || agenda ? { type: 'move', days: 1 } : { type: 'next' }
 		case Key.Up:
 			return grid ? { type: 'move', days: -7 } : null
 		case Key.Down:
 			return grid ? { type: 'move', days: 7 } : null
 		case Key.PageUp:
-			return { type: 'previous' }
+			return dated ? { type: 'previous' } : null
 		case Key.PageDown:
-			return { type: 'next' }
+			return dated ? { type: 'next' } : null
 		case Key.Return:
 		case Key.Enter:
 			return grid ? { type: 'open' } : null
 		case Key.N:
 			return { type: 'new' }
+		case Key.G:
+			return dated ? { type: 'goToDate' } : null
 		case Key.T:
 		case Key.Home:
-			return { type: 'today' }
+			return dated ? { type: 'today' } : null
 	}
 	var digit = key - Key.Digit1
 	if (digit >= 0 && digit < VIEW_MODES.length) {

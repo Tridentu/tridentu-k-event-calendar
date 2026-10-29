@@ -1,6 +1,7 @@
 // Event cache (instant start): what is kept on disk and how it's read back. Pure functions, no I/O.
-// Only Google calendar events (calendar ids "account::calendar"), only the fields the views need:
-// no descriptions, no attendee e-mails, never tokens.
+// Only Google calendar events and tasks (Google Tasks, TickTick) of accounts (calendar / list ids
+// "account::calendar"), only the fields the views need: no descriptions or task notes, no
+// attendee e-mails, never tokens.
 
 var VERSION = 1
 var MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000
@@ -106,10 +107,64 @@ function pickEvent(event) {
 	return picked
 }
 
+// A task's reminders (minutes before due) as stored: whole numbers only, no repeats, at most 20.
+function taskReminderMinutes(list) {
+	var out = []
+	var items = toList(list)
+	for (var i = 0; i < items.length && out.length < 20; i++) {
+		var minutes = items[i]
+		if (typeof minutes === 'number' && isFinite(minutes) && out.indexOf(Math.round(minutes)) < 0) {
+			out.push(Math.round(minutes))
+		}
+	}
+	return out
+}
+
+// The cached copy of one task (whitelisted fields only): no notes, no checklist. Its reminders as
+// minutes only (reminderMinutes, from task.reminders), so a task started offline still reminds.
+var TASK_TEXT_FIELDS = ['due', 'dueTime', 'status', 'completed', 'parentId', 'repeatRule', 'projectId', 'backgroundColor']
+
+function pickTask(task) {
+	var picked = {
+		kind: 'tasks#task',
+		id: String(task.id),
+		title: String(typeof task._summary !== 'undefined' ? task._summary : (task.title || task.summary || '')),
+		start: copyDate(task.start),
+		end: copyDate(task.end),
+	}
+	picked.summary = picked.title
+	for (var i = 0; i < TASK_TEXT_FIELDS.length; i++) {
+		var key = TASK_TEXT_FIELDS[i]
+		var value = task[key]
+		if (value !== undefined && value !== null && value !== '' && typeof value !== 'object') {
+			picked[key] = String(value)
+		}
+	}
+	var priority = Number(task.priority)
+	if (isFinite(priority) && priority > 0) {
+		picked.priority = priority
+	}
+	// task.reminders when loaded; reminderMinutes when read back from the file.
+	var reminders = taskReminderMinutes(task.reminders !== undefined ? task.reminders : task.reminderMinutes)
+	if (reminders.length) {
+		picked.reminderMinutes = reminders
+	}
+	// Not the whole task: changing it must start from the server copy (the tasks managers).
+	picked.fromCache = true
+	return picked
+}
+
+function isTask(event) {
+	return !!event && event.kind === 'tasks#task'
+}
+
 function isCacheableEvent(event) {
 	return !!event && !!event.id && !!event.start && !!event.end
 		&& typeof event.start === 'object' && typeof event.end === 'object'
-		&& event.kind !== 'tasks#task'
+}
+
+function pickItem(event) {
+	return isTask(event) ? pickTask(event) : pickEvent(event)
 }
 
 // JSON text for eventsByCalendar ({ calendarId: { items: [...] } }).
@@ -123,7 +178,7 @@ function serialize(eventsByCalendar, dateMin, dateMax, now) {
 		// Working locations (kept apart, see EventTypes.splitWorkingLocations) are stored with the
 		// events and split again when read (EventModel.showCachedEvents).
 		var events = toList(data && data.items).concat(toList(data && data.workingLocations))
-		calendars[calendarId] = events.filter(isCacheableEvent).map(pickEvent)
+		calendars[calendarId] = events.filter(isCacheableEvent).map(pickItem)
 	}
 	return JSON.stringify({
 		version: VERSION,
@@ -160,12 +215,40 @@ function deserialize(text, now, isSelected) {
 		}
 		var items = data.calendars[calendarId]
 		// Re-pick on read too, so an old or hand-edited file can't bring in more than the whitelist.
-		calendars[calendarId] = Array.isArray(items) ? items.filter(isCacheableEvent).map(pickEvent) : []
+		calendars[calendarId] = Array.isArray(items) ? items.filter(isCacheableEvent).map(pickItem) : []
 	}
 	return { savedAt: data.savedAt, dateMin: data.dateMin, dateMax: data.dateMax, calendars: calendars }
 }
 
-// Scoped ids ("account::calendar") of the calendars selected in the Google account settings.
+// The account of a scoped calendar id ('account::calendar'), '' when it has none.
+function accountOf(calendarId) {
+	var index = typeof calendarId === 'string' ? calendarId.indexOf('::') : -1
+	return index > 0 ? calendarId.slice(0, index) : ''
+}
+
+// Cache text without the calendars of accounts that are gone (accountIds: the ones still there):
+// '' when nothing is left or the text can't be read (missing, broken, too old). The rest is kept
+// as it was (savedAt too).
+function pruneText(text, accountIds, now) {
+	var keep = {}
+	toList(accountIds).forEach(function(id) {
+		if (id) {
+			keep[String(id)] = true
+		}
+	})
+	var cached = deserialize(text, now, function(calendarId) { return !!keep[accountOf(calendarId)] })
+	if (!cached || !Object.keys(cached.calendars).length) {
+		return ''
+	}
+	var byCalendar = {}
+	for (var calendarId in cached.calendars) {
+		byCalendar[calendarId] = { items: cached.calendars[calendarId] }
+	}
+	return serialize(byCalendar, cached.dateMin, cached.dateMax, new Date(cached.savedAt))
+}
+
+// Scoped ids ("account::calendar") of the calendars and task lists selected in the account
+// settings: Google (calendarIdList, tasklistIdList) and TickTick (projectIdList) accounts.
 function selectedCalendarIds(accounts) {
 	var ids = {}
 	var list = toList(accounts)
@@ -189,6 +272,12 @@ function selectedCalendarIds(accounts) {
 				ids[account.id + '::primary'] = true
 			}
 		}
+		var lists = toList(account.tasklistIdList).concat(toList(account.projectIdList))
+		for (var l = 0; l < lists.length; l++) {
+			if (lists[l]) {
+				ids[account.id + '::' + lists[l]] = true
+			}
+		}
 	}
 	return ids
 }
@@ -199,8 +288,11 @@ if (typeof module !== 'undefined') {
 		MAX_AGE_MS: MAX_AGE_MS,
 		isCacheableCalendarId: isCacheableCalendarId,
 		pickEvent: pickEvent,
+		pickTask: pickTask,
 		serialize: serialize,
 		deserialize: deserialize,
 		selectedCalendarIds: selectedCalendarIds,
+		accountOf: accountOf,
+		pruneText: pruneText,
 	}
 }

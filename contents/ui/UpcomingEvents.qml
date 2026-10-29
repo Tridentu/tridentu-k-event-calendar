@@ -8,6 +8,7 @@ import "Invitations.js" as Invitations
 import "DailyAgenda.js" as DailyAgenda
 import "MeetingRules.js" as MeetingRules
 import "Shared.js" as Shared
+import "Tasks.js" as Tasks
 import "./calendars"
 
 CalendarManager {
@@ -43,7 +44,32 @@ CalendarManager {
 	}
 
 	// All-day events "start" at midnight and declined events don't need a reminder.
+	//--- Muted events (the event menu): no notifications, no clock chip, no auto-join, Do Not
+	// Disturb or full-screen alert; still shown in the views. One occurrence: calendar, id, start.
+	readonly property var mutedKeys: plasmoid.configuration.mutedEventKeys || []
+	function muteKey(eventItem) {
+		return String(eventItem.calendarId || '') + '|' + String(eventItem.id || '') + '|' + new Date(eventItem.startDateTime).getTime()
+	}
+	function isMuted(eventItem) {
+		return !!eventItem && mutedKeys.indexOf(muteKey(eventItem)) >= 0
+	}
+	function setMuted(eventItem, muted) {
+		var key = muteKey(eventItem)
+		var dayAgo = Date.now() - 24 * 60 * 60 * 1000
+		// Without this one and without those of events past a day ago.
+		var keys = Array.prototype.slice.call(mutedKeys).filter(function(k) {
+			return k !== key && Number(String(k).split('|').pop()) > dayAgo
+		})
+		if (muted) {
+			keys.push(key)
+		}
+		plasmoid.configuration.mutedEventKeys = keys
+	}
+
 	function shouldNotify(eventItem) {
+		if (isMuted(eventItem)) {
+			return false
+		}
 		if (plasmoid.configuration.eventNotifySkipAllDay && eventItem.start && eventItem.start.date) {
 			return false
 		}
@@ -55,6 +81,15 @@ CalendarManager {
 		var items = []
 		for (var calendarId in eventsByCalendar) {
 			items = items.concat(Shared.toArray(eventsByCalendar[calendarId].items))
+		}
+		// The same event in two calendars: one notification (Settings > Views, as in the views).
+		if (plasmoid.configuration.hideDuplicateEvents) {
+			// The copy kept: one in a calendar shown and not left out of the clock, where possible.
+			var duplicates = Shared.duplicateEvents(items, function(eventItem) {
+				return !Shared.isHiddenCalendar(eventItem.calendarId, plasmoid.configuration.hiddenCalendarIds)
+					&& !Shared.isHiddenCalendar(eventItem.calendarId, plasmoid.configuration.clockHiddenCalendarIds)
+			})
+			items = items.filter(function(eventItem, index) { return !duplicates[index] })
 		}
 		return items
 	}
@@ -89,12 +124,13 @@ CalendarManager {
 		return bodyText
 	}
 
-	// Sends a notification with Join (/ RSVP / Snooze) actions.
+	// Sends a notification with Join (event starting) / RSVP / Snooze actions.
 	function notifyEvent(eventItem, args) {
 		var meetingLink = MeetingLink.find(eventItem)
 		var actions = []
 		if (plasmoid.configuration.eventNotificationActions) {
-			if (meetingLink) {
+			// Join only when the meeting starts: not on a reminder (minutes before) or an invitation.
+			if (meetingLink && args.event === 'eventStarting') {
 				actions.push('join,' + i18nc("%1 = Google Meet, Zoom, ...", "Join %1", meetingLink.label))
 			}
 		}
@@ -217,29 +253,47 @@ CalendarManager {
 		if (!DailyAgenda.isDue(now, plasmoid.configuration.dailyAgendaTime, plasmoid.configuration.dailyAgendaDay)) {
 			return
 		}
-		plasmoid.configuration.dailyAgendaDay = DailyAgenda.dayKey(now)
-		var agenda = DailyAgenda.summarize(allEventItems(), now, 5)
-		logger.log('notification: daily agenda,', agenda.count, 'events') // No titles in the log
-		sendDailyAgendaNotification(agenda)
+		var dayKey = DailyAgenda.dayKey(now)
+		plasmoid.configuration.dailyAgendaDay = dayKey
+		var items = allEventItems()
+		var agenda = DailyAgenda.summarize(items, now, 5)
+		// Today's and overdue tasks: all of them with dailyAgendaTasks, else the morning task
+		// summary (checkTaskSummary), merged here so there's one notification.
+		var tasks = null
+		var withTasks = !!plasmoid.configuration.dailyAgendaTasks
+		if (withTasks || plasmoid.configuration.taskRemindersEnabled) {
+			tasks = DailyAgenda.summarizeTasks(items, now, 3, withTasks)
+			plasmoid.configuration.taskSummaryDay = dayKey
+		}
+		logger.log('notification: daily agenda,', agenda.count, 'events,', tasks ? tasks.count : 0, 'tasks') // No titles in the log
+		sendDailyAgendaNotification(agenda, tasks)
 	}
 
-	function sendDailyAgendaNotification(agenda) {
+	// tasks: DailyAgenda.summarizeTasks, or null.
+	function sendDailyAgendaNotification(agenda, tasks) {
 		var lines = agenda.items.map(function(item) {
 			var title = Shared.escapeHtml(item.title)
 			return item.allDay
 				? i18nc("daily agenda, %1 = event title", "All day: %1", title)
-				: Qt.formatTime(item.start, appletConfig.timeFormat) + ' ' + title
+				: Shared.formatTime(item.start, appletConfig.timeFormat) + ' ' + title
 		})
 		if (agenda.more > 0) {
 			lines.push(i18ncp("daily agenda, more events", "+%1 more", "+%1 more", agenda.more))
+		}
+		var hasTasks = !!tasks && tasks.count > 0
+		if (hasTasks && agenda.count > 0) {
+			lines.push(Shared.escapeHtml(taskSummaryTitle(tasks)) + ':')
+		}
+		if (hasTasks) {
+			lines = lines.concat(taskSummaryLines(tasks))
 		}
 		notificationManager.notify({
 			appName: i18n("Event Calendar"),
 			appIcon: "view-calendar-day",
 			event: 'dailyAgenda',
 			expireTimeout: -1,
-			summary: agenda.count > 0
-				? i18np("Today: %1 event", "Today: %1 events", agenda.count)
+			summary: agenda.count > 0 ? i18np("Today: %1 event", "Today: %1 events", agenda.count)
+				: hasTasks ? taskSummaryTitle(tasks)
 				: i18n("Nothing planned today"),
 			body: lines.join('<br />'),
 			actions: ['agenda,' + i18n("Open Agenda")],
@@ -302,11 +356,27 @@ CalendarManager {
 	function meetingKey(eventItem) {
 		return String(eventItem.id || eventItem.summary || '') + '|' + new Date(eventItem.startDateTime).getTime()
 	}
+	// A full-screen alert for this meeting (main.qml shows it on every screen).
+	signal meetingAlertRequested(var eventItem)
+
 	function atMeetingStart(eventItem, sent, now) {
-		if (eventItem.endDateTime <= now || isMarkedEnded(eventItem)) {
+		if (eventItem.endDateTime <= now || isMarkedEnded(eventItem) || isMuted(eventItem)) {
 			return
 		}
 		var key = meetingKey(eventItem)
+		// The notification, full screen: a timed meeting (with a video link), not declined, not of a
+		// calendar left out of the clock's countdown.
+		// Settings > Events > When an Event Starts: the notification, full screen.
+		if (plasmoid.configuration.eventStartingNotificationEnabled && plasmoid.configuration.meetingFullScreenAlert && !sent[key + '|alert']
+				&& shouldNotify(eventItem) // The notification's own rules (all-day, declined, muted)
+				&& !(eventItem.start && eventItem.start.date)
+				&& (!plasmoid.configuration.meetingFullScreenAlertLinkOnly || !!MeetingLink.find(eventItem))
+				&& Shared.myResponse(eventItem) !== 'declined'
+				&& !Shared.isHiddenCalendar(eventItem.calendarId, plasmoid.configuration.clockHiddenCalendarIds)) {
+			sent[key + '|alert'] = now
+			logger.log('full-screen alert', eventItem.startDateTime) // No title in the log
+			upcomingEvents.meetingAlertRequested(eventItem)
+		}
 		if (plasmoid.configuration.meetingAutoJoin && !sent[key + '|join']) {
 			var meetingLink = MeetingLink.find(eventItem)
 			if (MeetingRules.canAutoJoin(eventItem, !!meetingLink)) {
@@ -359,6 +429,10 @@ CalendarManager {
 		lastNotifyCheck = now
 		var sent = NotifyTiming.pruneSent(sentNotifications, now)
 		allEventItems().forEach(function(eventItem) {
+			if (Tasks.isTask(eventItem)) {
+				upcomingEvents.checkTaskReminders(eventItem, win, sent, now)
+				return // Not as an all-day event
+			}
 			var notify = shouldNotify(eventItem)
 			var due = NotifyTiming.dueFor(eventItem, notify ? reminderMinutesFor(eventItem) : [], win, now)
 			for (var i = 0; i < due.length; i++) {
@@ -371,6 +445,11 @@ CalendarManager {
 				// Logged without the title, to tell this widget's notifications apart from others
 				// (eg: Google Calendar's own in a browser).
 				if (due[i].kind === 'start') {
+					// The full-screen alert came up for it (atMeetingStart, above): no second one.
+					if (sent[meetingKey(eventItem) + '|alert']) {
+						sent[due[i].key] = now
+						continue
+					}
 					if (plasmoid.configuration.eventStartingNotificationEnabled) {
 						sent[due[i].key] = now
 						logger.log('notification: event starting', eventItem.startDateTime)
@@ -385,6 +464,164 @@ CalendarManager {
 		})
 		sentNotifications = sent
 		checkSnoozedReminders()
+		checkSnoozedTasks()
+	}
+
+	//--- Tasks: their own reminders (a due time or TickTick reminders, see NotifyTiming), in the
+	// same window and with the same sent keys as events.
+	function checkTaskReminders(task, win, sent, now) {
+		if (!plasmoid.configuration.taskRemindersEnabled) {
+			return
+		}
+		var due = NotifyTiming.taskDueFor(task, win)
+		for (var i = 0; i < due.length; i++) {
+			if (sent[due[i].key]) {
+				continue
+			}
+			sent[due[i].key] = now
+			logger.log('notification: task reminder', due[i].minutes, 'min before', Tasks.dueDay(task), task.dueTime || '') // No title in the log
+			sendTaskReminderNotification(task)
+		}
+	}
+
+	// "Due today 14:00", "Overdue", ...
+	function taskDueText(task) {
+		var info = NotifyTiming.taskDueState(task, timeModel.currentTime.getTime())
+		var due = new Date(info.due)
+		var time = info.timed ? Shared.formatTime(due, appletConfig.timeFormat) : ''
+		if (info.state === 'overdue') {
+			return i18nc("task reminder", "Overdue")
+		} else if (info.state === 'today') {
+			return time ? i18nc("task reminder, %1 = time", "Due today %1", time) : i18nc("task reminder", "Due today")
+		} else if (info.state === 'tomorrow') {
+			return time ? i18nc("task reminder, %1 = time", "Due tomorrow %1", time) : i18nc("task reminder", "Due tomorrow")
+		} else if (info.state === 'date') {
+			var date = Shared.formatDate(due, Locale.ShortFormat)
+			return i18nc("task reminder, %1 = date (and time)", "Due %1", time ? date + ' ' + time : date)
+		}
+		return ''
+	}
+
+	// Mark as done / Snooze; a click opens the task in the popup.
+	function sendTaskReminderNotification(task) {
+		var actions = ['done,' + i18nc("task reminder", "Mark as done")]
+		if (upcomingEvents.snoozeMinutes > 0) {
+			actions.push('snooze,' + i18np("Snooze 1 minute", "Snooze %1 minutes", upcomingEvents.snoozeMinutes))
+		}
+		notificationManager.notify({
+			appName: i18n("Event Calendar"),
+			appIcon: "view-task",
+			event: 'taskReminder',
+			expireTimeout: upcomingEvents.reminderExpireTimeout(),
+			summary: task.summary || task.title || '',
+			body: Shared.escapeHtml(taskDueText(task)),
+			soundFile: plasmoid.configuration.eventReminderSfxEnabled ? plasmoid.configuration.eventReminderSfxPath : '',
+			actions: actions,
+		}, function(actionId) {
+			if (actionId === 'default') {
+				upcomingEvents.showInWidget(task)
+			} else if (actionId === 'done') {
+				var current = upcomingEvents.currentTask(task) || task
+				eventModel.toggleTask(current, true, function(err) {
+					if (err) {
+						logger.log('task reminder: could not mark the task as done') // No title in the log
+					}
+				})
+			} else if (actionId === 'snooze') {
+				var at = new Date(timeModel.currentTime)
+				at.setMinutes(at.getMinutes() + upcomingEvents.snoozeMinutes)
+				upcomingEvents.snoozedTasks.push({ task: task, at: at })
+			}
+		})
+	}
+
+	// The loaded item of a task (after a sync the items are new objects), or null when gone.
+	function currentTask(task) {
+		var items = eventsByCalendar[task.calendarId] ? Shared.toArray(eventsByCalendar[task.calendarId].items) : []
+		for (var i = 0; i < items.length; i++) {
+			if (items[i] && items[i].id === task.id && Tasks.isTask(items[i])) {
+				return items[i]
+			}
+		}
+		return null
+	}
+
+	property var snoozedTasks: [] // [{ task, at }]
+	function checkSnoozedTasks() {
+		var now = timeModel.currentTime
+		var remaining = []
+		for (var i = 0; i < snoozedTasks.length; i++) {
+			var snoozed = snoozedTasks[i]
+			if (snoozed.at > now) {
+				remaining.push(snoozed)
+				continue
+			}
+			var task = currentTask(snoozed.task)
+			if (task && !Tasks.isDone(task) && plasmoid.configuration.taskRemindersEnabled) {
+				logger.log('notification: snoozed task reminder') // No title in the log
+				sendTaskReminderNotification(task)
+			}
+		}
+		snoozedTasks = remaining
+	}
+
+	//--- Morning summary of the tasks due today without reminders of their own, and overdue ones:
+	// once a day at the daily agenda time; merged into the daily agenda when that's on.
+	function checkTaskSummary() {
+		if (!plasmoid.configuration.taskRemindersEnabled || plasmoid.configuration.dailyAgendaEnabled || !eventsSynced) {
+			return
+		}
+		var now = timeModel.currentTime
+		if (!(upcomingEvents.dateMin <= now && now <= upcomingEvents.dateMax)) {
+			return
+		}
+		if (!DailyAgenda.isDue(now, plasmoid.configuration.dailyAgendaTime, plasmoid.configuration.taskSummaryDay)) {
+			return
+		}
+		plasmoid.configuration.taskSummaryDay = DailyAgenda.dayKey(now)
+		var tasks = DailyAgenda.summarizeTasks(allEventItems(), now, 3, false)
+		logger.log('notification: task summary,', tasks.count, 'tasks') // No titles in the log
+		if (tasks.count > 0) {
+			sendTaskSummaryNotification(tasks)
+		}
+	}
+
+	// "3 tasks due today", "2 overdue tasks", "3 tasks due today, 2 overdue".
+	function taskSummaryTitle(tasks) {
+		if (tasks.overdue === 0) {
+			return i18np("%1 task due today", "%1 tasks due today", tasks.today)
+		} else if (tasks.today === 0) {
+			return i18np("%1 overdue task", "%1 overdue tasks", tasks.overdue)
+		}
+		return i18nc("%1 = 3 tasks due today, %2 = 2 overdue", "%1, %2",
+			i18np("%1 task due today", "%1 tasks due today", tasks.today),
+			i18ncp("tasks", "%1 overdue", "%1 overdue", tasks.overdue))
+	}
+
+	// The titles (escaped) and "+N more".
+	function taskSummaryLines(tasks) {
+		var lines = tasks.titles.map(function(title) {
+			return Shared.escapeHtml(title)
+		})
+		if (tasks.more > 0) {
+			lines.push(i18ncp("task summary, more tasks", "+%1 more", "+%1 more", tasks.more))
+		}
+		return lines
+	}
+
+	function sendTaskSummaryNotification(tasks) {
+		notificationManager.notify({
+			appName: i18n("Event Calendar"),
+			appIcon: "view-task",
+			event: 'taskReminder',
+			expireTimeout: -1,
+			summary: taskSummaryTitle(tasks),
+			body: taskSummaryLines(tasks).join('<br />'),
+		}, function(actionId) {
+			if (actionId === 'default') {
+				root.expanded = true
+			}
+		})
 	}
 
 	//--- Next event (panel chip, tooltip, middle-click join)
@@ -436,11 +673,24 @@ CalendarManager {
 			if (isEventInProgress(eventItem) && isMarkedEnded(eventItem)) {
 				continue
 			}
+			if (plasmoid.configuration.clockNextEventSkipAllDay && eventItem.start && eventItem.start.date) {
+				continue
+			}
+			if (Shared.isHiddenCalendar(eventItem.calendarId, plasmoid.configuration.clockHiddenCalendarIds)) {
+				continue
+			}
+			// Not accepted: a maybe, or an invitation not answered yet (your own events count).
+			if (plasmoid.configuration.clockNextEventAcceptedOnly && Shared.isUnconfirmedResponse(Shared.myResponse(eventItem))) {
+				continue
+			}
 			var inProgress = isEventInProgress(eventItem)
 			if (!inProgress && !(now < eventItem.startDateTime && eventItem.startDateTime.getTime() <= windowEnd)) {
 				continue
 			}
 			var hasLink = !!MeetingLink.find(eventItem)
+			if (plasmoid.configuration.clockNextEventLinkOnly && !hasLink) {
+				continue
+			}
 			var better = !best
 				// In progress beats upcoming. Among in progress, one with a meeting link, then the latest started.
 				|| (inProgress && !bestInProgress)
@@ -482,14 +732,14 @@ CalendarManager {
 		var today = Shared.startOfDay(now)
 		var startDay = Shared.startOfDay(start)
 		var days = Math.round((startDay - today) / (24 * 60 * 60 * 1000))
-		var time = Qt.formatTime(start, appletConfig.timeFormat)
+		var time = Shared.formatTime(start, appletConfig.timeFormat)
 		var when
 		if (days === 0) {
 			when = time
 		} else if (days === 1) {
 			when = i18nc("%1 = time", "tomorrow %1", time)
 		} else {
-			when = Qt.formatDate(start, Locale.ShortFormat) + ' ' + time
+			when = Shared.formatDate(start, Locale.ShortFormat) + ' ' + time
 		}
 		var msLeft = start - now
 		if (msLeft < 24 * 60 * 60 * 1000) {
@@ -521,9 +771,23 @@ CalendarManager {
 		}
 		tooltipNowText = current
 			? i18nc("%1 = event title, %2 = end time", "Now: %1, until %2", current.summary,
-				Qt.formatTime(current.endDateTime, appletConfig.timeFormat))
+				Shared.formatTime(current.endDateTime, appletConfig.timeFormat))
 			: ""
 		tooltipNextText = next ? i18nc("%1 = event title, %2 = when", "Next: %1, %2", next.summary, formatTooltipStart(next, now)) : ""
+		updateTooltipTasks()
+	}
+
+	// Tooltip: "3 overdue tasks", of the task lists not hidden in the popup.
+	property string tooltipTasksText: ""
+	function updateTooltipTasks() {
+		var items = []
+		for (var calendarId in eventsByCalendar) {
+			if (!Shared.isHiddenCalendar(calendarId, plasmoid.configuration.hiddenCalendarIds)) {
+				items = items.concat(Shared.toArray(eventsByCalendar[calendarId].items))
+			}
+		}
+		var count = DailyAgenda.overdueTaskCount(items, timeModel.currentTime)
+		tooltipTasksText = count > 0 ? i18np("%1 overdue task", "%1 overdue tasks", count) : ""
 	}
 
 	function joinNextEvent() {
@@ -537,6 +801,7 @@ CalendarManager {
 	function tick() {
 		checkForEventsStarting()
 		checkDailyAgenda()
+		checkTaskSummary()
 		updateNextEvent()
 		updateTooltipEvents()
 	}
@@ -556,6 +821,7 @@ CalendarManager {
 				upcomingEvents.eventsSynced = true
 				upcomingEvents.checkInvitations()
 				upcomingEvents.checkDailyAgenda()
+				upcomingEvents.checkTaskSummary()
 				upcomingEvents.checkMeetingsInProgress()
 				upcomingEvents.updateNextEvent()
 				upcomingEvents.updateTooltipEvents()

@@ -71,19 +71,33 @@ LinkRect {
 	readonly property var meetingLink: MeetingLink.find(model)
 	radius: 8
 	border.width: 1
-	border.color: eventStyle.outlineColor
+	border.color: eventStyle.showBar ? "transparent" : eventStyle.outlineColor // ColorBarFill draws it
 	backgroundColor: eventStyle.fillColor
-	backgroundHoverColor: eventStyle.unconfirmed ? appletConfig.agendaHoverBackground : Qt.darker(tileColor, 1.08)
+	backgroundHoverColor: eventStyle.unconfirmed ? appletConfig.agendaHoverBackground : Qt.darker(eventStyle.fillColor, 1.08)
 	// Events that already ended today are dimmed (whole past days are dimmed by the day item).
 	opacity: ended && agendaItemIsToday ? appletConfig.pastOpacity : 1
 	// Not LinkRect's childrenRect size: the contents follow the tile's width (binding loop).
-	implicitWidth: contents.implicitWidth + Kirigami.Units.largeSpacing + Kirigami.Units.smallSpacing
+	implicitWidth: contents.implicitWidth + Kirigami.Units.largeSpacing + Kirigami.Units.smallSpacing + (eventStyle.showBar ? 4 : 0)
 	implicitHeight: contents.implicitHeight + Kirigami.Units.smallSpacing * 2 + 2
+
+	// "Bar" event look: the bar in the event color along the left edge (EventStyle.showBar).
+	ColorBarFill {
+		visible: agendaEventItem.eventStyle.showBar
+		barColor: agendaEventItem.eventStyle.barColor
+		outlined: agendaEventItem.eventStyle.unconfirmed
+		fillColor: agendaEventItem.color // With the hover color
+		borderColor: agendaEventItem.eventStyle.outlineColor
+		topLeftRadius: agendaEventItem.radius
+		bottomLeftRadius: agendaEventItem.radius
+		topRightRadius: agendaEventItem.radius
+		bottomRightRadius: agendaEventItem.radius
+	}
 
 	StripeFill {
 		visible: agendaEventItem.eventStyle.striped
 		anchors.fill: parent
 		anchors.margins: 1
+		anchors.leftMargin: agendaEventItem.eventStyle.showBar ? 5 : 1
 		radius: agendaEventItem.radius - 1
 		stripeColor: agendaEventItem.eventStyle.stripeColor
 	}
@@ -93,7 +107,7 @@ LinkRect {
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.top: parent.top
-		anchors.leftMargin: Kirigami.Units.largeSpacing
+		anchors.leftMargin: Kirigami.Units.largeSpacing + (agendaEventItem.eventStyle.showBar ? 4 : 0)
 		anchors.rightMargin: Kirigami.Units.smallSpacing
 		anchors.topMargin: Kirigami.Units.smallSpacing + 1
 		spacing: 0
@@ -115,6 +129,7 @@ LinkRect {
 						}
 						return model.summary
 					}
+					textFormat: Text.PlainText
 					color: agendaEventItem.tileTextColor
 					font.family: appletConfig.eventFont.family
 					font.pointSize: appletConfig.eventFont.pointSize
@@ -139,7 +154,9 @@ LinkRect {
 						opacity: 0.85
 						font: appletConfig.eventSmallFont
 						Layout.fillWidth: true
-						Layout.maximumWidth: implicitWidth
+						// Rounded up: a fractional implicitWidth is rounded down and elides the text.
+						Layout.preferredWidth: Math.ceil(implicitWidth)
+						Layout.maximumWidth: Math.ceil(implicitWidth)
 						elide: Text.ElideRight
 					}
 					// What else is set; the location, Join button and description are shown already.
@@ -163,6 +180,7 @@ LinkRect {
 				Layout.alignment: Qt.AlignVCenter
 				meetingLink: agendaEventItem.meetingLink
 				textColor: agendaEventItem.tileTextColor
+				baseColor: agendaEventItem.eventStyle.fillColor
 			}
 		}
 
@@ -172,6 +190,7 @@ LinkRect {
 			visible: showProperty
 			Layout.topMargin: Kirigami.Units.smallSpacing
 			text: Shared.renderText(model.description)
+			textFormat: Text.StyledText // renderText: escaped text and links only
 			color: agendaEventItem.tileTextColor
 			opacity: 0.8
 			font.family: appletConfig.eventFont.family

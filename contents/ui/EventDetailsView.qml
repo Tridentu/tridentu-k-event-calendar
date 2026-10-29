@@ -11,6 +11,7 @@ import "MeetingLink.js" as MeetingLink
 import "Responses.js" as Responses
 import "Guests.js" as Guests
 import "Shared.js" as Shared
+import "Tasks.js" as Tasks
 import "TimeZone.js" as TimeZone
 import "lib/ColorUtil.js" as ColorUtil
 import "code/GooglePalette.js" as GooglePalette
@@ -56,6 +57,64 @@ Rectangle {
 	property bool showAllGuests: false
 	property bool confirmingDelete: false
 	readonly property bool isRecurring: !!(eventItem && eventItem.recurringEventId)
+
+	//--- Tasks: done / not done, the due day, the list and the notes (no time, guests or place).
+	readonly property bool isTask: Tasks.isTask(eventItem)
+	readonly property bool isDone: isTask && Tasks.isDone(eventItem)
+	readonly property bool isOverdue: isTask && Tasks.isOverdue(eventItem, timeModel.currentTime)
+	// Tasks: TickTick's checklist ({ id, title, done }), Google's subtasks (the list's tasks with
+	// this one as their parent, made again when the list changes).
+	readonly property var checklist: isTask ? Tasks.cleanSubtasks(eventItem.subtasks) : []
+	property int listRevision: 0
+	readonly property var childTasks: {
+		listRevision // Depends on it
+		if (!isTask || !eventItem.id || typeof eventModel === "undefined" || !eventModel) {
+			return []
+		}
+		var calendar = eventModel.loadedCalendar(eventItem.calendarId)
+		var items = calendar && calendar.items ? calendar.items : []
+		return items.filter(function(item) {
+			return Tasks.isTask(item) && item.parentId === eventItem.id
+		})
+	}
+	Connections {
+		target: details.isTask && typeof eventModel !== "undefined" ? eventModel : null
+		ignoreUnknownSignals: true
+		function onCalendarFetched(calendarId, data) { details.listChanged(calendarId) }
+		function onEventAdded(calendarId, data) { details.listChanged(calendarId) }
+		function onEventRemoved(calendarId, eventId, data) { details.listChanged(calendarId) }
+		function onEventUpdated(calendarId, eventId, data) { details.listChanged(calendarId) }
+	}
+	function listChanged(calendarId) {
+		if (eventItem && calendarId === eventItem.calendarId) {
+			listRevision++
+		}
+	}
+	// When the task is due, in words: "Today, 14:00", "Tomorrow", "Wednesday, 28 October", with
+	// "Overdue · " before a past day.
+	readonly property string dueText: {
+		var info = isTask ? Tasks.dueInfo(eventItem, timeModel.currentTime) : { kind: 'none' }
+		if (info.kind === 'none') {
+			return i18n("No due date")
+		}
+		var parts = info.day.split('-')
+		var date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
+		var dateText = info.kind === 'today' ? i18nc("tasks filter", "Today")
+			: info.kind === 'tomorrow' ? i18nc("tasks filter", "Tomorrow")
+			: Shared.formatDate(date, i18nc("a task's due date in its details", "dddd, d MMMM"))
+		if (eventItem.dueTime) { // Timed TickTick tasks
+			var time = eventItem.dueTime.split(':')
+			dateText = i18nc("date (%1) with time (%2)", "%1, %2", dateText,
+				Shared.formatTime(new Date(2000, 0, 1, Number(time[0]), Number(time[1])), appletConfig.timeFormat))
+		}
+		return info.kind === 'overdue' ? i18n("Overdue") + " · " + dateText : dateText
+	}
+	readonly property bool taskInProgress: isTask && Tasks.isInProgress(eventItem, plasmoid.configuration.tasksInProgress)
+	readonly property string taskPriority: isTask ? Tasks.priorityKey(eventItem) : 'none'
+	function toggleDone() {
+		eventModel.toggleTask(eventItem, !isDone)
+	}
+
 	onEventItemChanged: {
 		confirmingDelete = false
 		showAllGuests = false
@@ -147,7 +206,7 @@ Rectangle {
 
 			PlasmaComponents3.Label {
 				visible: details.confirmingDelete
-				text: details.isRecurring ? i18n("Delete:") : i18n("Delete this event?")
+				text: details.isRecurring ? i18n("Delete:") : details.isTask ? i18n("Delete this task?") : i18n("Delete this event?")
 			}
 			PlasmaComponents3.Button {
 				visible: details.confirmingDelete
@@ -179,7 +238,9 @@ Rectangle {
 			PlasmaComponents3.ToolButton {
 				visible: !details.confirmingDelete && !!(details.eventItem && details.eventItem.htmlLink)
 				icon.name: "globe" // Native action icon (internet-web-browser is a colored app icon)
-				text: i18n("Open in Google Calendar")
+				text: details.isTask
+					? (details.eventItem && details.eventItem.calendarManagerId === "TickTick" ? i18n("Open in TickTick") : i18n("Open in Google Tasks"))
+					: i18n("Open in Google Calendar")
 				display: QQC2.AbstractButton.IconOnly
 				onClicked: Shared.openExternalUrl(details.eventItem.htmlLink)
 				PlasmaComponents3.ToolTip.text: text
@@ -192,7 +253,7 @@ Rectangle {
 				onClicked: details.editRequested()
 			}
 			PlasmaComponents3.ToolButton {
-				visible: !details.confirmingDelete && !!details.eventItem
+				visible: !details.confirmingDelete && !!details.eventItem && !details.isTask
 				icon.name: "edit-copy"
 				text: i18n("Duplicate")
 				display: QQC2.AbstractButton.IconOnly
@@ -217,14 +278,25 @@ Rectangle {
 			Layout.fillHeight: true
 			contentWidth: availableWidth
 			QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
+			QQC2.ScrollBar.vertical: OverlayScrollBar {
+				view: scrollView
+			}
 
 			ColumnLayout {
 				id: contentColumn
 				width: scrollView.availableWidth
 				spacing: Kirigami.Units.largeSpacing
 
-				// Title with color bar
+				// A task: its own layout (title with its check, a row per property, the notes).
+				TaskDetailsBody {
+					visible: details.isTask
+					Layout.fillWidth: true
+					details: details
+				}
+
+				// Title with color bar (an event; a task has TaskDetailsBody)
 				RowLayout {
+					visible: !details.isTask
 					Layout.fillWidth: true
 					Layout.leftMargin: Kirigami.Units.largeSpacing
 					Layout.rightMargin: Kirigami.Units.largeSpacing
@@ -245,6 +317,9 @@ Rectangle {
 								level: 2
 								wrapMode: Text.Wrap
 								text: details.eventItem ? details.eventItem.summary : ""
+								textFormat: Text.PlainText // User text: never parsed as HTML
+								font.strikeout: details.isDone
+								opacity: details.isDone ? 0.7 : 1
 							}
 							// Private event (Google visibility): only you see its details.
 							Kirigami.Icon {
@@ -268,9 +343,13 @@ Rectangle {
 						PlasmaComponents3.Label {
 							Layout.fillWidth: true
 							wrapMode: Text.Wrap
+							textFormat: Text.PlainText
 							text: {
 								if (!details.eventItem) {
 									return ""
+								}
+								if (details.isTask) {
+									return details.dueText
 								}
 								var when = LocaleFuncs.formatEventDuration(details.eventItem, {
 									relativeDate: timeModel.currentTime,
@@ -284,7 +363,8 @@ Rectangle {
 								}
 								return when
 							}
-							opacity: 0.8
+							color: details.isOverdue ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+							opacity: details.isOverdue ? 1 : 0.8
 						}
 						// The event's own time zone, when its clock differs from the local one.
 						PlasmaComponents3.Label {
@@ -312,7 +392,7 @@ Rectangle {
 
 				// Join
 				PlasmaComponents3.Button {
-					visible: !!details.meetingLink
+					visible: !!details.meetingLink && !details.isTask
 					Layout.leftMargin: Kirigami.Units.largeSpacing
 					icon.name: "call-start"
 					text: details.meetingLink ? i18nc("%1 = Google Meet, Zoom, ...", "Join %1", details.meetingLink.label) : ""
@@ -321,7 +401,7 @@ Rectangle {
 
 				// RSVP
 				RowLayout {
-					visible: details.canRespond
+					visible: details.canRespond && !details.isTask
 					Layout.fillWidth: true
 					Layout.leftMargin: Kirigami.Units.largeSpacing
 					Layout.rightMargin: Kirigami.Units.largeSpacing
@@ -348,11 +428,13 @@ Rectangle {
 				}
 
 				Kirigami.Separator {
+					visible: !details.isTask
 					Layout.fillWidth: true
 				}
 
-				// Properties: icon + text rows
+				// Properties: icon + text rows (an event's)
 				GridLayout {
+					visible: !details.isTask
 					Layout.fillWidth: true
 					Layout.leftMargin: Kirigami.Units.largeSpacing
 					Layout.rightMargin: Kirigami.Units.largeSpacing
@@ -403,6 +485,7 @@ Rectangle {
 						Layout.fillWidth: true
 						wrapMode: Text.Wrap
 						text: i18nc("%1 = titles of other events at the same time", "Overlaps with: %1", titles.join(", "))
+						textFormat: Text.PlainText // User text: never parsed as HTML
 					}
 
 					// Location
@@ -416,7 +499,7 @@ Rectangle {
 					PlasmaComponents3.Label {
 						id: locationLabel
 						readonly property string location: details.eventItem && details.eventItem.location ? details.eventItem.location : ""
-						visible: !!location
+						visible: !!location && !details.isTask
 						Layout.fillWidth: true
 						wrapMode: Text.Wrap
 						textFormat: Text.StyledText
@@ -445,6 +528,7 @@ Rectangle {
 						Layout.fillWidth: true
 						wrapMode: Text.Wrap
 						text: extraRooms.map(function(r) { return r.displayName || r.email }).join(", ")
+						textFormat: Text.PlainText // User text: never parsed as HTML
 					}
 
 					// Calendar
@@ -467,8 +551,12 @@ Rectangle {
 							var name = details.calendar ? String(details.calendar.summary) : ""
 							// Primary calendars are named after the account: "a@x.com - a@x.com".
 							var parts = name.split(" - ")
+							if (details.isTask && parts.length > 1) {
+								return parts.slice(1).join(" - ") // A task list: "TickTick - Work" is "Work"
+							}
 							return parts.length === 2 && parts[0] === parts[1] ? parts[0] : name
 						}
+						textFormat: Text.PlainText
 					}
 
 					// Reminders
@@ -515,6 +603,7 @@ Rectangle {
 									Layout.fillWidth: true
 									elide: Text.ElideMiddle
 									text: modelData.title
+									textFormat: Text.PlainText // User text: never parsed as HTML
 									color: Kirigami.Theme.linkColor
 									font.underline: attachmentMouse.containsMouse
 									MouseArea {
@@ -536,7 +625,7 @@ Rectangle {
 
 				// Guests
 				ColumnLayout {
-					visible: details.attendees.length > 0
+					visible: details.attendees.length > 0 && !details.isTask
 					Layout.fillWidth: true
 					Layout.leftMargin: Kirigami.Units.largeSpacing
 					Layout.rightMargin: Kirigami.Units.largeSpacing
@@ -611,6 +700,71 @@ Rectangle {
 				}
 
 				Kirigami.Separator {
+					visible: subtasksColumn.visible
+					Layout.fillWidth: true
+				}
+
+				// Tasks: the subtasks, each with its check (Google's: a task row, opens it).
+				ColumnLayout {
+					id: subtasksColumn
+					visible: details.checklist.length > 0 || details.childTasks.length > 0
+					Layout.fillWidth: true
+					Layout.leftMargin: Kirigami.Units.largeSpacing
+					Layout.rightMargin: Kirigami.Units.largeSpacing
+					spacing: 2
+					PlasmaComponents3.Label {
+						readonly property var progress: Tasks.subtaskProgress(details.eventItem)
+						Layout.fillWidth: true
+						// Both kinds (a checklist and child tasks): no count for half of them.
+						text: details.checklist.length > 0 && details.childTasks.length === 0
+							? i18nc("checklist items done: %1 of %2", "%1 of %2 subtasks done", progress.done, progress.total)
+							: i18n("Subtasks")
+						textFormat: Text.PlainText
+						font.weight: Font.DemiBold
+						opacity: 0.8
+					}
+					Repeater {
+						model: details.checklist
+						RowLayout {
+							id: checklistRow
+							readonly property var subtask: modelData
+							Layout.fillWidth: true
+							spacing: Kirigami.Units.smallSpacing * 2
+							TaskCheck {
+								id: checklistCheck
+								Layout.alignment: Qt.AlignVCenter
+								size: 2 * Math.round(checklistLabel.implicitHeight / 2)
+								eventItem: details.eventItem
+								subtaskId: checklistRow.subtask.id
+								subtaskDone: !!checklistRow.subtask.done
+								color: details.eventColor
+								square: appletConfig.islands
+							}
+							PlasmaComponents3.Label {
+								id: checklistLabel
+								Layout.fillWidth: true
+								Layout.minimumWidth: 0
+								text: checklistRow.subtask.title
+								textFormat: Text.PlainText // User text: never parsed as HTML
+								opacity: checklistCheck.done ? 0.55 : 1
+								font.strikeout: checklistCheck.done
+								wrapMode: Text.Wrap
+							}
+						}
+					}
+					Repeater {
+						model: details.childTasks
+						TaskRow {
+							Layout.fillWidth: true
+							eventItem: modelData
+							today: Tasks.dayString(timeModel.currentTime)
+							compact: true
+							actionsEnabled: false
+						}
+					}
+				}
+
+				Kirigami.Separator {
 					visible: descriptionLabel.visible
 					Layout.fillWidth: true
 				}
@@ -618,7 +772,10 @@ Rectangle {
 				// Description
 				PlasmaComponents3.Label {
 					id: descriptionLabel
-					readonly property string description: details.eventItem && details.eventItem.description ? details.eventItem.description : ""
+					// Tasks: their notes.
+					// (A task's notes are in TaskDetailsBody.)
+					readonly property string description: !details.eventItem || details.isTask ? ""
+						: details.eventItem.description ? details.eventItem.description : ""
 					visible: !!description
 					Layout.fillWidth: true
 					Layout.leftMargin: Kirigami.Units.largeSpacing

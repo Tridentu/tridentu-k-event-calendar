@@ -13,6 +13,8 @@ import org.kde.kcmutils as KCMUtils
 
 import "./lib"
 import "DayWeather.js" as DayWeather
+import "Shared.js" as Shared
+import "MeetingLink.js" as MeetingLink
 
 PlasmoidItem {
 	id: root
@@ -37,7 +39,86 @@ PlasmoidItem {
 	TimerModel { id: timerModel }
 	EventCache { id: eventCache }
 	EventModel { id: eventModel }
-	UpcomingEvents { id: upcomingEvents }
+	UpcomingEvents {
+		id: upcomingEvents
+		onMeetingAlertRequested: function(eventItem) { root.showMeetingAlert(eventItem) }
+	}
+
+	//--- Full-screen meeting alert (UpcomingEvents.meetingAlertRequested), as the Fokus plasmoid's
+	// break overlay: one window per screen, made only while the alert is up (windows made at startup
+	// are a risk to plasmashell's start). Above panels and on every desktop through layer-shell when
+	// it's installed: probed when needed, its files reached by URL only (MeetingAlertSetLayer.qml).
+	property var alertEvent: null
+	property var alertMeetingLink: null
+	// The windows: blurred behind (Kicker's DashboardWindow, as Fokus) and through layer-shell when
+	// those modules are there, each probed once when first needed; '' : the plain windows below.
+	property string alertSetUrl: ""
+	property var moduleProbes: ({})
+	function moduleAvailable(probeFile) {
+		if (!(probeFile in moduleProbes)) {
+			var probe = Qt.createComponent(Qt.resolvedUrl(probeFile), Component.PreferSynchronous)
+			moduleProbes[probeFile] = probe.status === Component.Ready
+			probe.destroy()
+		}
+		return moduleProbes[probeFile]
+	}
+	function showMeetingAlert(eventItem) {
+		alertSnoozeTimer.stop()
+		var layer = moduleAvailable("LayerShellProbe.qml")
+		var blur = moduleAvailable("KickerProbe.qml")
+		alertSetUrl = blur && layer ? "MeetingAlertSetBlurLayer.qml"
+			: blur ? "MeetingAlertSetBlur.qml"
+			: layer ? "MeetingAlertSetLayer.qml" : ""
+		alertMeetingLink = MeetingLink.find(eventItem)
+		alertEvent = eventItem
+	}
+	function closeMeetingAlert() {
+		alertEvent = null
+	}
+	function joinMeetingAlert() {
+		if (alertMeetingLink) {
+			meetingOpener.open(alertMeetingLink.url)
+		}
+		closeMeetingAlert()
+	}
+	function snoozeMeetingAlert() {
+		alertSnoozeTimer.eventItem = alertEvent
+		closeMeetingAlert()
+		alertSnoozeTimer.restart()
+	}
+	Timer {
+		id: alertSnoozeTimer
+		property var eventItem: null
+		interval: 60 * 1000
+		onTriggered: {
+			if (eventItem && eventItem.endDateTime > new Date() && !upcomingEvents.isMuted(eventItem)) {
+				root.showMeetingAlert(eventItem)
+			}
+		}
+	}
+	Instantiator {
+		active: !!root.alertEvent && !root.alertSetUrl
+		model: Qt.application.screens
+		delegate: MeetingAlertWindow {
+			screen: modelData
+			screenGeometry: Qt.rect(modelData.virtualX, modelData.virtualY, modelData.width, modelData.height)
+			eventItem: root.alertEvent
+			meetingLink: root.alertMeetingLink
+			onJoinRequested: root.joinMeetingAlert()
+			onSnoozeRequested: root.snoozeMeetingAlert()
+			onCloseRequested: root.closeMeetingAlert()
+		}
+	}
+	Loader {
+		source: root.alertEvent && root.alertSetUrl ? Qt.resolvedUrl(root.alertSetUrl) : ""
+		onLoaded: {
+			item.eventItem = Qt.binding(function() { return root.alertEvent })
+			item.meetingLink = Qt.binding(function() { return root.alertMeetingLink })
+			item.joinRequested.connect(root.joinMeetingAlert)
+			item.snoozeRequested.connect(root.snoozeMeetingAlert)
+			item.closeRequested.connect(root.closeMeetingAlert)
+		}
+	}
 	AgendaModel {
 		id: agendaModel
 		timeModel: timeModel
@@ -52,7 +133,7 @@ PlasmoidItem {
 	}
 
 	function formatClipboardText() {
-		return Qt.formatDateTime(timeModel.currentTime, Qt.locale().dateTimeFormat(Locale.LongFormat))
+		return Shared.formatDateTime(timeModel.currentTime, Qt.locale().dateTimeFormat(Locale.LongFormat))
 	}
 
 	function copyCurrentDateTime() {
@@ -183,6 +264,7 @@ PlasmoidItem {
 				closeOverlays() // Don't come back to a stale search or event card.
 			}
 			if (isExpanded) {
+				showDefaultView() // Each time it opens: Settings > Views > Default view
 				updateToday()
 				logic.updateWeather()
 				Qt.callLater(focusForKeys) // Keyboard shortcuts (PopupView Keys)

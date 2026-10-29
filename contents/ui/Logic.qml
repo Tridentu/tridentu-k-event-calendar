@@ -21,13 +21,15 @@ Item {
 	//--- Main
 	Component.onCompleted: {
 		lastGoogleSelectionSignature = googleSelectionSignature()
+		lastCacheAccountIds = cacheAccountIds()
 		showCachedEvents()
 		pollTimer.start()
 	}
 
-	//--- Event cache: the last loaded Google events, shown until the first fetch round finishes.
+	//--- Event cache: the last loaded Google events and tasks (Google, TickTick), shown until the
+	// first fetch round finishes.
 	function showCachedEvents() {
-		var selected = EventCacheUtil.selectedCalendarIds(parseGoogleAccounts())
+		var selected = EventCacheUtil.selectedCalendarIds(parseGoogleAccounts().concat(parseTickTickAccounts()))
 		var cached = eventCache.load(function(calendarId) { return !!selected[calendarId] })
 		if (!cached) {
 			return
@@ -35,6 +37,24 @@ Item {
 		logger.debug('showCachedEvents', Object.keys(cached.calendars).length, 'calendars from', new Date(cached.savedAt))
 		eventModel.showCachedEvents(cached.calendars)
 		if (popup) popup.updateUI()
+	}
+
+	// Ids of the Google and TickTick accounts in config.
+	property var lastCacheAccountIds: []
+	function cacheAccountIds() {
+		return parseGoogleAccounts().concat(parseTickTickAccounts()).map(function(account) {
+			return account && account.id ? String(account.id) : ''
+		}).filter(function(id) { return !!id })
+	}
+	// An account was removed (signed out): its calendars leave the cache file right away, not
+	// with the next refresh.
+	function pruneCacheOfGoneAccounts() {
+		var ids = cacheAccountIds()
+		var gone = lastCacheAccountIds.some(function(id) { return ids.indexOf(id) < 0 })
+		lastCacheAccountIds = ids
+		if (gone) {
+			eventCache.pruneAccounts(ids)
+		}
 	}
 
 	//--- Update
@@ -114,8 +134,11 @@ Item {
 		logic.updateDailyWeather()
 
 		// Hourly data feeds the meteogram (agenda view) and the Day view's weather panel.
-		var meteogramShown = popup ? popup.showMeteogram : plasmoid.configuration.widgetShowMeteogram && plasmoid.configuration.popupMode === 'classic' // popup exists after first open
-		if (meteogramShown || plasmoid.configuration.popupMode === 'today') {
+		// The popup exists after its first open; before, the view it will open in.
+		var cfg = plasmoid.configuration
+		var viewMode = popup ? popup.viewMode : (cfg.popupOpenLastView && cfg.popupLastView ? cfg.popupLastView : cfg.popupMode)
+		var meteogramShown = popup ? popup.showMeteogram : cfg.widgetShowMeteogram && viewMode === 'classic'
+		if (meteogramShown || viewMode === 'today') {
 			logic.updateHourlyWeather()
 		}
 	}
@@ -169,6 +192,7 @@ Item {
 		onTriggered: logic.updateWeather(true)
 	}
 	function weatherArrived() {
+		retryDone()
 		weatherRetries = 0
 		weatherRetryTimer.stop()
 	}
@@ -224,6 +248,7 @@ Item {
 		//--- Events
 		function onEnabledCalendarPluginsChanged() { logic.updateEvents() }
 		function onGoogleAccountsChanged() {
+			logic.pruneCacheOfGoneAccounts()
 			// Token refreshes rewrite googleAccounts too. Only refetch when the selection changes.
 			var signature = logic.googleSelectionSignature()
 			if (signature !== logic.lastGoogleSelectionSignature) {
@@ -232,6 +257,7 @@ Item {
 			}
 		}
 		function onGoogleActiveAccountIdChanged() { logic.updateEvents() }
+		function onTickTickAccountsChanged() { logic.pruneCacheOfGoneAccounts() }
 		function onGoogleEventClickActionChanged() { logic.updateEvents() }
 		function onGoogleColorPaletteChanged() {
 			// Recolor right away (system palette is applied at display time anyway).
@@ -239,14 +265,20 @@ Item {
 			if (popup) popup.updateUI()
 		}
 		function onShowDeclinedEventsChanged() { logic.refilterEvents() }
+		function onHideDuplicateEventsChanged() { logic.refilterEvents() }
 		// Calendars hidden in the popup header's menu: a view filter, nothing is fetched again.
 		function onHiddenCalendarIdsChanged() { logic.refilterEvents() }
+		// The clock's next-event chip only.
+		function onClockHiddenCalendarIdsChanged() { upcomingEvents.updateNextEvent() }
+		function onClockNextEventSkipAllDayChanged() { upcomingEvents.updateNextEvent() }
+		function onClockNextEventLinkOnlyChanged() { upcomingEvents.updateNextEvent() }
+		function onMutedEventKeysChanged() { upcomingEvents.updateNextEvent() }
+		function onClockNextEventAcceptedOnlyChanged() { upcomingEvents.updateNextEvent() }
 
 		//--- Weather
 		function onWeatherServiceChanged() { logic.resetWeatherAndUpdate() }
 		function onOpenMeteoLatitudeChanged() { logic.resetWeatherAndUpdate() }
 		function onOpenMeteoLongitudeChanged() { logic.resetWeatherAndUpdate() }
-		function onPopupModeChanged() { logic.updateWeather(true) } // Today needs hourly data
 		function onOpenWeatherMapAppIdChanged() { logic.resetWeatherAndUpdate() }
 		function onOpenWeatherMapCityIdChanged() { logic.resetWeatherAndUpdate() }
 		function onWeatherCanadaCityIdChanged() { logic.resetWeatherAndUpdate() }
@@ -290,6 +322,19 @@ Item {
 		}
 		try {
 			var parsed = SafeConfig.parseBase64Json(raw, [])
+			return Array.isArray(parsed) ? parsed : []
+		} catch (e) {
+			return []
+		}
+	}
+	// TickTick accounts from config (ids and selected projects; the tokens are in the keyring).
+	function parseTickTickAccounts() {
+		var raw = plasmoid.configuration.tickTickAccounts
+		if (!raw) {
+			return []
+		}
+		try {
+			var parsed = Array.isArray(raw) ? raw : SafeConfig.parseBase64Json(raw, [])
 			return Array.isArray(parsed) ? parsed : []
 		} catch (e) {
 			return []
@@ -352,7 +397,7 @@ Item {
 				logic.eventsNetworkFailed = true
 				logic.networkFailed()
 			} else {
-				// Event cache: the last loaded Google events (see showCachedEvents).
+				// Event cache: the last loaded Google events and tasks (see showCachedEvents).
 				eventModel.settleCachedCalendars()
 				eventCache.scheduleSave(eventModel.eventsByCalendar, eventModel.dateMin, eventModel.dateMax)
 				logic.eventsNetworkFailed = false
@@ -383,10 +428,14 @@ Item {
 	property int networkFailures: 0
 	property double nextRetryAt: 0 // ms since epoch
 	property bool outageNotified: false
+	// A retry is running (the banner's Retry Now waits for it): until the fetch fails or comes back,
+	// at most retryingTimeout.
+	property bool retrying: false
 	readonly property var retryDelays: [30, 60, 120, 300] // seconds; capped below the poll interval
 	property int outageNotifyDelay: 3 * 60 * 1000 // Desktop notification only if the outage lasts
 
 	function networkFailed() {
+		retryDone()
 		if (!offline) {
 			offline = true
 			outageNotified = false
@@ -404,6 +453,7 @@ Item {
 		if (popup) popup.showNetworkError()
 	}
 	function networkRecovered() {
+		retryDone()
 		if (!offline || eventsNetworkFailed || weatherNetworkFailed) {
 			return
 		}
@@ -427,8 +477,13 @@ Item {
 		}
 	}
 	function retryNow() {
+		if (retrying) {
+			return
+		}
 		retryTimer.stop()
 		nextRetryAt = 0
+		retrying = true
+		retryingTimeout.restart()
 		if (eventsNetworkFailed || !weatherNetworkFailed) {
 			logic.updateEvents()
 		}
@@ -439,6 +494,16 @@ Item {
 	Timer {
 		id: retryTimer
 		onTriggered: logic.retryNow()
+	}
+	function retryDone() {
+		retrying = false
+		retryingTimeout.stop()
+	}
+	// A fetch that never ends (no answer, no error): Retry Now can be pressed again.
+	Timer {
+		id: retryingTimeout
+		interval: 45000
+		onTriggered: logic.retrying = false
 	}
 	// One desktop notification per outage, only if it lasts.
 	Timer {

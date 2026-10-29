@@ -42,6 +42,48 @@ function toArray(listLike) {
 	return []
 }
 
+// The Akonadi collections of a PimCalendarsModel (kdepim-addons' pimevents plugin):
+// [{ id, name, checked }], checked: shown in the Plasma calendars (the plugin's own selection,
+// [PIMEventsPlugin] calendars= in plasmashellrc). Accounts (resources) are left out.
+// Current versions: a flat list with the roles collectionId (UserRole + 1), name, enabled (false:
+// an account) and checked. Older ones: a tree with a { id, enabled } object in UserRole + 1.
+var PIM_ROLE_ID = 1, PIM_ROLE_NAME = 2, PIM_ROLE_ENABLED = 3, PIM_ROLE_CHECKED = 4
+function pimCalendarRows(model, userRole, displayRole) {
+	var rows = []
+	if (!model) {
+		return rows
+	}
+	function push(index) {
+		var data = model.data(index, userRole + PIM_ROLE_ID)
+		if (data && typeof data === 'object') {
+			rows.push({
+				id: String(data.id),
+				name: String(model.data(index, displayRole) || ''),
+				checked: !!data.enabled,
+			})
+		} else if (data !== undefined && data !== null && model.data(index, userRole + PIM_ROLE_ENABLED) !== false) {
+			rows.push({
+				id: String(data),
+				name: String(model.data(index, userRole + PIM_ROLE_NAME) || model.data(index, displayRole) || ''),
+				checked: !!model.data(index, userRole + PIM_ROLE_CHECKED),
+			})
+		}
+	}
+	// A tree under the accounts (Akonadi's EntityTreeModel): calendars can be folders in folders.
+	function walk(parent, depth) {
+		var count = parent ? model.rowCount(parent) : model.rowCount()
+		for (var i = 0; i < count; i++) {
+			var index = parent ? model.index(i, 0, parent) : model.index(i, 0)
+			push(index)
+			if (depth < 8 && model.hasChildren(index)) {
+				walk(index, depth + 1)
+			}
+		}
+	}
+	walk(null, 0)
+	return rows
+}
+
 function getPluginFilename(pluginPath) {
 	if (!pluginPath || typeof pluginPath !== 'string') {
 		return ''
@@ -51,6 +93,13 @@ function getPluginFilename(pluginPath) {
 		return pluginPath
 	}
 	return pluginPath.substr(lastSlash + 1)
+}
+
+// Whether pluginList (enabledCalendarPlugins) has the plugin named stem ("pimevents").
+function hasPlugin(pluginList, stem) {
+	return toArray(pluginList).some(function(plugin) {
+		return getPluginStem(plugin) === stem
+	})
 }
 
 function getPluginStem(pluginRef) {
@@ -70,6 +119,34 @@ function getStoredPluginFilename(pluginRef) {
 		return ''
 	}
 	return pluginStem + '.so'
+}
+
+// enabledCalendarPlugins as another (broken) Plasma 6 port may have left it: one character per
+// entry ("h", "o", "l", ...: the characters joined back are the comma-separated list it was), or
+// several plugins in one entry ("holidaysevents.so,pimevents.so"). Returns the plugin filenames,
+// one-letter names (never a plugin) left out; a sound list comes back the same.
+function repairPluginList(pluginList) {
+	var entries = toArray(pluginList).map(function(entry) {
+		return String(entry)
+	})
+	var oneCharacterEach = entries.length > 1 && entries.every(function(entry) {
+		return entry.length === 1
+	})
+	if (oneCharacterEach) {
+		entries = [entries.join('')]
+	}
+	var split = []
+	entries.forEach(function(entry) {
+		entry.split(',').forEach(function(part) {
+			part = part.trim()
+			if (part) {
+				split.push(part)
+			}
+		})
+	})
+	return pluginPathToFilenameList(split).filter(function(filename) {
+		return getPluginStem(filename).length > 1
+	})
 }
 
 function pluginPathToFilenameList(pluginPathList) {

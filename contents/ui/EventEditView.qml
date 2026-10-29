@@ -13,6 +13,7 @@ import "Recurrence.js" as Recurrence
 import "Reminders.js" as Reminders
 import "SeriesEdit.js" as SeriesEdit
 import "Shared.js" as Shared
+import "Tasks.js" as Tasks
 import "TimeZone.js" as TimeZone
 import "code/ColorIdMap.js" as ColorIdMap
 import "code/GooglePalette.js" as GooglePalette
@@ -28,7 +29,129 @@ Rectangle {
 	property var initialStart: null // New events: exact start time (eg: clicked week view slot)
 	property string initialTitle: "" // New events: title typed so far (eg: in quick add)
 	property var templateEvent: null // New events: a copy of this event (Duplicate)
+	property bool newTask: false // New: a task (due on initialDate), on a task list
+	property string initialCalendarId: "" // New: on this calendar / task list
+	property bool initialNoDue: false // New task: without a due date
 	readonly property bool isNew: !eventItem
+
+	//--- Tasks: title, notes, due day (or none) and the task list; with TickTick (taskCaps) also a
+	// time, priority, repeat, reminders and a checklist. Nothing else of an event.
+	readonly property bool editingTask: !isNew && Tasks.isTask(eventItem)
+	// Editing a task, or a new one on a task list.
+	readonly property bool taskMode: editingTask || (isNew && calendarSelector.selectedIsTasklist)
+	property bool taskHasDue: true
+	property var taskDue: new Date()
+	// What the list's provider has (EventModel.taskCapabilities / Tasks.capabilities).
+	readonly property var taskCaps: taskMode && calendarSelector.selectedCalendarId && typeof eventModel.taskCapabilities === 'function'
+		? eventModel.taskCapabilities(calendarSelector.selectedCalendarId) : Tasks.capabilities('')
+	property bool taskTimed: false // At a time of the due day (else all day)
+	property var taskTime: new Date(2000, 0, 1, 9, 0)
+	property int taskPriority: 0 // Tasks.priorityOf
+	property var taskRemindersAfter: [] // Reminders after the due time (minutes < 0, eg: 9:00 on the day), kept
+	property var taskSubtasks: [] // [{ id, title, done }], edited in place
+	readonly property bool showTaskRepeat: taskMode && !!taskCaps.repeat && taskHasDue
+	readonly property bool showTaskReminders: taskMode && !!taskCaps.reminders && taskHasDue
+	function fillTask(item) {
+		titleField.text = item.summary || item.title || ""
+		descriptionField.text = item.notes || ""
+		var day = Tasks.dueDay(item)
+		taskHasDue = !!day
+		if (day) {
+			var parts = day.split('-')
+			taskDue = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
+		}
+		var time = Tasks.dueTimeOf(item)
+		taskTimed = !!time
+		if (time) {
+			taskTime = new Date(2000, 0, 1, Number(time.substring(0, 2)), Number(time.substring(3, 5)))
+		}
+		taskPriority = Tasks.priorityOf(item)
+		var reminders = Tasks.cleanReminders(item.reminders)
+		reminderItems = reminders.filter(function(m) { return m >= 0 }).map(Reminders.split)
+		taskRemindersAfter = reminders.filter(function(m) { return m < 0 })
+		taskSubtasks = Tasks.cleanSubtasks(item.subtasks)
+		var rule = Tasks.cleanRepeatRule(item.repeatRule)
+		if (rule) {
+			setInitialRepeat(rule, taskDue)
+		}
+	}
+	// 9:00 on the due day, as a reminder after an all-day task's start: "On the day at 9:00".
+	function afterText(minutes) {
+		var after = -minutes
+		var time = new Date(2000, 0, 1, Math.floor(after / 60) % 24, after % 60)
+		var days = Math.floor(after / 1440)
+		var clock = Shared.formatTime(time, appletConfig.timeFormat)
+		return days > 0 ? i18ncp("task reminder after the due day starts", "%1 day later at %2", "%1 days later at %2", days, clock)
+			: i18nc("task reminder: %1 = time", "On the day at %1", clock)
+	}
+	function removeReminderAfter(index) {
+		var list = taskRemindersAfter.slice()
+		list.splice(index, 1)
+		taskRemindersAfter = list
+	}
+	function addSubtask(title) {
+		var text = String(title || "").trim()
+		if (text) {
+			taskSubtasks = taskSubtasks.concat([{ id: "", title: text, done: false }])
+		}
+	}
+	function removeSubtask(index) {
+		var list = taskSubtasks.slice()
+		list.splice(index, 1)
+		taskSubtasks = list
+	}
+	// The task's fields as the form has them, for Tasks.editorChanges.
+	function taskForm(title) {
+		var dueDay = taskHasDue ? Shared.localeDateString(taskDue) : ''
+		var form = {
+			title: title,
+			notes: descriptionField.text,
+			dueDay: dueDay,
+			// Data, not display: always "HH:mm" in ASCII digits (Qt.formatTime: the C locale).
+			dueTime: taskTimed ? Qt.formatTime(taskTime, "HH:mm") : '',
+			priority: taskPriority,
+			reminders: reminderItems.map(Reminders.toMinutes).concat(taskRemindersAfter),
+			// A checklist item typed but not added yet (no Enter) counts too.
+			subtasks: taskSubtasks.concat(newSubtaskField.text.trim() ? [{ id: "", title: newSubtaskField.text, done: false }] : []),
+		}
+		if (repeatChanged) {
+			form.repeatRule = repeatRule()
+		}
+		return form
+	}
+	function saveTask(title) {
+		var listId = calendarSelector.selectedCalendarId
+		if (isNew) {
+			eventModel.createEventFromData(listId, Object.assign({ title: title },
+				Tasks.editBody(Tasks.editorChanges(null, taskForm(title), taskCaps))), null)
+			return
+		}
+		// Only what changed.
+		var body = Tasks.editBody(Tasks.editorChanges(eventItem, taskForm(title), taskCaps))
+		var hasChanges = Object.keys(body).length > 0
+		if (!moving) {
+			if (hasChanges) {
+				eventModel.setEventProperties(eventItem.calendarId, eventItem.id, body)
+			}
+			return
+		}
+		// Another list of the account: move, then the changes on the moved task (as afterMove).
+		var model = eventModel
+		var appLogic = logic
+		var taskId = eventItem.id
+		model.moveEvent(eventItem.calendarId, taskId, listId, function(err, moved) {
+			if (err) {
+				return
+			}
+			if (hasChanges) {
+				model.setEventProperties(listId, moved && moved.id || taskId, body, {
+					done: function() { appLogic.update() },
+				})
+			} else {
+				appLogic.update()
+			}
+		})
+	}
 	// Rows below a row with an icon line up with its text.
 	readonly property real indent: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing
 	signal closeRequested()
@@ -52,13 +175,17 @@ Rectangle {
 	property var endDate: null // Last day, inclusive
 	property int endCount: 10
 	property string lastStartDay: ""
-	readonly property bool supportsRecurrence: !!calendarSelector.selectedCalendarId
+	readonly property bool supportsRecurrence: !taskMode && !!calendarSelector.selectedCalendarId
 		&& eventModel.supportsRecurrence(calendarSelector.selectedCalendarId)
-	readonly property bool canEditRepeat: supportsRecurrence && !seriesLoading && (!isOccurrence || editSeries)
+	readonly property bool canEditRepeat: taskMode ? showTaskRepeat : supportsRecurrence && !seriesLoading && (!isOccurrence || editSeries)
+	// The repeat rows: an event's (Google), or a task's (TickTick).
+	readonly property bool showRepeat: supportsRecurrence || showTaskRepeat
+	// The day a repeat starts on: the event's start, or the task's due day.
+	readonly property var repeatStart: taskMode ? taskDue : durationSelector.startDateTime
 
 	// The rule for the repeat options, for an event starting on `start`.
 	function repeatRuleAt(start) {
-		var allDay = allDayCheckBox.checked
+		var allDay = taskMode ? !taskTimed : allDayCheckBox.checked
 		var rule
 		if (repeatKey === 'original') {
 			rule = originalRule
@@ -75,7 +202,7 @@ Rectangle {
 		return Recurrence.withEnd(rule, { type: endType, date: endDate, count: endCount }, allDay)
 	}
 	function repeatRule() {
-		return repeatRuleAt(durationSelector.startDateTime)
+		return repeatRuleAt(repeatStart)
 	}
 	function setCustom(custom) {
 		customFreq = custom.freq
@@ -221,7 +348,7 @@ Rectangle {
 		var format = { clock24h: appletConfig.clock24h }
 		var text = LocaleFuncs.formatEventTime(start, format) + " – " + LocaleFuncs.formatEventTime(end, format)
 		if (start.toDateString() !== durationSelector.startDateTime.toDateString()) {
-			text = Qt.formatDate(start, i18nc("event editor date format", "d MMM, yyyy")) + " " + text
+			text = Shared.formatDate(start, i18nc("event editor date format", "d MMM, yyyy")) + " " + text
 		}
 		return i18nc("%1 = start and end time in the local time zone", "%1 your time", text)
 	}
@@ -625,6 +752,11 @@ Rectangle {
 			titleField.forceActiveFocus()
 			return
 		}
+		if (taskMode) {
+			saveTask(summary)
+			closeRequested()
+			return
+		}
 		var notice = guestNoticeNeeded()
 		if (notice && !sendUpdatesChoice) {
 			guestNotice = notice
@@ -824,23 +956,56 @@ Rectangle {
 		}
 	}
 
+	// Task lists as calendars for the selector (eventModel.getTaskLists gives id, summary and color).
+	function taskListEntries(lists, label) {
+		return lists.map(function(list) {
+			return {
+				id: list.id,
+				summary: label ? i18nc("%1 = task list name", "%1 (tasks)", list.summary) : list.summary,
+				backgroundColor: list.backgroundColor,
+				accessRole: 'owner',
+				isTasklist: true,
+			}
+		})
+	}
+
 	Component.onCompleted: {
 		var calendarList = eventModel.getCalendarList().filter(function(c) { return !c.isTasklist })
-		// An existing event can only move within its account (populate keeps the writable ones).
-		if (eventItem) {
+		var startId = initialCalendarId || plasmoid.configuration.agendaNewEventLastCalendarId
+		if (editingTask) {
+			// The task lists of its account (moving within the account).
+			var account = accountPrefix.slice(0, -2)
+			calendarList = taskListEntries(account ? eventModel.getTaskLists(account) : [], false)
+			if (!calendarList.some(function(c) { return c.id === eventItem.calendarId })) {
+				calendarList.unshift({ id: eventItem.calendarId, summary: i18n("Task list"), accessRole: 'owner', isTasklist: true })
+			}
+		} else if (eventItem) {
+			// An existing event can only move within its account (populate keeps the writable ones).
 			var prefix = accountPrefix
 			calendarList = calendarList.filter(function(c) {
 				return c.id === eventItem.calendarId || (prefix !== '' && String(c.id).indexOf(prefix) === 0)
 			})
+		} else if (newTask) {
+			calendarList = taskListEntries(eventModel.getTaskLists(), false)
+		} else if (!templateEvent) {
+			// New event: the task lists too, after the calendars (picking one makes it a task).
+			calendarList = calendarList.concat(taskListEntries(eventModel.getTaskLists(), true))
+			var isCalendar = calendarList.some(function(c) { return c.id === startId && !c.isTasklist })
+			if (!isCalendar && startId !== initialCalendarId) {
+				startId = "" // The last one used was a task list: events first
+			}
 		}
-		var initialCalendarId = eventItem ? eventItem.calendarId : plasmoid.configuration.agendaNewEventLastCalendarId
+		var initialId = eventItem ? eventItem.calendarId : startId
 		// Duplicate: on the same calendar when it's one we can write to.
 		if (templateEvent && calendarList.some(function(c) { return c.id === templateEvent.calendarId })) {
-			initialCalendarId = templateEvent.calendarId
+			initialId = templateEvent.calendarId
 		}
-		calendarSelector.populate(calendarList, initialCalendarId)
-
-		if (eventItem) {
+		calendarSelector.populate(calendarList, initialId)
+		taskDue = new Date(initialDate)
+		taskHasDue = !initialNoDue
+		if (editingTask) {
+			fillTask(eventItem)
+		} else if (eventItem) {
 			fillFrom(eventItem, false)
 		} else if (templateEvent) {
 			fillFrom(templateEvent, true)
@@ -872,7 +1037,8 @@ Rectangle {
 			id: actionsRow
 			Layout.fillWidth: true
 			Layout.margins: Kirigami.Units.smallSpacing
-			title: form.isNew ? i18n("New Event") : i18n("Edit Event")
+			title: form.taskMode ? (form.isNew ? i18n("New Task") : i18n("Edit Task"))
+				: form.isNew ? i18n("New Event") : i18n("Edit Event")
 			actionText: i18n("Save")
 			actionIcon: "document-save"
 			actionEnabled: titleField.text.trim().length > 0 && !!calendarSelector.selectedCalendarId
@@ -919,6 +1085,9 @@ Rectangle {
 			Layout.fillHeight: true
 			contentWidth: availableWidth
 			QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
+			QQC2.ScrollBar.vertical: OverlayScrollBar {
+				view: scrollView
+			}
 
 			ColumnLayout {
 				id: fieldsColumn
@@ -954,6 +1123,80 @@ Rectangle {
 					Layout.fillWidth: true
 					// Existing events: move to another calendar of the same account (see canMove).
 					enabled: form.isNew || form.canMove
+				}
+
+				// Tasks: the due day, or none (Google Tasks keep no time).
+				RowLayout {
+					visible: form.taskMode
+					Layout.fillWidth: true
+					RowIcon {
+						source: "view-calendar-day"
+					}
+					DateSelector {
+						visible: form.taskHasDue
+						Layout.fillWidth: true
+						dateFormat: i18nc("event editor date format", "d MMM, yyyy")
+						dateTime: form.taskDue
+						onDateTimeShifted: function(oldDateTime, deltaDateTime, newDateTime) {
+							form.taskDue = newDateTime
+						}
+						Accessible.name: i18n("Due date")
+					}
+					Item {
+						visible: !form.taskHasDue
+						Layout.fillWidth: true
+					}
+					PlasmaComponents3.Switch {
+						text: i18n("No due date")
+						checked: !form.taskHasDue
+						onToggled: form.taskHasDue = !checked
+					}
+				}
+				// TickTick: a time on the due day, or all day.
+				RowLayout {
+					visible: form.taskMode && !!form.taskCaps.dueTime && form.taskHasDue
+					Layout.fillWidth: true
+					RowIcon {
+						source: "preferences-system-time"
+					}
+					TimeSelector {
+						visible: form.taskTimed
+						Layout.fillWidth: true
+						dateTime: form.taskTime
+						onDateTimeShifted: function(oldDateTime, deltaDateTime, newDateTime) {
+							form.taskTime = newDateTime
+						}
+						Accessible.name: i18n("Due time")
+					}
+					Item {
+						visible: !form.taskTimed
+						Layout.fillWidth: true
+					}
+					PlasmaComponents3.Switch {
+						text: i18n("All day")
+						checked: !form.taskTimed
+						onToggled: form.taskTimed = !checked
+					}
+				}
+				// TickTick: the priority (the check's color in the lists).
+				RowLayout {
+					visible: form.taskMode && !!form.taskCaps.priority
+					Layout.fillWidth: true
+					RowIcon {
+						source: "flag"
+					}
+					KeyComboBox {
+						Layout.fillWidth: true
+						model: [
+							{ key: '0', text: i18nc("task priority", "No priority") },
+							{ key: '1', text: i18nc("task priority", "Low priority") },
+							{ key: '3', text: i18nc("task priority", "Medium priority") },
+							{ key: '5', text: i18nc("task priority", "High priority") },
+						]
+						currentKey: String(form.taskPriority)
+						onPicked: function(key) { form.taskPriority = Number(key) }
+						Accessible.name: i18n("Priority")
+					}
 				}
 
 				// Event type (new events on a primary Google calendar).
@@ -1081,12 +1324,13 @@ Rectangle {
 
 				PlasmaComponents3.CheckBox {
 					id: allDayCheckBox
-					visible: !form.isSpecialType
+					visible: !form.isSpecialType && !form.taskMode
 					text: i18n("All day")
 				}
 
 				DurationSelector {
 					id: durationSelector
+					visible: !form.taskMode
 					Layout.fillWidth: true
 					showTime: !allDayCheckBox.checked
 				}
@@ -1163,7 +1407,7 @@ Rectangle {
 				}
 
 				RowLayout {
-					visible: form.supportsRecurrence
+					visible: form.showRepeat
 					Layout.fillWidth: true
 					RowIcon {
 						source: "view-refresh"
@@ -1173,17 +1417,17 @@ Rectangle {
 						Layout.fillWidth: true
 						enabled: form.canEditRepeat
 						model: {
-							var start = durationSelector.startDateTime
+							var start = form.repeatStart
 							var list = [
 								{ key: 'none', text: i18n("Does not repeat") },
 								{ key: 'daily', text: i18n("Daily") },
 								{ key: 'weekdays', text: i18n("Every weekday (Monday to Friday)") },
 								{ key: 'weekly', text: i18nc("%1 = day name", "Weekly on %1", Qt.locale().dayName(start.getDay())) },
 								{ key: 'monthly', text: i18nc("%1 = day of the month", "Monthly on day %1", start.getDate()) },
-								{ key: 'yearly', text: i18nc("%1 = date, eg: 16 October", "Yearly on %1", Qt.formatDate(start, "d MMMM")) },
+								{ key: 'yearly', text: i18nc("%1 = date, eg: 16 October", "Yearly on %1", Shared.formatDate(start, "d MMMM")) },
 							]
 							if (form.initialRepeatKey === 'original') {
-								list.push({ key: 'original', text: i18n("Custom (as set in Google Calendar)") })
+								list.push({ key: 'original', text: form.taskMode ? i18n("Custom (as set in TickTick)") : i18n("Custom (as set in Google Calendar)") })
 							}
 							list.push({ key: 'custom', text: i18n("Custom…") })
 							return list
@@ -1192,7 +1436,7 @@ Rectangle {
 						onPicked: function(key) {
 							if (key === 'custom' && form.repeatKey !== 'custom') {
 								// Start from what was picked before, eg: Weekly on Thursday.
-								form.setCustom(Recurrence.customOf(form.repeatRule(), durationSelector.startDateTime))
+								form.setCustom(Recurrence.customOf(form.repeatRule(), form.repeatStart))
 							}
 							form.repeatKey = key
 						}
@@ -1202,7 +1446,7 @@ Rectangle {
 
 				// Custom repeat: every N days / weeks / months / years, and the days of the week.
 				ColumnLayout {
-					visible: form.supportsRecurrence && form.repeatKey === 'custom'
+					visible: form.showRepeat && form.repeatKey === 'custom'
 					enabled: form.canEditRepeat
 					Layout.fillWidth: true
 					Layout.leftMargin: form.indent
@@ -1261,7 +1505,7 @@ Rectangle {
 
 				// When a repeat ends.
 				RowLayout {
-					visible: form.supportsRecurrence && form.repeatKey !== 'none'
+					visible: form.showRepeat && form.repeatKey !== 'none'
 					enabled: form.canEditRepeat
 					Layout.fillWidth: true
 					Layout.leftMargin: form.indent
@@ -1279,7 +1523,7 @@ Rectangle {
 						currentKey: form.endType
 						onPicked: function(key) {
 							if (key === 'until' && !form.endDate) {
-								var d = new Date(durationSelector.startDateTime)
+								var d = new Date(form.repeatStart)
 								d.setMonth(d.getMonth() + 1)
 								form.endDate = d
 							}
@@ -1290,7 +1534,7 @@ Rectangle {
 						visible: form.endType === 'until'
 						Layout.fillWidth: true
 						dateFormat: i18nc("event editor date format", "d MMM, yyyy")
-						dateTime: form.endDate || durationSelector.startDateTime
+						dateTime: form.endDate || form.repeatStart
 						onDateTimeShifted: function(oldDateTime, deltaDateTime, newDateTime) {
 							form.endDate = newDateTime
 						}
@@ -1311,7 +1555,7 @@ Rectangle {
 
 				PlasmaComponents3.TextField {
 					id: locationField
-					visible: !form.isSpecialType
+					visible: !form.isSpecialType && !form.taskMode
 					Layout.fillWidth: true
 					placeholderText: i18n("Location")
 				}
@@ -1418,9 +1662,10 @@ Rectangle {
 					}
 				}
 
-				// Reminders: the calendar's defaults, or this event's own notification times.
+				// Reminders: the calendar's defaults, or this event's own notification times. A task
+				// (TickTick): its own list, and those after the due time kept as they are.
 				ColumnLayout {
-					visible: form.supportsRecurrence
+					visible: form.supportsRecurrence || form.showTaskReminders
 					Layout.fillWidth: true
 					spacing: Kirigami.Units.smallSpacing
 
@@ -1432,7 +1677,12 @@ Rectangle {
 						PlasmaComponents3.Label {
 							text: i18n("Reminders")
 						}
+						Item {
+							visible: form.taskMode
+							Layout.fillWidth: true
+						}
 						KeyComboBox {
+							visible: !form.taskMode
 							Layout.fillWidth: true
 							model: [
 								{ key: 'default', text: i18n("Calendar's default") },
@@ -1448,13 +1698,14 @@ Rectangle {
 						}
 					}
 					Repeater {
-						model: form.remindersCustom ? form.reminderItems : []
+						// A task: always its own list (no calendar default).
+						model: form.remindersCustom || form.taskMode ? form.reminderItems : []
 						RowLayout {
 							Layout.fillWidth: true
 							Layout.leftMargin: form.indent
 							readonly property int itemIndex: index
 							PlasmaComponents3.SpinBox {
-								from: 1
+								from: form.taskMode ? 0 : 1 // A task: also at the due time
 								to: 999
 								value: modelData.value
 								onValueModified: form.setReminder(parent.itemIndex, value, modelData.unit)
@@ -1480,14 +1731,36 @@ Rectangle {
 							}
 						}
 					}
+					Repeater {
+						model: form.showTaskReminders ? form.taskRemindersAfter : []
+						RowLayout {
+							Layout.fillWidth: true
+							Layout.leftMargin: form.indent
+							readonly property int itemIndex: index
+							PlasmaComponents3.Label {
+								Layout.fillWidth: true
+								text: form.afterText(modelData)
+								textFormat: Text.PlainText
+								elide: Text.ElideRight
+							}
+							PlasmaComponents3.ToolButton {
+								icon.name: "edit-delete-remove"
+								onClicked: form.removeReminderAfter(parent.itemIndex)
+								Accessible.name: PlasmaComponents3.ToolTip.text
+								PlasmaComponents3.ToolTip.text: i18n("Remove reminder")
+								PlasmaComponents3.ToolTip.visible: hovered
+								PlasmaComponents3.ToolTip.delay: Kirigami.Units.toolTipDelay
+							}
+						}
+					}
 					PlasmaComponents3.Label {
-						visible: form.remindersCustom && form.reminderItems.length === 0
+						visible: (form.remindersCustom || form.taskMode) && form.reminderItems.length === 0 && (!form.taskMode || form.taskRemindersAfter.length === 0)
 						Layout.leftMargin: form.indent
 						text: i18n("No notification reminders")
 						opacity: 0.7
 					}
 					PlasmaComponents3.ToolButton {
-						visible: form.remindersCustom
+						visible: form.remindersCustom || form.taskMode
 						enabled: form.canAddReminder
 						Layout.leftMargin: Kirigami.Units.iconSizes.small
 						icon.name: "list-add"
@@ -1597,11 +1870,69 @@ Rectangle {
 					}
 				}
 
+				// TickTick: the checklist (subtasks): check, rename, remove, add.
+				ColumnLayout {
+					visible: form.taskMode && !!form.taskCaps.subtasks
+					Layout.fillWidth: true
+					spacing: Kirigami.Units.smallSpacing
+					RowLayout {
+						Layout.fillWidth: true
+						RowIcon {
+							source: "checkbox"
+						}
+						PlasmaComponents3.Label {
+							Layout.fillWidth: true
+							text: i18n("Subtasks")
+							textFormat: Text.PlainText
+						}
+					}
+					Repeater {
+						model: form.taskSubtasks
+						RowLayout {
+							Layout.fillWidth: true
+							Layout.leftMargin: form.indent
+							readonly property int itemIndex: index
+							PlasmaComponents3.CheckBox {
+								checked: modelData.done
+								// In place: the rows aren't made again (the field keeps its focus).
+								onToggled: form.taskSubtasks[parent.itemIndex].done = checked
+								Accessible.name: modelData.title
+							}
+							PlasmaComponents3.TextField {
+								Layout.fillWidth: true
+								text: modelData.title
+								font.strikeout: parent.children[0].checked
+								onTextEdited: form.taskSubtasks[parent.itemIndex].title = text
+								Accessible.name: i18n("Subtask")
+							}
+							PlasmaComponents3.ToolButton {
+								icon.name: "edit-delete-remove"
+								onClicked: form.removeSubtask(parent.itemIndex)
+								Accessible.name: PlasmaComponents3.ToolTip.text
+								PlasmaComponents3.ToolTip.text: i18n("Remove subtask")
+								PlasmaComponents3.ToolTip.visible: hovered
+								PlasmaComponents3.ToolTip.delay: Kirigami.Units.toolTipDelay
+							}
+						}
+					}
+					// Enter adds the item and keeps the field for the next one.
+					PlasmaComponents3.TextField {
+						id: newSubtaskField
+						Layout.fillWidth: true
+						Layout.leftMargin: form.indent
+						placeholderText: i18n("Add a subtask…")
+						onAccepted: {
+							form.addSubtask(text)
+							text = ""
+						}
+					}
+				}
+
 				PlasmaComponents3.TextArea {
 					id: descriptionField
 					Layout.fillWidth: true
 					Layout.preferredHeight: Kirigami.Units.gridUnit * 5
-					placeholderText: i18n("Description")
+					placeholderText: form.taskMode ? i18n("Notes") : i18n("Description")
 					wrapMode: TextEdit.Wrap
 				}
 			}

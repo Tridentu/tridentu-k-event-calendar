@@ -1,6 +1,8 @@
 import QtQuick
 
+import "MeetingLink.js" as MeetingLink
 import "Shared.js" as Shared
+import "Tasks.js" as Tasks
 
 ListModel {
 	id: agendaModel
@@ -19,6 +21,8 @@ ListModel {
 	property int showNextNumDays: 14
 	property bool showAllDaysInMonth: true
 	property bool clipEventsOutsideLimits: true
+	// A multi-day event broken up into at most this many days.
+	readonly property int maxEventDays: 400
 	property bool clipEventsFromOtherMonths: true
 	property date visibleDateMin: new Date()
 	property date visibleDateMax: new Date()
@@ -68,7 +72,7 @@ ListModel {
 			agendaItem.events.map(function(e) {
 				return [e.id, e.calendarId, e.etag || e.updated || '', e.summary, e.location || '',
 					(e.description || '').length, time(e.startDateTime), time(e.endDateTime), e.backgroundColor || '', !!e.canEdit, Shared.myResponse(e),
-					Shared.conflictTitles(e)]
+					e.attendeeGuestCount, e.conflictTitlesText, e.meetingUrl]
 			}),
 			agendaItem.tasks.map(function(t) {
 				return [t.id, t.calendarId, t.etag || t.updated || '', t.summary, !!t.isCompleted, t.parent || '',
@@ -205,32 +209,9 @@ ListModel {
 		}
 		var generation = ++agendaModel.parseGeneration
 		// Copy: items is shared with the month view and reminders. Don't sort or rewrite it in place.
-		var items = data.items.slice()
-
-		if (plasmoid.configuration.agendaPlaceOverdueTasksOnToday) {
-			for (var i = 0; i < items.length; i++) {
-				var eventItem = items[i]
-				if (eventItem.kind === 'tasks#task'
-					&& eventItem.due
-					&& !eventItem.isCompleted
-				) {
-					var now = new Date(timeModel.currentTime)
-					var taskIsOverdue = eventItem.dueEndTime < now
-					if (taskIsOverdue) {
-						eventItem = Object.assign({}, eventItem)
-						eventItem.start = {
-							date: Shared.localeDateString(now),
-						}
-						eventItem.end = {
-							date: Shared.localeDateString(now),
-						}
-						eventItem.startDateTime = now
-						eventItem.endDateTime = now
-						items[i] = eventItem
-					}
-				}
-			}
-		}
+		// Events only: tasks are in the Tasks tab and the Day view. (A new array: items is shared with
+		// the month view and reminders, so it isn't sorted or rewritten in place.)
+		var items = Tasks.withoutTasks(data.items)
 
 		// Sort by start time if event, or position if tasks
 		items.sort(function(a,b) {
@@ -339,6 +320,11 @@ ListModel {
 			var breakupMultiDayEvents = plasmoid.configuration.agendaBreakupMultiDayEvents
 			for (; itemIndex < end; itemIndex++) {
 				var eventItem = items[itemIndex]
+				if (eventItem.kind !== 'tasks#task') {
+					// Nested lists summed up once per event (also when on many days): the rows don't
+					// walk nested ListModels in bindings (issue #3).
+					eventItem = Shared.withPlainSummary(eventItem, MeetingLink.find(eventItem))
+				}
 				if (breakupMultiDayEvents) {
 					// for Max(start, visibleMin) .. Min(end, visibleMax)
 					var lowerLimitDate = (agendaModel.clipEventsOutsideLimits && eventItem.startDateTime < agendaModel.visibleDateMin
@@ -357,9 +343,19 @@ ListModel {
 					if (agendaModel.clipEventsOutsideLimits && upperLimitDate > agendaModel.visibleDateMax) {
 						upperLimitDate = agendaModel.visibleDateMax
 					}
-					// Compare by day so a timed event crossing midnight also lands on its last day.
-					for (var eventItemDate = new Date(lowerLimitDate); !Shared.isDateAfter(eventItemDate, upperLimitDate); eventItemDate.setDate(eventItemDate.getDate() + 1)) {
+					// An invalid start or end (no date, or NaN) would never pass the end: the start's day only.
+					if (!Shared.isValidDate(lowerLimitDate) || !Shared.isValidDate(upperLimitDate)) {
+						if (Shared.isValidDate(eventItem.startDateTime)) {
+							insertEventAtDate(agendaItemList, byDay, eventItem.startDateTime, eventItem)
+						}
+						continue
+					}
+					// Compare by day so a timed event crossing midnight also lands on its last day. At most
+					// maxEventDays days (an event over years, not clipped to the visible range).
+					var eventItemDate = new Date(lowerLimitDate)
+					for (var dayCount = 0; dayCount < agendaModel.maxEventDays && !Shared.isDateAfter(eventItemDate, upperLimitDate); dayCount++) {
 						insertEventAtDate(agendaItemList, byDay, eventItemDate, eventItem)
+						eventItemDate.setDate(eventItemDate.getDate() + 1)
 					}
 				} else {
 					var now = new Date(timeModel.currentTime)

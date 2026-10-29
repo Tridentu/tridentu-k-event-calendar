@@ -9,6 +9,9 @@ import "EventCacheUtil.js" as EventCacheUtil
 import "Guests.js" as Guests
 import "Conflicts.js" as Conflicts
 import "EventTypes.js" as EventTypes
+import "TaskLists.js" as TaskLists
+import "Tasks.js" as Tasks
+import "calendars/PlasmaCalendarEventState.js" as PlasmaCalendarEventState
 
 CalendarManager {
 	id: eventModel
@@ -253,8 +256,75 @@ CalendarManager {
 		}
 	}
 
+	//--- TickTick: one session and tasks manager per account with a token (from the keyring).
+	TickTickAccountsStore {
+		id: tickTickAccountsStore
+	}
+
+	Repeater {
+		id: tickTickAccountsRepeater
+		model: tickTickAccountsStore.fetchableAccounts
+		delegate: Item {
+			id: tickTickAccountItem
+			property string accountId: modelData.id
+			property string accountLabel: modelData.label || "TickTick"
+
+			TickTickApiSession {
+				id: tickTickApiSession
+				server: modelData.server
+				token: modelData.token
+			}
+			TickTickTasksManager {
+				id: tickTickTasksManager
+				session: tickTickApiSession
+				accountsStore: tickTickAccountsStore
+				accountId: tickTickAccountItem.accountId
+				accountLabel: tickTickAccountItem.accountLabel
+			}
+
+			// Label and projects change in place (TickTickAccountsStore.updateAccount): the manager stays.
+			Connections {
+				target: tickTickAccountsStore
+				function onAccountUpdated(updatedId) {
+					if (updatedId === tickTickAccountItem.accountId) {
+						var account = tickTickAccountsStore.getAccount(updatedId)
+						tickTickAccountItem.accountLabel = account && account.label ? account.label : "TickTick"
+					}
+				}
+			}
+
+			Component.onCompleted: {
+				eventModel.bindSignals(tickTickTasksManager)
+			}
+			Component.onDestruction: {
+				eventModel.unbindSignals(tickTickTasksManager)
+			}
+		}
+	}
+
+	Connections {
+		target: tickTickAccountsStore
+		// Accounts or tokens changed: the managers were made again.
+		function onFetchableAccountsChanged() {
+			eventModel.clear()
+			deferredUpdate.restart()
+		}
+		// A label or the projects changed: fetch again, keeping what's shown meanwhile.
+		function onAccountUpdated(accountId) {
+			deferredUpdate.restart()
+		}
+	}
+
 	PlasmaCalendarManager {
 		id: plasmaCalendarManager
+	}
+
+	// Tasks are placed on their day when parsed (Tasks.placementDay): place them again.
+	Connections {
+		target: plasmoid.configuration
+		function onAgendaPlaceOverdueTasksOnTodayChanged() {
+			deferredUpdate.restart()
+		}
 	}
 
 	//---
@@ -285,17 +355,82 @@ CalendarManager {
 	onAllDataFetched: {
 		restoreCachedCalendars()
 		mergeEvents()
+		fetchRound = false
+	}
+
+	// A fetch round runs: eventsByCalendar was emptied and fills up calendar by calendar.
+	property bool fetchRound: false
+	onFetchingData: fetchRound = true
+	// A calendar's loaded data for a view that reads it directly (the Tasks tab, the Day view's
+	// tasks): during a fetch round, until the calendar arrives, what the last round loaded, so the
+	// view doesn't go empty meanwhile (eg: Retry Now while offline).
+	function loadedCalendar(calendarId) {
+		var calendar = eventModel.eventsByCalendar[calendarId]
+		if (!calendar && fetchRound) {
+			calendar = eventModel.previousEventsByCalendar[calendarId]
+		}
+		// Not fetched yet at all (start, an account's token just read from the keyring): the
+		// event cache's copy.
+		if (!calendar) {
+			calendar = eventModel.cachedEventsByCalendar[calendarId]
+		}
+		return calendar || null
 	}
 
 	//--- Event cache (EventCache.qml): shown on start until the first fetch round brings them in.
-	property var cachedEventsByCalendar: ({}) // { calendarId: { items: [...] } }, Google calendars only
+	// { calendarId: { items: [...] } }: Google calendars, Google task lists and TickTick projects.
+	property var cachedEventsByCalendar: ({})
 
-	// Events from the disk cache: parsed like fetched ones, shown right away.
+	// The account of a cached calendar id ('account::calendar') is a TickTick one.
+	function isTickTickAccountId(accountId) {
+		var accounts = tickTickAccountsStore.accounts
+		for (var i = 0; i < accounts.length; i++) {
+			if (accounts[i].id === accountId) {
+				return true
+			}
+		}
+		return false
+	}
+
+	// A cached task as the tasks managers parse it: placed on its day again, no notes; its reminders
+	// (minutes, EventCacheUtil.pickTask) back as reminders.
+	function parseCachedTask(calendarId, item) {
+		var now = new Date()
+		var day = Tasks.placementDay(item, now, !!plasmoid.configuration.agendaPlaceOverdueTasksOnToday)
+		item.start = { date: day }
+		item.end = { date: Tasks.addDays(day, 1) }
+		defaultEventParsing(calendarId, item)
+		item.calendarManagerId = isTickTickAccountId(Tasks.listAccount(calendarId)) ? 'TickTick' : 'GoogleTasks'
+		item.notes = ''
+		item.description = ''
+		item.isCompleted = Tasks.isDone(item)
+		item.priority = Tasks.priorityOf(item)
+		item.dueTime = item.dueTime || ''
+		item.parentId = item.parentId || ''
+		item.repeatRule = item.repeatRule || ''
+		item.reminders = Shared.toArray(item.reminderMinutes).filter(function(minutes) {
+			return typeof minutes === 'number' && isFinite(minutes)
+		})
+		delete item.reminderMinutes
+		item.subtasks = []
+		var dueDay = Tasks.dueDay(item)
+		if (dueDay) {
+			item.dueDate = dueDay
+			item.dueDateTime = new Date(dueDay + ' 00:00:00')
+			item.dueEndTime = new Date(Tasks.addDays(dueDay, 1) + ' 00:00:00')
+		}
+	}
+
+	// Events and tasks from the disk cache: parsed like fetched ones, shown right away.
 	function showCachedEvents(calendars) {
 		var shown = {}
 		for (var calendarId in calendars) {
 			var items = calendars[calendarId]
 			for (var i = 0; i < items.length; i++) {
+				if (Tasks.isTask(items[i])) {
+					parseCachedTask(calendarId, items[i])
+					continue
+				}
 				defaultEventParsing(calendarId, items[i])
 				items[i].calendarManagerId = 'GoogleCalendar'
 				items[i].description = ''
@@ -305,12 +440,18 @@ CalendarManager {
 		}
 		eventModel.cachedEventsByCalendar = shown
 		mergeEvents()
+		taskListsChanged() // The task views: the cached lists (cachedTaskLists) and their tasks
+	}
+
+	// Google and TickTick accounts, for EventCacheUtil.selectedCalendarIds.
+	function cacheAccounts() {
+		return Shared.toArray(googleAccountsStore.accounts).concat(Shared.toArray(tickTickAccountsStore.accounts))
 	}
 
 	// A fetch round that couldn't load a cached calendar (offline right after boot, keyring still
 	// locked) keeps showing the cached events instead of an empty calendar.
 	function restoreCachedCalendars() {
-		var selected = EventCacheUtil.selectedCalendarIds(googleAccountsStore.accounts)
+		var selected = EventCacheUtil.selectedCalendarIds(cacheAccounts())
 		for (var calendarId in eventModel.cachedEventsByCalendar) {
 			if (!eventModel.eventsByCalendar[calendarId] && selected[calendarId]) {
 				eventModel.eventsByCalendar[calendarId] = eventModel.cachedEventsByCalendar[calendarId]
@@ -320,13 +461,10 @@ CalendarManager {
 
 	// After a fetch round without network errors: calendars that were fetched no longer need the
 	// cached copy, nor do ones whose account can't be fetched (signed out). Until the keyring gave
-	// the tokens, nothing Google was fetched yet, so everything stays.
+	// an account kind's tokens (Google, TickTick), nothing of it was fetched yet, so those stay.
 	function settleCachedCalendars() {
-		if (!googleAccountsStore.secretsLoaded) {
-			return
-		}
 		var fetchable = {}
-		var accounts = googleAccountsStore.fetchableAccounts
+		var accounts = Shared.toArray(googleAccountsStore.fetchableAccounts).concat(Shared.toArray(tickTickAccountsStore.fetchableAccounts))
 		for (var i = 0; i < accounts.length; i++) {
 			fetchable[accounts[i].id] = true
 		}
@@ -337,6 +475,11 @@ CalendarManager {
 			var accountId = calendarId.slice(0, calendarId.indexOf('::'))
 			if (eventModel.eventsByCalendar[calendarId] !== cached) {
 				continue // Fetched
+			}
+			var secretsLoaded = isTickTickAccountId(accountId) ? tickTickAccountsStore.secretsLoaded : googleAccountsStore.secretsLoaded
+			if (!secretsLoaded) {
+				remaining[calendarId] = cached // Not fetched yet
+				continue
 			}
 			if (!fetchable[accountId]) {
 				delete eventModel.eventsByCalendar[calendarId]
@@ -356,6 +499,9 @@ CalendarManager {
 		if (!eventItem) {
 			return ''
 		}
+		if (Tasks.isTask(eventItem)) {
+			return taskDetailsText(eventItem)
+		}
 		var lines = []
 		lines.push(LocaleFuncs.formatEventDuration(eventItem, {
 			relativeDate: timeModel.currentTime,
@@ -372,6 +518,33 @@ CalendarManager {
 		if (description) {
 			lines.push('')
 			lines.push(description.length > 300 ? description.substr(0, 300) + '…' : description)
+		}
+		return lines.join('\n')
+	}
+
+	// Tooltip text for a task: due date, list, start of the notes.
+	function taskDetailsText(task) {
+		var lines = []
+		var dueDay = Tasks.dueDay(task)
+		if (dueDay) {
+			var due = Shared.formatDateTime(new Date(dueDay + ' 00:00:00'), i18nc("short month+date format", "MMM d"))
+			if (task.dueTime) { // Timed TickTick tasks
+				var parts = String(task.dueTime).split(':')
+				var time = new Date(2000, 0, 1, Number(parts[0]), Number(parts[1]))
+				due = i18nc("date (%1) with time (%2)", "%1, %2", due, Shared.formatTime(time, appletConfig.timeFormat))
+			}
+			lines.push(i18nc("%1 = date", "Due %1", due))
+		} else {
+			lines.push(i18n("No due date"))
+		}
+		var list = getCalendar(task.calendarId)
+		if (list && list.summary) {
+			lines.push(list.summary)
+		}
+		var notes = Shared.plainText(task.notes || task.description)
+		if (notes) {
+			lines.push('')
+			lines.push(notes.length > 300 ? notes.substr(0, 300) + '…' : notes)
 		}
 		return lines.join('\n')
 	}
@@ -423,14 +596,22 @@ CalendarManager {
 			return (!!eventItem.canEdit || !!Shared.myResponse(eventItem))
 				&& !Shared.isHiddenCalendar(eventItem.calendarId, hiddenCalendars)
 		}))
-		var items = []
+		// A calendar both synced by Akonadi and signed in to directly: only the direct copy.
+		var pimDuplicates = PlasmaCalendarEventState.pimDuplicates(all, function(eventItem) {
+			return !!eventItem.canEdit || !!Shared.myResponse(eventItem)
+		})
+		var shown = []
 		for (var i = 0; i < all.length; i++) {
 			var titles = conflicts[Conflicts.eventKey(all[i])] || []
 			all[i].conflictsWith = titles.map(function(title) { return { summary: title } })
-			if (!inHiddenCalendar[i] && !Shared.isHiddenDeclined(all[i], showDeclined)) {
-				items.push(all[i])
+			if (!inHiddenCalendar[i] && !pimDuplicates[i] && !Shared.isHiddenDeclined(all[i], showDeclined)) {
+				shown.push(all[i])
 			}
 		}
+		// Settings > Views: the same event in two calendars shown once (among the ones shown, so a
+		// hidden calendar's copy never takes the shown one's place).
+		var duplicates = plasmoid.configuration.hideDuplicateEvents ? Shared.duplicateEvents(shown) : {}
+		var items = shown.filter(function(eventItem, index) { return !duplicates[index] })
 		eventModel.workingLocations = EventTypes.workingLocationMap(workingLocationItems, {
 			home: i18nc("working location", "Home"),
 			office: i18nc("working location", "Office"),
@@ -440,17 +621,31 @@ CalendarManager {
 	}
 
 	//--- CalendarManager: Event
-	function createEvent(calendarId, date, text) {
-		if (plasmoid.configuration.agendaNewEventRememberCalendar) {
+	// The calendar new events start in (agendaNewEventRememberCalendar); not a task list, so a new
+	// task doesn't make events default to it.
+	function rememberNewEventCalendar(calendarId) {
+		var calendar = getCalendar(calendarId)
+		if (plasmoid.configuration.agendaNewEventRememberCalendar && !(calendar && calendar.isTasklist)) {
 			plasmoid.configuration.agendaNewEventLastCalendarId = calendarId
 		}
+	}
+	// time: optional 'HH:mm' (a timed event), for the calendars that don't read it from the text.
+	function createEvent(calendarId, date, text, time) {
+		rememberNewEventCalendar(calendarId)
 
 		var calendarManager = managerWith(calendarId, 'createEvent')
 		if (calendarManager) {
-			calendarManager.createEvent(calendarId, date, text)
+			calendarManager.createEvent(calendarId, date, text, time || '')
 		} else {
 			logger.log('Could not createEvent: no calendar manager')
 		}
+	}
+
+	// Google Calendar reads the day, time and place from a quick add's text (its quickAdd); the
+	// others get the day and time from QuickParse.js.
+	function readsQuickAddText(calendarId) {
+		var calendarManager = getCalendarManager(calendarId)
+		return !!calendarManager && calendarManager.calendarManagerId === 'GoogleCalendar'
 	}
 
 	// Search the calendars that support it (Google) between timeMin and timeMax.
@@ -474,9 +669,7 @@ CalendarManager {
 
 	// params: optional query params (Google), eg: { sendUpdates: 'all', conferenceDataVersion: 1 }.
 	function createEventFromData(calendarId, eventData, done, params) {
-		if (plasmoid.configuration.agendaNewEventRememberCalendar) {
-			plasmoid.configuration.agendaNewEventLastCalendarId = calendarId
-		}
+		rememberNewEventCalendar(calendarId)
 		var calendarManager = managerWith(calendarId, 'createEventFromData')
 		if (calendarManager) {
 			calendarManager.createEventFromData(calendarId, eventData, done, params)
@@ -485,13 +678,40 @@ CalendarManager {
 		}
 	}
 
-	// done(err): optional, called once the server answered (Google).
+	// In progress (Tasks.isInProgress): kept by the widget, not by the services.
+	function setTaskInProgress(item, on) {
+		var keys = plasmoid.configuration.tasksInProgress || []
+		var next = Tasks.withProgress(keys, item, on)
+		if (next.length !== keys.length) {
+			plasmoid.configuration.tasksInProgress = next
+		}
+	}
+	// A task's mark from one list (and id) to another: a task moved to another list.
+	function moveTaskProgress(from, to) {
+		var keys = plasmoid.configuration.tasksInProgress || []
+		if (Array.prototype.indexOf.call(keys, Tasks.progressKey(from)) >= 0) {
+			plasmoid.configuration.tasksInProgress = Tasks.withProgress(Tasks.withProgress(keys, from, false), to, true)
+		}
+	}
+
+	// done(err): optional, called once the server answered (Google). A deleted task's in-progress
+	// mark goes once it's deleted.
 	function deleteEvent(calendarId, eventId, done) {
 		var calendarManager = managerWith(calendarId, 'deleteEvent')
 		if (calendarManager) {
-			calendarManager.deleteEvent(calendarId, eventId, done)
+			calendarManager.deleteEvent(calendarId, eventId, function(err) {
+				if (!err) {
+					eventModel.setTaskInProgress({ calendarId: calendarId, id: eventId }, false)
+				}
+				if (done) {
+					done.apply(null, arguments)
+				}
+			})
 		} else {
 			logger.log('Could not deleteEvent: no calendar manager')
+			if (done) {
+				done('no calendar manager')
+			}
 		}
 	}
 
@@ -502,6 +722,9 @@ CalendarManager {
 			calendarManager.deleteSeries(calendarId, seriesId, done)
 		} else {
 			logger.log('Could not deleteSeries: no calendar manager')
+			if (done) {
+				done('no calendar manager')
+			}
 		}
 	}
 
@@ -570,7 +793,8 @@ CalendarManager {
 		return Guests.knownGuests(eventModel.eventsData.items)
 	}
 
-	// options: optional { params } with query params for the update (Google).
+	// options: optional { params } with query params for the update (Google Calendar), or
+	// { done(err, item) } for tasks.
 	function setEventProperties(calendarId, eventId, args, options) {
 		var calendarManager = managerWith(calendarId, 'setEventProperties')
 		if (calendarManager) {
@@ -578,6 +802,267 @@ CalendarManager {
 		} else {
 			logger.log('Could not setEventProperties: no calendar manager')
 		}
+	}
+
+	//--- Tasks (see Tasks.js)
+	function isTask(item) {
+		return Tasks.isTask(item)
+	}
+
+	// Check (done) or uncheck a task. cb(err, item): optional, always called once saved or failed.
+	function toggleTask(item, done, cb) {
+		if (!Tasks.isTask(item) || !managerWith(item.calendarId, 'setEventProperties')) {
+			if (cb) {
+				cb('toggleTask: not a task', null)
+			}
+			return
+		}
+		// Done (once saved): no longer in progress.
+		var model = eventModel
+		var key = { calendarId: item.calendarId, id: item.id }
+		setEventProperties(item.calendarId, item.id, Tasks.toggleBody(done), { done: function(err) {
+			if (!err && done) {
+				model.setTaskInProgress(key, false)
+			}
+			if (cb) {
+				cb.apply(null, arguments)
+			}
+		} })
+	}
+
+	// Check (done) or uncheck a subtask of a task: a TickTick checklist item (subtaskId: its id in
+	// item.subtasks), else a task of the same list (Google: subtasks are tasks with a parent).
+	// cb(err, item): optional, always called; item is the task that was saved.
+	function toggleSubtask(item, subtaskId, done, cb) {
+		var calendarManager = Tasks.isTask(item) ? managerWith(item.calendarId, 'toggleSubtask') : null
+		if (calendarManager) {
+			calendarManager.toggleSubtask(item.calendarId, item.id, subtaskId, done, cb)
+			return
+		}
+		var subtask = Tasks.isTask(item) ? getEvent(item.calendarId, subtaskId) : null
+		if (!subtask) {
+			if (cb) {
+				cb('toggleSubtask: no such subtask', null)
+			}
+			return
+		}
+		toggleTask(subtask, done, cb)
+	}
+
+	// What the editor can set on a task of the list: { dueTime, priority, repeat, reminders,
+	// subtasks } (Tasks.capabilities: TickTick all, Google none).
+	function taskCapabilities(listId) {
+		var calendarManager = getCalendarManager(listId)
+		return Tasks.capabilities(calendarManager ? String(calendarManager.calendarManagerId) : '')
+	}
+
+	// Tasks can be put in another order within the list (Google; TickTick's API can't).
+	function supportsReorder(listId) {
+		return !!managerWith(listId, 'reorderTask')
+	}
+
+	// Put a task right after previousTaskId ('' : first) in its list, among its siblings (see
+	// GoogleTasksManager.reorderTask). cb(err, item): optional, always called.
+	function reorderTask(item, previousTaskId, cb) {
+		var calendarManager = Tasks.isTask(item) ? managerWith(item.calendarId, 'reorderTask') : null
+		if (!calendarManager) {
+			logger.log('Could not reorderTask: not supported')
+			if (cb) {
+				cb('reorderTask not supported', null)
+			}
+			return
+		}
+		calendarManager.reorderTask(item.calendarId, item.id, previousTaskId || '', cb)
+	}
+
+	// The task lists tasks can be added to or moved to: [{ id, summary, backgroundColor }].
+	// accountPrefix: optional, only that account's lists (the part of the ids before '::').
+	function getTaskLists(accountPrefix) {
+		var prefix = accountPrefix ? accountPrefix + '::' : ''
+		return getCalendarList().filter(function(c) {
+			return c.isTasklist === true
+				&& (!c.accessRole || c.accessRole === 'owner' || c.accessRole === 'writer')
+				&& (!prefix || String(c.id).indexOf(prefix) === 0)
+		}).map(function(c) {
+			return { id: c.id, summary: c.summary, backgroundColor: c.backgroundColor }
+		})
+	}
+
+	// The task lists selected in settings (their tasks are loaded), for the Tasks view:
+	// [{ id, name, color, group }], group: the account label (else the service's name).
+	function getSelectedTaskLists() {
+		var out = []
+		for (var i = 0; i < calendarManagerList.length; i++) {
+			var calendarManager = calendarManagerList[i]
+			var label = String(calendarManager.accountLabel || "")
+			var group = label || (calendarManager.calendarManagerId === 'TickTick' ? "TickTick" : "Google")
+			var list = calendarManager.getCalendarList()
+			for (var j = 0; j < list.length; j++) {
+				var calendar = list[j]
+				if (!calendar || !calendar.id || calendar.isTasklist !== true) {
+					continue
+				}
+				var selected = typeof calendarManager.isTasklistSelected === 'function' ? calendarManager.isTasklistSelected(calendar.id)
+					: typeof calendarManager.isProjectSelected === 'function' ? calendarManager.isProjectSelected(calendar.id)
+					: !!eventModel.eventsByCalendar[calendar.id]
+				if (!selected) {
+					continue
+				}
+				var entry = withListIcon(selectedCalendarEntry(calendar.id, calendar, label))
+				entry.group = group
+				out.push(entry)
+			}
+		}
+		return out.concat(cachedTaskLists(out))
+	}
+
+	// Before the keyring gave an account's token (at start), it has no tasks manager yet: its selected
+	// lists from the account's settings, those the event cache has tasks of, so the cached tasks show
+	// right away (the Tasks tab, the Day view) instead of after the first fetch.
+	// A task list's entry with the emoji its name starts with as its icon, like TickTick (TaskLists.
+	// splitIcon): { …, name: without it, icon, fullName: the name as stored (to rename it) }.
+	function withListIcon(entry) {
+		var split = TaskLists.splitIcon(entry.name)
+		entry.fullName = entry.name
+		entry.name = split.name
+		entry.icon = split.icon
+		return entry
+	}
+	function cachedTaskLists(shown) {
+		var managed = {}
+		for (var i = 0; i < calendarManagerList.length; i++) {
+			if (calendarManagerList[i].accountId) {
+				managed[String(calendarManagerList[i].accountId)] = true
+			}
+		}
+		var have = {}
+		shown.forEach(function(list) { have[list.id] = true })
+		var out = []
+		var addAccount = function(account, lists, selectedIds, fallbackGroup) {
+			if (!account || !account.id || managed[String(account.id)]) {
+				return
+			}
+			var group = String(account.label || fallbackGroup)
+			Shared.toArray(lists).forEach(function(list) {
+				var id = String(account.id) + '::' + list.id
+				if (have[id] || Shared.toArray(selectedIds).indexOf(list.id) < 0
+						|| !Object.prototype.hasOwnProperty.call(eventModel.cachedEventsByCalendar, id)) {
+					return
+				}
+				out.push(withListIcon({ id: id, name: String(list.title || list.name || ""), color: String(list.color || ""), group: group }))
+			})
+		}
+		Shared.toArray(googleAccountsStore.accounts).forEach(function(account) {
+			addAccount(account, account.tasklistList, account.tasklistIdList, "Google")
+		})
+		Shared.toArray(tickTickAccountsStore.accounts).forEach(function(account) {
+			addAccount(account, account.projectList, account.projectIdList, "TickTick")
+		})
+		return out
+	}
+
+	//--- Task lists: create, rename, delete, color, clear completed (see TaskLists.js)
+	// Emitted after a list changed (the Tasks view builds its rows again).
+	signal taskListsChanged()
+
+	// The accounts lists can be created in, for a "New list in…" picker:
+	// [{ id (the account prefix of its list ids), label, provider (calendarManagerId) }].
+	function getTaskAccounts() {
+		var out = []
+		for (var i = 0; i < calendarManagerList.length; i++) {
+			var calendarManager = calendarManagerList[i]
+			if (typeof calendarManager.createTaskList !== 'function' || !calendarManager.accountId) {
+				continue
+			}
+			var provider = String(calendarManager.calendarManagerId)
+			out.push({
+				id: String(calendarManager.accountId),
+				label: String(calendarManager.accountLabel || (provider === 'TickTick' ? "TickTick" : "Google")),
+				provider: provider,
+			})
+		}
+		return out
+	}
+	function taskListAccountManager(accountPrefix) {
+		for (var i = 0; i < calendarManagerList.length; i++) {
+			var calendarManager = calendarManagerList[i]
+			if (calendarManager.accountId === accountPrefix && typeof calendarManager.createTaskList === 'function') {
+				return calendarManager
+			}
+		}
+		return null
+	}
+
+	// { rename, delete, color, clearCompleted }: what can be done with the list.
+	function taskListCapabilities(listId) {
+		var calendarManager = managerWith(listId, 'taskListCapabilities')
+		return calendarManager ? calendarManager.taskListCapabilities(listId)
+			: { rename: false, delete: false, color: false, clearCompleted: false }
+	}
+	function supportsListEdit(listId) {
+		return TaskLists.hasAny(taskListCapabilities(listId))
+	}
+
+	// done(err, result) once the server answered, always called. removedListId: a deleted list,
+	// unloaded here (its tasks leave the views). merge: the list's tasks changed (the views are
+	// built again once).
+	function taskListDone(done, removedListId, merge) {
+		return function(err, result) {
+			if (!err) {
+				if (removedListId) {
+					delete eventModel.eventsByCalendar[removedListId]
+					delete eventModel.calendarPluginMap[removedListId]
+				}
+				if (removedListId || merge) {
+					mergeEvents()
+				}
+				taskListsChanged()
+			}
+			if (done) {
+				done(err || null, result || null)
+			}
+		}
+	}
+	// Call fnName(listId, args..., done) on the list's manager, else done(err).
+	function forwardTaskList(fnName, listId, args, done, removedListId, merge) {
+		var calendarManager = managerWith(listId, fnName)
+		if (!calendarManager) {
+			logger.log('Could not ' + fnName + ': not supported')
+			if (done) {
+				done(fnName + ' not supported', null)
+			}
+			return
+		}
+		calendarManager[fnName].apply(calendarManager, [listId].concat(args, [taskListDone(done, removedListId, merge)]))
+	}
+
+	// A new list in an account (accountPrefix: see getTaskAccounts), shown right away.
+	// done(err, list): list is { id, name }.
+	function createTaskList(accountPrefix, title, done) {
+		var calendarManager = taskListAccountManager(accountPrefix)
+		if (!calendarManager) {
+			logger.log('Could not createTaskList: no account')
+			if (done) {
+				done('createTaskList: no account', null)
+			}
+			return
+		}
+		calendarManager.createTaskList(title, taskListDone(done, ''))
+	}
+	function renameTaskList(listId, title, done) {
+		forwardTaskList('renameTaskList', listId, [title], done, '')
+	}
+	// The list and its tasks are deleted.
+	function deleteTaskList(listId, done) {
+		forwardTaskList('deleteTaskList', listId, [], done, listId)
+	}
+	// color: '#rrggbb' (TickTick).
+	function setTaskListColor(listId, color, done) {
+		forwardTaskList('setTaskListColor', listId, [color], done, '')
+	}
+	// The list's completed tasks are cleared (Google): they leave the views in one rebuild.
+	function clearCompleted(listId, done) {
+		forwardTaskList('clearCompleted', listId, [], done, '', true)
 	}
 
 	// Repeat rules can be edited (Google Calendar).
@@ -615,7 +1100,16 @@ CalendarManager {
 	function moveEvent(calendarId, eventId, destinationCalendarId, done, params) {
 		var calendarManager = managerWith(calendarId, 'moveEvent')
 		if (calendarManager) {
-			calendarManager.moveEvent(calendarId, eventId, destinationCalendarId, done, params)
+			// A task in progress keeps its mark in the other list (Google: maybe under a new id).
+			calendarManager.moveEvent(calendarId, eventId, destinationCalendarId, function(err, data) {
+				if (!err) {
+					eventModel.moveTaskProgress({ calendarId: calendarId, id: eventId },
+						{ calendarId: destinationCalendarId, id: data && data.id ? data.id : eventId })
+				}
+				if (done) {
+					done.apply(null, arguments)
+				}
+			}, params)
 		} else {
 			logger.log('Could not moveEvent: no calendar manager')
 			if (done) {
@@ -677,7 +1171,9 @@ CalendarManager {
 					continue
 				}
 				listed[calendar.id] = true
-				out.push(selectedCalendarEntry(calendar.id, calendar, group))
+				if (calendar.inCalendarMenu !== false) { // false: its events are in another entry
+					out.push(selectedCalendarEntry(calendar.id, calendar, group))
+				}
 			}
 		}
 		// Calendars a manager doesn't list (iCalendar files): look them up by id.

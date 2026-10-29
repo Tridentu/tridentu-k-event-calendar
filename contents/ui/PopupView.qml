@@ -5,6 +5,7 @@ import org.kde.plasma.components as PlasmaComponents3
 
 import "lib"
 import "Shared.js" as Shared
+import "Tasks.js" as Tasks
 import "Undo.js" as Undo
 import "KeyNav.js" as KeyNav
 import "./weather/WeatherApi.js" as WeatherApi
@@ -68,18 +69,69 @@ MouseArea {
 
 	// Month mode: only a full month view with event titles, like mobile calendar apps.
 	// Week mode: only the week view. Both use the month/week popup size.
-	readonly property bool monthMode: plasmoid.configuration.popupMode === 'month'
-	readonly property bool weekMode: plasmoid.configuration.popupMode === 'week'
-	readonly property bool dayMode: plasmoid.configuration.popupMode === 'today'
+	// Tasks mode: the task lists (Tasks tab), when some are selected in settings; else the month.
+	property bool taskListsSelected: false
+	function refreshTaskLists() {
+		taskListsSelected = !!eventModel && eventModel.getSelectedTaskLists().length > 0
+	}
+	// Views offered in the header (Settings > Views > Tabs); the shown one falls back to the first
+	// of them when its tab is hidden (or Tasks has no lists).
+	readonly property var hiddenViewTabs: plasmoid.configuration.hiddenViewTabs || []
+	function viewOffered(mode) {
+		return hiddenViewTabs.indexOf(mode) < 0 && (mode !== 'tasks' || taskListsSelected)
+	}
+	// The view shown: Settings > Views > Default view (popupMode) when the popup opens, or with
+	// "Open in the last used view" (popupOpenLastView) the one used last (popupLastView, kept over
+	// restarts). Switching views (tabs, a click on a month's day, keys) changes only this, not the
+	// Default view.
+	readonly property bool openLastView: plasmoid.configuration.popupOpenLastView
+	property string currentView: openLastView && plasmoid.configuration.popupLastView
+		? plasmoid.configuration.popupLastView : plasmoid.configuration.popupMode
+	function showDefaultView() {
+		if (!openLastView) {
+			currentView = plasmoid.configuration.popupMode
+		}
+	}
+	onCurrentViewChanged: {
+		closeOverlays() // Overlays belong to the view they were opened from.
+		if (openLastView) {
+			plasmoid.configuration.popupLastView = currentView
+		}
+	}
+	onOpenLastViewChanged: {
+		if (openLastView) {
+			plasmoid.configuration.popupLastView = currentView
+		}
+	}
+	// The Day view needs the hourly forecast (also when the popup is made in it: see
+	// Component.onCompleted, no change fires then).
+	onViewModeChanged: logic.updateWeather(true)
+	readonly property string viewMode: {
+		var mode = currentView
+		if (viewOffered(mode)) {
+			return mode
+		}
+		var modes = ['month', 'week', 'today', 'classic', 'tasks']
+		for (var i = 0; i < modes.length; i++) {
+			if (viewOffered(modes[i])) {
+				return modes[i]
+			}
+		}
+		return 'month'
+	}
+	readonly property bool monthMode: viewMode === 'month'
+	readonly property bool weekMode: viewMode === 'week'
+	readonly property bool dayMode: viewMode === 'today'
+	readonly property bool tasksMode: viewMode === 'tasks'
 	readonly property bool hourGridMode: weekMode || dayMode // Both use WeekView
-	readonly property bool fullViewMode: monthMode || hourGridMode
+	readonly property bool fullViewMode: monthMode || hourGridMode || tasksMode
 	property bool showMeteogram: plasmoid.configuration.widgetShowMeteogram && !fullViewMode
 	property bool showTimer: plasmoid.configuration.widgetShowTimer && !fullViewMode
 	// The agenda view is the agenda list only (plus optional meteogram / timer); the month view
 	// is the calendar.
 	property bool showAgenda: !fullViewMode
 	property bool showCalendar: monthMode
-	readonly property bool showViewTabs: plasmoid.configuration.showViewTabs
+	readonly property string viewSwitcher: plasmoid.configuration.viewSwitcher
 	// The agenda view (and its meteogram / timer) is a list: cap its width and center it.
 	readonly property real agendaMaxWidth: Kirigami.Units.gridUnit * 32
 	// Month and week views put the top bar inside their header row, the agenda layout above.
@@ -100,7 +152,13 @@ MouseArea {
 		agendaView.scrollToDate(selectedDate)
 	}
 
-	Component.onCompleted: deferredUpdateUI()
+	Component.onCompleted: {
+		refreshTaskLists()
+		deferredUpdateUI()
+		if (dayMode || showMeteogram) {
+			logic.updateWeather(true)
+		}
+	}
 
 	onMonthViewDateChanged: {
 		logger.debug('onMonthViewDateChanged', monthViewDate)
@@ -129,6 +187,7 @@ MouseArea {
 		onShowDetails: function(eventItem) { popup.activateEvent(eventItem) }
 		onEditEvent: function(eventItem) { popup.editEvent(eventItem) }
 		onDuplicateEvent: function(eventItem) { popup.duplicateEvent(eventItem) }
+		onDeleteRequested: function(eventItem, wholeSeries) { popup.deleteWithUndo(eventItem, wholeSeries) }
 	}
 	//--- Undo (delete, move)
 	// Show "text" with an Undo button for a while; a newer offer replaces it.
@@ -147,7 +206,9 @@ MouseArea {
 		if (wholeSeries) {
 			var seriesId = eventItem.recurringEventId
 			eventModel.deleteSeries(calendarId, seriesId, function(err) {
-				if (!err && undoable) {
+				if (err) {
+					showError(i18n("Couldn't delete the event"))
+				} else if (undoable) {
 					offerUndo(i18n("Repeating event deleted"), function() {
 						eventModel.restoreEvent(calendarId, seriesId, null, restored)
 					})
@@ -161,17 +222,30 @@ MouseArea {
 		if (undoable && !eventItem.recurringEventId) {
 			copy = Undo.restoreCopy(eventModel.getEvent(calendarId, eventId) || eventItem)
 		}
+		var deletedText = Tasks.isTask(eventItem) ? i18n("Task deleted") : i18n("Event deleted")
 		eventModel.deleteEvent(calendarId, eventId, function(err) {
-			if (!err && undoable) {
-				offerUndo(i18n("Event deleted"), function() {
+			if (err) {
+				showError(Tasks.isTask(eventItem) ? i18n("Couldn't delete the task") : i18n("Couldn't delete the event"))
+			} else if (undoable) {
+				offerUndo(deletedText, function() {
 					eventModel.restoreEvent(calendarId, eventId, copy, restored)
 				})
 			}
 		})
 	}
 
+	// Month and agenda delegates hand over ListModel copies (nested arrays become models): the
+	// original event object when it's loaded.
+	function originalEvent(eventItem) {
+		var original = null
+		if (eventItem && eventItem.calendarId && eventItem.id && eventModel.eventsByCalendar[eventItem.calendarId]) {
+			original = eventModel.getEvent(eventItem.calendarId, eventItem.id)
+		}
+		return original || eventItem
+	}
+
 	function showEventMenu(eventItem, item, x, y) {
-		eventContextMenu.openFor(eventItem, item, x, y)
+		eventContextMenu.openFor(originalEvent(eventItem), item, x, y)
 	}
 
 	function activateEvent(eventItem) {
@@ -184,13 +258,7 @@ MouseArea {
 			}
 			return
 		}
-		// Month and agenda delegates hand over ListModel copies (nested arrays become models);
-		// show the original event object.
-		var original = null
-		if (eventItem.calendarId && eventItem.id && eventModel.eventsByCalendar[eventItem.calendarId]) {
-			original = eventModel.getEvent(eventItem.calendarId, eventItem.id)
-		}
-		detailsEvent = original || eventItem
+		detailsEvent = originalEvent(eventItem)
 	}
 	function closeEventDetails() {
 		detailsEvent = null
@@ -207,6 +275,26 @@ MouseArea {
 		searchOpen = false
 	}
 	property bool quickAddOpen: false
+	//--- Go to date (the G key): the view goes to the day typed.
+	property bool goToDateOpen: false
+	function openGoToDate() {
+		closeOverlays()
+		goToDateOpen = true
+	}
+	function goToDay(day) {
+		goToDateOpen = false
+		day = Shared.startOfDay(day)
+		if (hourGridMode && weekViewLoader.item) {
+			weekViewLoader.item.weekStart = weekViewLoader.item.startOfWeek(day)
+			return
+		}
+		// Month and Agenda: the day selected (the agenda scrolls to it).
+		if (day.getFullYear() !== monthViewDate.getFullYear() || day.getMonth() !== monthViewDate.getMonth()) {
+			monthViewDate = day
+		}
+		monthView.setSelectedDate(day)
+		scrollToSelection()
+	}
 	function openQuickAdd() {
 		quickAddOpen = true
 	}
@@ -237,7 +325,7 @@ MouseArea {
 			return
 		}
 		pendingDayViewDate = day
-		plasmoid.configuration.popupMode = 'today'
+		currentView = 'today'
 	}
 
 	//--- New / edit event form, on top of everything.
@@ -247,21 +335,42 @@ MouseArea {
 	property var editorStart: null
 	property string editorTitle: ""
 	property var editorTemplate: null // Duplicate: the new event starts as a copy of this one
-	function newEvent(date, startTime, title) {
+	property bool editorTask: false // New task (due on editorDate) instead of an event
+	property string editorCalendarId: "" // New event / task: on this calendar / task list
+	property bool editorTaskNoDue: false // New task without a due date
+	function newEvent(date, startTime, title, calendarId) {
 		editorEvent = null
 		editorTemplate = null
+		editorTask = false
+		editorCalendarId = calendarId || ""
+		editorTaskNoDue = false
 		editorDate = date || selectedDate || new Date()
 		editorStart = startTime || null
 		editorTitle = title || ""
 		editorOpen = true
 	}
+	// A new task due on date (the editor in task mode), on calendarId when that's a task list.
+	// No date (null): without a due date.
+	function newTask(date, title, calendarId) {
+		newEvent(date, null, title, calendarId)
+		editorTask = true
+		editorTaskNoDue = !date
+	}
+	// Any task list to add tasks to.
+	function hasTaskLists() {
+		return eventModel.getCalendarList().some(function(c) { return c.isTasklist })
+	}
 	function editEvent(eventItem) {
-		editorEvent = eventItem
+		editorEvent = originalEvent(eventItem)
 		editorTemplate = null
+		editorTask = false
+		editorCalendarId = ""
 		editorOpen = true
 	}
 	function duplicateEvent(eventItem) {
 		editorEvent = null
+		editorTask = false
+		editorCalendarId = ""
 		editorTemplate = eventItem
 		editorDate = eventItem.startDateTime || new Date()
 		editorStart = null
@@ -282,12 +391,16 @@ MouseArea {
 		detailsEvent = null
 		searchOpen = false
 		quickAddOpen = false
+		goToDateOpen = false
 		closeImport()
+		if (tasksViewLoader.item) {
+			tasksViewLoader.item.closeManaging()
+		}
 	}
-	// Overlays belong to the view they were opened from.
+	// The Default view changed in Settings: show it.
 	Connections {
 		target: plasmoid.configuration
-		function onPopupModeChanged() { popup.closeOverlays() }
+		function onPopupModeChanged() { popup.currentView = plasmoid.configuration.popupMode }
 	}
 	// The open event may have been edited (or deleted) meanwhile: show the current version.
 	Connections {
@@ -315,7 +428,13 @@ MouseArea {
 	Connections {
 		target: popup.eventModel
 		function onFetchingData() { popup.refreshing = true }
-		function onAllDataFetched() { popup.refreshing = false }
+		function onAllDataFetched() {
+			popup.refreshing = false
+			popup.refreshTaskLists()
+		}
+		function onCalendarFetched(calendarId, data) { popup.refreshTaskLists() }
+		function onDataCleared() { popup.refreshTaskLists() }
+		function onTaskListsChanged() { popup.refreshTaskLists() } // A list made or deleted
 	}
 	Timer {
 		// Never leave the spinner stuck if a fetch doesn't report back.
@@ -331,16 +450,20 @@ MouseArea {
 		anchors.right: parent.right
 		monthViewItem: monthView
 		weekViewItem: weekViewLoader.item
-		showViewTabs: popup.showViewTabs
+		currentMode: popup.viewMode
+		showTasksTab: popup.taskListsSelected
+		tasksMode: popup.tasksMode
+		viewSwitcher: popup.viewSwitcher
 		showPinButton: popup.showPinButton
 		refreshing: popup.refreshing
 		onViewSelected: function(mode) {
 			popup.closeOverlays()
-			plasmoid.configuration.popupMode = mode
+			popup.currentView = mode
 		}
-		onNewEventClicked: popup.openQuickAdd()
+		onNewEventClicked: popup.tasksMode ? popup.newTask(null) : popup.openQuickAdd()
 		onSearchClicked: popup.openSearch()
 		onRefreshClicked: logic.update()
+		onGoToDateRequested: popup.openGoToDate()
 	}
 
 	// Problems fetching data, above every view. Offline: the last loaded events stay visible and
@@ -367,7 +490,7 @@ MouseArea {
 			if (!network) {
 				return errorText
 			}
-			var retry = secondsLeft <= 0 ? i18n("Retrying…")
+			var retry = logic.retrying || secondsLeft <= 0 ? i18n("Retrying…")
 				: secondsLeft < 60 ? i18np("Retrying in %1 second.", "Retrying in %1 seconds.", secondsLeft)
 				: i18np("Retrying in %1 minute.", "Retrying in %1 minutes.", Math.ceil(secondsLeft / 60))
 			return i18n("Can't connect. Showing the last loaded events.") + " " + retry
@@ -375,8 +498,10 @@ MouseArea {
 		actions: [
 			Kirigami.Action {
 				visible: errorBanner.network
+				// While a retry runs: disabled, says so.
+				enabled: !logic.retrying
 				icon.name: "view-refresh"
-				text: i18n("Retry Now")
+				text: logic.retrying ? i18n("Retrying…") : i18n("Retry Now")
 				onTriggered: logic.retryNow()
 			},
 			Kirigami.Action {
@@ -386,6 +511,18 @@ MouseArea {
 				onTriggered: errorBanner.errorText = ""
 			}
 		]
+		// A retry runs: a thin running bar along the banner's bottom edge.
+		PlasmaComponents3.ProgressBar {
+			visible: errorBanner.network && (logic.retrying || popup.refreshing)
+			anchors.left: parent.left
+			anchors.right: parent.right
+			anchors.bottom: parent.bottom
+			anchors.leftMargin: Kirigami.Units.cornerRadius
+			anchors.rightMargin: Kirigami.Units.cornerRadius
+			height: 3
+			indeterminate: true
+			Accessible.name: i18n("Retrying…")
+		}
 		Timer {
 			interval: 1000
 			repeat: true
@@ -485,6 +622,20 @@ MouseArea {
 		}
 
 		OverlayCard {
+			visible: popup.goToDateOpen
+			anchors.fill: parent
+			onOutsideClicked: popup.goToDateOpen = false
+			cardComponent: visible ? goToDateCard : null
+			Component {
+				id: goToDateCard
+				GoToDateView {
+					onCloseRequested: popup.goToDateOpen = false
+					onDayChosen: function(day) { popup.goToDay(day) }
+				}
+			}
+		}
+
+		OverlayCard {
 			id: quickAddOverlay
 			visible: popup.quickAddOpen
 			anchors.fill: parent
@@ -495,9 +646,17 @@ MouseArea {
 				QuickAddView {
 					date: popup.selectedDate
 					onCloseRequested: popup.closeQuickAdd()
-					onMoreOptionsRequested: function(title) {
+					onMoreOptionsRequested: function(title, calendarId, isTasklist) {
 						popup.closeQuickAdd()
-						popup.newEvent(popup.selectedDate, null, title)
+						if (isTasklist) {
+							popup.newTask(popup.selectedDate, title, calendarId)
+						} else {
+							popup.newEvent(popup.selectedDate, null, title, calendarId)
+						}
+					}
+					onNewTaskRequested: function(title) {
+						popup.closeQuickAdd()
+						popup.newTask(popup.selectedDate, title)
 					}
 				}
 			}
@@ -534,6 +693,9 @@ MouseArea {
 					initialStart: popup.editorStart
 					initialTitle: popup.editorTitle
 					templateEvent: popup.editorTemplate
+					newTask: popup.editorTask
+					initialNoDue: popup.editorTask && popup.editorTaskNoDue
+					initialCalendarId: popup.editorCalendarId
 					onCloseRequested: popup.closeEditor()
 				}
 			}
@@ -570,9 +732,23 @@ MouseArea {
 		}
 	}
 
+	// The task lists: the whole width (TasksView centers its column, the scroll bar at the edge).
+	Loader {
+		id: tasksViewLoader
+		active: popup.tasksMode
+		visible: active
+		anchors.top: widgetGrid.top
+		anchors.bottom: widgetGrid.bottom
+		anchors.left: widgetGrid.left
+		anchors.right: widgetGrid.right
+		sourceComponent: TasksView {
+			eventModel: popup.eventModel
+		}
+	}
+
 	GridLayout {
 		id: widgetGrid
-		visible: !popup.hourGridMode
+		visible: !popup.hourGridMode && !popup.tasksMode
 		anchors.fill: parent
 		anchors.margins: popup.padding
 		anchors.topMargin: popup.viewTabsHeight
@@ -652,6 +828,7 @@ MouseArea {
 			id: monthView
 			visible: showCalendar
 			showHeader: false
+			islands: appletConfig.islands
 			borderOpacity: appletConfig.faintGridLineOpacity
 			showWeekNumbers: plasmoid.configuration.monthShowWeekNumbers
 			highlightCurrentDayWeek: true
@@ -662,27 +839,28 @@ MouseArea {
 			Layout.fillHeight: true
 			Layout.alignment: Qt.AlignCenter
 
+			eventTitles: popup.monthMode
 			// Multi-day events as bars across the days (with event titles, ie: the month popup mode).
 			spanBarsEnabled: true
 			// Events can be dragged to other days (with event titles).
 			eventDragEnabled: true
 			eventDragModel: popup.eventModel
 
-			onDaysRebuilt: parseGCalEvents(popup.eventModel.eventsData)
+			onDaysRebuilt: popup.updateMonth()
 			// The bar lanes depend on how many event rows fit in a day cell. Refilled right away
 			// (in the same frame as the layout change): a deferred refill showed the cells first
 			// filled the other way, then reordered.
 			onEventRowCapacityChanged: if (spanBarsActive) reparseGCalEvents()
 			onSpanBarsActiveChanged: reparseGCalEvents()
 			function reparseGCalEvents() {
-				parseGCalEvents(popup.eventModel.eventsData)
+				popup.updateMonth()
 			}
 
 			function parseGCalEvents(data) {
 				if (!(data && data.items)) {
 					return
 				}
-				monthView.setEvents(data.items)
+				monthView.setEvents(data.items) // Leaves the tasks out (they're in the Agenda and the Tasks tab)
 			}
 
 			onDayDoubleClicked: function(dayData) {
@@ -754,22 +932,41 @@ MouseArea {
 	//--- Weather for the views
 	readonly property bool weatherInViews: plasmoid.configuration.weatherShowInViews
 
+	// Only the views on screen are rebuilt; the others are marked stale and rebuilt when shown
+	// (a refresh while in the Day view doesn't build the agenda and the month nobody sees).
+	property bool agendaStale: false
+	property bool monthStale: false
 	function updateUI() {
 		updateUITimer.stop()
 
-		agendaModel.parseGCalEvents(eventModel.eventsData)
 		agendaModel.parseWeatherForecast(root.weatherByDay)
-		monthView.parseGCalEvents(eventModel.eventsData)
+		updateAgenda()
+		updateMonth()
 		if (weekViewLoader.item) {
 			weekViewLoader.item.rebuild()
 		}
 		scrollToSelection()
 	}
+	function updateAgenda() {
+		agendaStale = !showAgenda
+		if (showAgenda) {
+			agendaModel.parseGCalEvents(eventModel.eventsData)
+		}
+	}
+	function updateMonth() {
+		monthStale = !showCalendar
+		if (showCalendar) {
+			monthView.parseGCalEvents(eventModel.eventsData)
+		}
+	}
+	onShowAgendaChanged: if (showAgenda && agendaStale) updateAgenda()
+	onShowCalendarChanged: if (showCalendar && monthStale) updateMonth()
 
-	//--- Keyboard (KeyNav.js): arrows, Enter, N, / or Ctrl+F, T, 1-4. Cards and text fields keep
-	// their keys; Esc is left to the cards and to Plasma (closes the popup).
-	readonly property bool anyOverlayOpen: editorOpen || !!detailsEvent || searchOpen || quickAddOpen || importOpen
-	readonly property string currentViewMode: monthMode ? 'month' : weekMode ? 'week' : dayMode ? 'today' : 'classic'
+	//--- Keyboard (KeyNav.js): arrows, Enter, N, / or Ctrl+F, T, 1-5. Cards and text fields keep
+	// their keys; Esc is left to the cards and to Plasma (closes the popup). Tasks tab: Up / Down,
+	// Enter, Space, E and Delete act on its highlighted task, N goes to "Add a task…".
+	readonly property bool anyOverlayOpen: editorOpen || !!detailsEvent || searchOpen || quickAddOpen || importOpen || goToDateOpen
+	readonly property string currentViewMode: monthMode ? 'month' : weekMode ? 'week' : dayMode ? 'today' : tasksMode ? 'tasks' : 'classic'
 	// Take the keys when the popup opens and when the last card closes (its focus is gone).
 	function focusForKeys() {
 		if (!anyOverlayOpen) {
@@ -780,6 +977,12 @@ MouseArea {
 
 	Keys.onPressed: function(event) {
 		if (anyOverlayOpen || KeyNav.isTextInput(Window.activeFocusItem)) {
+			return
+		}
+		// Esc on the Tasks tab's "Manage lists": back to the tasks.
+		if (event.key === Qt.Key_Escape && tasksMode && tasksViewLoader.item && tasksViewLoader.item.managing) {
+			tasksViewLoader.item.closeManaging()
+			event.accepted = true
 			return
 		}
 		var action = KeyNav.actionFor(event.key, event.modifiers, currentViewMode)
@@ -808,6 +1011,9 @@ MouseArea {
 			case 'today':
 				if (nav) nav.goToday(); else monthView.resetToToday()
 				return true
+			case 'goToDate':
+				openGoToDate()
+				return true
 			case 'move':
 				var date = Shared.startOfDay(Shared.addDays(selectedDate, action.days))
 				if (date.getFullYear() !== monthViewDate.getFullYear() || date.getMonth() !== monthViewDate.getMonth()) {
@@ -820,6 +1026,12 @@ MouseArea {
 				showDayView(selectedDate)
 				return true
 			case 'new':
+				if (tasksMode) {
+					if (!(tasksViewLoader.item && tasksViewLoader.item.focusQuickAdd())) {
+						newTask(null)
+					}
+					return true
+				}
 				var day = keyDate()
 				if (!Shared.isSameDate(day, selectedDate)) {
 					selectedDate = day
@@ -829,10 +1041,25 @@ MouseArea {
 			case 'search':
 				openSearch()
 				return true
+			case 'taskMove':
+				if (tasksViewLoader.item) {
+					tasksViewLoader.item.moveKeyRow(action.delta)
+					return true
+				}
+				return false
+			case 'taskOpen':
+			case 'taskToggle':
+			case 'taskEdit':
+			case 'taskDelete':
+				var actionName = { taskOpen: 'open', taskToggle: 'toggle', taskEdit: 'edit', taskDelete: 'delete' }[action.type]
+				return !!tasksViewLoader.item && tasksViewLoader.item.keyAction(actionName)
 			case 'view':
-				if (action.mode !== plasmoid.configuration.popupMode) {
+				if (!viewOffered(action.mode)) {
+					return false
+				}
+				if (action.mode !== currentView) {
 					closeOverlays()
-					plasmoid.configuration.popupMode = action.mode
+					currentView = action.mode
 				}
 				return true
 		}

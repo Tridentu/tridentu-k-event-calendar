@@ -21,16 +21,16 @@ ConfigPage {
 
 	// Format presets; "" means the locale default. The last entry is "Custom".
 	readonly property var timePresets: [
-		{ format: "", text: i18n("Default (%1)", Qt.formatTime(new Date(), localeTimeFormat)) },
-		{ format: "HH:mm", text: Qt.formatTime(new Date(), "HH:mm") + " " + i18n("(24-hour)") },
-		{ format: "h:mm AP", text: Qt.formatTime(new Date(), "h:mm AP") + " " + i18n("(12-hour)") },
-		{ format: localeTimeFormat.replace('mm', 'mm:ss'), text: Qt.formatTime(new Date(), localeTimeFormat.replace('mm', 'mm:ss')) + " " + i18n("(with seconds)") },
+		{ format: "", text: i18n("Default (%1)", Shared.formatTime(new Date(), localeTimeFormat)) },
+		{ format: "HH:mm", text: Shared.formatTime(new Date(), "HH:mm") + " " + i18n("(24-hour)") },
+		{ format: "h:mm AP", text: Shared.formatTime(new Date(), "h:mm AP") + " " + i18n("(12-hour)") },
+		{ format: localeTimeFormat.replace('mm', 'mm:ss'), text: Shared.formatTime(new Date(), localeTimeFormat.replace('mm', 'mm:ss')) + " " + i18n("(with seconds)") },
 	]
 	readonly property var datePresets: [
-		{ format: "", text: i18n("Default (%1)", Qt.formatDate(new Date(), localeDateFormat)) },
-		{ format: longDateNoWeekday, text: Qt.formatDate(new Date(), longDateNoWeekday) },
-		{ format: "ddd d MMM", text: Qt.formatDate(new Date(), "ddd d MMM") },
-		{ format: "MMM d", text: Qt.formatDate(new Date(), "MMM d") },
+		{ format: "", text: i18n("Default (%1)", Shared.formatDate(new Date(), localeDateFormat)) },
+		{ format: longDateNoWeekday, text: Shared.formatDate(new Date(), longDateNoWeekday) },
+		{ format: "ddd d MMM", text: Shared.formatDate(new Date(), "ddd d MMM") },
+		{ format: "MMM d", text: Shared.formatDate(new Date(), "MMM d") },
 	]
 
 	// A format combo: presets + "Custom…" that shows the text field.
@@ -73,7 +73,7 @@ ConfigPage {
 		}
 		Label {
 			visible: picker.showCustom
-			text: formatField.value ? Qt.formatDateTime(new Date(), formatField.value) : ""
+			text: formatField.value ? Shared.formatDateTime(new Date(), formatField.value) : ""
 			opacity: 0.7
 		}
 	}
@@ -129,7 +129,7 @@ ConfigPage {
 			FormCard.FormDelegateSeparator {}
 			FormConfigSpin {
 				label: i18n("Maximum height")
-				description: i18n("0 = fit the panel")
+				hint: i18n("0 = fit the panel")
 				configKey: 'clockMaxHeight'
 				suffix: i18n(" px")
 				from: 0
@@ -152,9 +152,9 @@ ConfigPage {
 				description: i18n("Eg: the date")
 				configKey: 'clockShowLine2'
 			}
-			FormCard.FormDelegateSeparator {}
+			FormCard.FormDelegateSeparator { visible: clockShowLine2.checked }
 			LabeledRow {
-				enabled: clockShowLine2.checked
+				visible: clockShowLine2.checked
 				title: i18n("Format")
 				FormatPicker {
 					Layout.fillWidth: true
@@ -162,15 +162,15 @@ ConfigPage {
 					presets: page.datePresets
 				}
 			}
-			FormCard.FormDelegateSeparator {}
+			FormCard.FormDelegateSeparator { visible: clockShowLine2.checked }
 			FormConfigSwitch {
-				enabled: clockShowLine2.checked
+				visible: clockShowLine2.checked
 				text: i18n("Bold")
 				configKey: 'clockLineBold2'
 			}
-			FormCard.FormDelegateSeparator {}
+			FormCard.FormDelegateSeparator { visible: clockShowLine2.checked }
 			LabeledRow {
-				enabled: clockShowLine2.checked
+				visible: clockShowLine2.checked
 				title: i18n("Size")
 				ConfigSlider {
 					Layout.fillWidth: true
@@ -192,18 +192,48 @@ ConfigPage {
 				text: i18n("Show next to the clock")
 				configKey: 'clockShowNextEvent'
 			}
-			FormCard.FormDelegateSeparator {}
+			FormCard.FormDelegateSeparator { visible: clockShowNextEvent.checked }
 			FormConfigSpin {
-				enabled: clockShowNextEvent.checked
+				visible: clockShowNextEvent.checked
 				label: i18n("When it starts within")
 				configKey: 'clockNextEventMinutes'
 				suffix: i18n(" min")
 				from: 5
 				to: 1440
 			}
-			FormCard.FormDelegateSeparator {}
+			FormCard.FormDelegateSeparator { visible: clockShowNextEvent.checked }
 			FormConfigSwitch {
-				enabled: clockShowNextEvent.checked
+				visible: clockShowNextEvent.checked
+				text: i18n("Skip all-day events")
+				description: i18n("They still show in the agenda.")
+				configKey: 'clockNextEventSkipAllDay'
+			}
+			FormCard.FormDelegateSeparator { visible: clockShowNextEvent.checked }
+			FormConfigSwitch {
+				visible: clockShowNextEvent.checked
+				text: i18n("Only meetings with a video link")
+				configKey: 'clockNextEventLinkOnly'
+			}
+			FormCard.FormDelegateSeparator { visible: clockShowNextEvent.checked }
+			FormConfigSwitch {
+				visible: clockShowNextEvent.checked
+				text: i18n("Only accepted invitations")
+				description: i18n("Not the ones answered maybe or not answered yet.")
+				configKey: 'clockNextEventAcceptedOnly'
+			}
+			FormCard.FormDelegateSeparator { visible: clockShowNextEvent.checked }
+			FormConfigSpin {
+				visible: clockShowNextEvent.checked
+				label: i18n("Longest title")
+				hint: i18n("0: as much as fits.")
+				configKey: 'clockNextEventMaxTitle'
+				suffix: i18nc("characters, after a number", " characters")
+				from: 0
+				to: 100
+			}
+			FormCard.FormDelegateSeparator { visible: clockShowNextEvent.checked }
+			FormConfigSwitch {
+				visible: clockShowNextEvent.checked
 				text: i18n("Progress of the current meeting")
 				description: i18n("A thin bar under the meeting's name, in its calendar's color.")
 				configKey: 'clockShowMeetingProgress'

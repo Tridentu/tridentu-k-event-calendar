@@ -8,6 +8,7 @@ import "EventBuckets.js" as EventBuckets
 import "LocaleFuncs.js" as LocaleFuncs
 import "MeetingLink.js" as MeetingLink
 import "Shared.js" as Shared
+import "Tasks.js" as Tasks
 import "TimeZone.js" as TimeZone
 import "WeekDrag.js" as WeekDrag
 import "lib/ColorUtil.js" as ColorUtil
@@ -39,6 +40,8 @@ Item {
 	// 7: week view. 1: today / day view (the same hour grid with one wide column).
 	property int dayCount: 7
 	readonly property bool singleDay: dayCount === 1
+	// Day view: the tasks strip above the hour grid is open (this session).
+	property bool dayTasksExpanded: true
 	// Week view without the weekend (the locale's working days). Still whole weeks: navigation and
 	// weekStart (the first day of week setting) stay the same, only the columns change.
 	property bool workWeek: false
@@ -64,21 +67,49 @@ Item {
 	signal weatherRetryRequested()
 	readonly property bool showWeather: Object.keys(weatherByDay).length > 0 || weatherIsSetup
 
-	// Day view: the day grid (capped width) with the weather panel beside it, both centered.
-	// Too narrow for both: the panel becomes a compact row above the grid.
-	readonly property real weatherPanelWidth: Kirigami.Units.gridUnit * 13
-	readonly property real weatherGap: Kirigami.Units.gridUnit * 1.5 // Each side of the space between day and weather
-	readonly property bool weatherBeside: singleDay && showWeather && width >= Kirigami.Units.gridUnit * 36
+	// Day view: the weather on the left of the day grid (capped width) and the day's tasks on its
+	// right, all centered. Not enough room: the tasks become a strip above the grid, then the
+	// weather a compact row above it.
+	// Both side columns as wide as each other: a share of the popup, within limits.
+	readonly property real sidePanelWidth: Math.round(Math.min(Kirigami.Units.gridUnit * 17, Math.max(Kirigami.Units.gridUnit * 12, width * 0.27)))
+	readonly property real weatherPanelWidth: sidePanelWidth
+	readonly property real tasksPanelWidth: sidePanelWidth
+	readonly property real weatherGap: Kirigami.Units.gridUnit // Each side of the space between the grid and a panel
+	// Islands style: the hour grid (with the day names and the all-day events) is a card
+	// (IslandCard); in the Day view the weather and the tasks are cards too, a card gap apart.
+	readonly property bool islands: appletConfig.islands
+	readonly property real panelGap: islands ? appletConfig.cardGap : weatherGap * 2 // Between the grid and a panel
+	// Islands: no extra room at the popup's edges, its own padding is the margin (one more card gap
+	// doubled it); the shadows fit in that padding.
+	readonly property real islandsEdge: 0
+	readonly property real minDayGridWidth: Kirigami.Units.gridUnit * 14
+	readonly property bool dayHasTaskLists: dayTasksStrip.hasLists
+	// The Day view's panels the user wants (Settings > Views > Day view shows).
+	readonly property bool dayWantsMiniMonth: plasmoid.configuration.dayShowMiniMonth !== false
+	readonly property bool dayWantsUpNext: plasmoid.configuration.dayShowUpNext !== false
+	readonly property bool dayWantsWeather: plasmoid.configuration.dayShowWeather !== false
+	readonly property bool dayWantsTasks: plasmoid.configuration.dayShowTasks !== false
+	// Right of the grid, when there's room: the day's tasks and below them its weather. Left of it,
+	// when there's room for that too: a small month (MiniMonth) and below it Up next. A column whose
+	// panels are all turned off isn't there.
+	readonly property bool rightWanted: (dayWantsTasks && dayHasTaskLists) || (dayWantsWeather && showWeather)
+	readonly property bool leftWanted: dayWantsMiniMonth || (dayWantsUpNext && islands)
+	readonly property bool rightBeside: singleDay && rightWanted && width >= minDayGridWidth + tasksPanelWidth + panelGap
+	readonly property bool leftBeside: singleDay && leftWanted
+		&& width >= minDayGridWidth + sidePanelWidth + panelGap + (rightBeside ? tasksPanelWidth + panelGap : 0)
+	readonly property bool weatherBeside: rightBeside && dayWantsWeather && showWeather
+	readonly property bool tasksBeside: rightBeside && dayWantsTasks && dayHasTaskLists
+	readonly property real leftPanelSpace: leftBeside ? sidePanelWidth + panelGap : 0
+	readonly property real rightPanelSpace: rightBeside ? tasksPanelWidth + panelGap : 0
 	readonly property real contentWidth: {
 		if (!singleDay) {
-			return width
+			return width - islandsEdge * 2
 		}
-		var room = weatherBeside ? width - weatherPanelWidth - weatherGap * 2 : width
-		return Math.min(room, Kirigami.Units.gridUnit * 32)
+		return Math.min(width - leftPanelSpace - rightPanelSpace - islandsEdge * 2, Kirigami.Units.gridUnit * 32)
 	}
 	readonly property real contentX: {
-		var total = contentWidth + (weatherBeside ? weatherPanelWidth + weatherGap * 2 : 0)
-		return Math.round((width - total) / 2)
+		var total = leftPanelSpace + contentWidth + rightPanelSpace
+		return Math.round((width - total) / 2) + leftPanelSpace
 	}
 	readonly property date todayStart: Shared.startOfDay(currentTime)
 	function dayWeather(d) {
@@ -86,6 +117,29 @@ Item {
 	}
 	// Day view: the weather panel follows the shown day.
 	readonly property bool showingToday: Shared.startOfDay(weekStart).getTime() === todayStart.getTime()
+	// The Day view with nothing (more) in the hours: no timed event left today, or none on another
+	// day. The grid then says so, with the next event after the day (nextEvent: { item, day }).
+	readonly property bool dayFree: {
+		if (!singleDay || days.length === 0) {
+			return false
+		}
+		var now = currentTime.getTime()
+		return days[0].timed.filter(function(block) { return !weekView.showingToday || block.end > now }).length === 0
+	}
+	readonly property var nextEvent: {
+		if (!dayFree) {
+			return null
+		}
+		var items = Tasks.withoutTasks(eventModel && eventModel.eventsData ? eventModel.eventsData.items : [])
+		return Shared.upcomingEvents(items, dayDate(1), 1)[0] || null
+	}
+	function nextEventText(entry) {
+		var start = new Date(entry.item.startDateTime)
+		var day = Shared.isSameDate(entry.day, dayDate(1)) && showingToday ? i18nc("tasks filter", "Tomorrow")
+			: Shared.formatDate(entry.day, i18nc("Up next: a day's heading", "dddd, d MMM"))
+		var time = entry.item.start && entry.item.start.date ? "" : " " + Shared.formatTime(start, appletConfig.timeFormat)
+		return i18nc("%1 = day and time, %2 = event title", "Next: %1 · %2", day + time, entry.item.summary || "")
+	}
 	// The shown day's daytime hours (7:00 to 19:00) from the hourly forecast.
 	function dayHours(d) {
 		var from = Shared.startOfDay(d).getTime() + 7 * 3600000
@@ -140,9 +194,8 @@ Item {
 		smallFontMetrics.advanceWidth(formatZoneTime(23, 45)), smallFontMetrics.advanceWidth(formatZoneTime(12, 45)),
 		smallFontMetrics.advanceWidth(zoneAbbreviation(secondZone)))) + Kirigami.Units.smallSpacing : 0
 	readonly property int gutterWidth: localGutterWidth + secondGutterWidth
-	// The scroll bar gets its own room right of the grid instead of covering the last day.
-	readonly property real scrollBarSpace: hourScrollBar.visible ? hourScrollBar.width : 0
-	readonly property real columnWidth: Math.max(1, (timeGrid.width - gutterWidth - scrollBarSpace) / columnCount)
+	// The day columns reach the edge: the thin scroll bar shows over the last one while in use.
+	readonly property real columnWidth: Math.max(1, (timeGrid.width - gutterWidth) / columnCount)
 	readonly property int allDayRowHeight: Math.round(lineHeight * 2.2) + 6 // Title + date span
 	readonly property int maxVisibleAllDayRows: 3
 	// Same faint lines as the month grid.
@@ -182,7 +235,7 @@ Item {
 	}
 	function formatZoneTime(hours, minutes) {
 		var d = new Date(2000, 0, 1, hours, minutes)
-		return Qt.formatTime(d, appletConfig.clock24h ? 'HH:mm' : (minutes ? 'h:mm AP' : 'h AP'))
+		return Shared.formatTime(d, appletConfig.clock24h ? 'HH:mm' : (minutes ? 'h:mm AP' : 'h AP'))
 	}
 	// The second zone's clock at a local hour of the first shown day. When the time difference
 	// changes during the shown days (a DST switch), the header says so (secondZoneShifts).
@@ -195,7 +248,7 @@ Item {
 	// Short zone names for the hour column header: the local one from Qt, the other from tz rules.
 	// Both names when it changes between the first and last shown day (eg: "EDT/EST").
 	function zoneAbbreviationAt(zone, ms) {
-		return zone ? TimeZone.abbreviation(zone, ms) : Qt.formatDateTime(new Date(ms), "t")
+		return zone ? TimeZone.abbreviation(zone, ms) : Shared.formatDateTime(new Date(ms), "t")
 	}
 	function zoneAbbreviation(zone) {
 		var first = zoneAbbreviationAt(zone, columnDate(0).getTime() + 12 * 3600000)
@@ -220,23 +273,26 @@ Item {
 
 	readonly property string title: {
 		if (singleDay) {
-			return Qt.formatDate(weekStart, Qt.locale().dateFormat(Locale.LongFormat))
+			// Without the weekday: the hours' card title has it.
+			var longDate = Qt.locale().dateFormat(Locale.LongFormat).replace(/(^dddd.?\s)|(,?\sdddd$)/, "")
+			return Shared.formatDate(weekStart, longDate)
 		}
 		var first = columnDate(0)
 		var last = columnDate(columnCount - 1)
 		if (first.getFullYear() !== last.getFullYear()) {
-			return Qt.formatDate(first, 'd MMM yyyy') + ' – ' + Qt.formatDate(last, 'd MMM yyyy')
+			return Shared.formatDate(first, 'd MMM yyyy') + ' – ' + Shared.formatDate(last, 'd MMM yyyy')
 		} else if (first.getMonth() !== last.getMonth()) {
-			return Qt.formatDate(first, 'd MMM') + ' – ' + Qt.formatDate(last, 'd MMM yyyy')
+			return Shared.formatDate(first, 'd MMM') + ' – ' + Shared.formatDate(last, 'd MMM yyyy')
 		}
-		return Qt.formatDate(first, 'd') + ' – ' + Qt.formatDate(last, 'd MMMM yyyy')
+		return Shared.formatDate(first, 'd') + ' – ' + Shared.formatDate(last, 'd MMMM yyyy')
 	}
 
 	//--- Data
 	function rebuild() {
 		// The blocks are recreated: a drag in progress ends, a dropped one shows its saved times.
 		dragState = null
-		var items = eventModel && eventModel.eventsData ? eventModel.eventsData.items : []
+		// Events only: tasks are in the Tasks view.
+		var items = Tasks.withoutTasks(eventModel && eventModel.eventsData ? eventModel.eventsData.items : [])
 		var result = []
 		for (var i = 0; i < columnCount; i++) {
 			var dayStart = columnDate(i).getTime()
@@ -556,10 +612,13 @@ Item {
 			return Shared.runsOf(flags)
 		}
 		Rectangle {
-			x: weekView.contentX + weekView.gutterWidth + modelData.first * weekView.columnWidth
-			y: dayNamesRow.y
+			// Over the hour grid's card (islands), still faint.
+			z: weekView.islands ? 1 : 0
+			x: weekView.contentX + gridCard.leftPadding + weekView.gutterWidth + modelData.first * weekView.columnWidth
+			y: gridCard.y + gridCard.topPadding + dayNamesRow.y
 			width: modelData.count * weekView.columnWidth
-			height: weekView.height - y
+			// Down to the bottom of the grid (islands: of its card).
+			height: gridCard.y + gridCard.height - gridCard.bottomPadding - y
 			radius: 6
 			color: Kirigami.Theme.textColor
 			opacity: 0.04
@@ -577,746 +636,1038 @@ Item {
 		today: weekView.dayWeather(weekView.weekStart)
 	}
 
-	DayWeatherPanel {
-		visible: weekView.weatherBeside
-		x: weekView.contentX + weekView.contentWidth + weekView.weatherGap * 2
-		// Top aligned with the day header, like the grid, with a little padding.
-		y: dayNamesRow.y + Kirigami.Units.largeSpacing
-		width: weekView.weatherPanelWidth - Kirigami.Units.largeSpacing
-		height: parent.height - y - Kirigami.Units.largeSpacing
-		locationName: plasmoid.configuration.weatherService === 'OpenMeteo' ? plasmoid.configuration.openMeteoLocationName : ""
-		hourly: weekView.showingToday ? weekView.weatherHourly : weekView.dayHours(weekView.weekStart)
-		nextDays: {
-			var list = []
-			for (var i = 1; i <= 4; i++) {
-				var d = weekView.dayWeather(weekView.dayDate(i))
-				if (d) {
-					list.push(d)
-				}
+	// The side columns end with the grid's card (islands): its bottom edge.
+	readonly property real sideBottom: gridCard.y + gridCard.height
+
+	// Left of the grid, on top: a small month to pick another day, dots by how busy a day is.
+	IslandCard {
+		id: miniMonthCard
+		visible: weekView.leftBeside && weekView.dayWantsMiniMonth
+		shown: weekView.islands
+		// Flat: padding on its left (the popup's edge), the same space on the grid side. Islands: a
+		// card from the top down, a card gap from the grid.
+		x: weekView.islands ? weekView.contentX - weekView.panelGap - weekView.sidePanelWidth
+			: weekView.contentX - weekView.weatherGap * 2 - weekView.sidePanelWidth + Kirigami.Units.largeSpacing * 2
+		// Top aligned with the day header, like the grid, with a little padding (flat).
+		y: weekView.islands ? 0 : gridCard.y + dayNamesRow.y + Kirigami.Units.largeSpacing
+		width: weekView.islands ? weekView.sidePanelWidth : weekView.sidePanelWidth - Kirigami.Units.largeSpacing * 2
+		height: implicitHeight
+
+		MiniMonth {
+			eventModel: weekView.leftBeside ? weekView.eventModel : null
+			selectedDate: weekView.weekStart
+			today: weekView.currentTime
+			firstDayOfWeek: {
+				var setting = plasmoid.configuration.firstDayOfWeek
+				return setting >= 0 ? setting : Qt.locale().firstDayOfWeek % 7
 			}
-			return list
+			onDayClicked: function(day) { weekView.weekStart = Shared.startOfDay(day) }
+		}
+	}
+
+	// Under it (islands, when there's room): the events after the shown day, down to the grid's
+	// bottom edge.
+	IslandCard {
+		id: upNextCard
+		readonly property real startY: miniMonthCard.visible ? miniMonthCard.y + miniMonthCard.height + appletConfig.cardGap : 0
+		visible: weekView.islands && weekView.leftBeside && weekView.dayWantsUpNext && weekView.sideBottom - startY >= Kirigami.Units.gridUnit * 6
+		x: miniMonthCard.x
+		y: startY
+		width: miniMonthCard.width
+		// As tall as its few events, at most down to the grid's bottom edge.
+		height: Math.max(0, Math.min(implicitHeight, weekView.sideBottom - startY))
+
+		UpNextPanel {
+			// Only the events that fit whole (a short popup: fewer, not a cut row).
+			maxHeight: weekView.sideBottom - upNextCard.startY - upNextCard.topPadding - upNextCard.bottomPadding
+			eventModel: upNextCard.visible ? weekView.eventModel : null
+			after: weekView.dayDate(1)
+			today: weekView.currentTime
+			onDayRequested: function(day) { weekView.weekStart = Shared.startOfDay(day) }
+		}
+	}
+
+	// Right of the grid, under the tasks: the shown day's weather (as tall as it is; at the top without
+	// the tasks).
+	IslandCard {
+		id: weatherCard
+		readonly property real topY: weekView.islands ? 0 : gridCard.y + dayNamesRow.y + Kirigami.Units.largeSpacing
+		visible: weekView.weatherBeside
+		shown: weekView.islands
+		x: weekView.contentX + weekView.contentWidth + (weekView.islands ? weekView.panelGap : weekView.weatherGap * 2)
+		// Right under the tasks (as tall as they are), or at the top without them.
+		y: weekView.tasksBeside ? tasksCard.y + tasksCard.height + (weekView.islands ? appletConfig.cardGap : Kirigami.Units.largeSpacing) : topY
+		readonly property real room: weekView.sideBottom - y
+		width: weekView.islands ? weekView.tasksPanelWidth : weekView.tasksPanelWidth - Kirigami.Units.largeSpacing
+		// As tall as the weather, at most the room left.
+		height: Math.max(0, Math.min(implicitHeight, room))
+
+		DayWeatherPanel {
+			// Its sections from the room left under the tasks: without the hourly chart, then without
+			// the next days.
+			showHourly: weatherCard.room >= Kirigami.Units.gridUnit * 25
+			showNextDays: weatherCard.room >= Kirigami.Units.gridUnit * 15.5
+			locationName: plasmoid.configuration.weatherService === 'OpenMeteo' ? plasmoid.configuration.openMeteoLocationName : ""
+			hourly: weekView.showingToday ? weekView.weatherHourly : weekView.dayHours(weekView.weekStart)
+			nextDays: {
+				var list = []
+				for (var i = 1; i <= 4; i++) {
+					var d = weekView.dayWeather(weekView.dayDate(i))
+					if (d) {
+						list.push(d)
+					}
+				}
+				return list
+			}
+		}
+	}
+
+	// On top: the day's tasks, as tall as they are (the list scrolls past the room there is).
+	IslandCard {
+		id: tasksCard
+		// The most it may take: the column, less at least the weather's current conditions below.
+		readonly property real bottomY: weekView.weatherBeside ? weekView.sideBottom - Kirigami.Units.gridUnit * 9 - (weekView.islands ? appletConfig.cardGap : Kirigami.Units.largeSpacing)
+			: weekView.sideBottom
+		visible: weekView.tasksBeside
+		shown: weekView.islands
+		x: weekView.contentX + weekView.contentWidth + (weekView.islands ? weekView.panelGap : weekView.weatherGap * 2)
+		y: weekView.islands ? 0 : gridCard.y + dayNamesRow.y + Kirigami.Units.largeSpacing
+		width: weekView.islands ? weekView.tasksPanelWidth : weekView.tasksPanelWidth - Kirigami.Units.largeSpacing
+		// As tall as its tasks (not stretched).
+		height: implicitHeight
+
+		DayTasksPanel {
+			eventModel: weekView.singleDay ? weekView.eventModel : null
+			day: weekView.columnDate(0)
+			showSeparator: false
+			maxListHeight: Math.max(Kirigami.Units.gridUnit * 3, tasksCard.bottomY - tasksCard.y - tasksCard.topPadding - tasksCard.bottomPadding - Kirigami.Units.gridUnit * 5)
 		}
 	}
 
 	ColumnLayout {
 		x: weekView.contentX
 		width: weekView.contentWidth
-		height: parent.height
-		spacing: Kirigami.Units.smallSpacing
+		height: parent.height - weekView.islandsEdge
+		spacing: weekView.islands ? appletConfig.cardGap : Kirigami.Units.smallSpacing
 
-		DayWeatherPanel {
-			visible: weekView.singleDay && weekView.showWeather && !weekView.weatherBeside && weekView.weatherIsSetup
+		IslandCard {
+			visible: weekView.singleDay && weekView.dayWantsWeather && weekView.showWeather && !weekView.weatherBeside && weekView.weatherIsSetup
+			shown: weekView.islands
 			Layout.fillWidth: true
-			compact: true
+			DayWeatherPanel {
+				compact: true
+			}
 		}
 
-		// Day names. Not in the Today view: the popup header shows the date.
-		Row {
-			id: dayNamesRow
+		// Islands: the day's tasks as a strip above the grid's card, in a card of its own (flat: the
+		// strip is below the all-day events, dayTasksStrip).
+		IslandCard {
+			visible: weekView.islands && dayTasksStrip.wanted && dayTasksStrip.hasLists
+			shown: weekView.islands
 			Layout.fillWidth: true
-			// The Day view: only the time zone names (second time zone).
-			Layout.preferredHeight: weekView.singleDay && !weekView.secondZone ? 0 : implicitHeight
-			Item {
-				width: weekView.gutterWidth
-				height: weekView.secondZone ? zoneNamesRow.implicitHeight : 1
-				// Time zone names above the hour labels (second time zone).
-				Row {
-					id: zoneNamesRow
-					visible: !!weekView.secondZone
-					anchors.bottom: parent.bottom
-					PlasmaComponents3.Label {
-						width: weekView.secondGutterWidth
-						horizontalAlignment: Text.AlignRight
-						text: weekView.secondZone ? weekView.zoneAbbreviation(weekView.secondZone) : ""
-						font: Kirigami.Theme.smallFont
-						opacity: 0.6
-						PlasmaComponents3.ToolTip.text: weekView.secondZoneShifts
-							? i18nc("%1 = time zone, %2 = a date", "%1\nThe time difference changes during these days: the hours shown are those of %2.",
-								weekView.secondZone.replace(/_/g, ' '), Qt.formatDate(weekView.columnDate(0), Qt.locale().dateFormat(Locale.ShortFormat)))
-							: weekView.secondZone.replace(/_/g, ' ')
-						PlasmaComponents3.ToolTip.visible: secondZoneHover.hovered
-						HoverHandler {
-							id: secondZoneHover
-						}
-					}
-					PlasmaComponents3.Label {
-						width: weekView.localGutterWidth - Kirigami.Units.smallSpacing
-						horizontalAlignment: Text.AlignRight
-						text: weekView.secondZone ? weekView.zoneAbbreviation("") : ""
-						font: Kirigami.Theme.smallFont
-						opacity: 0.6
-					}
-				}
-			}
-			Repeater {
-				model: weekView.columnCount
-				Item {
-					id: dayHeaderCell
-					readonly property date date: weekView.columnDate(index)
-					readonly property bool today: weekView.isToday(date)
-					readonly property var weather: weekView.dayWeather(date)
-					visible: !weekView.singleDay
-					width: weekView.columnWidth
-					height: dayHeaderColumn.implicitHeight
-					opacity: date < weekView.todayStart ? appletConfig.pastOpacity : 1
-
-					Column {
-						id: dayHeaderColumn
-						width: parent.width
-						PlasmaComponents3.Label {
-							width: parent.width
-							horizontalAlignment: Text.AlignHCenter
-							text: Qt.locale().dayName(dayHeaderCell.date.getDay(), Locale.ShortFormat)
-							font: Kirigami.Theme.smallFont
-							color: dayHeaderCell.today ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-							opacity: dayHeaderCell.today ? 1 : 0.6
-						}
-						Item {
-							width: parent.width
-							height: dayNumberLabel.implicitHeight + 4
-							Rectangle {
-								anchors.centerIn: parent
-								width: Math.max(dayNumberLabel.implicitWidth, dayNumberLabel.implicitHeight) + 6
-								height: width
-								radius: width / 2
-								color: Kirigami.Theme.highlightColor
-								visible: dayHeaderCell.today
-							}
-							PlasmaComponents3.Label {
-								id: dayNumberLabel
-								anchors.centerIn: parent
-								text: dayHeaderCell.date.getDate()
-								font.weight: Font.Bold
-								color: dayHeaderCell.today ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
-							}
-						}
-						// Google working location ("Home", "Office", ...)
-						WorkingLocationLabel {
-							anchors.horizontalCenter: parent.horizontalCenter
-							date: dayHeaderCell.date
-							maxWidth: parent.width - 4
-							showIcon: dayHeaderCell.width >= Kirigami.Units.gridUnit * 4
-						}
-					}
-
-					// Week view: small icon and high temperature in the top right corner of the day header.
-					Row {
-						visible: !weekView.singleDay && !!dayHeaderCell.weather && dayHeaderCell.width >= Kirigami.Units.gridUnit * 5
-						anchors.top: parent.top
-						anchors.right: parent.right
-						anchors.rightMargin: Kirigami.Units.smallSpacing
-						spacing: 1
-						opacity: 0.7
-						Kirigami.Icon {
-							anchors.verticalCenter: parent.verticalCenter
-							width: Kirigami.Units.iconSizes.small
-							height: width
-							source: Shared.symbolicIcon(dayHeaderCell.weather ? dayHeaderCell.weather.iconName : "")
-							fallback: dayHeaderCell.weather ? dayHeaderCell.weather.iconName : ""
-						}
-						PlasmaComponents3.Label {
-							anchors.verticalCenter: parent.verticalCenter
-							text: dayHeaderCell.weather ? Shared.formatTemp(dayHeaderCell.weather.temp.max) : ""
-							font: Kirigami.Theme.smallFont
-						}
-					}
-				}
+			DayTasksPanel {
+				eventModel: weekView.islands && weekView.singleDay ? weekView.eventModel : null
+				day: weekView.columnDate(0)
+				collapsible: true
+				expanded: weekView.dayTasksExpanded
+				onExpandedChanged: weekView.dayTasksExpanded = expanded
+				showSeparator: false
+				maxListHeight: Math.max(Kirigami.Units.gridUnit * 3, weekView.height * 0.3)
 			}
 		}
 
-		// Day view: the day's working location (the week view has it in the day header).
-		WorkingLocationLabel {
-			Layout.leftMargin: weekView.gutterWidth + Kirigami.Units.smallSpacing
-			visible: weekView.singleDay && !!text
-			date: weekView.columnDate(0)
-			maxWidth: weekView.width - weekView.gutterWidth
-		}
-
-		// All-day events
-		Item {
-			id: allDayArea
-			Layout.fillWidth: true
-			readonly property int rows: Math.min(weekView.allDayLaneCount, weekView.maxVisibleAllDayRows)
-			readonly property bool hasHiddenRow: weekView.allDayLaneCount > weekView.maxVisibleAllDayRows
-			Layout.preferredHeight: rows * (weekView.allDayRowHeight + 2) + 6
-			visible: rows > 0
-
-			Repeater {
-				model: weekView.allDayBars
-				Rectangle {
-					readonly property var bar: modelData
-					readonly property var eventItem: bar.eventItem
-					readonly property EventStyle eventStyle: EventStyle {
-						eventItem: bar.eventItem
-					}
-					// Light tint of the event color with a full-color stripe and theme text: reads better
-					// than a solid bar, also with pastel or (dark theme) darkened colors.
-					x: weekView.gutterWidth + bar.first * weekView.columnWidth + 2
-					y: 3 + bar.lane * (weekView.allDayRowHeight + 2)
-					// Being dragged: faded where it was (not for a copy); dropped: the preview stands in for it.
-					readonly property bool dragSource: !!weekView.dragState && weekView.dragState.mode === 'days' && weekView.dragState.eventItem === eventItem
-					opacity: dragSource && !weekView.dragState.copy ? (weekView.dragState.pending ? 0 : 0.35)
-						: bar.eventItem.endDateTime <= weekView.todayStart ? appletConfig.pastOpacity : 1
-					width: (bar.last - bar.first + 1) * weekView.columnWidth - 4
-					height: weekView.allDayRowHeight
-					// Square ends where the event continues before or after this week.
-					// Before the first or after the last shown day (work week: the weekend too).
-					readonly property bool cutLeft: bar.eventItem.startDateTime < weekView.columnDate(bar.first)
-					readonly property bool cutRight: bar.eventItem.endDateTime > weekView.dayDate(weekView.columnDays[bar.last] + 1)
-					readonly property real cornerRadius: Math.min(8, height / 2)
-					radius: cornerRadius
-					topLeftRadius: cutLeft ? 0 : cornerRadius
-					bottomLeftRadius: cutLeft ? 0 : cornerRadius
-					topRightRadius: cutRight ? 0 : cornerRadius
-					bottomRightRadius: cutRight ? 0 : cornerRadius
-					color: eventStyle.unconfirmed ? Kirigami.Theme.backgroundColor : ColorUtil.setAlpha(eventStyle.color, appletConfig.darkTheme ? 0.3 : 0.22)
-					border.width: 1
-					border.color: eventStyle.unconfirmed ? eventStyle.outlineColor : ColorUtil.setAlpha(eventStyle.color, 0.45)
-					clip: true
-					// Maybe, or out of office (hatched like Google Calendar). On the light tint, always in
-					// the event color (EventStyle.stripeColor is for filled bars).
-					StripeFill {
-						visible: parent.eventStyle.striped
-						anchors.fill: parent
-						anchors.margins: 1
-						radius: Math.max(0, parent.cornerRadius - 1)
-						stripeColor: parent.eventStyle.color
-					}
-					// Stripe on the start side (not when the event began before this week), inset so it
-					// stays inside the rounded corners.
-					Rectangle {
-						visible: !parent.cutLeft
-						x: 3
-						y: 3
-						width: 3
-						height: parent.height - 6
-						radius: width / 2
-						color: parent.eventStyle.color
-					}
-					// Title, then the date span ("14 – 16 Oct · 3 days") or "All day".
-					// Long timed events (24 h+) are in this row too: Shared.eventSpan handles both.
-					readonly property var span: Shared.eventSpan(eventItem, appletConfig.timeFormat, weekView.currentTime)
-					readonly property string spanText: {
-						if (span.allDay && !span.multiDay) {
-							return i18n("All day")
-						}
-						var range = LocaleFuncs.formatRange(span.startText, span.endText)
-						return span.allDay ? range + " · " + i18np("%1 day", "%1 days", span.days) : range
-					}
-					Column {
-						anchors.left: parent.left
-						anchors.right: parent.right
-						anchors.verticalCenter: parent.verticalCenter
-						anchors.leftMargin: 11
-						anchors.rightMargin: 4
-						PlasmaComponents3.Label {
-							width: parent.width
-							text: eventItem.summary
-							color: Kirigami.Theme.textColor
-							font.family: appletConfig.eventFont.family
-							font.pointSize: appletConfig.eventFont.pointSize
-							font.weight: Font.DemiBold
-							font.strikeout: eventStyle.declined
-							elide: Text.ElideRight
-						}
-						PlasmaComponents3.Label {
-							width: parent.width
-							text: spanText
-							color: Kirigami.Theme.textColor
-							opacity: 0.75
-							font: appletConfig.eventSmallFont
-							elide: Text.ElideRight
-						}
-					}
-					// Click opens the event, right click its menu, press and drag moves it by days (Ctrl: copies).
-					DragMouseArea {
-						id: barMouse
-						anchors.fill: parent
-						eventItem: parent.eventItem
-						draggable: weekView.canDragBar(parent.bar)
-						mapTo: allDayArea
-						onDragStarted: function(from, at, copy) {
-							weekView.dragBeginDays(parent.bar, from.x, copy)
-							weekView.dragMoveDays(at.x, copy)
-						}
-						onDragMoved: function(at, copy) { weekView.dragMoveDays(at.x, copy) }
-						onDropped: function(copy) { weekView.dragDrop(copy) }
-						onDragCanceled: weekView.dragCancel()
-					}
-					PlasmaCore.ToolTipArea {
-						anchors.fill: parent
-						mainText: parent.eventItem.summary
-						subText: containsMouse ? weekView.eventModel.eventDetailsText(parent.eventItem) : ""
-						textFormat: Text.PlainText
-					}
-				}
-			}
-
-			// Where a dragged all-day bar would go (its lane, moved by the columns dragged), with its new days.
-			Rectangle {
-				id: allDayDragPreview
-				readonly property var info: weekView.dragState && weekView.dragState.mode === 'days' ? weekView.dragState : null
-				readonly property int shift: info ? info.dayIndex - info.pressIndex : 0
-				readonly property int first: info ? Math.max(0, Math.min(weekView.columnCount - 1, info.bar.first + shift)) : 0
-				readonly property int last: info ? Math.max(0, Math.min(weekView.columnCount - 1, info.bar.last + shift)) : 0
-				readonly property color stripeColor: info ? appletConfig.eventColor(info.eventItem.backgroundColor) : "transparent"
-				readonly property var span: info ? Shared.eventSpan({ start: info.eventItem.start, startDateTime: info.start, endDateTime: info.end }, appletConfig.timeFormat, weekView.currentTime) : null
-				z: 3
-				visible: !!info
-				x: weekView.gutterWidth + first * weekView.columnWidth + 2
-				y: info ? 3 + Math.min(info.bar.lane, allDayArea.rows - 1) * (weekView.allDayRowHeight + 2) : 0
-				width: (last - first + 1) * weekView.columnWidth - 4
-				height: weekView.allDayRowHeight
-				radius: Math.min(8, height / 2)
-				color: Qt.tint(Kirigami.Theme.backgroundColor, ColorUtil.setAlpha(stripeColor, appletConfig.darkTheme ? 0.45 : 0.35))
-				border.width: 1
-				border.color: Kirigami.Theme.highlightColor
-				Column {
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.verticalCenter: parent.verticalCenter
-					anchors.leftMargin: 8
-					anchors.rightMargin: 4
-					PlasmaComponents3.Label {
-						width: parent.width
-						text: allDayDragPreview.info ? allDayDragPreview.info.eventItem.summary : ""
-						font.family: appletConfig.eventFont.family
-						font.pointSize: appletConfig.eventFont.pointSize
-						font.weight: Font.DemiBold
-						elide: Text.ElideRight
-					}
-					PlasmaComponents3.Label {
-						width: parent.width
-						readonly property var span: allDayDragPreview.span
-						// The new day(s): one day just its date.
-						text: !span ? "" : span.allDay && !span.multiDay ? span.startText
-							: LocaleFuncs.formatRange(span.startText, span.endText)
-						opacity: 0.75
-						font: appletConfig.eventSmallFont
-						elide: Text.ElideRight
-					}
-				}
-				DragCopyBadge {
-					visible: !!allDayDragPreview.info && allDayDragPreview.info.copy
-					anchors.right: parent.right
-					anchors.verticalCenter: parent.verticalCenter
-					anchors.rightMargin: 3
-				}
-			}
-
-			// "+N" per day for events in lanes that don't fit.
-			Repeater {
-				model: allDayArea.hasHiddenRow ? weekView.columnCount : 0
-				PlasmaComponents3.Label {
-					readonly property int hiddenCount: weekView.allDayHiddenPerDay[index] || 0
-					visible: hiddenCount > 0
-					x: weekView.gutterWidth + index * weekView.columnWidth
-					y: 3 + (allDayArea.rows - 1) * (weekView.allDayRowHeight + 2)
-					width: weekView.columnWidth
-					height: weekView.allDayRowHeight
-					horizontalAlignment: Text.AlignHCenter
-					verticalAlignment: Text.AlignVCenter
-					text: i18nc("more events not shown", "+%1", hiddenCount)
-					opacity: 0.7
-				}
-			}
-		}
-
-		// Hour grid
-		Item {
-			id: timeGrid
+		// The hour grid, with the day names / time zones and the all-day events (islands: a card).
+		IslandCard {
+			id: gridCard
+			shown: weekView.islands
 			Layout.fillWidth: true
 			Layout.fillHeight: true
-			clip: true
 
-			// Frame around the day columns (not the hour labels), with rounded corners.
-			Rectangle {
-				z: 1
-				x: weekView.gutterWidth
-				width: weekView.columnWidth * weekView.columnCount
-				height: parent.height
-				radius: 6
-				color: "transparent"
-				border.width: 1
-				border.color: weekView.gridLineColor
-			}
+			ColumnLayout {
+				spacing: Kirigami.Units.smallSpacing
 
-			Flickable {
-				id: flickable
-				anchors.fill: parent
-				contentWidth: width
-				contentHeight: weekView.hourCount * weekView.hourHeight
-				boundsBehavior: Flickable.StopAtBounds
-				PlasmaComponents3.ScrollBar.vertical: PlasmaComponents3.ScrollBar {
-					id: hourScrollBar
-					onPressedChanged: {
-						if (pressed) {
-							flickable.userScrolled = true
-						} else {
-							weekView.userTopHour = flickable.contentY / weekView.hourHeight
+				// Day view: a title like the side cards' ("Today", "Tomorrow", "Yesterday" or the
+				// weekday), the day's number of events on the right.
+				RowLayout {
+					visible: weekView.singleDay
+					Layout.fillWidth: true
+					Layout.leftMargin: weekView.islands ? 0 : Kirigami.Units.smallSpacing
+					Layout.rightMargin: Kirigami.Units.smallSpacing
+					Layout.bottomMargin: Kirigami.Units.smallSpacing
+					spacing: Kirigami.Units.smallSpacing
+					readonly property int eventCount: weekView.days.length > 0 ? weekView.days[0].timed.length + weekView.days[0].allDay.length : 0
+					PlasmaComponents3.Label {
+						Layout.fillWidth: true
+						Layout.minimumWidth: 0
+						text: {
+							// "Today · Wednesday", "Monday, 2 Nov" (the popup's title has the date, without the weekday).
+							var diff = Math.round((Shared.startOfDay(weekView.weekStart).getTime() - weekView.todayStart.getTime()) / 86400000)
+							var weekday = Qt.locale().standaloneDayName(weekView.weekStart.getDay(), Locale.LongFormat)
+							var relative = diff === 0 ? i18nc("tasks filter", "Today")
+								: diff === 1 ? i18nc("tasks filter", "Tomorrow")
+								: diff === -1 ? i18nc("the day before today", "Yesterday")
+								: ""
+							// Another day: with its date too (next Monday isn't this one).
+							return relative ? relative + " · " + weekday
+								: Shared.formatDate(weekView.weekStart, i18nc("Up next: a day's heading", "dddd, d MMM"))
 						}
+						textFormat: Text.PlainText
+						font.weight: Font.Bold
+						font.pointSize: appletConfig.fontPoints(Kirigami.Theme.defaultFont) * 1.25
+						font.capitalization: Font.Capitalize
+						elide: Text.ElideRight
 					}
-				}
-				// Opening: scroll to the working hours once the grid has its size, unless scrolled already.
-				property bool userScrolled: false
-				onMovementStarted: userScrolled = true
-				onMovementEnded: weekView.userTopHour = contentY / weekView.hourHeight
-				onHeightChanged: {
-					if (!userScrolled) {
-						weekView.scrollToWorkingHours()
+					PlasmaComponents3.Label {
+						visible: parent.eventCount > 0
+						text: i18np("%1 event", "%1 events", parent.eventCount)
+						textFormat: Text.PlainText
+						opacity: 0.75
 					}
 				}
 
-				Item {
-					width: flickable.width
-					height: flickable.contentHeight
-
-					// Hour lines and labels
-					Repeater {
-						model: weekView.hourCount
-						Item {
-							readonly property int hour: weekView.firstHour + index
-							y: index * weekView.hourHeight
-							width: parent.width
-							height: weekView.hourHeight
-							// Outside the working hours: a faint shade.
-							Rectangle {
-								visible: parent.hour < weekView.workStartHour || parent.hour >= weekView.workEndHour
-								x: weekView.gutterWidth + 1
-								width: weekView.columnWidth * weekView.columnCount - 2
-								height: parent.height
-								color: Kirigami.Theme.textColor
-								opacity: 0.025
-							}
+				// Day names. Not in the Today view: the popup header shows the date.
+				Row {
+					id: dayNamesRow
+					Layout.fillWidth: true
+					// The Day view: only the time zone names (second time zone).
+					Layout.preferredHeight: weekView.singleDay && !weekView.secondZone ? 0 : implicitHeight
+					Item {
+						width: weekView.gutterWidth
+						height: weekView.secondZone ? zoneNamesRow.implicitHeight : 1
+						// Time zone names above the hour labels (second time zone).
+						Row {
+							id: zoneNamesRow
+							visible: !!weekView.secondZone
+							anchors.bottom: parent.bottom
 							PlasmaComponents3.Label {
-								visible: index > 0 && !!weekView.secondZone
 								width: weekView.secondGutterWidth
-								y: -height / 2
 								horizontalAlignment: Text.AlignRight
-								text: weekView.secondZone ? weekView.secondZoneLabel(parent.hour) : ""
+								text: weekView.secondZone ? weekView.zoneAbbreviation(weekView.secondZone) : ""
 								font: Kirigami.Theme.smallFont
-								opacity: 0.45
+								opacity: 0.6
+								PlasmaComponents3.ToolTip.text: weekView.secondZoneShifts
+									? i18nc("%1 = time zone, %2 = a date", "%1\nThe time difference changes during these days: the hours shown are those of %2.",
+										weekView.secondZone.replace(/_/g, ' '), Shared.formatDate(weekView.columnDate(0), Qt.locale().dateFormat(Locale.ShortFormat)))
+									: weekView.secondZone.replace(/_/g, ' ')
+								PlasmaComponents3.ToolTip.visible: secondZoneHover.hovered
+								HoverHandler {
+									id: secondZoneHover
+								}
 							}
 							PlasmaComponents3.Label {
-								visible: index > 0
-								x: weekView.secondGutterWidth
 								width: weekView.localGutterWidth - Kirigami.Units.smallSpacing
-								y: -height / 2
 								horizontalAlignment: Text.AlignRight
-								text: weekView.formatHour(parent.hour)
+								text: weekView.secondZone ? weekView.zoneAbbreviation("") : ""
 								font: Kirigami.Theme.smallFont
 								opacity: 0.6
 							}
+						}
+					}
+					Repeater {
+						model: weekView.columnCount
+						Item {
+							id: dayHeaderCell
+							readonly property date date: weekView.columnDate(index)
+							readonly property bool today: weekView.isToday(date)
+							readonly property var weather: weekView.dayWeather(date)
+							visible: !weekView.singleDay
+							width: weekView.columnWidth
+							height: dayHeaderColumn.implicitHeight
+							opacity: date < weekView.todayStart ? appletConfig.pastOpacity : 1
+
+							Column {
+								id: dayHeaderColumn
+								width: parent.width
+								PlasmaComponents3.Label {
+									width: parent.width
+									horizontalAlignment: Text.AlignHCenter
+									text: Qt.locale().dayName(dayHeaderCell.date.getDay(), Locale.ShortFormat)
+									font: Kirigami.Theme.smallFont
+									color: dayHeaderCell.today ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+									opacity: dayHeaderCell.today ? 1 : 0.6
+								}
+								Item {
+									width: parent.width
+									height: dayNumberLabel.implicitHeight + 4
+									Rectangle {
+										anchors.centerIn: parent
+										width: Math.max(dayNumberLabel.implicitWidth, dayNumberLabel.implicitHeight) + 6
+										height: width
+										radius: width / 2
+										color: Kirigami.Theme.highlightColor
+										visible: dayHeaderCell.today
+									}
+									PlasmaComponents3.Label {
+										id: dayNumberLabel
+										anchors.centerIn: parent
+										text: dayHeaderCell.date.getDate()
+										font.weight: Font.Bold
+										color: dayHeaderCell.today ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
+									}
+								}
+								// Google working location ("Home", "Office", ...)
+								WorkingLocationLabel {
+									anchors.horizontalCenter: parent.horizontalCenter
+									date: dayHeaderCell.date
+									maxWidth: parent.width - 4
+									showIcon: dayHeaderCell.width >= Kirigami.Units.gridUnit * 4
+								}
+							}
+
+							// Week view: small icon and high temperature in the top right corner of the day header.
+							Row {
+								visible: !weekView.singleDay && !!dayHeaderCell.weather && dayHeaderCell.width >= Kirigami.Units.gridUnit * 5
+								anchors.top: parent.top
+								anchors.right: parent.right
+								anchors.rightMargin: Kirigami.Units.smallSpacing
+								spacing: 1
+								opacity: 0.7
+								Kirigami.Icon {
+									anchors.verticalCenter: parent.verticalCenter
+									width: Kirigami.Units.iconSizes.small
+									height: width
+									source: Shared.symbolicIcon(dayHeaderCell.weather ? dayHeaderCell.weather.iconName : "")
+									fallback: dayHeaderCell.weather ? dayHeaderCell.weather.iconName : ""
+								}
+								PlasmaComponents3.Label {
+									anchors.verticalCenter: parent.verticalCenter
+									text: dayHeaderCell.weather ? Shared.formatTemp(dayHeaderCell.weather.temp.max) : ""
+									font: Kirigami.Theme.smallFont
+								}
+							}
+						}
+					}
+				}
+
+				// Day view: the day's working location (the week view has it in the day header).
+				WorkingLocationLabel {
+					Layout.leftMargin: weekView.gutterWidth + Kirigami.Units.smallSpacing
+					visible: weekView.singleDay && !!text
+					date: weekView.columnDate(0)
+					maxWidth: weekView.width - weekView.gutterWidth
+				}
+
+				// All-day events
+				Item {
+					id: allDayArea
+					Layout.fillWidth: true
+					readonly property int rows: Math.min(weekView.allDayLaneCount, weekView.maxVisibleAllDayRows)
+					readonly property bool hasHiddenRow: weekView.allDayLaneCount > weekView.maxVisibleAllDayRows
+					Layout.preferredHeight: rows * (weekView.allDayRowHeight + 2) + 6
+					visible: rows > 0
+
+					Repeater {
+						model: weekView.allDayBars
+						Rectangle {
+							readonly property var bar: modelData
+							readonly property var eventItem: bar.eventItem
+							readonly property EventStyle eventStyle: EventStyle {
+								eventItem: bar.eventItem
+							}
+							// Light tint of the event color with a full-color stripe and theme text: reads better
+							// than a solid bar, also with pastel or (dark theme) darkened colors. With the "bar"
+							// event look, all-day events are filled in their color instead (EventStyle).
+							readonly property bool solid: appletConfig.barEventLook && eventStyle.allDay
+							readonly property bool outlined: eventStyle.unconfirmed
+							x: weekView.gutterWidth + bar.first * weekView.columnWidth + 2
+							y: 3 + bar.lane * (weekView.allDayRowHeight + 2)
+							// Being dragged: faded where it was (not for a copy); dropped: the preview stands in for it.
+							readonly property bool dragSource: !!weekView.dragState && weekView.dragState.mode === 'days' && weekView.dragState.eventItem === eventItem
+							opacity: (dragSource && !weekView.dragState.copy ? (weekView.dragState.pending ? 0 : 0.35)
+								: bar.eventItem.endDateTime <= weekView.todayStart ? appletConfig.pastOpacity : 1) * eventStyle.doneOpacity
+							width: (bar.last - bar.first + 1) * weekView.columnWidth - 4
+							height: weekView.allDayRowHeight
+							// Square ends where the event continues before or after this week.
+							// Before the first or after the last shown day (work week: the weekend too).
+							readonly property bool cutLeft: bar.eventItem.startDateTime < weekView.columnDate(bar.first)
+							readonly property bool cutRight: bar.eventItem.endDateTime > weekView.dayDate(weekView.columnDays[bar.last] + 1)
+							readonly property real cornerRadius: Math.min(8, height / 2)
+							radius: cornerRadius
+							topLeftRadius: cutLeft ? 0 : cornerRadius
+							bottomLeftRadius: cutLeft ? 0 : cornerRadius
+							topRightRadius: cutRight ? 0 : cornerRadius
+							bottomRightRadius: cutRight ? 0 : cornerRadius
+							color: solid ? eventStyle.fillColor : outlined ? Kirigami.Theme.backgroundColor : ColorUtil.setAlpha(eventStyle.color, appletConfig.darkTheme ? 0.3 : 0.22)
+							border.width: 1
+							border.color: solid || outlined ? eventStyle.outlineColor : ColorUtil.setAlpha(eventStyle.color, 0.45)
+							readonly property color titleColor: solid ? eventStyle.textColor : Kirigami.Theme.textColor
+							clip: true
+							// Maybe, or out of office (hatched like Google Calendar). On the light tint, always in
+							// the event color (EventStyle.stripeColor is for filled bars).
+							StripeFill {
+								visible: parent.eventStyle.striped
+								anchors.fill: parent
+								anchors.margins: 1
+								radius: Math.max(0, parent.cornerRadius - 1)
+								stripeColor: parent.solid ? parent.eventStyle.stripeColor : parent.eventStyle.color
+							}
+							// Stripe on the start side (not when the event began before this week), inset so it
+							// stays inside the rounded corners.
 							Rectangle {
-								visible: index > 0
-								// Inside the frame, so lines don't darken where they meet it.
-								x: weekView.gutterWidth + 1
-								width: weekView.columnWidth * weekView.columnCount - 2
-								height: 1
-								color: weekView.gridLineColor
+								visible: !parent.cutLeft && !parent.solid
+								x: 3
+								y: 3
+								width: 3
+								height: parent.height - 6
+								radius: width / 2
+								color: parent.eventStyle.color
+							}
+							// Title, then the date span ("14 – 16 Oct · 3 days") or "All day".
+							// Long timed events (24 h+) are in this row too: Shared.eventSpan handles both.
+							readonly property var span: Shared.eventSpan(eventItem, appletConfig.timeFormat, weekView.currentTime)
+							readonly property string spanText: {
+								if (span.allDay && !span.multiDay) {
+									return i18n("All day")
+								}
+								var range = LocaleFuncs.formatRange(span.startText, span.endText)
+								return span.allDay ? range + " · " + i18np("%1 day", "%1 days", span.days) : range
+							}
+							Column {
+								anchors.left: parent.left
+								anchors.right: parent.right
+								anchors.verticalCenter: parent.verticalCenter
+								anchors.leftMargin: parent.solid ? 6 : 11
+								anchors.rightMargin: 4
+								PlasmaComponents3.Label {
+									id: allDayTitle
+									// Invitation not answered yet: the question mark before the title (Shared.isAwaitingAnswer).
+									readonly property bool awaitingAnswer: Shared.isAwaitingAnswer(parent.parent.eventStyle.response)
+									readonly property int iconSize: 2 * Math.floor(Math.min(Kirigami.Units.iconSizes.small, height) / 2)
+									width: parent.width
+									// Never wider than the label: a padding past its width crashed Qt's text layout.
+									leftPadding: awaitingAnswer ? Math.min(iconSize + 3, Math.max(0, width - 8)) : 0
+									text: eventItem.summary
+									textFormat: Text.PlainText // User text: never parsed as HTML
+									color: parent.parent.titleColor
+									font.family: appletConfig.eventFont.family
+									font.pointSize: appletConfig.eventFont.pointSize
+									font.weight: Font.DemiBold
+									font.strikeout: eventStyle.struckThrough
+									elide: Text.ElideRight
+									Kirigami.Icon {
+										visible: allDayTitle.awaitingAnswer
+										anchors.verticalCenter: parent.verticalCenter
+										width: allDayTitle.iconSize
+										height: width
+										roundToIconSize: false
+										source: Shared.EVENT_INDICATOR_ICONS.needsAction
+										isMask: true
+										color: allDayTitle.color
+									}
+								}
+								PlasmaComponents3.Label {
+									width: parent.width
+									text: spanText
+									color: parent.parent.titleColor
+									opacity: 0.75
+									font: appletConfig.eventSmallFont
+									elide: Text.ElideRight
+								}
+							}
+							// Click opens the event, right click its menu, press and drag moves it by days (Ctrl: copies).
+							DragMouseArea {
+								id: barMouse
+								anchors.fill: parent
+								eventItem: parent.eventItem
+								draggable: weekView.canDragBar(parent.bar)
+								mapTo: allDayArea
+								onDragStarted: function(from, at, copy) {
+									weekView.dragBeginDays(parent.bar, from.x, copy)
+									weekView.dragMoveDays(at.x, copy)
+								}
+								onDragMoved: function(at, copy) { weekView.dragMoveDays(at.x, copy) }
+								onDropped: function(copy) { weekView.dragDrop(copy) }
+								onDragCanceled: weekView.dragCancel()
+							}
+							PlasmaCore.ToolTipArea {
+								anchors.fill: parent
+								mainText: parent.eventItem.summary // Not bound to containsMouse, see EventBar
+								subText: weekView.eventModel.eventDetailsText(parent.eventItem)
+								textFormat: Text.PlainText
 							}
 						}
 					}
 
-					// Where a dragged block would go, with its new times.
+					// Where a dragged all-day bar would go (its lane, moved by the columns dragged), with its new days.
 					Rectangle {
-						id: dragPreview
-						readonly property var info: weekView.dragState && weekView.dragState.mode !== 'days' ? weekView.dragState : null
-						readonly property real dayStart: info ? weekView.columnDate(info.dayIndex).getTime() : 0
-						readonly property color barColor: info ? appletConfig.eventColor(info.eventItem.backgroundColor) : "transparent"
-						readonly property real topY: info ? Math.max(0, weekView.hourY(info.start.getTime(), dayStart)) : 0
-						readonly property real bottomY: info ? Math.min(parent.height, weekView.hourY(info.end.getTime(), dayStart)) : 0
+						id: allDayDragPreview
+						readonly property var info: weekView.dragState && weekView.dragState.mode === 'days' ? weekView.dragState : null
+						readonly property int shift: info ? info.dayIndex - info.pressIndex : 0
+						readonly property int first: info ? Math.max(0, Math.min(weekView.columnCount - 1, info.bar.first + shift)) : 0
+						readonly property int last: info ? Math.max(0, Math.min(weekView.columnCount - 1, info.bar.last + shift)) : 0
+						readonly property color stripeColor: info ? appletConfig.eventColor(info.eventItem.backgroundColor) : "transparent"
+						readonly property var span: info ? Shared.eventSpan({ start: info.eventItem.start, startDateTime: info.start, endDateTime: info.end }, appletConfig.timeFormat, weekView.currentTime) : null
 						z: 3
 						visible: !!info
-						x: info ? weekView.gutterWidth + info.dayIndex * weekView.columnWidth + 2 : 0
-						y: topY + 1
-						width: weekView.columnWidth - 4
-						height: Math.max(weekView.lineHeight + 2, bottomY - topY - 2)
-						radius: Math.min(10, height / 2)
-						color: ColorUtil.setAlpha(barColor, info && info.pending ? 1 : 0.9)
+						x: weekView.gutterWidth + first * weekView.columnWidth + 2
+						y: info ? 3 + Math.min(info.bar.lane, allDayArea.rows - 1) * (weekView.allDayRowHeight + 2) : 0
+						width: (last - first + 1) * weekView.columnWidth - 4
+						height: weekView.allDayRowHeight
+						radius: Math.min(8, height / 2)
+						color: Qt.tint(Kirigami.Theme.backgroundColor, ColorUtil.setAlpha(stripeColor, appletConfig.darkTheme ? 0.45 : 0.35))
 						border.width: 1
 						border.color: Kirigami.Theme.highlightColor
 						Column {
-							anchors.fill: parent
-							anchors.margins: 2
-							anchors.leftMargin: 6
-							clip: true
-							// Too short for two lines: the new times come first, they're what the drag is about.
-							readonly property bool oneLine: dragPreview.height < weekView.lineHeight * 2 + 4
-							readonly property string timeText: dragPreview.info ? Shared.formatTimeRange(dragPreview.info.start, dragPreview.info.end, appletConfig.timeFormat) : ""
+							anchors.left: parent.left
+							anchors.right: parent.right
+							anchors.verticalCenter: parent.verticalCenter
+							anchors.leftMargin: 8
+							anchors.rightMargin: 4
 							PlasmaComponents3.Label {
 								width: parent.width
-								text: dragPreview.info ? (parent.oneLine ? parent.timeText + ' · ' : '') + dragPreview.info.eventItem.summary : ""
-								color: Shared.contrastTextColor(dragPreview.barColor)
+								text: allDayDragPreview.info ? allDayDragPreview.info.eventItem.summary : ""
+								textFormat: Text.PlainText // User text: never parsed as HTML
+								font.family: appletConfig.eventFont.family
+								font.pointSize: appletConfig.eventFont.pointSize
+								font.weight: Font.DemiBold
 								elide: Text.ElideRight
 							}
 							PlasmaComponents3.Label {
 								width: parent.width
-								visible: !parent.oneLine
-								text: parent.timeText
-								color: Shared.contrastTextColor(dragPreview.barColor)
+								readonly property var span: allDayDragPreview.span
+								// The new day(s): one day just its date.
+								text: !span ? "" : span.allDay && !span.multiDay ? span.startText
+									: LocaleFuncs.formatRange(span.startText, span.endText)
+								opacity: 0.75
 								font: appletConfig.eventSmallFont
 								elide: Text.ElideRight
 							}
 						}
 						DragCopyBadge {
-							visible: !!dragPreview.info && dragPreview.info.copy
+							visible: !!allDayDragPreview.info && allDayDragPreview.info.copy
 							anchors.right: parent.right
-							anchors.top: parent.top
-							anchors.margins: 2
+							anchors.verticalCenter: parent.verticalCenter
+							anchors.rightMargin: 3
 						}
 					}
 
-					// Day columns
+					// "+N" per day for events in lanes that don't fit.
 					Repeater {
-						model: weekView.days
-						Item {
-							id: dayColumn
-							readonly property var day: modelData
-							readonly property bool today: weekView.isToday(day.date)
+						model: allDayArea.hasHiddenRow ? weekView.columnCount : 0
+						PlasmaComponents3.Label {
+							readonly property int hiddenCount: weekView.allDayHiddenPerDay[index] || 0
+							visible: hiddenCount > 0
 							x: weekView.gutterWidth + index * weekView.columnWidth
+							y: 3 + (allDayArea.rows - 1) * (weekView.allDayRowHeight + 2)
 							width: weekView.columnWidth
-							height: parent.height
+							height: weekView.allDayRowHeight
+							horizontalAlignment: Text.AlignHCenter
+							verticalAlignment: Text.AlignVCenter
+							text: i18nc("more events not shown", "+%1", hiddenCount)
+							opacity: 0.7
+						}
+					}
+				}
 
-							Rectangle {
-								anchors.fill: parent
-								color: Kirigami.Theme.highlightColor
-								// Only in the week view: in the day view the whole column is "today".
-								opacity: dayColumn.today && !weekView.singleDay ? 0.08 : 0
-							}
-							// Past part of today (and whole past days): light grey wash.
-							Rectangle {
-								readonly property real nowY: (weekView.currentTime.getHours() + weekView.currentTime.getMinutes() / 60 - weekView.firstHour) * weekView.hourHeight
-								visible: dayColumn.day.date < weekView.todayStart || dayColumn.today
-								width: parent.width
-								height: dayColumn.day.date < weekView.todayStart ? parent.height : Math.max(0, Math.min(parent.height, nowY))
-								color: Kirigami.Theme.textColor
-								opacity: 0.04
-							}
-							// Today: highlight-colored frame around the column (week view only).
-							Rectangle {
-								visible: dayColumn.today && !weekView.singleDay
-								anchors.fill: parent
-								anchors.margins: 1
-								color: "transparent"
-								radius: 6
-								border.width: 2
-								border.color: ColorUtil.setAlpha(Kirigami.Theme.highlightColor, 0.5)
-							}
-							Rectangle {
-								visible: index > 0 // The frame draws the left edge.
-								width: 1
-								height: parent.height
-								color: weekView.gridLineColor
-							}
+				// Day view without the weather beside: the day's tasks as a strip that folds away.
+				DayTasksPanel {
+					id: dayTasksStrip
+					Layout.fillWidth: true
+					Layout.leftMargin: Kirigami.Units.smallSpacing
+					Layout.rightMargin: Kirigami.Units.smallSpacing
+					// Also tells whether there are task lists at all (dayHasTaskLists), so it keeps its model.
+					readonly property bool wanted: weekView.singleDay && weekView.dayWantsTasks && !weekView.tasksBeside
+					visible: wanted && hasLists && !weekView.islands
+					eventModel: weekView.singleDay ? weekView.eventModel : null
+					day: weekView.columnDate(0)
+					collapsible: true
+					expanded: weekView.dayTasksExpanded
+					onExpandedChanged: weekView.dayTasksExpanded = expanded
+					maxListHeight: Math.max(Kirigami.Units.gridUnit * 3, weekView.height * 0.3)
+				}
 
-							// Click an empty spot: new event at that time (rounded down to 30 min), 1 hour long.
-							// Hovering previews that slot.
-							MouseArea {
-								id: slotArea
-								anchors.fill: parent
-								hoverEnabled: true
-								cursorShape: Qt.CrossCursor
-								readonly property int slotMinutes: Math.floor((weekView.firstHour + mouseY / weekView.hourHeight) * 60 / 30) * 30
-								function slotStart() {
-									var start = new Date(dayColumn.day.date)
-									start.setMinutes(slotMinutes)
-									return start
-								}
-								onClicked: popup.newEvent(dayColumn.day.date, slotStart())
-							}
-							Rectangle {
-								id: slotPreview
-								visible: slotArea.containsMouse
-								x: 2
-								y: (slotArea.slotMinutes / 60 - weekView.firstHour) * weekView.hourHeight + 1
-								width: parent.width - 4
-								height: weekView.hourHeight - 2
-								radius: Math.min(10, height / 2)
-								color: ColorUtil.setAlpha(Kirigami.Theme.highlightColor, 0.15)
-								border.width: 1
-								border.color: ColorUtil.setAlpha(Kirigami.Theme.highlightColor, 0.6)
+				// Hour grid
+				Item {
+					id: timeGrid
+					Layout.fillWidth: true
+					Layout.fillHeight: true
+					clip: true
+
+					// The note's card: as wide as its text and the next event's button (their implicit widths,
+					// not the note's), a bit of room around them.
+					Rectangle {
+						readonly property real pad: Kirigami.Units.largeSpacing
+						visible: freeNote.visible
+						z: 2
+						width: Math.min(freeNote.width, Math.max(freeNoteLabel.implicitWidth, nextButton.visible ? nextButton.implicitWidth : 0) + pad * 2)
+						height: freeNote.height + pad * 2
+						x: freeNote.x + Math.round((freeNote.width - width) / 2)
+						y: freeNote.y - pad
+						radius: appletConfig.cardRadius
+						// Opaque: the hour lines don't show through.
+						color: ColorUtil.setAlpha(appletConfig.cardColor, 1)
+						border.width: 1
+						border.color: appletConfig.cardBorderColor
+					}
+					// Day view, nothing (more) in the hours: a quiet note in the free part under the now line,
+					// and the next event after the day (a click shows its day).
+					ColumnLayout {
+						id: freeNote
+						z: 3
+						// Always the same spot: near the bottom of the visible hours, whatever the time or the
+						// scrolling (it used to follow the now line).
+						visible: weekView.dayFree && timeGrid.height >= Kirigami.Units.gridUnit * 8
+						// The day column's width (not from its contents: the labels' maximum width follows it).
+						x: weekView.gutterWidth + Kirigami.Units.gridUnit / 2
+						y: Math.round(timeGrid.height - height - Kirigami.Units.gridUnit * 2)
+						width: Math.max(0, timeGrid.width - weekView.gutterWidth - Kirigami.Units.gridUnit)
+						spacing: Kirigami.Units.smallSpacing
+						PlasmaComponents3.Label {
+							id: freeNoteLabel
+							Layout.fillWidth: true
+							horizontalAlignment: Text.AlignHCenter
+							text: weekView.showingToday ? i18n("No more events today") : i18n("No events")
+							textFormat: Text.PlainText
+							opacity: 0.6
+							elide: Text.ElideRight
+						}
+						PlasmaComponents3.ToolButton {
+							id: nextButton
+							visible: !!weekView.nextEvent
+							Layout.alignment: Qt.AlignHCenter
+							Layout.maximumWidth: freeNote.width
+							readonly property string label: weekView.nextEvent ? weekView.nextEventText(weekView.nextEvent) : ""
+							text: label.replace(/&/g, "&&") // No mnemonic from a "&" in the title
+							Accessible.name: label
+							// The event's title as plain text (never parsed as HTML).
+							contentItem: RowLayout {
+								spacing: Kirigami.Units.smallSpacing
 								PlasmaComponents3.Label {
+									Layout.fillWidth: true
+									Layout.minimumWidth: 0
+									text: parent.parent.label
+									textFormat: Text.PlainText
+									elide: Text.ElideRight
+								}
+								Kirigami.Icon {
+									implicitWidth: Kirigami.Units.iconSizes.small
+									implicitHeight: implicitWidth
+									source: Qt.application.layoutDirection === Qt.RightToLeft ? "go-previous" : "go-next"
+								}
+							}
+							onClicked: weekView.weekStart = Shared.startOfDay(weekView.nextEvent.day)
+						}
+					}
+
+					// Frame around the day columns (not the hour labels), with rounded corners. Not in the
+					// islands style: the card is the frame (a second border inside it stuck out).
+					Rectangle {
+						visible: !weekView.islands
+						z: 1
+						x: weekView.gutterWidth
+						width: weekView.columnWidth * weekView.columnCount
+						height: parent.height
+						radius: 6
+						color: "transparent"
+						border.width: 1
+						border.color: weekView.gridLineColor
+					}
+
+					Flickable {
+						id: flickable
+						anchors.fill: parent
+						contentWidth: width
+						contentHeight: weekView.hourCount * weekView.hourHeight
+						boundsBehavior: Flickable.StopAtBounds
+						PlasmaComponents3.ScrollBar.vertical: OverlayScrollBar {
+							id: hourScrollBar
+							onPressedChanged: {
+								if (pressed) {
+									flickable.userScrolled = true
+								} else {
+									weekView.userTopHour = flickable.contentY / weekView.hourHeight
+								}
+							}
+						}
+						// Opening: scroll to the working hours once the grid has its size, unless scrolled already.
+						property bool userScrolled: false
+						onMovementStarted: userScrolled = true
+						onMovementEnded: weekView.userTopHour = contentY / weekView.hourHeight
+						onHeightChanged: {
+							if (!userScrolled) {
+								weekView.scrollToWorkingHours()
+							}
+						}
+
+						Item {
+							width: flickable.width
+							height: flickable.contentHeight
+
+							// Hour lines and labels
+							Repeater {
+								model: weekView.hourCount
+								Item {
+									readonly property int hour: weekView.firstHour + index
+									y: index * weekView.hourHeight
+									width: parent.width
+									height: weekView.hourHeight
+									// Outside the working hours: a faint shade.
+									Rectangle {
+										visible: parent.hour < weekView.workStartHour || parent.hour >= weekView.workEndHour
+										x: weekView.gutterWidth + 1
+										width: weekView.columnWidth * weekView.columnCount - 2
+										height: parent.height
+										color: Kirigami.Theme.textColor
+										opacity: 0.025
+									}
+									PlasmaComponents3.Label {
+										visible: index > 0 && !!weekView.secondZone
+										width: weekView.secondGutterWidth
+										y: -height / 2
+										horizontalAlignment: Text.AlignRight
+										text: weekView.secondZone ? weekView.secondZoneLabel(parent.hour) : ""
+										font: Kirigami.Theme.smallFont
+										opacity: 0.45
+									}
+									PlasmaComponents3.Label {
+										visible: index > 0
+										x: weekView.secondGutterWidth
+										width: weekView.localGutterWidth - Kirigami.Units.smallSpacing
+										y: -height / 2
+										horizontalAlignment: Text.AlignRight
+										text: weekView.formatHour(parent.hour)
+										font: Kirigami.Theme.smallFont
+										opacity: 0.6
+									}
+									Rectangle {
+										visible: index > 0
+										// Inside the frame, so lines don't darken where they meet it.
+										x: weekView.gutterWidth + 1
+										width: weekView.columnWidth * weekView.columnCount - 2
+										height: 1
+										color: weekView.gridLineColor
+									}
+								}
+							}
+
+							// Where a dragged block would go, with its new times.
+							Rectangle {
+								id: dragPreview
+								readonly property var info: weekView.dragState && weekView.dragState.mode !== 'days' ? weekView.dragState : null
+								readonly property real dayStart: info ? weekView.columnDate(info.dayIndex).getTime() : 0
+								readonly property color barColor: info ? appletConfig.eventColor(info.eventItem.backgroundColor) : "transparent"
+								readonly property real topY: info ? Math.max(0, weekView.hourY(info.start.getTime(), dayStart)) : 0
+								readonly property real bottomY: info ? Math.min(parent.height, weekView.hourY(info.end.getTime(), dayStart)) : 0
+								z: 3
+								visible: !!info
+								x: info ? weekView.gutterWidth + info.dayIndex * weekView.columnWidth + 2 : 0
+								y: topY + 1
+								width: weekView.columnWidth - 4
+								height: Math.max(weekView.lineHeight + 2, bottomY - topY - 2)
+								radius: Math.min(10, height / 2)
+								color: ColorUtil.setAlpha(barColor, info && info.pending ? 1 : 0.9)
+								border.width: 1
+								border.color: Kirigami.Theme.highlightColor
+								Column {
 									anchors.fill: parent
 									anchors.margins: 2
 									anchors.leftMargin: 6
-									text: {
-										var start = slotArea.slotStart()
-										var end = new Date(start.getTime() + 60 * 60 * 1000)
-										return Shared.formatTimeRange(start, end, appletConfig.timeFormat)
+									clip: true
+									// Too short for two lines: the new times come first, they're what the drag is about.
+									readonly property bool oneLine: dragPreview.height < weekView.lineHeight * 2 + 4
+									readonly property string timeText: dragPreview.info ? Shared.formatTimeRange(dragPreview.info.start, dragPreview.info.end, appletConfig.timeFormat) : ""
+									PlasmaComponents3.Label {
+										width: parent.width
+										text: dragPreview.info ? (parent.oneLine ? parent.timeText + ' · ' : '') + dragPreview.info.eventItem.summary : ""
+										textFormat: Text.PlainText // User text: never parsed as HTML
+										color: Shared.contrastTextColor(dragPreview.barColor)
+										elide: Text.ElideRight
 									}
-									font: Kirigami.Theme.smallFont
-									color: Kirigami.Theme.highlightColor
-									elide: Text.ElideRight
+									PlasmaComponents3.Label {
+										width: parent.width
+										visible: !parent.oneLine
+										text: parent.timeText
+										color: Shared.contrastTextColor(dragPreview.barColor)
+										font: appletConfig.eventSmallFont
+										elide: Text.ElideRight
+									}
+								}
+								DragCopyBadge {
+									visible: !!dragPreview.info && dragPreview.info.copy
+									anchors.right: parent.right
+									anchors.top: parent.top
+									anchors.margins: 2
 								}
 							}
 
+							// Day columns
 							Repeater {
-								model: dayColumn.day.timed
-								// Click opens the event, right click its menu, press and drag moves it.
-								EventBar {
-									id: eventBlock
-									readonly property var block: modelData
-									eventItem: block.eventItem
-									detailsModel: weekView.eventModel
-									showTitle: false
-									readonly property real slotWidth: (dayColumn.width - 3) / block.columns
-									// Clip to the visible hour range.
-									readonly property real rangeStart: block.dayStart + weekView.firstHour * 3600000
-									readonly property real rangeEnd: block.dayStart + weekView.lastHour * 3600000
-									readonly property real visibleStart: Math.max(block.start, rangeStart)
-									readonly property real visibleEnd: Math.min(Math.max(block.end, block.start + 15 * 60000), rangeEnd)
-									dragSource: !!weekView.dragState && weekView.dragState.eventItem === eventItem
-									dragCopy: !!weekView.dragState && weekView.dragState.copy
-									dragPending: !!weekView.dragState && weekView.dragState.pending
-									dimmed: eventItem.endDateTime <= weekView.currentTime
-									draggable: weekView.canDrag(block)
-									dragMapTo: flickable
-									onDragStarted: function(from, at, copy) {
-										weekView.dragBegin(block, 'move', from, copy)
-										weekView.dragMove(at, copy)
-									}
-									onDragMoved: function(at, copy) { weekView.dragMove(at, copy) }
-									onDropped: function(copy) { weekView.dragDrop(copy) } // Ctrl: a copy
-									onDragCanceled: weekView.dragCancel()
-									visible: visibleEnd > visibleStart
-									x: 2 + block.column * slotWidth
-									y: weekView.hourY(visibleStart, block.dayStart) + 1
-									width: slotWidth - 1
-									height: Math.max(weekView.lineHeight + 2, (visibleEnd - visibleStart) / 3600000 * weekView.hourHeight - 2)
-									// Square edges where the event continues beyond what's shown
-									// (from the previous day / before the first hour, or past the last one).
-									cuttable: true
-									cutTop: block.continued || block.start < rangeStart
-									cutBottom: block.continues || block.end > rangeEnd
-									maxRadius: 10
+								model: weekView.days
+								Item {
+									id: dayColumn
+									readonly property var day: modelData
+									readonly property bool today: weekView.isToday(day.date)
+									x: weekView.gutterWidth + index * weekView.columnWidth
+									width: weekView.columnWidth
+									height: parent.height
 
-									// Today view: join button for meetings that haven't ended.
-									readonly property var meetingLink: weekView.singleDay && plasmoid.configuration.agendaShowEventHangoutLink && eventItem.endDateTime > weekView.currentTime ? MeetingLink.find(eventItem) : null
-
-									Column {
-										z: 1 // Above the block's mouse area: location links take their clicks
+									Rectangle {
 										anchors.fill: parent
-										anchors.margins: 2
-										anchors.leftMargin: 6
-										anchors.rightMargin: joinPill.visible ? joinPill.width + Kirigami.Units.smallSpacing * 2 : 2
-										clip: true
-										PlasmaComponents3.Label {
-											width: parent.width
-											// Day view, block too short for a second line: put time and location after the title.
-											readonly property bool inlineDetails: weekView.singleDay && eventBlock.height < weekView.lineHeight * 2 + 4
-											text: {
-												var item = eventBlock.eventItem
-												if (!inlineDetails) {
-													return item.summary
-												}
-												var parts = [item.summary, Shared.formatTimeRange(item.startDateTime, item.endDateTime, appletConfig.timeFormat)]
-												if (item.location) {
-													parts.push(item.location)
-												}
-												return parts.join(' · ')
-											}
-											color: eventBlock.eventStyle.textColor
-											font.family: appletConfig.eventFont.family
-											font.pointSize: appletConfig.eventFont.pointSize
-											font.strikeout: eventBlock.eventStyle.declined
-											font.bold: eventBlock.inProgress // Event in progress
-											elide: Text.ElideRight
-											wrapMode: Text.WordWrap
-											maximumLineCount: Math.max(1, Math.floor((eventBlock.height - 4) / weekView.lineHeight) - 1)
-										}
-										// Time (day view: and location), then icons for what else is set.
-										Row {
-											width: parent.width
-											visible: eventBlock.height >= weekView.lineHeight * 2 + 4
-											spacing: Kirigami.Units.smallSpacing
-											// The time first; icons only in the room left.
-											PlasmaComponents3.Label {
-												id: blockTimeLabel
-												width: Math.min(implicitWidth, parent.width)
-												text: {
-													var format = appletConfig.timeFormat
-													var item = eventBlock.eventItem
-													// Day view has room for the end time and location (opens in Google Maps).
-													if (weekView.singleDay) {
-														var text = Shared.formatTimeRange(item.startDateTime, item.endDateTime, format)
-														return item.location ? text + ' · ' + Shared.locationLink(item.location) : text
-													}
-													return Qt.formatTime(item.startDateTime, format)
-												}
-												textFormat: Text.StyledText
-												linkColor: eventBlock.eventStyle.textColor
-												onLinkActivated: function(link) { Shared.openExternalUrl(link) }
-												color: eventBlock.eventStyle.textColor
-												font: appletConfig.eventSmallFont
-												elide: Text.ElideRight
-											}
-											EventIndicators {
-												anchors.verticalCenter: parent.verticalCenter
-												maxWidth: parent.width - blockTimeLabel.width - parent.spacing
-												eventItem: eventBlock.eventItem
-												color: eventBlock.eventStyle.textColor
-												iconSize: 2 * Math.round(eventSmallFontMetrics.height / 2)
-												opacity: 0.85
-												// The day view shows the location as text and has a Join button.
-												showLocation: !weekView.singleDay
-												showMeeting: !joinPill.visible
-												// Week view: repeating events (standups, ...) are everywhere, the icon is noise.
-												showRepeat: weekView.singleDay
-											}
-										}
+										color: Kirigami.Theme.highlightColor
+										// Only in the week view: in the day view the whole column is "today".
+										opacity: dayColumn.today && !weekView.singleDay ? 0.08 : 0
 									}
-									JoinPill {
-										id: joinPill
-										visible: !!eventBlock.meetingLink && eventBlock.width >= Kirigami.Units.gridUnit * 10
-										anchors.right: parent.right
-										anchors.rightMargin: Kirigami.Units.smallSpacing
-										// Short blocks: centered and slimmer; taller ones: next to the title.
-										readonly property bool compact: eventBlock.height < weekView.lineHeight * 2 + 4
-										anchors.verticalCenter: compact ? parent.verticalCenter : undefined
-										anchors.top: compact ? undefined : parent.top
-										anchors.topMargin: Kirigami.Units.smallSpacing
-										verticalPadding: compact ? 0 : Kirigami.Units.smallSpacing / 2
-										meetingLink: eventBlock.meetingLink
-										textColor: Shared.contrastTextColor(eventBlock.eventStyle.color)
+									// Past part of today (and whole past days): light grey wash.
+									Rectangle {
+										readonly property real nowY: (weekView.currentTime.getHours() + weekView.currentTime.getMinutes() / 60 - weekView.firstHour) * weekView.hourHeight
+										visible: dayColumn.day.date < weekView.todayStart || dayColumn.today
+										width: parent.width
+										height: dayColumn.day.date < weekView.todayStart ? parent.height : Math.max(0, Math.min(parent.height, nowY))
+										color: Kirigami.Theme.textColor
+										opacity: 0.04
 									}
-									// Bottom edge: drag to change the end time.
-									MouseArea {
-										z: 2
-										visible: eventBlock.draggable && !eventBlock.cutBottom && eventBlock.height >= weekView.lineHeight * 1.5
-										anchors.left: parent.left
-										anchors.right: parent.right
-										anchors.bottom: parent.bottom
-										height: Math.min(Kirigami.Units.smallSpacing * 2, eventBlock.height / 4)
-										cursorShape: Qt.SizeVerCursor
-										preventStealing: true
-										onPressed: function(mouse) {
-											weekView.dragBegin(eventBlock.block, 'resize', mapToItem(flickable, mouse.x, mouse.y))
-										}
-										onPositionChanged: function(mouse) {
-											weekView.dragMove(mapToItem(flickable, mouse.x, mouse.y))
-										}
-										onReleased: weekView.dragDrop(false)
-										onCanceled: weekView.dragCancel()
+									// Today: highlight-colored frame around the column (week view only).
+									Rectangle {
+										visible: dayColumn.today && !weekView.singleDay
+										anchors.fill: parent
+										anchors.margins: 1
+										color: "transparent"
+										radius: 6
+										border.width: 2
+										border.color: ColorUtil.setAlpha(Kirigami.Theme.highlightColor, 0.5)
 									}
-								}
-							}
+									Rectangle {
+										visible: index > 0 // The frame draws the left edge.
+										width: 1
+										height: parent.height
+										color: weekView.gridLineColor
+									}
 
-							// Current time
-							Rectangle {
-								readonly property real hours: weekView.currentTime.getHours() + weekView.currentTime.getMinutes() / 60
-								visible: dayColumn.today && hours >= weekView.firstHour && hours <= weekView.lastHour
-								y: (hours - weekView.firstHour) * weekView.hourHeight
-								width: parent.width
-								height: 2
-								color: Kirigami.Theme.negativeTextColor
-								Rectangle {
-									x: -width / 2
-									anchors.verticalCenter: parent.verticalCenter
-									width: 8
-									height: 8
-									radius: 4
-									color: parent.color
+									// Click an empty spot: new event at that time (rounded down to 30 min), 1 hour long.
+									// Hovering previews that slot.
+									MouseArea {
+										id: slotArea
+										anchors.fill: parent
+										hoverEnabled: true
+										cursorShape: Qt.CrossCursor
+										readonly property int slotMinutes: Math.floor((weekView.firstHour + mouseY / weekView.hourHeight) * 60 / 30) * 30
+										function slotStart() {
+											var start = new Date(dayColumn.day.date)
+											start.setMinutes(slotMinutes)
+											return start
+										}
+										onClicked: popup.newEvent(dayColumn.day.date, slotStart())
+									}
+									Rectangle {
+										id: slotPreview
+										visible: slotArea.containsMouse
+										x: 2
+										y: (slotArea.slotMinutes / 60 - weekView.firstHour) * weekView.hourHeight + 1
+										width: parent.width - 4
+										height: weekView.hourHeight - 2
+										radius: Math.min(10, height / 2)
+										color: ColorUtil.setAlpha(Kirigami.Theme.highlightColor, 0.15)
+										border.width: 1
+										border.color: ColorUtil.setAlpha(Kirigami.Theme.highlightColor, 0.6)
+										PlasmaComponents3.Label {
+											anchors.fill: parent
+											anchors.margins: 2
+											anchors.leftMargin: 6
+											text: {
+												var start = slotArea.slotStart()
+												var end = new Date(start.getTime() + 60 * 60 * 1000)
+												return Shared.formatTimeRange(start, end, appletConfig.timeFormat)
+											}
+											font: Kirigami.Theme.smallFont
+											color: Kirigami.Theme.highlightColor
+											elide: Text.ElideRight
+										}
+									}
+
+									Repeater {
+										model: dayColumn.day.timed
+										// Click opens the event, right click its menu, press and drag moves it.
+										EventBar {
+											id: eventBlock
+											readonly property var block: modelData
+											eventItem: block.eventItem
+											detailsModel: weekView.eventModel
+											showTitle: false
+											readonly property real slotWidth: (dayColumn.width - 3) / block.columns
+											// Clip to the visible hour range.
+											readonly property real rangeStart: block.dayStart + weekView.firstHour * 3600000
+											readonly property real rangeEnd: block.dayStart + weekView.lastHour * 3600000
+											readonly property real visibleStart: Math.max(block.start, rangeStart)
+											readonly property real visibleEnd: Math.min(Math.max(block.end, block.start + 15 * 60000), rangeEnd)
+											dragSource: !!weekView.dragState && weekView.dragState.eventItem === eventItem
+											dragCopy: !!weekView.dragState && weekView.dragState.copy
+											dragPending: !!weekView.dragState && weekView.dragState.pending
+											dimmed: eventItem.endDateTime <= weekView.currentTime
+											draggable: weekView.canDrag(block)
+											dragMapTo: flickable
+											onDragStarted: function(from, at, copy) {
+												weekView.dragBegin(block, 'move', from, copy)
+												weekView.dragMove(at, copy)
+											}
+											onDragMoved: function(at, copy) { weekView.dragMove(at, copy) }
+											onDropped: function(copy) { weekView.dragDrop(copy) } // Ctrl: a copy
+											onDragCanceled: weekView.dragCancel()
+											visible: visibleEnd > visibleStart
+											x: 2 + block.column * slotWidth
+											y: weekView.hourY(visibleStart, block.dayStart) + 1
+											width: slotWidth - 1
+											height: Math.max(weekView.lineHeight + 2, (visibleEnd - visibleStart) / 3600000 * weekView.hourHeight - 2)
+											// Square edges where the event continues beyond what's shown
+											// (from the previous day / before the first hour, or past the last one).
+											cuttable: true
+											cutTop: block.continued || block.start < rangeStart
+											cutBottom: block.continues || block.end > rangeEnd
+											maxRadius: 10
+
+											// Today view: join button for meetings that haven't ended.
+											readonly property var meetingLink: weekView.singleDay && plasmoid.configuration.agendaShowEventHangoutLink && eventItem.endDateTime > weekView.currentTime ? MeetingLink.find(eventItem) : null
+
+											Column {
+												z: 1 // Above the block's mouse area: location links take their clicks
+												anchors.fill: parent
+												anchors.margins: 2
+												// Clear of the color bar (bar look), like the month view's rows.
+												anchors.leftMargin: eventBlock.showBar ? 9 : 6
+												anchors.rightMargin: joinPill.visible ? joinPill.anchors.rightMargin + joinPill.width + Kirigami.Units.smallSpacing : 2
+												clip: true
+												PlasmaComponents3.Label {
+													id: blockTitle
+													width: parent.width
+													// Day view, block too short for a second line: put time and location after the title.
+													readonly property bool inlineDetails: weekView.singleDay && eventBlock.height < weekView.lineHeight * 2 + 4
+													// Invitation not answered yet: the question mark before the title, as in the
+													// all-day row and the month (Shared.isAwaitingAnswer); also on short blocks.
+													readonly property bool awaitingAnswer: Shared.isAwaitingAnswer(eventBlock.eventStyle.response)
+													readonly property int iconSize: 2 * Math.floor(Math.min(Kirigami.Units.iconSizes.small, weekView.lineHeight) / 2)
+													// Never wider than the label: a padding past its width crashed Qt's text layout.
+													leftPadding: awaitingAnswer ? Math.min(iconSize + 3, Math.max(0, width - 8)) : 0
+													text: {
+														var item = eventBlock.eventItem
+														if (!inlineDetails) {
+															return item.summary
+														}
+														var parts = [item.summary, Shared.formatTimeRange(item.startDateTime, item.endDateTime, appletConfig.timeFormat)]
+														if (item.location) {
+															parts.push(item.location)
+														}
+														return parts.join(' · ')
+													}
+													textFormat: Text.PlainText // The title as typed
+													color: eventBlock.eventStyle.textColor
+													font.family: appletConfig.eventFont.family
+													font.pointSize: appletConfig.eventFont.pointSize
+													font.strikeout: eventBlock.eventStyle.declined
+													font.bold: eventBlock.inProgress // Event in progress
+													elide: Text.ElideRight
+													wrapMode: Text.WordWrap
+													maximumLineCount: Math.max(1, Math.floor((eventBlock.height - 4) / weekView.lineHeight) - 1)
+													Kirigami.Icon {
+														visible: blockTitle.awaitingAnswer
+														y: Math.round((weekView.lineHeight - height) / 2)
+														width: blockTitle.iconSize
+														height: width
+														roundToIconSize: false
+														source: Shared.EVENT_INDICATOR_ICONS.needsAction
+														isMask: true
+														color: blockTitle.color
+													}
+												}
+												// Time (day view: and location), then icons for what else is set.
+												Row {
+													width: parent.width
+													visible: eventBlock.height >= weekView.lineHeight * 2 + 4
+													spacing: Kirigami.Units.smallSpacing
+													// The time first; icons only in the room left.
+													PlasmaComponents3.Label {
+														id: blockTimeLabel
+														width: Math.min(implicitWidth, parent.width)
+														text: {
+															var format = appletConfig.timeFormat
+															var item = eventBlock.eventItem
+															// Day view has room for the end time and location (opens in Google Maps).
+															if (weekView.singleDay) {
+																var text = Shared.formatTimeRange(item.startDateTime, item.endDateTime, format)
+																return item.location ? text + ' · ' + Shared.locationLink(item.location) : text
+															}
+															return Shared.formatTime(item.startDateTime, format)
+														}
+														textFormat: Text.StyledText
+														linkColor: eventBlock.eventStyle.textColor
+														onLinkActivated: function(link) { Shared.openExternalUrl(link) }
+														color: eventBlock.eventStyle.textColor
+														font: appletConfig.eventSmallFont
+														elide: Text.ElideRight
+													}
+													EventIndicators {
+														anchors.verticalCenter: parent.verticalCenter
+														maxWidth: parent.width - blockTimeLabel.width - parent.spacing
+														eventItem: eventBlock.eventItem
+														color: eventBlock.eventStyle.textColor
+														iconSize: 2 * Math.round(eventSmallFontMetrics.height / 2)
+														opacity: 0.85
+														// The question mark is before the title.
+														showNeedsAction: false
+														// The day view shows the location as text and has a Join button.
+														showLocation: !weekView.singleDay
+														showMeeting: !joinPill.visible
+														// Week view: repeating events (standups, ...) are everywhere, the icon is noise.
+														showRepeat: weekView.singleDay
+													}
+												}
+											}
+											JoinPill {
+												id: joinPill
+												visible: !!eventBlock.meetingLink && eventBlock.width >= Kirigami.Units.gridUnit * 10
+												anchors.right: parent.right
+												// Short blocks: as far from the right edge as from the top and bottom.
+												anchors.rightMargin: compact ? Math.max(1, Math.min(Kirigami.Units.smallSpacing, Math.floor((parent.height - height) / 2))) : Kirigami.Units.smallSpacing
+												// Short blocks: centered and slimmer; taller ones: next to the title.
+												readonly property bool compact: eventBlock.height < weekView.lineHeight * 2 + 4
+												anchors.verticalCenter: compact ? parent.verticalCenter : undefined
+												anchors.top: compact ? undefined : parent.top
+												anchors.topMargin: Kirigami.Units.smallSpacing
+												verticalPadding: compact ? 0 : Kirigami.Units.smallSpacing / 2
+												// The shortest blocks (a line): a 1 px gap above and below at least (JoinPill fits it).
+												maxHeight: compact ? parent.height - 2 : 0
+												meetingLink: eventBlock.meetingLink
+												// The tile's own text color (white for a solid color, dark on a light tint).
+												textColor: eventBlock.eventStyle.textColor
+												baseColor: eventBlock.eventStyle.fillColor
+											}
+											// Bottom edge: drag to change the end time.
+											MouseArea {
+												z: 2
+												visible: eventBlock.draggable && !eventBlock.cutBottom && eventBlock.height >= weekView.lineHeight * 1.5
+												anchors.left: parent.left
+												anchors.right: parent.right
+												anchors.bottom: parent.bottom
+												height: Math.min(Kirigami.Units.smallSpacing * 2, eventBlock.height / 4)
+												cursorShape: Qt.SizeVerCursor
+												preventStealing: true
+												onPressed: function(mouse) {
+													weekView.dragBegin(eventBlock.block, 'resize', mapToItem(flickable, mouse.x, mouse.y))
+												}
+												onPositionChanged: function(mouse) {
+													weekView.dragMove(mapToItem(flickable, mouse.x, mouse.y))
+												}
+												onReleased: weekView.dragDrop(false)
+												onCanceled: weekView.dragCancel()
+											}
+										}
+									}
+
+									// Current time
+									Rectangle {
+										readonly property real hours: weekView.currentTime.getHours() + weekView.currentTime.getMinutes() / 60
+										visible: dayColumn.today && hours >= weekView.firstHour && hours <= weekView.lastHour
+										y: (hours - weekView.firstHour) * weekView.hourHeight
+										width: parent.width
+										height: 2
+										color: Kirigami.Theme.negativeTextColor
+										Rectangle {
+											x: -width / 2
+											anchors.verticalCenter: parent.verticalCenter
+											width: 8
+											height: 8
+											radius: 4
+											color: parent.color
+										}
+									}
 								}
 							}
 						}

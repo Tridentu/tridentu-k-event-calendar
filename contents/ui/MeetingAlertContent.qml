@@ -1,0 +1,185 @@
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls as QQC2
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.components as PlasmaComponents3
+
+import "Shared.js" as Shared
+import "LocaleFuncs.js" as LocaleFuncs
+
+// The notification when a meeting starts, full screen (Settings > Events > When an Event Starts >
+// Style): the screen in the theme's background, the meeting large in its middle (its calendar's
+// color, title, time, where it's held) and Join, Snooze 1 min, Dismiss. Esc dismisses, Return
+// joins. Shared by the alert windows (plain, blurred, layer-shell), like the Fokus plasmoid's break
+// overlay.
+Item {
+	id: content
+
+	property var eventItem: null
+	property var meetingLink: null // MeetingLink.find(eventItem), or null
+
+	signal joinRequested()
+	signal snoozeRequested()
+	signal closeRequested()
+
+	// Dark whatever the theme (Plasma's complementary colors: dark with light text), as Fokus'
+	// dark overlay: a light screen over a blurred desktop was glaring.
+	Kirigami.Theme.inherit: false
+	Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
+	focus: true
+	// The keys from the start, without a click first.
+	Component.onCompleted: forceActiveFocus()
+	Keys.onEscapePressed: content.closeRequested()
+	Keys.onReturnPressed: content.meetingLink ? content.joinRequested() : content.closeRequested()
+	Keys.onEnterPressed: content.meetingLink ? content.joinRequested() : content.closeRequested()
+
+	// A click beside the card does nothing (it's not a dismissal by mistake).
+	MouseArea {
+		anchors.fill: parent
+		onClicked: content.forceActiveFocus()
+	}
+
+	// The screen in the theme's background color (as Fokus' break overlay): nearly opaque, or
+	// translucent over the blur a blurring window draws (backgroundOpacity 0: the window paints it).
+	property real backgroundOpacity: 0.94
+	Rectangle {
+		anchors.fill: parent
+		visible: content.backgroundOpacity > 0
+		color: Qt.alpha(Kirigami.Theme.backgroundColor, content.backgroundOpacity)
+	}
+
+	// Centered and large: read from across the room.
+	ColumnLayout {
+		id: cardColumn
+		anchors.centerIn: parent
+		width: Math.min(parent.width - Kirigami.Units.gridUnit * 6, Kirigami.Units.gridUnit * 50)
+		spacing: Kirigami.Units.largeSpacing
+
+		// "Starting now", after a dot in the calendar's color.
+		RowLayout {
+			Layout.alignment: Qt.AlignHCenter
+			spacing: Kirigami.Units.largeSpacing
+			// The calendar's color in a light ring: a dark calendar color still stands out on the dark
+			// screen.
+			Rectangle {
+				Layout.alignment: Qt.AlignVCenter
+				implicitWidth: Math.round(startingLabel.font.pixelSize * 1.1)
+				implicitHeight: implicitWidth
+				radius: width / 2
+				color: content.eventItem ? appletConfig.eventColor(content.eventItem.backgroundColor) : Kirigami.Theme.highlightColor
+				border.width: Math.max(2, Math.round(width / 7))
+				border.color: Qt.alpha(Kirigami.Theme.textColor, 0.85)
+			}
+			PlasmaComponents3.Label {
+				id: startingLabel
+				text: content.eventItem && content.eventItem.startDateTime > new Date() ? i18n("Starting soon") : i18n("Starting now")
+				textFormat: Text.PlainText
+				font.pointSize: Kirigami.Theme.defaultFont.pointSize * 1.6
+				font.weight: Font.DemiBold
+				opacity: 0.75
+			}
+		}
+		PlasmaComponents3.Label {
+			Layout.fillWidth: true
+			horizontalAlignment: Text.AlignHCenter
+			text: content.eventItem ? content.eventItem.summary || "" : ""
+			textFormat: Text.PlainText // User text: never parsed as HTML
+			font.pointSize: Kirigami.Theme.defaultFont.pointSize * 4
+			font.weight: Font.Bold
+			wrapMode: Text.Wrap
+			maximumLineCount: 3
+			elide: Text.ElideRight
+		}
+		PlasmaComponents3.Label {
+			Layout.fillWidth: true
+			horizontalAlignment: Text.AlignHCenter
+			text: {
+				var item = content.eventItem
+				if (!item) {
+					return ""
+				}
+				var range = Shared.formatTimeRange(item.startDateTime, item.endDateTime, appletConfig.timeFormat)
+				return content.meetingLink && content.meetingLink.label ? range + " · " + content.meetingLink.label : range
+			}
+			textFormat: Text.PlainText
+			font.pointSize: Kirigami.Theme.defaultFont.pointSize * 1.6
+			opacity: 0.75
+		}
+
+		RowLayout {
+			Layout.alignment: Qt.AlignHCenter
+			Layout.topMargin: Kirigami.Units.gridUnit * 2
+			spacing: Kirigami.Units.largeSpacing
+			// Join: the accent button, the one Return presses.
+			AlertButton {
+				visible: !!content.meetingLink
+				accent: true
+				text: content.meetingLink && content.meetingLink.label ? i18nc("%1 = Google Meet, Zoom, ...", "Join %1", content.meetingLink.label) : i18n("Join")
+				iconName: "call-start"
+				onClicked: content.joinRequested()
+			}
+			AlertButton {
+				text: i18n("Snooze 1 min")
+				iconName: "player-time"
+				onClicked: content.snoozeRequested()
+			}
+			AlertButton {
+				text: i18n("Dismiss")
+				iconName: "window-close-symbolic"
+				onClicked: content.closeRequested()
+			}
+		}
+		PlasmaComponents3.Label {
+			Layout.alignment: Qt.AlignHCenter
+			Layout.topMargin: Kirigami.Units.largeSpacing
+			text: content.meetingLink ? i18n("Return: join · Esc: dismiss") : i18n("Esc: dismiss")
+			textFormat: Text.PlainText
+			opacity: 0.5
+		}
+	}
+
+	// A large pill button: the accent color (Join) or a soft tint of the text color.
+	component AlertButton: QQC2.AbstractButton {
+		id: alertButton
+		property bool accent: false
+		property string iconName: ""
+		readonly property color fg: accent ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
+		Accessible.name: text
+		hoverEnabled: true
+		padding: Kirigami.Units.largeSpacing * 1.5
+		leftPadding: Kirigami.Units.gridUnit * 1.5
+		rightPadding: Kirigami.Units.gridUnit * 1.5
+		background: Rectangle {
+			radius: height / 2
+			// The accent one darker / lighter; the others a stronger tint (lighter() does nothing to a
+			// light, translucent tint).
+			color: alertButton.accent
+				? (alertButton.pressed ? Qt.darker(Kirigami.Theme.highlightColor, 1.15)
+					: alertButton.hovered ? Qt.lighter(Kirigami.Theme.highlightColor, 1.12) : Kirigami.Theme.highlightColor)
+				: Qt.alpha(Kirigami.Theme.textColor, alertButton.pressed ? 0.28 : alertButton.hovered ? 0.18 : 0.08)
+			Behavior on color {
+				ColorAnimation { duration: Kirigami.Units.shortDuration }
+			}
+			border.width: alertButton.visualFocus ? 2 : 0
+			border.color: Kirigami.Theme.focusColor
+		}
+		contentItem: RowLayout {
+			spacing: Kirigami.Units.largeSpacing
+			Kirigami.Icon {
+				implicitWidth: Kirigami.Units.iconSizes.smallMedium
+				implicitHeight: implicitWidth
+				source: alertButton.iconName
+				isMask: true
+				color: alertButton.fg
+			}
+			PlasmaComponents3.Label {
+				text: alertButton.text
+				textFormat: Text.PlainText
+				color: alertButton.fg
+				font.pointSize: Kirigami.Theme.defaultFont.pointSize * 1.3
+				font.weight: alertButton.accent ? Font.DemiBold : Font.Normal
+			}
+		}
+	}
+}

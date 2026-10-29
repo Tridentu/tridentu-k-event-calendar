@@ -87,6 +87,33 @@ QtObject {
 	readonly property color eventBorderColor: ColorUtil.setAlpha(Kirigami.Theme.textColor, 0.2)
 	// Invitations not answered yes (Shared.myResponse), like Google Calendar: an outline in the event
 	// color on the background instead of a filled tile; maybe adds stripes, declined is struck through.
+	// Settings > Views > Event look = "All-day filled, timed light with a color bar": timed events
+	// are a light tint of their color (opaque, theme text) with a bar in the full color.
+	readonly property bool barEventLook: plasmoid.configuration.eventLook === 'bar'
+	// The bar's color: the event color, but pale ones (light greys, pastels) darker in a light theme,
+	// so the bar, the tint and the outline stand out from the background.
+	function eventBarColor(color) {
+		var c = Qt.color(color)
+		if (darkTheme || c.hslLightness <= 0.55) {
+			return c
+		}
+		return Qt.hsla(Math.max(0, c.hslHue), c.hslSaturation, 0.55, 1)
+	}
+	// Text in the event's color (bar look, not yet answered, like Google Calendar): dark enough to
+	// read on the background, or light enough in a dark theme.
+	function eventColoredTextColor(color) {
+		var c = Qt.color(color)
+		var lightness = darkTheme ? Math.max(c.hslLightness, 0.72) : Math.min(c.hslLightness, 0.4)
+		return Qt.hsla(Math.max(0, c.hslHue), c.hslSaturation, lightness, 1)
+	}
+	function eventTintColor(color) {
+		return Qt.tint(Kirigami.Theme.backgroundColor, ColorUtil.setAlpha(color, darkTheme ? 0.38 : 0.3))
+	}
+	// Its outline: between the tint and the full color, so pale colors (eg: banana, graphite) still
+	// stand out from the background and from tinted cells (today, weekends).
+	function eventTintOutlineColor(color) {
+		return Qt.tint(Kirigami.Theme.backgroundColor, ColorUtil.setAlpha(color, 0.6))
+	}
 	function eventFillColor(color, response) {
 		return Shared.isUnconfirmedResponse(response) ? Kirigami.Theme.backgroundColor : color
 	}
@@ -99,6 +126,18 @@ QtObject {
 		}
 		return Shared.isUnconfirmedResponse(response) ? color : eventBorderColor
 	}
+
+	// Settings > Views > Style = "Islands (cards)": the month grid, the Week / Day view's grid, the
+	// Day view's panels, the agenda days and the task sections sit in rounded cards (IslandCard);
+	// "Flat": one surface.
+	readonly property bool islands: plasmoid.configuration.uiStyle !== 'flat'
+	// A card: a bit lighter than the popup (light and dark themes) and nearly opaque, so it adds
+	// contrast on the translucent (blurred) popup background instead of taking it away.
+	readonly property color cardColor: ColorUtil.setAlpha(ColorUtil.lerp(Kirigami.Theme.backgroundColor, Qt.rgba(1, 1, 1, 1), darkTheme ? 0.94 : 0.5), 0.62)
+	readonly property color cardBorderColor: ColorUtil.setAlpha(Kirigami.Theme.textColor, 0.12)
+	readonly property real cardRadius: Math.round(Kirigami.Units.gridUnit * 0.9)
+	readonly property real cardPadding: Kirigami.Units.largeSpacing
+	readonly property real cardGap: Kirigami.Units.smallSpacing * 2
 
 	property color alternateBackgroundColor: {
 		var textColor = Kirigami.Theme.textColor
@@ -153,6 +192,21 @@ QtObject {
 		} else {
 			return line1TimeFormat
 		}
+	}
+	// The locale's words for QuickParse.js: { dayNames, monthNames, dayFirst } (10/11 = 10 November).
+	readonly property var quickParseLocale: {
+		var locale = Qt.locale()
+		var days = []
+		for (var d = 0; d < 7; d++) {
+			days.push([locale.dayName(d, Locale.LongFormat), locale.standaloneDayName(d, Locale.LongFormat)])
+		}
+		var months = []
+		for (var m = 0; m < 12; m++) {
+			months.push([locale.monthName(m, Locale.LongFormat), locale.monthName(m, Locale.ShortFormat),
+				locale.standaloneMonthName(m, Locale.LongFormat), locale.standaloneMonthName(m, Locale.ShortFormat)])
+		}
+		var format = localeDateFormat
+		return { dayNames: days, monthNames: months, dayFirst: format.indexOf('d') >= 0 && format.indexOf('d') < format.indexOf('M') }
 	}
 	readonly property string timeFormat: clock24h ? 'HH:mm' : 'h:mm AP' // Times in the views: 09:45 / 9:45 AM
 	readonly property bool clock24h: {

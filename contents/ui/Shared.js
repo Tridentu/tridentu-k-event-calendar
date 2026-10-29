@@ -1,5 +1,22 @@
 .pragma library
 
+//--- Dates and times in the system's language. Qt 6's Qt.formatDate / formatTime / formatDateTime
+// always use English names (and an ISO date / a time with seconds for Locale.ShortFormat), so
+// "ddd, d MMM" showed "Tue, 27 Oct" in a Polish locale. format: a format string ("ddd d MMM",
+// "HH:mm") or a Locale format (Locale.ShortFormat, …); a date, or anything new Date() takes.
+function asDate(d) {
+	return d instanceof Date ? d : new Date(d)
+}
+function formatDateTime(d, format) {
+	return typeof format === 'number' ? asDate(d).toLocaleString(Qt.locale(), format) : asDate(d).toLocaleString(Qt.locale(), String(format))
+}
+function formatDate(d, format) {
+	return typeof format === 'number' ? asDate(d).toLocaleDateString(Qt.locale(), format) : asDate(d).toLocaleString(Qt.locale(), String(format))
+}
+function formatTime(d, format) {
+	return typeof format === 'number' ? asDate(d).toLocaleTimeString(Qt.locale(), format) : asDate(d).toLocaleString(Qt.locale(), String(format))
+}
+
 function openGoogleCalendarNewEventUrl(date) {
 	function dateString(year, month, day) {
 		var s = '' + year
@@ -38,7 +55,7 @@ function dateString(d) {
 	return d.toISOString().substr(0, 10)
 }
 function localeDateString(d) {
-	return Qt.formatDateTime(d, 'yyyy-MM-dd')
+	return formatDateTime(d, 'yyyy-MM-dd')
 }
 function isValidDate(d) {
 	if (d === null) {
@@ -187,19 +204,46 @@ function toArray(value) {
 // or '' when not invited (no attendees, or the user organizes it). attendees is an array, or a
 // ListModel once the event has been put in one (agenda).
 function myResponse(eventItem) {
-	var attendees = eventItem ? eventItem.attendees : null
+	if (eventItem && typeof eventItem.attendeeResponse === 'string') {
+		return eventItem.attendeeResponse // Summed up beforehand (withPlainSummary)
+	}
+	return attendeeSummary(eventItem ? eventItem.attendees : null).response
+}
+
+// The attendees in one pass: response (myResponse) and guestCount (anyone besides the user, not
+// rooms). attendees: an array or a ListModel.
+function attendeeSummary(attendees) {
+	var summary = { response: '', guestCount: 0 }
 	if (!attendees) {
-		return ''
+		return summary
 	}
 	var isModel = typeof attendees.get === 'function' && typeof attendees.count === 'number'
 	var count = isModel ? attendees.count : (isList(attendees) ? attendees.length : 0)
 	for (var i = 0; i < count; i++) {
 		var attendee = isModel ? attendees.get(i) : attendees[i]
 		if (attendee && attendee.self) {
-			return attendee.organizer ? '' : String(attendee.responseStatus || '')
+			summary.response = attendee.organizer ? '' : String(attendee.responseStatus || '')
+		} else if (attendee && !attendee.resource) {
+			summary.guestCount++
 		}
 	}
-	return ''
+	return summary
+}
+
+// A copy of an event with its nested lists summed up as plain values, for a ListModel (the agenda):
+// read there, a nested ListModel's get() in a binding loops (Qt 6.12) and froze Plasma (issue #3).
+// attendeeResponse (myResponse), attendeeGuestCount, conflictTitlesText (conflictTitles, one per
+// line), meetingUrl / meetingLabel (meeting: MeetingLink.find's, or null). The widget's own fields
+// (EventFields.widgetFields): never sent to the server.
+function withPlainSummary(eventItem, meeting) {
+	var copy = Object.assign({}, eventItem)
+	var attendees = attendeeSummary(eventItem.attendees)
+	copy.attendeeResponse = attendees.response
+	copy.attendeeGuestCount = attendees.guestCount
+	copy.conflictTitlesText = conflictTitles(eventItem).join('\n')
+	copy.meetingUrl = meeting ? String(meeting.url || '') : ''
+	copy.meetingLabel = meeting ? String(meeting.label || '') : ''
+	return copy
 }
 
 // Left out of the views (and the panel's next meeting) when declined events are set to Hide.
@@ -224,6 +268,9 @@ function isHiddenCalendar(calendarId, hiddenCalendarIds) {
 // Titles of the events this one overlaps (EventModel sets conflictsWith, see Conflicts.js). It holds
 // { summary } objects, not strings: a ListModel (agenda) drops plain strings from nested lists.
 function conflictTitles(eventItem) {
+	if (eventItem && typeof eventItem.conflictTitlesText === 'string') {
+		return eventItem.conflictTitlesText ? eventItem.conflictTitlesText.split('\n') : [] // withPlainSummary
+	}
 	var list = eventItem ? eventItem.conflictsWith : null
 	if (!list) {
 		return []
@@ -240,12 +287,14 @@ function conflictTitles(eventItem) {
 	return titles
 }
 
-// What an event is or has set, as small icons after its time: 'outOfOffice' / 'focusTime' (Google
-// event types, see EventTypes.js), 'conflict' (overlaps another meeting),
+// What an event is or has set, as small icons after its time: 'needsAction' (an invitation not
+// answered yet, see isAwaitingAnswer; EventBar shows its icon before the title instead),
+// 'outOfOffice' / 'focusTime' (Google event types, see EventTypes.js), 'conflict' (overlaps another meeting),
 // 'location', 'meeting' (a join link, found by the caller with MeetingLink.find), 'guests' (anyone
 // besides the user), 'repeat' and 'description'. Keys in hide are left out, eg: when the view
 // already shows the location. attendees may be an array or a ListModel (agenda).
 var EVENT_INDICATOR_ICONS = {
+	needsAction: 'dialog-question',
 	outOfOffice: 'im-user-away',
 	focusTime: 'audio-headphones',
 	conflict: 'dialog-warning',
@@ -264,29 +313,27 @@ function eventIndicatorIconSize(key, size) {
 	var scale = EVENT_INDICATOR_SCALE[key] || 1
 	return scale === 1 ? size : 2 * Math.round(size * scale / 2)
 }
+// An invitation the user hasn't answered yet (the question mark icon), from Shared.myResponse.
+function isAwaitingAnswer(response) {
+	return response === 'needsAction'
+}
 function eventIndicatorKeys(eventItem, hasMeeting, hide) {
 	if (!eventItem) {
 		return []
 	}
 	hide = hide || {}
-	var attendees = eventItem.attendees
-	var guestCount = 0
-	if (attendees) {
-		var isModel = typeof attendees.get === 'function' && typeof attendees.count === 'number'
-		var count = isModel ? attendees.count : (isList(attendees) ? attendees.length : 0)
-		for (var i = 0; i < count; i++) {
-			var attendee = isModel ? attendees.get(i) : attendees[i]
-			if (attendee && !attendee.self && !attendee.resource) {
-				guestCount++
-			}
-		}
-	}
+	var attendees = typeof eventItem.attendeeGuestCount === 'number'
+		? { response: myResponse(eventItem), guestCount: eventItem.attendeeGuestCount } // withPlainSummary
+		: attendeeSummary(eventItem.attendees)
+	var response = attendees.response
+	var guestCount = attendees.guestCount
 	var keys = []
 	function add(key, isSet) {
 		if (isSet && !hide[key]) {
 			keys.push(key)
 		}
 	}
+	add('needsAction', isAwaitingAnswer(response))
 	add('outOfOffice', eventItem.eventType === 'outOfOffice')
 	add('focusTime', eventItem.eventType === 'focusTime')
 	add('conflict', conflictTitles(eventItem).length > 0)
@@ -306,6 +353,86 @@ function isUnconfirmedResponse(response) {
 // Number identifying a calendar day, eg: for weather lookups. Month is 0-based like Date.
 function dayKey(d) {
 	return d.getFullYear() * 10000 + d.getMonth() * 100 + d.getDate()
+}
+
+// How many events of items are on each day from..to (dates, to excluded): { dayKey: count }. An
+// all-day event counts on each of its days (its end date excluded), a timed one on each day it
+// touches.
+function eventDayCounts(items, from, to) {
+	var counts = {}
+	forEachEventDay(items, from, to, function(key) {
+		counts[key] = (counts[key] || 0) + 1
+	})
+	return counts
+}
+// Calls fn(dayKey, item) for each day from..to an event of items is on (see eventDayCounts).
+function forEachEventDay(items, from, to, fn) {
+	var first = startOfDay(from)
+	var last = startOfDay(to)
+	;(items || []).forEach(function(item) {
+		if (!item || !item.startDateTime || !item.endDateTime) {
+			return
+		}
+		var start = new Date(item.startDateTime)
+		var end = new Date(item.endDateTime)
+		// The last day it's on: an all-day end is the next day; a timed one ending at midnight too.
+		var lastDay = end > start ? startOfDay(new Date(end.getTime() - 1)) : startOfDay(start)
+		var day = startOfDay(start)
+		if (day < first) {
+			day = new Date(first)
+		}
+		for (var n = 0; day <= lastDay && day < last && n < 62; n++) {
+			fn(dayKey(day), item)
+			day = addDays(day, 1)
+		}
+	})
+}
+// The colors of the events on each day from..to: { dayKey: { color: count } } ("": no color).
+function eventDayColors(items, from, to) {
+	var colors = {}
+	forEachEventDay(items, from, to, function(key, item) {
+		var color = item.backgroundColor ? String(item.backgroundColor) : ""
+		var day = colors[key] || (colors[key] = {})
+		day[color] = (day[color] || 0) + 1
+	})
+	return colors
+}
+// The colors of a day's dots (dots: how many): each of its colors once, the most used ones first,
+// as many as there are dots; dots left over have the most used color, next to its first one.
+function dotColors(colorCounts, dots) {
+	var colors = Object.keys(colorCounts || {}).sort(function(a, b) {
+		return colorCounts[b] - colorCounts[a] || (a < b ? -1 : a > b ? 1 : 0)
+	}).slice(0, dots)
+	var list = []
+	for (var i = 0; i < colors.length; i++) {
+		var repeat = i === 0 ? dots - colors.length + 1 : 1
+		for (var j = 0; j < repeat; j++) {
+			list.push(colors[i])
+		}
+	}
+	return list
+}
+// The days with an event (eventDayCounts), { dayKey: true }.
+function eventDayKeys(items, from, to) {
+	var counts = eventDayCounts(items, from, to)
+	var keys = {}
+	for (var key in counts) {
+		keys[key] = true
+	}
+	return keys
+}
+// The events of items starting from after (a date) on, earliest first, at most limit: [{ item, day }]
+// (day: its start's day). For "Up next" and the Day view's "Next: …".
+function upcomingEvents(items, after, limit) {
+	var from = new Date(after).getTime()
+	var list = (items || []).filter(function(item) {
+		return !!item && !!item.startDateTime && new Date(item.startDateTime).getTime() >= from
+	}).sort(function(a, b) {
+		return new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime()
+	})
+	return list.slice(0, limit > 0 ? limit : list.length).map(function(item) {
+		return { item: item, day: startOfDay(new Date(item.startDateTime)) }
+	})
 }
 
 function pad2(n) {
@@ -338,7 +465,7 @@ function formatTemp(t) {
 
 // "09:45 – 10:00", format: a Qt time format, eg: appletConfig.timeFormat
 function formatTimeRange(start, end, format) {
-	return Qt.formatTime(start, format) + ' – ' + Qt.formatTime(end, format)
+	return formatTime(start, format) + ' – ' + formatTime(end, format)
 }
 
 // Monochrome variant of a (weather) icon: readable on any background. Use with `fallback: name`.
@@ -436,15 +563,59 @@ function eventSpan(e, timeFormat, now) {
 		var last = new Date(end)
 		last.setDate(last.getDate() - 1)
 		var dateFormat = spanDateFormat(start, last, now || new Date())
-		result.startText = Qt.formatDate(start, dateFormat)
-		result.endText = Qt.formatDate(last, dateFormat)
+		result.startText = formatDate(start, dateFormat)
+		result.endText = formatDate(last, dateFormat)
 	} else if (days > 1) {
 		var timedFormat = spanDateFormat(start, end, now || new Date()) + ' ' + timeFormat
-		result.startText = Qt.formatDateTime(start, timedFormat)
-		result.endText = Qt.formatDateTime(end, timedFormat)
+		result.startText = formatDateTime(start, timedFormat)
+		result.endText = formatDateTime(end, timedFormat)
 	} else {
-		result.startText = Qt.formatTime(start, timeFormat)
-		result.endText = Qt.formatTime(end, timeFormat)
+		result.startText = formatTime(start, timeFormat)
+		result.endText = formatTime(end, timeFormat)
 	}
 	return result
+}
+
+// The same event in more than one calendar (a meeting in your calendar and a shared one, or a
+// calendar subscribed twice): { index: true } for the copies to leave out. Same iCalUID (else id)
+// and start, in other calendars: one calendar's copies are kept, the best one's: preferred(e) first
+// (eg: shown where it's used), then one you can edit, then one with your answer, then the first.
+// Copies within one calendar are separate events, never left out. Tasks are left alone.
+function duplicateEvents(events, preferred) {
+	function rank(e) {
+		return (preferred && preferred(e) ? 4 : 0) + (e.canEdit ? 2 : (myResponse(e) ? 1 : 0))
+	}
+	var groups = {} // key -> { best: index, calendars: { calendarId: [indexes] } }
+	var order = []
+	for (var i = 0; i < events.length; i++) {
+		var e = events[i]
+		if (!e || e.kind === 'tasks#task' || !(e.iCalUID || e.id)) {
+			continue
+		}
+		var start = new Date(e.startDateTime).getTime()
+		if (!isFinite(start)) {
+			continue
+		}
+		var key = String(e.iCalUID || e.id) + '|' + start
+		var group = groups[key]
+		if (!group) {
+			group = groups[key] = { best: i, calendars: {} }
+			order.push(key)
+		} else if (rank(e) > rank(events[group.best])) {
+			group.best = i
+		}
+		var calendarId = String(e.calendarId || '')
+		;(group.calendars[calendarId] = group.calendars[calendarId] || []).push(i)
+	}
+	var drop = {}
+	order.forEach(function(key) {
+		var group = groups[key]
+		var keep = String(events[group.best].calendarId || '')
+		for (var calendarId in group.calendars) {
+			if (calendarId !== keep) {
+				group.calendars[calendarId].forEach(function(index) { drop[index] = true })
+			}
+		}
+	})
+	return drop
 }
