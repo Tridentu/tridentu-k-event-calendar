@@ -1,0 +1,935 @@
+import QtQuick
+import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.components as PlasmaComponents3
+
+import "ForecastChart.js" as ForecastChart
+import "Moon.js" as Moon
+import "Shared.js" as Shared
+import "WeatherIcons.js" as WeatherIcons
+import "lib/ColorUtil.js" as ColorUtil
+
+// Weather beside the Day view, in labeled sections: Now, Next hours, Next days.
+// Another day than today: that day's forecast (no "Now"), its hours and the days after it.
+ColumnLayout {
+	id: panel
+
+	property var current: null // { temp, iconName, text }, today only
+	property var today: null // daily item of the shown day
+	property var hourly: [] // hourly items: from now, or the shown day's daytime hours
+	property var nextDays: [] // daily items after the shown day
+	property bool isToday: true // false: the view shows another day
+	property bool isSetup: true
+	property string locationName: ""
+	// Its place (WeatherApi.place): the chart's nights by the sun there, sunrise and sunset. NaN: by
+	// the hour, no sunrise and sunset.
+	property real latitude: NaN
+	property real longitude: NaN
+	property date day: new Date() // The shown day: its sunrise and sunset
+	// The day's start: the day passed can be the current time, ticking (the same day: no change).
+	readonly property double dayStart: new Date(day.getFullYear(), day.getMonth(), day.getDate()).getTime()
+	readonly property var sun: Moon.sunRiseSet(new Date(dayStart), latitude, longitude)
+	// Sunrise and sunset beside the temperature, above the high and the low; a narrow card: below.
+	readonly property bool sunBeside: width >= Kirigami.Units.gridUnit * 14
+
+	// Sunrise and sunset (Moon.sunRiseSet) as the high and the low ("↑ 10°"): the Weather Icons glyph
+	// at the text's size, then the time; sunset dimmed as the low (lowOpacity).
+	component SunTimes: RowLayout {
+		id: sunTimes
+		property var sun: null
+		property real lowOpacity: 1
+		readonly property bool crossing: !!sun && (!!sun.rise || !!sun.set)
+		function timeText(date) {
+			return date ? Shared.formatTime(date, appletConfig.timeFormat) : ""
+		}
+		spacing: Kirigami.Units.largeSpacing
+		Accessible.name: crossing
+			? [sun.rise ? i18nc("%1 = time", "Sunrise %1", timeText(sun.rise)) : "",
+				sun.set ? i18nc("%1 = time", "Sunset %1", timeText(sun.set)) : ""].filter(Boolean).join(" · ")
+			: polarLabel.text
+		Repeater {
+			model: sunTimes.crossing ? [
+				{ glyph: "\uf051", at: sunTimes.sun.rise, opacity: 1 }, // wi-sunrise
+				{ glyph: "\uf052", at: sunTimes.sun.set, opacity: sunTimes.lowOpacity }, // wi-sunset
+			].filter(function(entry) { return !!entry.at }) : []
+			Row {
+				spacing: Math.max(2, Math.round(timeLabel.font.pixelSize / 4)) // A space
+				opacity: modelData.opacity
+				PlasmaComponents3.Label {
+					anchors.baseline: timeLabel.baseline
+					font.family: "weathericons"
+					font.pointSize: Kirigami.Theme.defaultFont.pointSize
+					text: modelData.glyph
+				}
+				PlasmaComponents3.Label {
+					id: timeLabel
+					textFormat: Text.PlainText
+					text: sunTimes.timeText(modelData.at)
+				}
+			}
+		}
+		// Close to the pole
+		PlasmaComponents3.Label {
+			id: polarLabel
+			visible: !sunTimes.crossing
+			textFormat: Text.PlainText
+			text: sunTimes.sun && sunTimes.sun.alwaysUp ? i18nc("the sun up all day", "Midnight sun") : i18nc("the sun down all day", "Polar night")
+		}
+	}
+	property string forecastUrl: "" // The full forecast on the web (WeatherApi.forecastPageUrl): the location opens it
+	property bool compact: false // One row above the grid when the popup is narrow
+	// Sections left out where there's little height (the Day view's right column above the tasks).
+	property bool showHourly: true
+	property bool showNextDays: true
+	property bool loading: false // A forecast request is running
+	property string errorText: "" // The last request failed
+	signal retryRequested()
+	readonly property bool hasData: !!current || !!today || hourly.length > 0
+	// First load: a loading view instead of the (empty) sections. Refreshes keep the old data.
+	readonly property bool showLoading: isSetup && loading && !hasData
+	readonly property bool showData: isSetup && !showLoading && (hasData || !errorText)
+
+	spacing: Kirigami.Units.smallSpacing
+
+	// Secondary text (section titles, descriptions, hours): dimmed less in a light theme, where the
+	// translucent card is light grey too.
+	readonly property real dimOpacity: appletConfig.darkTheme ? 0.75 : 0.9
+	// The chart's line and points: the accent, dark enough to stand out on a light card.
+	readonly property color lineColor: appletConfig.eventColoredTextColor(Kirigami.Theme.highlightColor)
+
+	function timeText(dt) {
+		return Shared.formatTime(new Date(dt * 1000), appletConfig.clock24h ? 'HH:mm' : 'h AP')
+	}
+	function precipitationText(mm) {
+		return mm > 0 ? i18nc("precipitation in mm", "%1 mm", Math.round(mm * 10) / 10) : ""
+	}
+
+	// The section name, underlined: a line below it, then the section's content.
+	component SectionTitle: ColumnLayout {
+		property alias text: titleLabel.text
+		property alias detail: detailLabel.text // On the right, dimmed (eg: the rain to come)
+		Layout.fillWidth: true
+		Layout.topMargin: Kirigami.Units.largeSpacing * 2
+		Layout.bottomMargin: Kirigami.Units.smallSpacing
+		spacing: Kirigami.Units.smallSpacing
+		RowLayout {
+			Layout.fillWidth: true
+			PlasmaComponents3.Label {
+				id: titleLabel
+				Layout.fillWidth: true
+				elide: Text.ElideRight
+				textFormat: Text.PlainText
+				// Above the text below it: larger and bolder, not dimmed.
+				font.weight: Font.DemiBold
+				font.pointSize: appletConfig.fontPoints(Kirigami.Theme.defaultFont) * 1.1
+			}
+			PlasmaComponents3.Label {
+				id: detailLabel
+				visible: !!text
+				textFormat: Text.PlainText
+				opacity: panel.dimOpacity
+			}
+		}
+		Kirigami.Separator {
+			Layout.fillWidth: true
+			opacity: appletConfig.darkTheme ? 0.6 : 1
+		}
+	}
+
+	// Not configured
+	ColumnLayout {
+		visible: !panel.isSetup
+		Layout.fillWidth: true
+		Kirigami.Icon {
+			Layout.alignment: Qt.AlignHCenter
+			source: "weather-none-available"
+			Layout.preferredWidth: Kirigami.Units.iconSizes.large
+			Layout.preferredHeight: Layout.preferredWidth
+			opacity: 0.6
+		}
+		PlasmaComponents3.Label {
+			Layout.fillWidth: true
+			horizontalAlignment: Text.AlignHCenter
+			wrapMode: Text.Wrap
+			text: i18n("Set a location in Settings > Weather to see the forecast here.")
+			opacity: 0.7
+		}
+	}
+
+	// No forecast yet and the request failed: why, and a way to try again.
+	ColumnLayout {
+		visible: panel.isSetup && !panel.loading && !panel.hasData && !!panel.errorText
+		Layout.fillWidth: true
+		Layout.topMargin: panel.compact ? 0 : Kirigami.Units.gridUnit * 3
+		spacing: Kirigami.Units.largeSpacing
+		Kirigami.Icon {
+			visible: !panel.compact
+			Layout.alignment: Qt.AlignHCenter
+			source: "weather-none-available"
+			Layout.preferredWidth: Kirigami.Units.iconSizes.large
+			Layout.preferredHeight: Layout.preferredWidth
+			opacity: 0.6
+		}
+		PlasmaComponents3.Label {
+			Layout.fillWidth: true
+			horizontalAlignment: Text.AlignHCenter
+			wrapMode: Text.Wrap
+			text: panel.errorText
+			opacity: 0.7
+		}
+		PlasmaComponents3.Button {
+			Layout.alignment: Qt.AlignHCenter
+			icon.name: "view-refresh"
+			text: i18n("Retry Now")
+			onClicked: panel.retryRequested()
+		}
+	}
+
+	// Loading (first time): spinner and text, centered; one row in the compact layout.
+	GridLayout {
+		visible: panel.showLoading
+		Layout.fillWidth: true
+		Layout.topMargin: panel.compact ? 0 : Kirigami.Units.gridUnit * 3
+		columns: panel.compact ? 2 : 1
+		columnSpacing: Kirigami.Units.largeSpacing
+		rowSpacing: Kirigami.Units.largeSpacing
+		PlasmaComponents3.BusyIndicator {
+			running: parent.visible
+			Layout.preferredWidth: panel.compact ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.large
+			Layout.preferredHeight: Layout.preferredWidth
+			Layout.alignment: panel.compact ? Qt.AlignVCenter : Qt.AlignHCenter
+		}
+		PlasmaComponents3.Label {
+			Layout.fillWidth: !panel.compact
+			Layout.alignment: Qt.AlignVCenter
+			horizontalAlignment: panel.compact ? Text.AlignLeft : Text.AlignHCenter
+			text: i18n("Loading weather…")
+			opacity: 0.7
+		}
+	}
+
+	// "Weather" as the card's title (like the Day view's "Tasks" beside it), the location on the
+	// right with a pin, a small spinner while refreshing.
+	RowLayout {
+		visible: panel.showData && !panel.compact
+		Layout.fillWidth: true
+		spacing: Kirigami.Units.smallSpacing
+		PlasmaComponents3.Label {
+			text: i18n("Weather")
+			textFormat: Text.PlainText
+			font.weight: Font.Bold
+			font.pointSize: appletConfig.fontPoints(Kirigami.Theme.defaultFont) * 1.25
+		}
+		Item {
+			Layout.fillWidth: true
+		}
+		PlasmaComponents3.BusyIndicator {
+			visible: panel.loading
+			running: visible
+			Layout.preferredWidth: Kirigami.Units.iconSizes.small
+			Layout.preferredHeight: Layout.preferredWidth
+		}
+		Kirigami.Icon {
+			visible: !!panel.locationName
+			Layout.alignment: Qt.AlignVCenter
+			implicitWidth: Kirigami.Units.iconSizes.small
+			implicitHeight: implicitWidth
+			source: "mark-location"
+			opacity: panel.dimOpacity
+		}
+		PlasmaComponents3.Label {
+			visible: !!panel.locationName
+			Layout.alignment: Qt.AlignVCenter
+			Layout.minimumWidth: 0
+			Layout.maximumWidth: Math.ceil(implicitWidth)
+			Layout.fillWidth: true
+			elide: Text.ElideRight
+			text: panel.locationName
+			textFormat: Text.PlainText // User text: never parsed as HTML
+			// A link (the full forecast on the web): in the link color, underlined when hovered.
+			opacity: panel.forecastUrl ? 1 : panel.dimOpacity
+			color: panel.forecastUrl ? Kirigami.Theme.linkColor : Kirigami.Theme.textColor
+			font.underline: !!panel.forecastUrl && locationHover.hovered
+			PlasmaComponents3.ToolTip.text: panel.forecastUrl ? i18n("Full forecast on the web") : text
+			PlasmaComponents3.ToolTip.visible: (truncated || !!panel.forecastUrl) && locationHover.hovered
+			HoverHandler {
+				id: locationHover
+				cursorShape: panel.forecastUrl ? Qt.PointingHandCursor : Qt.ArrowCursor
+			}
+			TapHandler {
+				enabled: !!panel.forecastUrl
+				onTapped: Shared.openExternalUrl(panel.forecastUrl)
+			}
+		}
+		// Opens in the browser.
+		Kirigami.Icon {
+			visible: !!panel.locationName && !!panel.forecastUrl
+			Layout.alignment: Qt.AlignVCenter
+			implicitWidth: Math.round(Kirigami.Units.iconSizes.small * 0.75)
+			implicitHeight: implicitWidth
+			source: "external-link-symbolic"
+			fallback: "link"
+			color: Kirigami.Theme.linkColor
+			TapHandler {
+				onTapped: Shared.openExternalUrl(panel.forecastUrl)
+			}
+			HoverHandler {
+				cursorShape: Qt.PointingHandCursor
+			}
+		}
+	}
+
+	// The icon tile's sky for a weather icon name (weather-clear, weather-showers-night, …):
+	// [top, bottom] of its gradient, deep enough that the sun and the white clouds stand out.
+	function skyColors(iconName) {
+		var name = String(iconName || "")
+		if (name.indexOf("night") >= 0) {
+			return ["#1f2a5a", "#3b4a8c"]
+		}
+		if (name.indexOf("storm") >= 0 || name.indexOf("severe") >= 0) {
+			return ["#463a6e", "#76669f"]
+		}
+		if (name.indexOf("fog") >= 0 || name === "weather-overcast") {
+			return ["#66707c", "#949daa"]
+		}
+		if (name === "weather-clear" || name === "weather-few-clouds") {
+			return ["#2f86dc", "#79bdf3"]
+		}
+		return ["#4c709a", "#86a7c9"] // Clouds, rain, snow
+	}
+
+	//--- Now (today), or the shown day's forecast
+	readonly property bool showDaySummary: !isToday && !!today
+	RowLayout {
+		visible: panel.showData && (!!panel.current || panel.showDaySummary)
+		Layout.fillWidth: true
+		// Right below the card's title (no section title of its own).
+		Layout.topMargin: panel.compact ? 0 : Kirigami.Units.largeSpacing
+		spacing: Kirigami.Units.largeSpacing
+		// The icon's background (Settings > Weather > Current weather icon background):
+		// - sky: a small sky (blue by day, indigo at night, grey for fog, …) with a soft shadow,
+		//   light icons (clouds) vanish on a light card otherwise
+		// - subtle: a faint tile of the text color
+		// - none: the icon alone, as large as the tile would be
+		Item {
+			id: iconTile
+			readonly property string background: plasmoid.configuration.weatherIconBackground || "sky"
+			readonly property var sky: panel.skyColors(panel.current ? panel.current.iconName : panel.showDaySummary ? panel.today.iconName : "")
+			readonly property real radius: Math.round(width * 0.3)
+			Layout.preferredWidth: (panel.compact ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.large) + Kirigami.Units.smallSpacing * 2
+			Layout.preferredHeight: Layout.preferredWidth
+			Rectangle {
+				visible: iconTile.background === "subtle"
+				anchors.fill: parent
+				radius: iconTile.radius
+				color: ColorUtil.setAlpha(Kirigami.Theme.textColor, appletConfig.darkTheme ? 0.1 : 0.07)
+			}
+			Kirigami.ShadowedRectangle {
+				visible: iconTile.background === "sky"
+				anchors.fill: parent
+				radius: iconTile.radius
+				color: iconTile.sky[1]
+				shadow.size: 8
+				shadow.yOffset: 2
+				shadow.color: ColorUtil.setAlpha(iconTile.sky[0], appletConfig.darkTheme ? 0.5 : 0.35)
+			}
+			Rectangle {
+				visible: iconTile.background === "sky"
+				anchors.fill: parent
+				radius: iconTile.radius
+				gradient: Gradient {
+					GradientStop { position: 0; color: iconTile.sky[0] }
+					GradientStop { position: 1; color: iconTile.sky[1] }
+				}
+			}
+			Kirigami.Icon {
+				anchors.centerIn: parent
+				width: iconTile.background === "none" ? parent.width : parent.width - Kirigami.Units.smallSpacing * 2
+				height: width
+				source: WeatherIcons.largeSource(panel.current ? panel.current.iconName : panel.showDaySummary ? panel.today.iconName : "", plasmoid.configuration.weatherIconStyle)
+			}
+		}
+		ColumnLayout {
+			Layout.fillWidth: true
+			spacing: 0
+			// The temperature: the panel's largest text, beside the icon.
+			Kirigami.Heading {
+				level: 1
+				font.pointSize: appletConfig.fontPoints(Kirigami.Theme.defaultFont) * (panel.compact ? 1.4 : 1.9)
+				font.weight: Font.Normal
+				text: panel.current ? Shared.formatTemp(panel.current.temp)
+					: panel.showDaySummary ? Shared.formatTemp(panel.today.temp.max) + " / " + Shared.formatTemp(panel.today.temp.min) : ""
+			}
+			PlasmaComponents3.Label {
+				Layout.fillWidth: true
+				elide: Text.ElideRight
+				text: panel.current ? panel.current.text : panel.showDaySummary ? (panel.today.text || panel.today.description || "") : ""
+				textFormat: Text.PlainText // User text: never parsed as HTML
+				opacity: panel.dimOpacity
+			}
+		}
+		// Today: the high and the low, then the rain (when there is any) on a light blue pill with a
+		// drop, on the right, in the room beside the temperature.
+		ColumnLayout {
+			readonly property bool todayRange: !!panel.today && panel.isToday
+			visible: !panel.compact && (todayRange || (!!panel.sun && panel.sunBeside))
+			Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+			spacing: Kirigami.Units.smallSpacing
+			// Above the high and the low (room enough): sunrise and sunset.
+			SunTimes {
+				visible: !!panel.sun && panel.sunBeside
+				Layout.alignment: Qt.AlignRight // The rows here lined up on the right
+				sun: panel.sun
+				lowOpacity: panel.dimOpacity * 0.8
+			}
+			RowLayout {
+				visible: parent.todayRange
+				Layout.alignment: Qt.AlignRight
+				spacing: Kirigami.Units.largeSpacing
+				Accessible.name: panel.today ? i18nc("high / low temperature", "High %1 · Low %2", Shared.formatTemp(panel.today.temp.max), Shared.formatTemp(panel.today.temp.min)) : ""
+				PlasmaComponents3.Label {
+					textFormat: Text.PlainText
+					text: panel.today ? "↑ " + Shared.formatTemp(panel.today.temp.max) : ""
+				}
+				PlasmaComponents3.Label {
+					textFormat: Text.PlainText
+					text: panel.today ? "↓ " + Shared.formatTemp(panel.today.temp.min) : ""
+					opacity: panel.dimOpacity * 0.8
+				}
+			}
+			Rectangle {
+				id: rainPill
+				readonly property string rain: panel.today ? panel.precipitationText(panel.today.precipitation) : ""
+				readonly property color tint: appletConfig.darkTheme ? "#7db8ff" : "#1f6fd6"
+				visible: !!rain && parent.todayRange
+				Layout.alignment: Qt.AlignRight
+				implicitWidth: rainRow.implicitWidth + Kirigami.Units.largeSpacing * 2
+				implicitHeight: rainRow.implicitHeight + Kirigami.Units.smallSpacing * 2
+				radius: height / 2
+				color: ColorUtil.setAlpha(tint, appletConfig.darkTheme ? 0.2 : 0.12)
+				Accessible.name: rain ? i18nc("precipitation during the day", "Rain: %1", rain) : ""
+				RowLayout {
+					id: rainRow
+					anchors.centerIn: parent
+					spacing: Kirigami.Units.smallSpacing
+					// A drop: a circle, and above its center a square of half its size turned on its
+					// corner (the bottom corner at the center, the point up, the sides on the circle).
+					Item {
+						readonly property real d: Math.round(rainLabel.implicitHeight * 0.5)
+						Layout.alignment: Qt.AlignVCenter
+						implicitWidth: d
+						implicitHeight: Math.ceil(d * (0.5 + Math.SQRT1_2))
+						Rectangle {
+							width: parent.d / 2
+							height: width
+							x: (parent.width - width) / 2
+							y: parent.height - parent.d / 2 - parent.d * Math.SQRT1_2 / 2 - height / 2
+							rotation: 45
+							antialiasing: true
+							color: rainPill.tint
+						}
+						Rectangle {
+							width: parent.d
+							height: width
+							y: parent.height - height
+							radius: width / 2
+							antialiasing: true
+							color: rainPill.tint
+						}
+					}
+					PlasmaComponents3.Label {
+						id: rainLabel
+						textFormat: Text.PlainText
+						text: rainPill.rain
+						color: rainPill.tint
+						font.weight: Font.DemiBold
+					}
+				}
+			}
+		}
+		// Compact: today's range on the same row
+		PlasmaComponents3.Label {
+			visible: panel.compact && !!panel.today && !!panel.current
+			text: panel.today ? i18nc("high / low temperature", "High %1 · Low %2", Shared.formatTemp(panel.today.temp.max), Shared.formatTemp(panel.today.temp.min)) : ""
+			opacity: panel.dimOpacity
+		}
+	}
+	// A narrow card: sunrise and sunset in a row of their own, the conditions keep their room.
+	SunTimes {
+		visible: panel.showData && !panel.compact && !!panel.sun && !panel.sunBeside && (!!panel.current || !!panel.today)
+		Layout.alignment: Qt.AlignRight
+		sun: panel.sun
+		lowOpacity: panel.dimOpacity * 0.8
+	}
+	// Another day: its rain (the high / low are in the heading).
+	PlasmaComponents3.Label {
+		readonly property string rain: panel.today ? panel.precipitationText(panel.today.precipitation) : ""
+		visible: panel.showData && !panel.compact && !!panel.today && !panel.isToday && !!rain
+		Layout.fillWidth: true
+		Layout.topMargin: Kirigami.Units.smallSpacing
+		wrapMode: Text.Wrap
+		text: rain ? i18nc("precipitation during the day", "Rain: %1", rain) : ""
+		opacity: panel.dimOpacity
+	}
+	// Past days and days beyond the forecast
+	PlasmaComponents3.Label {
+		visible: panel.showData && !panel.isToday && !panel.today && panel.hourly.length === 0
+		Layout.fillWidth: true
+		wrapMode: Text.Wrap
+		text: i18n("No forecast for this day.")
+		opacity: panel.dimOpacity
+	}
+
+	//--- Next hours: temperature line with rain bars, labels every few hours (Settings > Weather >
+	// Forecast chart):
+	// - simple: a line in the accent color, plain rain bars
+	// - fancy: a smooth line colored by the temperature over a soft area, the nights shaded, a dashed
+	//   line at freezing, rounded rain bars, the high and the low in bold, a red line at the current time
+	readonly property bool fancyChart: plasmoid.configuration.weatherChartStyle === "fancy"
+	readonly property bool chartRainAmounts: plasmoid.configuration.weatherChartRainAmounts
+	SectionTitle {
+		visible: panel.showData && !panel.compact && panel.showHourly && panel.hourly.length > 1
+		// The hours the chart spans (Settings > Weather > Forecast chart > Hours shown).
+		readonly property int hours: hourChart.points.length > 1 ? Math.round((hourChart.points[hourChart.points.length - 1].dt - hourChart.points[0].dt) / 3600) : 0
+		text: panel.isToday ? i18np("Next hour", "Next %1 hours", hours) : i18nc("weather by hour of the shown day", "During the day")
+		readonly property real rain: ForecastChart.rainTotal(hourChart.points)
+		detail: panel.chartRainAmounts && rain > 0 ? i18nc("precipitation during the hours of the chart", "Rain: %1", panel.precipitationText(rain)) : ""
+	}
+	Item {
+		id: hourChart
+		visible: panel.showData && !panel.compact && panel.showHourly && points.length > 1
+		Layout.fillWidth: true
+		Layout.preferredHeight: Kirigami.Units.gridUnit * 7 + iconSize - Kirigami.Units.iconSizes.small
+
+		// Today: the next hours of Settings > Weather > Forecast chart > Hours shown;
+		// another day: its hours.
+		readonly property int hoursShown: Math.max(9, plasmoid.configuration.meteogramHours || 24)
+		readonly property var points: {
+			if (!panel.isToday || panel.hourly.length === 0) {
+				return panel.hourly
+			}
+			var last = panel.hourly[0].dt + hoursShown * 3600
+			return panel.hourly.filter(function(point) { return point.dt <= last })
+		}
+		// Every labelStep-th point labeled (icon, temperature, time): about 45 px apart at least.
+		readonly property int labelStep: {
+			var spacing = points.length > 1 ? (width - 12) / (points.length - 1) : width
+			var steps = [1, 2, 3, 6, 12]
+			for (var i = 0; i < steps.length; i++) {
+				if (steps[i] * spacing >= Kirigami.Units.gridUnit * 2.5) {
+					return steps[i]
+				}
+			}
+			return 12
+		}
+		readonly property int iconSize: plasmoid.configuration.weatherChartLargeIcons ? Kirigami.Units.iconSizes.smallMedium : Kirigami.Units.iconSizes.small
+		readonly property real iconRow: iconSize + 2
+		readonly property real labelRow: Math.ceil(chartFontMetrics.height) + 2
+		// Plot area for the line: below the icons and temperature labels, above the hour labels.
+		readonly property real plotTop: iconRow + labelRow
+		readonly property real plotBottom: height - labelRow
+		readonly property real minTemp: Math.min.apply(null, points.map(function(p) { return p.temp }))
+		readonly property real maxTemp: Math.max.apply(null, points.map(function(p) { return p.temp }))
+		readonly property real maxRain: Math.max(1, Math.max.apply(null, points.map(function(p) { return p.precipitation || 0 })))
+		readonly property var rainPeaks: panel.chartRainAmounts ? ForecastChart.rainPeaks(points, labelStep, 0.3) : []
+		readonly property string units: plasmoid.configuration.weatherUnits
+		// The current time: the shown day is today, and it's within the chart.
+		readonly property var now: typeof timeModel !== "undefined" ? timeModel.currentTime : new Date()
+		readonly property real nowIndex: panel.isToday ? ForecastChart.nowIndex(points, now.getTime()) : -1
+		readonly property color nowColor: "#e0403a"
+		function xAt(i) {
+			return points.length > 1 ? 6 + i * (width - 12) / (points.length - 1) : width / 2
+		}
+		function yAt(temp) {
+			var range = Math.max(2, maxTemp - minTemp)
+			return plotBottom - 4 - (temp - minTemp) / range * (plotBottom - plotTop - 8)
+		}
+		function rainHeight(rain) {
+			return rain / maxRain * (plotBottom - plotTop) * 0.6
+		}
+		// The labeled points: every 3 hours, with the fancy chart also the high and the low.
+		function isExtreme(i) {
+			if (!points[i]) {
+				return false // A label left over while the points get fewer
+			}
+			var t = points[i].temp
+			return panel.fancyChart && maxTemp - minTemp >= 2 && (t === maxTemp || t === minTemp)
+				&& points.findIndex(function(p) { return p.temp === t }) === i
+		}
+		function isLabeled(i) {
+			// An extreme replaces the regular label next to it, so they don't overlap.
+			if (i % labelStep !== 0) {
+				return isExtreme(i)
+			}
+			return isExtreme(i) || !(i > 0 && isExtreme(i - 1)) && !(i + 1 < points.length && isExtreme(i + 1))
+		}
+		onPointsChanged: chartCanvas.requestPaint()
+		onWidthChanged: chartCanvas.requestPaint()
+		onHeightChanged: chartCanvas.requestPaint()
+		Connections {
+			target: panel
+			function onFancyChartChanged() { chartCanvas.requestPaint() }
+			function onLineColorChanged() { chartCanvas.requestPaint() }
+		}
+
+		FontMetrics {
+			id: chartFontMetrics
+			font: Kirigami.Theme.smallFont
+		}
+
+		Canvas {
+			id: chartCanvas
+			anchors.fill: parent
+			onPaint: {
+				var ctx = getContext("2d")
+				ctx.reset()
+				var pts = hourChart.points
+				if (pts.length < 2) {
+					return
+				}
+				var fancy = panel.fancyChart
+				var dark = appletConfig.darkTheme
+				var xs = pts.map(function(p, i) { return hourChart.xAt(i) })
+				var ys = pts.map(function(p) { return hourChart.yAt(p.temp) })
+				var step = xs[1] - xs[0]
+
+				// Nights: shaded from the top of the plot to the hour labels.
+				if (fancy) {
+					ctx.fillStyle = dark ? "rgba(0, 0, 0, 0.22)" : "rgba(40, 60, 140, 0.08)"
+					ForecastChart.nightRanges(pts, Moon.sunDownAt(panel.latitude, panel.longitude)).forEach(function(range) {
+						var x1 = range.from === 0 ? 0 : hourChart.xAt(range.from)
+						var x2 = range.to === pts.length - 1 ? width : hourChart.xAt(range.to)
+						ctx.fillRect(x1, hourChart.plotTop - 4, x2 - x1, hourChart.plotBottom - hourChart.plotTop + 4)
+					})
+				}
+
+				// Rain bars
+				var barWidth = Math.max(2, step * 0.5)
+				if (fancy) {
+					var rainGradient = ctx.createLinearGradient(0, hourChart.plotTop, 0, hourChart.plotBottom)
+					rainGradient.addColorStop(0, dark ? "rgba(90, 160, 255, 0.75)" : "rgba(40, 120, 230, 0.8)")
+					rainGradient.addColorStop(1, dark ? "rgba(90, 160, 255, 0.3)" : "rgba(40, 120, 230, 0.35)")
+					ctx.fillStyle = rainGradient
+				} else {
+					ctx.fillStyle = Qt.rgba(0.2, 0.5, 0.9, dark ? 0.35 : 0.5)
+				}
+				for (var i = 0; i < pts.length; i++) {
+					var h = hourChart.rainHeight(pts[i].precipitation || 0)
+					if (h <= 0) {
+						continue
+					}
+					var left = xs[i] - barWidth / 2
+					var top = hourChart.plotBottom - h
+					if (fancy) {
+						var r = Math.min(barWidth / 2, h, 4)
+						ctx.beginPath()
+						ctx.moveTo(left, hourChart.plotBottom)
+						ctx.lineTo(left, top + r)
+						ctx.arcTo(left, top, left + r, top, r)
+						ctx.lineTo(left + barWidth - r, top)
+						ctx.arcTo(left + barWidth, top, left + barWidth, top + r, r)
+						ctx.lineTo(left + barWidth, hourChart.plotBottom)
+						ctx.closePath()
+						ctx.fill()
+					} else {
+						ctx.fillRect(left, top, barWidth, h)
+					}
+				}
+
+				// Freezing: a dashed line where the temperatures cross it.
+				var freezing = ForecastChart.fromCelsius(0, hourChart.units)
+				if (fancy && hourChart.minTemp < freezing && hourChart.maxTemp > freezing) {
+					var fy = hourChart.yAt(freezing)
+					ctx.strokeStyle = dark ? "rgba(120, 180, 255, 0.7)" : "rgba(40, 110, 220, 0.7)"
+					ctx.lineWidth = 1
+					ctx.setLineDash([4, 3])
+					ctx.beginPath()
+					ctx.moveTo(0, fy)
+					ctx.lineTo(width, fy)
+					ctx.stroke()
+					ctx.setLineDash([])
+				}
+
+				// Temperature line
+				var lineStyle = panel.lineColor
+				if (fancy) {
+					var stops = ForecastChart.temperatureStops(hourChart.minTemp, hourChart.maxTemp, hourChart.units)
+					var top = hourChart.yAt(hourChart.maxTemp)
+					var bottom = hourChart.yAt(hourChart.minTemp)
+					lineStyle = ctx.createLinearGradient(0, top, 0, Math.max(bottom, top + 1))
+					var area = ctx.createLinearGradient(0, top, 0, hourChart.plotBottom)
+					stops.forEach(function(stop) {
+						lineStyle.addColorStop(stop.position, stop.color)
+					})
+					// The area: the warmest color fading out (a blend towards the coldest one turns muddy).
+					area.addColorStop(0, ColorUtil.setAlpha(stops[0].color, dark ? 0.35 : 0.18))
+					area.addColorStop(1, ColorUtil.setAlpha(stops[0].color, 0))
+					var segments = ForecastChart.smoothSegments(xs, ys)
+					var tracePath = function() {
+						ctx.moveTo(xs[0], ys[0])
+						segments.forEach(function(s) {
+							ctx.bezierCurveTo(s.cp1x, s.cp1y, s.cp2x, s.cp2y, s.x, s.y)
+						})
+					}
+					ctx.beginPath()
+					tracePath()
+					ctx.lineTo(xs[xs.length - 1], hourChart.plotBottom)
+					ctx.lineTo(xs[0], hourChart.plotBottom)
+					ctx.closePath()
+					ctx.fillStyle = area
+					ctx.fill()
+					ctx.beginPath()
+					tracePath()
+					ctx.lineWidth = 2.5
+					ctx.lineJoin = "round"
+					ctx.lineCap = "round"
+					ctx.strokeStyle = lineStyle
+					ctx.stroke()
+				} else {
+					ctx.strokeStyle = lineStyle
+					ctx.lineWidth = 2
+					ctx.beginPath()
+					for (var j = 0; j < pts.length; j++) {
+						if (j === 0) {
+							ctx.moveTo(xs[j], ys[j])
+						} else {
+							ctx.lineTo(xs[j], ys[j])
+						}
+					}
+					ctx.stroke()
+				}
+
+				// Points at the labels: filled (simple), rings in the line's color (fancy).
+				for (var k = 0; k < pts.length; k++) {
+					if (!hourChart.isLabeled(k)) {
+						continue
+					}
+					ctx.beginPath()
+					ctx.arc(xs[k], ys[k], fancy ? 3.5 : 3, 0, Math.PI * 2)
+					if (fancy) {
+						ctx.fillStyle = Kirigami.Theme.backgroundColor
+						ctx.fill()
+						ctx.lineWidth = 2
+						ctx.strokeStyle = ForecastChart.colorAt(ForecastChart.toCelsius(pts[k].temp, hourChart.units))
+						ctx.stroke()
+					} else {
+						ctx.fillStyle = lineStyle
+						ctx.fill()
+					}
+				}
+			}
+		}
+
+		// The current time on the fancy chart: a red vertical line with a dot (the simple one as before).
+		Rectangle {
+			visible: panel.fancyChart && hourChart.nowIndex >= 0
+			x: Math.round(hourChart.xAt(Math.max(0, hourChart.nowIndex)) - width / 2)
+			y: hourChart.plotTop - 4
+			width: 2
+			height: hourChart.plotBottom - y
+			color: hourChart.nowColor
+			Rectangle {
+				anchors.horizontalCenter: parent.horizontalCenter
+				y: -height / 2
+				width: 7
+				height: width
+				radius: width / 2
+				color: parent.color
+			}
+		}
+
+		// Every labelStep points: icon on top, temperature above the point, time at the bottom.
+		Repeater {
+			model: hourChart.points.length
+			Item {
+				visible: index % hourChart.labelStep === 0
+				readonly property var point: hourChart.points[index]
+				x: hourChart.xAt(index)
+				width: 0
+				height: hourChart.height
+				Kirigami.Icon {
+					x: -width / 2
+					y: 0
+					width: hourChart.iconSize
+					height: width
+					source: WeatherIcons.source(parent.point ? parent.point.iconName : "", plasmoid.configuration.weatherIconStyle)
+					fallback: parent.point ? parent.point.iconName : ""
+				}
+				PlasmaComponents3.Label {
+					x: Math.max(-parent.x, Math.min(-implicitWidth / 2, hourChart.width - parent.x - implicitWidth))
+					y: hourChart.plotBottom + 1
+					text: parent.point ? panel.timeText(parent.point.dt) : ""
+					font: Kirigami.Theme.smallFont
+					opacity: panel.dimOpacity
+				}
+			}
+		}
+		// The temperatures: at the labeled points, the high and the low in bold (fancy).
+		Repeater {
+			model: hourChart.points.length
+			PlasmaComponents3.Label {
+				readonly property var point: hourChart.points[index]
+				visible: !!point && hourChart.isLabeled(index)
+				x: Math.max(0, Math.min(hourChart.xAt(index) - implicitWidth / 2, hourChart.width - implicitWidth))
+				y: hourChart.yAt(point ? point.temp : 0) - implicitHeight - 3
+				text: point ? Shared.formatTemp(point.temp) : ""
+				font.pointSize: Kirigami.Theme.smallFont.pointSize
+				font.weight: hourChart.isExtreme(index) ? Font.Bold : Font.Normal
+			}
+		}
+		// Rain amounts at the peaks, above their bars.
+		Repeater {
+			model: hourChart.rainPeaks
+			PlasmaComponents3.Label {
+				readonly property var point: hourChart.points[modelData]
+				x: Math.max(0, Math.min(hourChart.xAt(modelData) - implicitWidth / 2, hourChart.width - implicitWidth))
+				y: hourChart.plotBottom - hourChart.rainHeight(point.precipitation) - implicitHeight
+				text: panel.precipitationText(point.precipitation)
+				font: Kirigami.Theme.smallFont
+				color: Kirigami.Theme.linkColor
+			}
+		}
+
+		// Mouse over: the hour under it, marked (a line, its point ringed) with what it brings in a box
+		// beside the line: its day and time, the temperature to a tenth (the labels round), the sky, the rain.
+		HoverHandler {
+			id: chartHover
+			onHoveredChanged: {
+				chartHoverDelay.stop()
+				hourChart.hoverReady = false
+				if (hovered) {
+					chartHoverDelay.start()
+				}
+			}
+		}
+		// Shown once the mouse rests on the chart a moment: not while it just passes over it.
+		property bool hoverReady: false
+		Timer {
+			id: chartHoverDelay
+			interval: 700
+			onTriggered: hourChart.hoverReady = true
+		}
+		readonly property int hoverIndex: hoverReady && chartHover.hovered && points.length > 1
+			? Math.max(0, Math.min(points.length - 1, Math.round((chartHover.point.position.x - 6) / ((width - 12) / (points.length - 1)))))
+			: -1
+		readonly property var hoverPoint: hoverIndex >= 0 ? points[hoverIndex] : null
+		Rectangle {
+			visible: !!hourChart.hoverPoint
+			x: Math.round(hourChart.xAt(hourChart.hoverIndex))
+			y: hourChart.plotTop - 4
+			width: 1
+			height: hourChart.plotBottom - hourChart.plotTop + 4
+			color: ColorUtil.setAlpha(Kirigami.Theme.textColor, 0.4)
+		}
+		Rectangle {
+			readonly property real size: 9
+			visible: !!hourChart.hoverPoint
+			x: hourChart.xAt(hourChart.hoverIndex) - size / 2
+			y: hourChart.yAt(hourChart.hoverPoint ? hourChart.hoverPoint.temp : 0) - size / 2
+			width: size
+			height: size
+			radius: size / 2
+			color: Kirigami.Theme.backgroundColor
+			border.width: 2
+			border.color: panel.lineColor
+		}
+		Rectangle {
+			readonly property real lineX: hourChart.xAt(hourChart.hoverIndex)
+			readonly property real gap: Kirigami.Units.smallSpacing * 2
+			visible: !!hourChart.hoverPoint
+			// Right of the line, or left of it where there's no room.
+			x: lineX + gap + width <= hourChart.width ? lineX + gap : Math.max(0, lineX - gap - width)
+			y: hourChart.plotTop
+			width: hoverText.implicitWidth + Kirigami.Units.smallSpacing * 3
+			height: hoverText.implicitHeight + Kirigami.Units.smallSpacing * 2
+			radius: 4
+			color: Kirigami.Theme.backgroundColor
+			border.width: 1
+			border.color: ColorUtil.setAlpha(Kirigami.Theme.textColor, 0.25)
+			PlasmaComponents3.Label {
+				id: hoverText
+				anchors.centerIn: parent
+				font: Kirigami.Theme.smallFont
+				textFormat: Text.PlainText
+				text: {
+					var point = hourChart.hoverPoint
+					if (!point) {
+						return ""
+					}
+					var lines = [
+						Qt.locale().toString(new Date(point.dt * 1000), "ddd") + " " + panel.timeText(point.dt),
+						Number(point.temp).toLocaleString(Qt.locale(), 'f', 1) + "°",
+					]
+					var sky = point.text || point.description
+					if (sky) {
+						lines.push(sky)
+					}
+					if (point.precipitation > 0) {
+						lines.push(panel.precipitationText(point.precipitation))
+					}
+					return lines.join("\n")
+				}
+			}
+		}
+	}
+
+	//--- Next days: day, icon, high / low. With the chart's larger icons, larger here too and the
+	// text to fit them. The days given (a week at most, as far as the weather service goes:
+	// OpenWeatherMap's free API about 5), as many as fit in maxHeight, whole rows only.
+	property real maxHeight: Infinity
+	readonly property bool largeIcons: plasmoid.configuration.weatherChartLargeIcons
+	readonly property real nextDaysFontScale: largeIcons ? 1.15 : 1
+	readonly property bool nextDaysWanted: showData && !compact && showNextDays && nextDays.length > 0
+	FontMetrics {
+		id: nextDaysFontMetrics
+		font.pointSize: appletConfig.fontPoints(Kirigami.Theme.defaultFont) * panel.nextDaysFontScale
+	}
+	readonly property real nextDaysRowStep: Math.ceil(Math.max(nextDaysFontMetrics.height, largeIcons ? Kirigami.Units.iconSizes.smallMedium : Kirigami.Units.iconSizes.small)) + nextDaysList.spacing
+	// The rest of the panel: its height without the day rows (which don't change it, no loop).
+	readonly property real heightBesideDays: implicitHeight - nextDaysList.implicitHeight
+	readonly property int nextDaysShown: {
+		if (!nextDaysWanted) {
+			return 0
+		}
+		var room = maxHeight - heightBesideDays + nextDaysList.spacing
+		return Math.max(1, Math.min(nextDays.length, Math.floor(room / nextDaysRowStep)))
+	}
+	SectionTitle {
+		visible: panel.nextDaysWanted
+		text: i18n("Next days")
+	}
+	ColumnLayout {
+		id: nextDaysList
+		visible: panel.nextDaysWanted
+		Layout.fillWidth: true
+		spacing: 2
+		Repeater {
+			model: panel.nextDaysWanted ? panel.nextDays.slice(0, panel.nextDaysShown) : []
+			RowLayout {
+				Layout.fillWidth: true
+				spacing: Kirigami.Units.smallSpacing
+				PlasmaComponents3.Label {
+					Layout.fillWidth: true
+					elide: Text.ElideRight
+					text: Qt.locale().dayName(new Date(modelData.dt * 1000).getDay(), Locale.LongFormat)
+					font.capitalization: Font.Capitalize
+					font.pointSize: appletConfig.fontPoints(Kirigami.Theme.defaultFont) * panel.nextDaysFontScale
+				}
+				Kirigami.Icon {
+					source: WeatherIcons.source(modelData.iconName, plasmoid.configuration.weatherIconStyle)
+					fallback: modelData.iconName
+					Layout.preferredWidth: panel.largeIcons ? Kirigami.Units.iconSizes.smallMedium : Kirigami.Units.iconSizes.small
+					Layout.preferredHeight: Layout.preferredWidth
+				}
+				PlasmaComponents3.Label {
+					Layout.preferredWidth: Math.round(Kirigami.Units.gridUnit * 4 * panel.nextDaysFontScale)
+					horizontalAlignment: Text.AlignRight
+					text: Shared.formatTemp(modelData.temp.max) + " / " + Shared.formatTemp(modelData.temp.min)
+					font.pointSize: appletConfig.fontPoints(Kirigami.Theme.defaultFont) * panel.nextDaysFontScale
+				}
+			}
+		}
+	}
+
+	Item { Layout.fillHeight: true }
+}

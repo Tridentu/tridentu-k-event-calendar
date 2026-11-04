@@ -1,0 +1,39 @@
+[Global]
+IconName=view-calendar
+Name=Event Calendar NG
+Comment=Event Calendar NG widget
+
+[Event/reminder]
+Name=Event reminder
+Comment=An event starts soon
+Action=Popup
+
+[Event/eventStarting]
+Name=Event starting
+Comment=An event starts now
+Action=Popup
+
+[Event/invitation]
+Name=New invitation
+Comment=An invitation for today to answer
+Action=Popup
+
+[Event/dailyAgenda]
+Name=Daily agenda
+Comment=Today's events, once in the morning
+Action=Popup
+
+[Event/taskReminder]
+Name=Task reminder
+Comment=A task is due, or the tasks due today
+Action=Popup
+
+[Event/timer]
+Name=Timer finished
+Comment=The widget's timer has finished
+Action=Popup
+
+[Event/syncProblem]
+Name=Calendar sync problem
+Comment=The calendar can't sync, or is back in sync
+Action=Popup

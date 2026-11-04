@@ -8,10 +8,12 @@ import "EventBuckets.js" as EventBuckets
 import "LocaleFuncs.js" as LocaleFuncs
 import "MeetingLink.js" as MeetingLink
 import "Shared.js" as Shared
+import "WeatherIcons.js" as WeatherIcons
 import "Tasks.js" as Tasks
 import "TimeZone.js" as TimeZone
 import "WeekDrag.js" as WeekDrag
 import "lib/ColorUtil.js" as ColorUtil
+import "./weather/WeatherApi.js" as WeatherApi
 
 // Week view like Google Calendar: hour grid with event blocks, all-day row on top.
 Item {
@@ -21,9 +23,11 @@ Item {
 	// The popup header shows the title and the navigation (goPrevious, goNext, goToday).
 	function goPrevious() {
 		weekStart = dayDate(-dayCount)
+		pageSlide.run(-1, 0)
 	}
 	function goNext() {
 		weekStart = dayDate(dayCount)
+		pageSlide.run(1, 0)
 	}
 	// The week (or day) with today; when it's shown already, still relaid and scrolled once.
 	function goToday() {
@@ -71,7 +75,7 @@ Item {
 	// right, all centered. Not enough room: the tasks become a strip above the grid, then the
 	// weather a compact row above it.
 	// Both side columns as wide as each other: a share of the popup, within limits.
-	readonly property real sidePanelWidth: Math.round(Math.min(Kirigami.Units.gridUnit * 17, Math.max(Kirigami.Units.gridUnit * 12, width * 0.27)))
+	readonly property real sidePanelWidth: appletConfig.sidePanelWidth(width)
 	readonly property real weatherPanelWidth: sidePanelWidth
 	readonly property real tasksPanelWidth: sidePanelWidth
 	readonly property real weatherGap: Kirigami.Units.gridUnit // Each side of the space between the grid and a panel
@@ -89,6 +93,9 @@ Item {
 	readonly property bool dayWantsUpNext: plasmoid.configuration.dayShowUpNext !== false
 	readonly property bool dayWantsWeather: plasmoid.configuration.dayShowWeather !== false
 	readonly property bool dayWantsTasks: plasmoid.configuration.dayShowTasks !== false
+	// Three all-day events or more: side by side, three in a row (Settings > Views).
+	readonly property bool allDayTiles: singleDay && plasmoid.configuration.dayAllDayTiles !== false
+	onAllDayTilesChanged: layoutAllDay(days)
 	// Right of the grid, when there's room: the day's tasks and below them its weather. Left of it,
 	// when there's room for that too: a small month (MiniMonth) and below it Up next. A column whose
 	// panels are all turned off isn't there.
@@ -118,7 +125,8 @@ Item {
 	// Day view: the weather panel follows the shown day.
 	readonly property bool showingToday: Shared.startOfDay(weekStart).getTime() === todayStart.getTime()
 	// The Day view with nothing (more) in the hours: no timed event left today, or none on another
-	// day. The grid then says so, with the next event after the day (nextEvent: { item, day }).
+	// day. The grid then says so, with the next event after the day (nextEvent: { item, day }) of the
+	// calendars in the clock's countdown.
 	readonly property bool dayFree: {
 		if (!singleDay || days.length === 0) {
 			return false
@@ -130,7 +138,11 @@ Item {
 		if (!dayFree) {
 			return null
 		}
-		var items = Tasks.withoutTasks(eventModel && eventModel.eventsData ? eventModel.eventsData.items : [])
+		// Not from the calendars left out of the clock's countdown (their clock button in the calendar menu).
+		var clockHidden = Shared.toArray(plasmoid.configuration.clockHiddenCalendarIds)
+		var items = Tasks.withoutTasks(eventModel && eventModel.eventsData ? eventModel.eventsData.items : []).filter(function(eventItem) {
+			return !Shared.isHiddenCalendar(eventItem.calendarId, clockHidden)
+		})
 		return Shared.upcomingEvents(items, dayDate(1), 1)[0] || null
 	}
 	function nextEventText(entry) {
@@ -149,7 +161,9 @@ Item {
 			return t >= from && t <= to
 		})
 	}
-	onDayCountChanged: goToday()
+	// After the columns follow (columnDays): right away the rebuild saw the old count (Day -> Week
+	// filled only the first column).
+	onDayCountChanged: Qt.callLater(goToday)
 
 	// [{ date, allDay: [eventItem], timed: [{ eventItem, start, end, column, columns }] }]
 	property var days: []
@@ -158,6 +172,8 @@ Item {
 	property var allDayBars: []
 	property int allDayLaneCount: 0
 	property var allDayHiddenPerDay: [] // Events per day in lanes that aren't shown.
+	property int allDayTileHidden: 0 // Day view tiles: events past the last place, a "+N" there
+	readonly property int allDayTileColumns: 3
 
 	FontMetrics {
 		id: fontMetrics
@@ -196,6 +212,14 @@ Item {
 	readonly property int gutterWidth: localGutterWidth + secondGutterWidth
 	// The day columns reach the edge: the thin scroll bar shows over the last one while in use.
 	readonly property real columnWidth: Math.max(1, (timeGrid.width - gutterWidth) / columnCount)
+	// An all-day bar from its first to its last column; a Day view tile (bar.slots) a part of the day.
+	function allDayBarX(first, bar) {
+		var x = gutterWidth + first * columnWidth + 2
+		return bar && bar.slots ? x + bar.slot * columnWidth / bar.slots : x
+	}
+	function allDayBarWidth(first, last, bar) {
+		return (bar && bar.slots ? columnWidth / bar.slots : (last - first + 1) * columnWidth) - 4
+	}
 	readonly property int allDayRowHeight: Math.round(lineHeight * 2.2) + 6 // Title + date span
 	readonly property int maxVisibleAllDayRows: 3
 	// Same faint lines as the month grid.
@@ -330,7 +354,9 @@ Item {
 					})
 				}
 			}
-			allDay.sort(function(a, b) { return a.startDateTime - b.startDateTime })
+			allDay.sort(function(a, b) { // The same start: by title, the same order at each fetch
+				return a.startDateTime - b.startDateTime || String(a.summary || '').localeCompare(String(b.summary || ''))
+			})
 			layoutTimed(timed)
 			result.push({ date: new Date(dayStart), allDay: allDay, timed: timed })
 		}
@@ -356,6 +382,16 @@ Item {
 	}
 
 	function layoutAllDay(dayList) {
+		var dayEvents = dayList.length === 1 ? dayList[0].allDay : []
+		if (allDayTiles && dayEvents.length >= allDayTileColumns) {
+			var tiles = EventBuckets.layoutTiles(dayEvents, allDayTileColumns, maxVisibleAllDayRows)
+			allDayBars = tiles.bars
+			allDayHiddenPerDay = []
+			allDayLaneCount = tiles.laneCount
+			allDayTileHidden = tiles.hiddenCount
+			return
+		}
+		allDayTileHidden = 0
 		// One bar per event from its first to its last day in this week, in lanes; too many lanes:
 		// maxVisibleAllDayRows - 1 lanes and a "+N" row.
 		var layout = EventBuckets.layoutLanes(dayList.map(function(day) { return day.allDay }), maxVisibleAllDayRows)
@@ -411,7 +447,7 @@ Item {
 		resetScroll()
 		rebuild()
 	}
-	onWorkWeekChanged: rebuild()
+	onWorkWeekChanged: Qt.callLater(rebuild) // As above: once columnDays follows
 	Component.onCompleted: {
 		rebuild()
 		Qt.callLater(scrollToWorkingHours) // Once the grid has its height
@@ -674,7 +710,7 @@ Item {
 		x: miniMonthCard.x
 		y: startY
 		width: miniMonthCard.width
-		// As tall as its few events, at most down to the grid's bottom edge.
+		// As tall as its events, at most down to the grid's bottom edge (as many as fit there).
 		height: Math.max(0, Math.min(implicitHeight, weekView.sideBottom - startY))
 
 		UpNextPanel {
@@ -707,15 +743,20 @@ Item {
 			// the next days.
 			showHourly: weatherCard.room >= Kirigami.Units.gridUnit * 25
 			showNextDays: weatherCard.room >= Kirigami.Units.gridUnit * 15.5
-			locationName: plasmoid.configuration.weatherService === 'OpenMeteo' ? plasmoid.configuration.openMeteoLocationName : ""
+			forecastUrl: WeatherApi.forecastPageUrl(plasmoid.configuration)
+			locationName: plasmoid.configuration.weatherService === 'OpenMeteo' ? plasmoid.configuration.openMeteoLocationName
+				: weekView.weatherCurrent && weekView.weatherCurrent.place ? weekView.weatherCurrent.place : ""
 			hourly: weekView.showingToday ? weekView.weatherHourly : weekView.dayHours(weekView.weekStart)
+			// The week after the shown day, as far as the forecast goes; the panel shows those that fit.
+			maxHeight: weatherCard.room - weatherCard.topPadding - weatherCard.bottomPadding
 			nextDays: {
 				var list = []
-				for (var i = 1; i <= 4; i++) {
+				for (var i = 1; i <= 7; i++) {
 					var d = weekView.dayWeather(weekView.dayDate(i))
-					if (d) {
-						list.push(d)
+					if (!d) {
+						break
 					}
+					list.push(d)
 				}
 				return list
 			}
@@ -782,6 +823,13 @@ Item {
 			shown: weekView.islands
 			Layout.fillWidth: true
 			Layout.fillHeight: true
+			// Paging (previous / next): the new week or day slides in from its side.
+			transform: Translate { id: pageShift }
+			SlideIn {
+				id: pageSlide
+				target: gridCard
+				shift: pageShift
+			}
 
 			ColumnLayout {
 				spacing: Kirigami.Units.smallSpacing
@@ -926,7 +974,7 @@ Item {
 									anchors.verticalCenter: parent.verticalCenter
 									width: Kirigami.Units.iconSizes.small
 									height: width
-									source: Shared.symbolicIcon(dayHeaderCell.weather ? dayHeaderCell.weather.iconName : "")
+									source: WeatherIcons.source(dayHeaderCell.weather ? dayHeaderCell.weather.iconName : "", plasmoid.configuration.weatherIconStyle)
 									fallback: dayHeaderCell.weather ? dayHeaderCell.weather.iconName : ""
 								}
 								PlasmaComponents3.Label {
@@ -969,13 +1017,13 @@ Item {
 							// event look, all-day events are filled in their color instead (EventStyle).
 							readonly property bool solid: appletConfig.barEventLook && eventStyle.allDay
 							readonly property bool outlined: eventStyle.unconfirmed
-							x: weekView.gutterWidth + bar.first * weekView.columnWidth + 2
+							x: weekView.allDayBarX(bar.first, bar)
 							y: 3 + bar.lane * (weekView.allDayRowHeight + 2)
 							// Being dragged: faded where it was (not for a copy); dropped: the preview stands in for it.
 							readonly property bool dragSource: !!weekView.dragState && weekView.dragState.mode === 'days' && weekView.dragState.eventItem === eventItem
 							opacity: (dragSource && !weekView.dragState.copy ? (weekView.dragState.pending ? 0 : 0.35)
 								: bar.eventItem.endDateTime <= weekView.todayStart ? appletConfig.pastOpacity : 1) * eventStyle.doneOpacity
-							width: (bar.last - bar.first + 1) * weekView.columnWidth - 4
+							width: weekView.allDayBarWidth(bar.first, bar.last, bar)
 							height: weekView.allDayRowHeight
 							// Square ends where the event continues before or after this week.
 							// Before the first or after the last shown day (work week: the weekend too).
@@ -1099,9 +1147,9 @@ Item {
 						readonly property var span: info ? Shared.eventSpan({ start: info.eventItem.start, startDateTime: info.start, endDateTime: info.end }, appletConfig.timeFormat, weekView.currentTime) : null
 						z: 3
 						visible: !!info
-						x: weekView.gutterWidth + first * weekView.columnWidth + 2
+						x: weekView.allDayBarX(first, info ? info.bar : null)
 						y: info ? 3 + Math.min(info.bar.lane, allDayArea.rows - 1) * (weekView.allDayRowHeight + 2) : 0
-						width: (last - first + 1) * weekView.columnWidth - 4
+						width: weekView.allDayBarWidth(first, last, info ? info.bar : null)
 						height: weekView.allDayRowHeight
 						radius: Math.min(8, height / 2)
 						color: Qt.tint(Kirigami.Theme.backgroundColor, ColorUtil.setAlpha(stripeColor, appletConfig.darkTheme ? 0.45 : 0.35))
@@ -1141,6 +1189,18 @@ Item {
 						}
 					}
 
+					// Day view tiles: "+N" in the last place for the events that don't fit.
+					PlasmaComponents3.Label {
+						visible: weekView.allDayTileHidden > 0
+						x: weekView.allDayBarX(0, { slot: weekView.allDayTileColumns - 1, slots: weekView.allDayTileColumns })
+						y: 3 + (allDayArea.rows - 1) * (weekView.allDayRowHeight + 2)
+						width: weekView.allDayBarWidth(0, 0, { slots: weekView.allDayTileColumns })
+						height: weekView.allDayRowHeight
+						horizontalAlignment: Text.AlignHCenter
+						verticalAlignment: Text.AlignVCenter
+						text: i18nc("more events not shown", "+%1", weekView.allDayTileHidden)
+						opacity: 0.7
+					}
 					// "+N" per day for events in lanes that don't fit.
 					Repeater {
 						model: allDayArea.hasHiddenRow ? weekView.columnCount : 0

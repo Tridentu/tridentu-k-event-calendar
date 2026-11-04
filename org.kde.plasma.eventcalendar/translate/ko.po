@@ -1,0 +1,5665 @@
+# Translation of eventcalendar in ko
+# Copyright (C) 2022
+# This file is distributed under the same license as the eventcalendar package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: eventcalendar\n"
+"Report-Msgid-Bugs-To: https://github.com/divinae/plasma-applet-"
+"eventcalendar\n"
+"POT-Creation-Date: 2026-11-04 10:49+0100\n"
+"PO-Revision-Date: 2022-10-25 17:15+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#: ../contents/config/config.qml
+msgid "Views"
+msgstr "보기"
+
+#: ../contents/config/config.qml
+msgid "Clock"
+msgstr "시계"
+
+#: ../contents/config/config.qml
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/config/ConfigEvents.qml ../contents/ui/SearchView.qml
+msgid "Events"
+msgstr "행사"
+
+#: ../contents/config/config.qml ../contents/ui/CalendarToggles.qml
+#: ../contents/ui/config/CalendarsGeneral.qml
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/PopupHeader.qml
+msgid "Calendars"
+msgstr "달력"
+
+#: ../contents/config/config.qml ../contents/ui/config/ConfigViews.qml
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/PopupHeader.qml
+#: ../contents/ui/SearchView.qml
+msgid "Tasks"
+msgstr "할 일"
+
+#: ../contents/config/config.qml ../contents/ui/config/ConfigViews.qml
+#: ../contents/ui/WeatherPanel.qml
+msgid "Weather"
+msgstr "날씨"
+
+#: ../contents/config/config.qml
+msgid "Time Zones"
+msgstr "시간대"
+
+#: ../contents/config/config.qml
+msgid "Advanced"
+msgstr "고급"
+
+#: ../contents/ui/AgendaEventItem.qml
+msgid "Calendar event"
+msgstr "달력 이벤트"
+
+#: ../contents/ui/AgendaEventItem.qml
+msgid "In progress"
+msgstr "진행 중"
+
+#: ../contents/ui/AgendaListItem.qml
+msgctxt "agenda day header, %1 = Fri, 16 Oct"
+msgid "Today · %1"
+msgstr "오늘 · %1"
+
+#: ../contents/ui/AgendaListItem.qml
+msgctxt "agenda day header, %1 = Sat, 17 Oct"
+msgid "Tomorrow · %1"
+msgstr "내일 · %1"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/PopupHeader.qml
+msgid "New Event"
+msgstr "새 이벤트"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/QuickAddView.qml
+msgid "New Task…"
+msgstr "새 작업…"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/WeekView.qml
+msgid "No events"
+msgstr "이벤트 없음"
+
+#: ../contents/ui/badges/EventTitlesBadge.qml
+msgctxt "more events not shown in a month day cell"
+msgid "+%1"
+msgstr "+%1"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: %1 didn't accept the user name or password"
+msgstr "CalDAV: %1에서 사용자 이름이나 암호를 받아들이지 않음"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+#: ../contents/ui/calendars/ICalManager.qml
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Could not connect"
+msgstr "연결 실패"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid ""
+"CalDAV needs Python modules: install them in Settings > Calendars > CalDAV"
+msgstr ""
+"CalDAV에 Python 모듈이 필요합니다: 설정 > 달력 > CalDAV에서 설치하십시오"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "The event was changed elsewhere meanwhile; it's loaded again"
+msgstr "그 사이에 다른 곳에서 일정이 변경되어 다시 불러왔습니다"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Unknown error"
+msgstr "알 수 없는 오류"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: %1"
+msgstr "CalDAV: %1"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: an unexpected answer"
+msgstr "CalDAV: 예상하지 못한 응답"
+
+#: ../contents/ui/calendars/CalDAVManager.qml ../contents/ui/EventModel.qml
+msgid "This calendar can't import events"
+msgstr "이 달력으로는 일정을 가져올 수 없습니다"
+
+#: ../contents/ui/calendars/CalendarManager.qml
+msgctxt "event with no summary"
+msgid "(No title)"
+msgstr "(제목 없음)"
+
+#: ../contents/ui/CalendarSelector.qml
+msgid "[No Calendars]"
+msgstr "[달력 없음]"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+#: ../contents/ui/calendars/TickTickTasksManager.qml ../contents/ui/Logic.qml
+msgid "HTTP Error %1: %2"
+msgstr "HTTP 오류 %1: %2"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+#: ../contents/ui/calendars/TickTickTasksManager.qml ../contents/ui/Logic.qml
+msgid "Will try again soon."
+msgstr "나중에 다시 시도하십시오."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml ../contents/ui/Logic.qml
+msgid ""
+"Widget has been updated. Please logout and login to Google Calendar again."
+msgstr ""
+"위젯이 업데이트되었습니다. Google 캘린더에 로그아웃 후 다시 로그인하십시오."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Too many web requests. Will try again soon."
+msgstr "웹 요청이 너무 많습니다. 나중에 다시 시도하십시오."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+msgid "Google authentication failed: %1"
+msgstr "Google 인증 실패: %1"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+msgid "Could not get the free / busy times"
+msgstr "바쁨 / 한가함 시간을 가져올 수 없습니다"
+
+#: ../contents/ui/calendars/ICalManager.qml
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "iCalendar"
+msgstr "iCalendar"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid ""
+"Reading .ics calendars needs Python modules: install them in Settings > "
+"Calendars > iCalendar"
+msgstr ""
+".ics 달력을 읽으려면 Python 모듈이 필요합니다: 설정 > 달력 > iCalendar에서 설"
+"치하십시오"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid "Unknown iCalendar helper error"
+msgstr "알 수 없는 iCalendar 도우미 오류"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid "Could not load %1: %2"
+msgstr "%1을(를) 불러올 수 없음: %2"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/config/CalendarsGoogle.qml ../contents/ui/FindTimeView.qml
+msgctxt "separator of names in a list"
+msgid ", "
+msgstr ", "
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/config/PimCalendarList.qml
+msgid "KDE PIM (Akonadi)"
+msgstr "KDE PIM (Akonadi)"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/WeekView.qml
+msgid "%1 event"
+msgid_plural "%1 events"
+msgstr[0] "일정 %1개"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+msgctxt "%1 = calendar names"
+msgid "Akonadi: %1"
+msgstr "Akonadi: %1"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/EventModel.qml
+msgid "Holidays"
+msgstr "공휴일"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+msgid "Todo"
+msgstr "할 일"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Other"
+msgstr "기타"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Inbox"
+msgstr "수신함"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "TickTick: sign in again"
+msgstr "TickTick: 다시 로그인 필요"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Connect the account again with a new API token in the Tasks settings."
+msgstr "할 일 설정에서 새 API 토큰으로 계정을 다시 연결하십시오."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "No calendars selected in the settings."
+msgstr "설정에서 선택한 달력이 없습니다."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "In the clock's countdown. Click to leave it out."
+msgstr "시계 카운트다운에 포함됨. 클릭하면 제외합니다."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "Left out of the clock's countdown. Click to include it."
+msgstr "시계 카운트다운에서 제외됨. 클릭하면 포함합니다."
+
+#: ../contents/ui/CalendarToggles.qml
+msgctxt "%1 = calendar name"
+msgid "Include %1 in the clock's countdown"
+msgstr "%1을(를) 시계 카운트다운에 포함"
+
+#: ../contents/ui/CalendarToggles.qml ../contents/ui/UpcomingEvents.qml
+msgid "Show All"
+msgstr "모두 표시"
+
+#: ../contents/ui/CameraCheckView.qml ../contents/ui/CameraCheckWindow.qml
+msgid "Camera Check"
+msgstr "카메라 확인"
+
+#: ../contents/ui/CameraCheckView.qml ../contents/ui/EventContextMenu.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/JoinPill.qml
+#: ../contents/ui/main.qml ../contents/ui/MeetingAlertContent.qml
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = Google Meet, Zoom, ..."
+msgid "Join %1"
+msgstr "%1 참가"
+
+#: ../contents/ui/CameraCheckView.qml
+msgid ""
+"Nothing is recorded. The camera and the microphone are used only while this "
+"is open."
+msgstr ""
+"아무것도 녹화되지 않습니다. 카메라와 마이크는 이 창이 열려 있는 동안에만 사용"
+"됩니다."
+
+#: ../contents/ui/CameraMirror.qml
+msgid "The camera can't be used"
+msgstr "카메라를 사용할 수 없음"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "No camera found"
+msgstr "카메라를 찾을 수 없음"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "The camera can't be used. Another app may be using it."
+msgstr "카메라를 사용할 수 없습니다. 다른 앱이 사용 중일 수 있습니다."
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Starting the camera…"
+msgstr "카메라 시작 중…"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Try Again"
+msgstr "다시 시도"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "No camera"
+msgstr "카메라 없음"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Mirror the picture"
+msgstr "화면 좌우 반전"
+
+#: ../contents/ui/CardHeader.qml ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/ImportView.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TasksView.qml
+msgid "Cancel"
+msgstr "취소"
+
+#: ../contents/ui/ClockView.qml ../contents/ui/main.qml
+msgctxt "time left in the current meeting"
+msgid "%1 min left"
+msgid_plural "%1 min left"
+msgstr[0] "%1분 남음"
+
+#: ../contents/ui/ClockView.qml
+msgctxt "time left in the current meeting, %1 = 1h20m"
+msgid "%1 left"
+msgstr "%1 남음"
+
+#: ../contents/ui/ClockView.qml ../contents/ui/main.qml
+msgctxt "meeting starts in"
+msgid "in %1 min"
+msgid_plural "in %1 min"
+msgstr[0] "%1분 후"
+
+#: ../contents/ui/ClockView.qml
+msgctxt "meeting starts in, %1 = 1h20m"
+msgid "in %1"
+msgstr "%1 후"
+
+#: ../contents/ui/config/CalendarColorButton.qml
+#: ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Color"
+msgstr "색상"
+
+#: ../contents/ui/config/CalendarColorButton.qml
+#: ../contents/ui/config/ConfigClock.qml ../contents/ui/EventEditView.qml
+msgid "Custom…"
+msgstr "사용자 정의…"
+
+#: ../contents/ui/config/CalendarColorButton.qml
+msgid "Calendar Color"
+msgstr "캘린더 색상"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Edit Calendar"
+msgstr "달력 편집"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Name"
+msgstr "이름"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Name in my list"
+msgstr "내 목록에 표시할 이름"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Only you see this name. The calendar keeps its name for others."
+msgstr ""
+"이 이름은 나에게만 보입니다. 다른 사람에게는 달력의 원래 이름이 표시됩니다."
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/EventEditView.qml ../contents/ui/ManageListsView.qml
+msgid "Save"
+msgstr "저장"
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid ""
+"Turn on the PIM Events plugin in the General tab (Plasma calendars) to show "
+"the calendars of KDE PIM (Akonadi)."
+msgstr ""
+"KDE PIM(Akonadi) 캘린더를 표시하려면 일반 탭(Plasma 캘린더)에서 PIM Events 플"
+"러그인을 켜세요."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid ""
+"This version of KDE PIM can't change the selection here: choose the "
+"calendars on the PIM Events Plugin page of these settings."
+msgstr ""
+"이 버전의 KDE PIM에서는 여기서 선택을 바꿀 수 없습니다. 이 설정의 PIM Events "
+"플러그인 페이지에서 캘린더를 선택하세요."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid ""
+"One calendar selected in the PIM events plugin no longer exists in Akonadi, "
+"eg because its account was set up anew, which gives its calendars new ids."
+msgid_plural ""
+"%1 calendars selected in the PIM events plugin no longer exist in Akonadi, "
+"eg because their account was set up anew, which gives its calendars new ids."
+msgstr[0] ""
+"PIM 이벤트 플러그인에서 선택한 달력 %1개가 Akonadi에 더 이상 없습니다. 예를 "
+"들어 계정을 다시 설정하면 달력에 새 ID가 부여됩니다."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid "Forget the Missing Ones"
+msgstr "없는 항목 잊기"
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid ""
+"In the popup's calendar menu they are shown and hidden by color: calendars "
+"of one color together."
+msgstr ""
+"팝업의 달력 메뉴에서는 색상별로 표시하거나 숨깁니다: 같은 색상의 달력은 함께 "
+"처리됩니다."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid "Installing…"
+msgstr "설치 중…"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "CalDAV needs the Python modules icalendar and recurring-ical-events."
+msgstr "CalDAV에는 Python 모듈 icalendar와 recurring-ical-events가 필요합니다."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid ""
+"The server didn't accept the user name or password. Some services need an "
+"app password (iCloud, Fastmail, Nextcloud with two-factor sign-in)."
+msgstr ""
+"서버에서 사용자 이름이나 암호를 받아들이지 않았습니다. 일부 서비스는 앱 암호"
+"가 필요합니다(iCloud, Fastmail, 2단계 인증을 사용하는 Nextcloud)."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Couldn't connect to the server. Check the address and your connection."
+msgstr "서버에 연결할 수 없습니다. 주소와 연결 상태를 확인하십시오."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid ""
+"No CalDAV calendars at that address. Try the address your service gives for "
+"CalDAV."
+msgstr ""
+"해당 주소에 CalDAV 달력이 없습니다. 서비스에서 CalDAV용으로 안내하는 주소를 "
+"사용해 보십시오."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "The server's answer couldn't be read"
+msgstr "서버 응답을 읽을 수 없음"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Enter the server address (https://…), your user name and your password."
+msgstr "서버 주소(https://…), 사용자 이름, 암호를 입력하십시오."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connecting…"
+msgstr "연결 중…"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "The password couldn't be stored in the keyring: %1"
+msgstr "키링에 암호를 저장할 수 없음: %1"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connected: %1 calendar"
+msgid_plural "Connected: %1 calendars"
+msgstr[0] "연결됨: 달력 %1개"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connected, but the account has no calendars for events."
+msgstr "연결되었지만 계정에 일정용 달력이 없습니다."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsICal.qml
+msgid ""
+"The Python modules icalendar and recurring-ical-events aren't all installed: "
+"calendars, or their repeating events, can be missing."
+msgstr ""
+"Python 모듈 icalendar와 recurring-ical-events가 모두 설치되어 있지 않습니다: "
+"달력이나 반복 일정이 빠질 수 있습니다."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid "Install"
+msgstr "설치"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid ""
+"Downloads icalendar and recurring-ical-events into the widget's own folder."
+msgstr "icalendar와 recurring-ical-events를 위젯 전용 폴더에 다운로드합니다."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Read-only"
+msgstr "읽기 전용"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Server's Color"
+msgstr "서버 색상"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Refresh Calendars"
+msgstr "달력 새로고침"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Remove Account"
+msgstr "계정 삭제"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Add a CalDAV Account"
+msgstr "CalDAV 계정 추가"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Server"
+msgstr "서버"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "eg: https://cloud.example.org/remote.php/dav"
+msgstr "예: https://cloud.example.org/remote.php/dav"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "User name"
+msgstr "사용자 이름"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Password"
+msgstr "암호"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Connect"
+msgstr "연결"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid ""
+"Plain http works only for a server on your own network; the password isn't "
+"encrypted on the way."
+msgstr ""
+"암호화되지 않은 http는 자체 네트워크의 서버에서만 작동합니다. 암호가 전송 중"
+"에 암호화되지 않습니다."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid ""
+"Nextcloud, Fastmail, iCloud (with an app password), Radicale, Baïkal and "
+"others. The password is kept in the system keyring. Repeating events are "
+"shown, but changed only in their own app for now."
+msgstr ""
+"Nextcloud, Fastmail, iCloud(앱 암호 사용), Radicale, Baïkal 등. 암호는 시스"
+"템 키링에 보관됩니다. 반복 일정은 표시되지만 지금은 해당 앱에서만 변경할 수 "
+"있습니다."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Import Events from a File…"
+msgstr "파일에서 일정 가져오기…"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid ""
+"Copy the events of an .ics file (exported from another calendar app) into "
+"one of your calendars. The widget shows them first, to pick the calendar."
+msgstr ""
+".ics 파일(다른 달력 앱에서 내보낸 파일)의 일정을 내 달력 중 하나로 복사합니"
+"다. 위젯에서 먼저 일정을 보여 주고 달력을 선택하게 합니다."
+
+#: ../contents/ui/config/CalendarsGeneral.qml ../contents/ui/ImportView.qml
+#: ../contents/ui/main.qml
+msgid "Import Events"
+msgstr "일정 가져오기"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/main.qml
+msgid "iCalendar (*.ics)"
+msgstr "iCalendar (*.ics)"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Share events with Glance"
+msgstr "Glance와 일정 공유"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid ""
+"Today's and tomorrow's events, with meeting links, for the Glance panel "
+"widget. Only on this computer; no descriptions or guest addresses."
+msgstr ""
+"오늘과 내일의 일정을 회의 링크와 함께 패널 위젯 Glance에 제공합니다. 이 컴퓨"
+"터에서만; 설명이나 게스트 주소는 포함하지 않습니다."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Refresh every"
+msgstr "새로고침 간격"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgctxt "Polling interval in minutes"
+msgid " min"
+msgstr " 분"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Plasma calendar plugins are unavailable."
+msgstr "Plasma 달력 플러그인을 사용할 수 없습니다."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Plasma calendars"
+msgstr "Plasma 달력"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Google Account"
+msgstr "Google 계정"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Google Account %1"
+msgstr "Google 계정 %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login failed: %1"
+msgstr "로그인 실패: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login complete."
+msgstr "로그인했습니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Could not prepare Google login: %1"
+msgstr "Google 로그인을 준비할 수 없음: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Waiting for browser callback..."
+msgstr "브라우저 콜백 대기 중..."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign-in timed out. Try again."
+msgstr "로그인 시간이 초과되었습니다. 다시 시도하십시오."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed. See logs for details."
+msgstr "자동 로그인에 실패했습니다. 자세한 내용은 로그를 참조하십시오."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: invalid callback data."
+msgstr "자동 로그인 실패: 잘못된 콜백 데이터입니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: %1"
+msgstr "자동 로그인 실패: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: authorization code missing."
+msgstr "자동 로그인 실패: 인증 코드가 없습니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"The desktop could not open the browser automatically. Use the login link in "
+"Advanced sign-in options instead."
+msgstr ""
+"데스크톱에서 브라우저를 자동으로 열 수 없습니다. 대신 고급 로그인 옵션의 로그"
+"인 링크를 사용하십시오."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Sign in to show your Google calendars and task lists. Your browser opens to "
+"sign in; when access is granted the widget picks it up automatically."
+msgstr ""
+"로그인하면 Google 달력과 작업 목록을 표시합니다. 로그인을 위해 브라우저가 열"
+"리며, 접근이 허용되면 위젯이 자동으로 인식합니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgctxt "%1 = email addresses"
+msgid ""
+"KDE PIM (Akonadi) already brings in the Google calendars of %1, read-only. "
+"Sign in here as well to answer invitations, edit and delete events and join "
+"meetings from the widget. Events of an account synced both ways are shown "
+"once, from the sign-in here."
+msgstr ""
+"KDE PIM(Akonadi)이 이미 %1의 Google 캘린더를 읽기 전용으로 가져옵니다. 여기에"
+"서도 로그인하면 위젯에서 초대에 응답하고, 일정을 편집·삭제하고, 회의에 참여"
+"할 수 있습니다. 양쪽으로 동기화되는 계정의 일정은 여기 로그인에서 한 번만 표"
+"시됩니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgctxt "%1 = email addresses"
+msgid ""
+"Also synced by KDE PIM (Akonadi): %1. Their events are shown once, from the "
+"sign-in here, where they can be answered and edited."
+msgstr ""
+"KDE PIM(Akonadi)에서도 동기화됨: %1. 해당 일정은 여기 로그인에서 한 번만 표시"
+"되며, 응답하고 편집할 수 있습니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign In Again"
+msgstr "다시 로그인"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Reload calendars and task lists"
+msgstr "달력 및 작업 목록 다시 불러오기"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/CalendarsICal.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Remove"
+msgstr "삭제"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Google access for this account expired or was revoked. Sign in again to "
+"reconnect it (the account and its settings are kept)."
+msgstr ""
+"이 계정의 Google 접근 권한이 만료되었거나 취소되었습니다. 다시 연결하려면 다"
+"시 로그인하십시오(계정과 설정은 유지됩니다)."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "The widget was updated. Sign in again to keep this account in sync."
+msgstr ""
+"위젯이 업데이트되었습니다. 이 계정의 동기화를 유지하려면 다시 로그인하십시오."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "No calendars loaded yet. Use the reload button."
+msgstr "아직 불러온 달력이 없습니다. 다시 불러오기 단추를 사용하십시오."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Task lists are chosen on the Tasks page."
+msgstr "작업 목록은 할 일 페이지에서 선택합니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Add Account…"
+msgstr "계정 추가…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign in with Google…"
+msgstr "Google로 로그인…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Waiting for the browser sign-in…"
+msgstr "브라우저 로그인 대기 중…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Advanced sign-in options"
+msgstr "고급 로그인 옵션"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Your own Google OAuth client, or pasting the sign-in code by hand"
+msgstr "자체 Google OAuth 클라이언트 사용 또는 로그인 코드 직접 붙여넣기"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client Credentials"
+msgstr "클라이언트 자격 증명"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Using a previously stored Google OAuth client for compatibility. If login "
+"still fails, add your own client ID and client secret."
+msgstr ""
+"호환성을 위해 이전에 저장된 Google OAuth 클라이언트를 사용합니다. 그래도 로그"
+"인에 실패하면 자체 클라이언트 ID와 클라이언트 비밀을 추가하십시오."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Try desktop built-in client (no secret)"
+msgstr "데스크톱 내장 클라이언트 시도(비밀 없음)"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client ID"
+msgstr "클라이언트 ID"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Optional"
+msgstr "선택 사항"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client Secret"
+msgstr "클라이언트 비밀"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Leave these empty to use the built-in client. A custom client must be a "
+"Google Cloud OAuth Desktop client, or a Web client with its secret and the "
+"redirect URI set to %1."
+msgstr ""
+"내장 클라이언트를 사용하려면 비워 두십시오. 사용자 정의 클라이언트는 Google "
+"Cloud OAuth 데스크톱 클라이언트이거나, 비밀이 있고 리디렉션 URI가 %1(으)로 설"
+"정된 웹 클라이언트여야 합니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"For a custom OAuth client, publish the OAuth consent screen to Production. "
+"Google expires refresh tokens for external apps left in Testing after seven "
+"days; Workspace session controls can also require reauthorization."
+msgstr ""
+"사용자 정의 OAuth 클라이언트를 사용하는 경우 OAuth 동의 화면을 프로덕션으로 "
+"게시하십시오. Google은 테스트 상태로 남아 있는 외부 앱의 새로 고침 토큰을 7"
+"일 후에 만료시킵니다. Workspace 세션 제어로 인해 재인증이 필요할 수도 있습니"
+"다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Manual Sign-in"
+msgstr "수동 로그인"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login (Auto) - Add Account"
+msgstr "로그인(자동) - 계정 추가"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login (Auto)"
+msgstr "로그인(자동)"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
+"the browser redirects to a localhost URL. If auto-capture succeeds you can "
+"ignore the field below; otherwise copy the full URL (or just the code) and "
+"paste it."
+msgstr ""
+"로그인(자동)을 클릭하면 <a href=\"%1\">%2</a>이(가) 열립니다. 접근을 허용하"
+"면 브라우저가 localhost URL로 리디렉션됩니다. 자동 캡처에 성공하면 아래 필드"
+"는 무시해도 됩니다. 그렇지 않으면 전체 URL(또는 코드만)을 복사하여 붙여 넣으"
+"십시오."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "The desktop could not open the browser automatically."
+msgstr "데스크톱에서 브라우저를 자동으로 열 수 없습니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Copy Link"
+msgstr "링크 복사"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Helper page (optional): <a href=\"%1\">%1</a>"
+msgstr "도우미 페이지(선택 사항): <a href=\"%1\">%1</a>"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"If your browser shows a connection error, that's expected. Copy the URL from "
+"the address bar anyway and paste it below. If auto-capture works, you do not "
+"need to paste anything."
+msgstr ""
+"브라우저에 연결 오류가 표시되는 것은 정상입니다. 그래도 주소 표시줄의 URL을 "
+"복사하여 아래에 붙여 넣으십시오. 자동 캡처가 작동하면 아무것도 붙여 넣을 필요"
+"가 없습니다."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Paste the authorization code or redirect URL here"
+msgstr "인증 코드 또는 리디렉션 URL을 여기에 붙여 넣기"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Google authorization code or redirect URL"
+msgstr "Google 인증 코드 또는 리디렉션 URL"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Paste the Google authorization code or the full redirect URL from the browser"
+msgstr "브라우저에서 Google 인증 코드 또는 전체 리디렉션 URL 붙여 넣기"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Add Account"
+msgstr "계정 추가"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Submit"
+msgstr "제출"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Options"
+msgstr "옵션"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Hide \"This event was added from Goals in Google Calendar\" description"
+msgstr "\"Google 캘린더의 목표에서 추가됨\" 설명 숨기기"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Show this calendar"
+msgstr "이 달력 표시"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Calendar Label"
+msgstr "달력 이름"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "https:// URL or local %1/*.ics file"
+msgstr "https:// URL 또는 로컬 %1/*.ics 파일"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Browse"
+msgstr "찾기"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Add Calendar"
+msgstr "달력 추가"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "An .ics link or a file"
+msgstr ".ics 링크 또는 파일"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "New Calendar"
+msgstr "새 달력"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "A file in %1"
+msgstr "%1의 파일"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid ""
+".ics files and links show here as calendars, read-only, offline too. Local "
+"files are read from %1. To add events to one of your calendars instead, "
+"import the file into a Google or CalDAV calendar (Calendars > General)."
+msgstr ""
+".ics 파일과 링크는 여기에 읽기 전용 달력으로 표시되며 오프라인에서도 작동합니"
+"다. 로컬 파일은 %1에서 읽습니다. 대신 내 달력에 일정을 추가하려면 파일을 "
+"Google 또는 CalDAV 달력으로 가져오십시오(달력 > 일반)."
+
+#: ../contents/ui/config/ConfigCalendars.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "General"
+msgstr "일반"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "Google Calendar"
+msgstr "Google 캘린더"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "Akonadi"
+msgstr "Akonadi"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "CalDAV"
+msgstr "CalDAV"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Default (%1)"
+msgstr "기본값 (%1)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(24-hour)"
+msgstr "(24시간제)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(12-hour)"
+msgstr "(12시간제)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(with seconds)"
+msgstr "(초 포함)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Time"
+msgstr "시간"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Format"
+msgstr "형식"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Bold"
+msgstr "굵게"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Font"
+msgstr "글꼴"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Maximum height"
+msgstr "최대 높이"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "0 = fit the panel"
+msgstr "0 = 패널에 맞춤"
+
+#: ../contents/ui/config/ConfigClock.qml ../contents/ui/config/ConfigViews.qml
+msgid " px"
+msgstr " px"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid ""
+"Custom formats use the <a href=\"https://doc.qt.io/qt-6/qml-qtqml-"
+"qt.html#formatDateTime-method\">Qt date and time format</a>, eg: HH:mm, ddd "
+"d MMM."
+msgstr ""
+"사용자 정의 형식은 <a href=\"https://doc.qt.io/qt-6/qml-qtqml-"
+"qt.html#formatDateTime-method\">Qt 날짜 및 시간 형식</a>을 사용합니다. 예: "
+"HH:mm, ddd d MMM."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Second Line"
+msgstr "두 번째 줄"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show a second line"
+msgstr "두 번째 줄 표시"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Eg: the date"
+msgstr "예: 날짜"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Size"
+msgstr "크기"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Next Meeting"
+msgstr "다음 회의"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show next to the clock"
+msgstr "시계 옆에 표시"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "When it starts within"
+msgstr "시작까지 남은 시간"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid " min"
+msgstr " 분"
+
+#: ../contents/ui/config/ConfigClock.qml ../contents/ui/config/ConfigEvents.qml
+msgid "Skip all-day events"
+msgstr "종일 이벤트 건너뛰기"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "They still show in the agenda."
+msgstr "일정에는 계속 표시됩니다."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Only meetings with a video link"
+msgstr "화상 링크가 있는 회의만"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Only accepted invitations"
+msgstr "수락한 초대만"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Not the ones answered maybe or not answered yet."
+msgstr "'미정'으로 답했거나 아직 답하지 않은 초대는 제외합니다."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Longest title"
+msgstr "제목 최대 길이"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "0: as much as fits."
+msgstr "0: 들어가는 만큼."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgctxt "characters, after a number"
+msgid " characters"
+msgstr "자"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Progress of the current meeting"
+msgstr "현재 회의 진행 상황"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "A thin bar under the meeting's name, in its calendar's color."
+msgstr "회의 이름 아래에 달력 색상으로 얇은 막대를 표시합니다."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Middle-click the clock to join the current or next meeting."
+msgstr "시계를 가운데 단추로 클릭하면 현재 또는 다음 회의에 참가합니다."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show background"
+msgstr "배경 표시"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Desktop widget"
+msgstr "바탕 화면 위젯"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Clicking an event opens"
+msgstr "이벤트를 클릭하면 열기"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Event details in the widget"
+msgstr "위젯의 이벤트 상세 정보"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Google Calendar in the browser"
+msgstr "브라우저의 Google 캘린더"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Reminder Before an Event"
+msgstr "이벤트 전 미리 알림"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Show a reminder"
+msgstr "미리 알림 표시"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Time before"
+msgstr "미리 알릴 시간"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "Time in minutes"
+msgid " min"
+msgstr " 분"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Use the reminder times set in Google Calendar"
+msgstr "Google 캘린더에 설정된 미리 알림 시간 사용"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Keep until dismissed"
+msgstr "닫을 때까지 유지"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Hide after"
+msgstr "숨기기까지"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "notification shown for"
+msgid "%1 second"
+msgid_plural "%1 seconds"
+msgstr[0] "%1초"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "notification timeout"
+msgid "System default"
+msgstr "시스템 기본값"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"System default: as set in System Settings > Notifications. A reminder hidden "
+"after a set time isn't kept in the notification history."
+msgstr ""
+"시스템 기본값: 시스템 설정 > 알림의 설정을 따릅니다. 정해진 시간 후 숨긴 알림"
+"은 알림 기록에 남지 않습니다."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Snooze"
+msgstr "다시 알림"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "0 = no Snooze button"
+msgstr "0 = 다시 알림 단추 없음"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Sound"
+msgstr "소리"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "When an Event Starts"
+msgstr "이벤트 시작 시"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Show a notification"
+msgstr "알림 표시"
+
+#: ../contents/ui/config/ConfigEvents.qml ../contents/ui/config/ConfigViews.qml
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Style"
+msgstr "스타일"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "the notification's style"
+msgid "Notification"
+msgstr "알림"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "the notification's style"
+msgid "Full screen"
+msgstr "전체 화면"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Full Screen"
+msgstr "전체 화면"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only for meetings with a video link"
+msgstr "화상 링크가 있는 회의에만"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other events: a notification. Muted events: none."
+msgstr "다른 일정: 알림. 음소거한 일정: 없음."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Camera check"
+msgstr "카메라 확인"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Before you join a meeting with a video link: your camera, and on request the "
+"microphone and the speaker. Nothing is recorded; they're on only while the "
+"alert is shown."
+msgstr ""
+"화상 링크가 있는 회의에 참여하기 전: 카메라, 그리고 요청 시 마이크와 스피커. "
+"아무것도 녹화되지 않으며 알림이 표시되는 동안에만 켜집니다."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Notification"
+msgstr "알림"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For the events without a video link."
+msgstr "화상 링크가 없는 일정용."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Critical"
+msgstr "중요"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Shown even in Do Not Disturb"
+msgstr "방해 금지 모드에서도 표시"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "\"Join meeting\" button"
+msgstr "\"회의 참가\" 단추"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Meetings"
+msgstr "회의"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open the meeting link when a meeting starts"
+msgstr "회의가 시작되면 회의 링크 열기"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For meetings you accepted or organize, not marked as ended."
+msgstr "수락했거나 주최하는 회의 중 종료로 표시하지 않은 회의."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command when a meeting starts"
+msgstr "회의 시작 시 실행할 명령"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Eg: notify-send \"In a meeting: $1\""
+msgstr "예: notify-send \"회의 중: $1\""
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command when it ends"
+msgstr "끝날 때 실행할 명령"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Run with sh: $1 is the meeting's title, $2 its link, $3 and $4 its start and "
+"end. For a meeting with guests or a link, not declined; it ends when it's "
+"over or marked as ended."
+msgstr ""
+"sh로 실행합니다: $1은 회의 제목, $2는 링크, $3과 $4는 시작과 끝입니다. 참석자"
+"나 링크가 있고 거절하지 않은 회의에 적용되며, 끝나거나 종료로 표시하면 끝납니"
+"다."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Pause music and videos when joining a meeting"
+msgstr "회의 참가 시 음악과 동영상 일시 정지"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Players that are playing (eg: Spotify, Elisa, a video in the browser), when "
+"a Join button opens a meeting or it opens when the meeting starts."
+msgstr ""
+"재생 중인 플레이어(예: Spotify, Elisa, 브라우저의 동영상)를 참가 단추로 회의"
+"를 열거나 회의 시작 시 자동으로 열 때 일시 정지합니다."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Do Not Disturb during meetings"
+msgstr "회의 중 방해 금지 모드"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Plasma's Do Not Disturb from the start until the end of a meeting with "
+"guests or a meeting link. Mark as Ended turns it off."
+msgstr ""
+"참석자나 회의 링크가 있는 회의의 시작부터 끝까지 Plasma의 방해 금지 모드를 켭"
+"니다. 종료로 표시하면 꺼집니다."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only meetings I accepted"
+msgstr "수락한 회의만"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open Google Meet links in"
+msgstr "Google Meet 링크 열기"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Default browser"
+msgstr "기본 브라우저"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other command…"
+msgstr "다른 명령…"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command"
+msgstr "명령"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Google account"
+msgstr "Google 계정"
+
+#: ../contents/ui/config/ConfigEvents.qml ../contents/ui/config/ConfigViews.qml
+msgid "Default"
+msgstr "기본"
+
+#: ../contents/ui/config/ConfigEvents.qml
+#, c-format
+msgid ""
+"Join buttons open Google Meet links there; other meeting links open in the "
+"default browser. In a command, %u stands for the meeting link. Google "
+"account: its number (0, 1, …) or email, as in Google's account switcher; "
+"empty uses the app's default."
+msgstr ""
+"참가 단추는 여기에서 Google Meet 링크를 엽니다. 다른 회의 링크는 기본 브라우"
+"저에서 열립니다. 명령에서 %u는 회의 링크를 나타냅니다. Google 계정: Google 계"
+"정 전환기와 같은 번호(0, 1, …) 또는 이메일이며, 비워 두면 앱의 기본값을 사용"
+"합니다."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other Notifications"
+msgstr "기타 알림"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "New invitations for today"
+msgstr "오늘의 새 초대"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification for each meeting today you haven't answered yet, with Yes, "
+"Maybe and No."
+msgstr ""
+"아직 답하지 않은 오늘의 회의마다 예, 미정, 아니요를 선택할 수 있는 알림을 표"
+"시합니다."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Today's events every morning"
+msgstr "매일 아침 오늘의 이벤트"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification with today's events once a day, also when the computer is "
+"turned on later."
+msgstr ""
+"하루에 한 번 오늘의 이벤트를 알림으로 표시합니다. 컴퓨터를 나중에 켠 경우에"
+"도 표시합니다."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "At"
+msgstr "시각"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Skip events I declined"
+msgstr "거절한 이벤트 건너뛰기"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only calendars in the clock's countdown"
+msgstr "시계 카운트다운의 달력만"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Reminders and starting events only of the calendars with the clock button on "
+"in the popup's calendar menu."
+msgstr "팝업 달력 메뉴에서 시계 단추가 켜진 달력의 미리 알림과 시작 일정만."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Popups and sounds for each kind of notification can also be set in System "
+"Settings > Notifications > Event Calendar."
+msgstr ""
+"알림 종류별 팝업과 소리는 시스템 설정 > 알림 > 이벤트 달력에서도 설정할 수 있"
+"습니다."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick did not accept the API token. Check it and try again."
+msgstr ""
+"TickTick에서 API 토큰을 허용하지 않았습니다. 토큰을 확인하고 다시 시도하십시"
+"오."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Could not connect to TickTick. Check your connection and try again."
+msgstr "TickTick에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하십시오."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick error: %1"
+msgstr "TickTick 오류: %1"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Connecting to TickTick…"
+msgstr "TickTick에 연결 중…"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Could not store the API token in the system keyring: %1"
+msgstr "시스템 키링에 API 토큰을 저장할 수 없음: %1"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick account added."
+msgstr "TickTick 계정을 추가했습니다."
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't rename the list"
+msgstr "목록 이름을 바꿀 수 없습니다"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't delete the list"
+msgstr "목록을 삭제할 수 없습니다"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't create the list"
+msgstr "목록을 만들 수 없습니다"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TasksView.qml
+msgid "List name"
+msgstr "목록 이름"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Rename"
+msgstr "이름 바꾸기"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgctxt "%1 = task list name"
+msgid "Delete the list \"%1\" and all its tasks? This can't be undone."
+msgstr ""
+"“%1” 목록과 그 안의 모든 작업을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니"
+"다."
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/EventContextMenu.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TaskRow.qml ../contents/ui/TasksView.qml
+msgid "Delete"
+msgstr "삭제"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TasksView.qml
+msgid "New list"
+msgstr "새 목록"
+
+#: ../contents/ui/config/ConfigTasks.qml
+#: ../contents/ui/config/ConfigTimezones.qml ../contents/ui/QuickAddView.qml
+msgid "Add"
+msgstr "추가"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Overdue tasks on today"
+msgstr "기한 지난 작업을 오늘에 표시"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Open tasks due on an earlier day are shown on today, in every view."
+msgstr "기한이 이전 날짜인 미완료 작업을 모든 보기에서 오늘에 표시합니다."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Smart recognition in Add a task"
+msgstr "작업 추가에서 스마트 인식"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"Words like \"tomorrow 17:00\", \"!high\", \"#List\" or \"every week\" set "
+"the new task's day, time, priority, list and repeat."
+msgstr ""
+"\"tomorrow 17:00\", \"!high\", \"#List\" or \"every week\" 같은 단어로 새 작"
+"업의 날짜, 시간, 우선순위, 목록, 반복을 설정합니다."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Notifications"
+msgstr "알림"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Task reminders"
+msgstr "작업 알림"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"A notification when a task with a due time or a reminder is due, and the "
+"tasks due today at the daily agenda time."
+msgstr ""
+"기한 시간이나 미리 알림이 설정된 작업의 기한이 되면 알리고, 오늘의 일정 시간"
+"에 오늘 기한인 작업을 알립니다."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Tasks in the daily agenda"
+msgstr "오늘의 일정에 작업 포함"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "The daily agenda notification also lists today's and overdue tasks."
+msgstr "오늘의 일정 알림에 오늘 작업과 기한 지난 작업도 표시합니다."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Google Tasks"
+msgstr "Google Tasks"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"Sign in on the Google Calendar page to choose the Google task lists shown "
+"here."
+msgstr ""
+"여기에 표시할 Google 작업 목록을 선택하려면 Google 캘린더 페이지에서 로그인하"
+"십시오."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Task Lists"
+msgstr "작업 목록"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"No task lists loaded yet. Reload the account on the Google Calendar page."
+msgstr ""
+"아직 불러온 작업 목록이 없습니다. Google 캘린더 페이지에서 계정을 다시 불러오"
+"십시오."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick"
+msgstr "TickTick"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Reload projects"
+msgstr "프로젝트 다시 불러오기"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"This account's API token is not in the system keyring. Remove the account "
+"and connect it again."
+msgstr ""
+"이 계정의 API 토큰이 시스템 키링에 없습니다. 계정을 삭제하고 다시 연결하십시"
+"오."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "No projects loaded yet. Use the reload button."
+msgstr "아직 불러온 프로젝트가 없습니다. 다시 불러오기 단추를 사용하십시오."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick (ticktick.com)"
+msgstr "TickTick(ticktick.com)"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Dida365 (dida365.com)"
+msgstr "Dida365(dida365.com)"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "API token"
+msgstr "API 토큰"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Paste the API token"
+msgstr "API 토큰 붙여 넣기"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Connect Another Account"
+msgstr "다른 계정 연결"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"Create an API token on the TickTick website: Settings > Account > API Token "
+"(on dida365.com for Dida365). The token is kept in the system keyring "
+"(KWallet or Secret Service), not in the widget's settings."
+msgstr ""
+"TickTick 웹 사이트에서 API 토큰을 만드십시오: Settings > Account > API "
+"Token(Dida365는 dida365.com에서). 토큰은 위젯 설정이 아닌 시스템 키링"
+"(KWallet 또는 Secret Service)에 보관됩니다."
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Local"
+msgstr "로컬"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Extra Time Zones in the Tooltip"
+msgstr "풍선 도움말의 추가 시간대"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "The name shown in the tooltip (empty: the city)"
+msgstr "도구 설명에 표시할 이름 (비워 두면 도시 이름)"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Move up"
+msgstr "위로 이동"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Move down"
+msgstr "아래로 이동"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Remove time zone"
+msgstr "시간대 삭제"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Add a time zone, eg: America/New_York"
+msgstr "시간대 추가, 예: Asia/Seoul"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Zones with the same time as yours are not shown."
+msgstr "현재 시간대와 시각이 같은 시간대는 표시하지 않습니다."
+
+#: ../contents/ui/config/ConfigTimezones.qml
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Display"
+msgstr "표시"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Show time zones as"
+msgstr "시간대 표시 형식"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "City name"
+msgstr "도시 이름"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Abbreviation (eg: CEST)"
+msgstr "약어(예: KST)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Popup"
+msgstr "팝업"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Default view"
+msgstr "기본 보기"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Month"
+msgstr "월"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Week"
+msgstr "주"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgctxt "calendar view showing one day"
+msgid "Day"
+msgstr "일"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Agenda"
+msgstr "일정"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Open in the last used view"
+msgstr "마지막으로 사용한 보기로 열기"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "View switcher"
+msgstr "보기 전환"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Tabs"
+msgstr "탭"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Drop-down menu"
+msgstr "드롭다운 메뉴"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Views offered"
+msgstr "제공할 보기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Popup size"
+msgstr "팝업 크기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Appearance"
+msgstr "모양"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"Islands: the calendar grids, the Day view's panels, the agenda days and the "
+"task sections each sit in a rounded card."
+msgstr ""
+"아일랜드: 달력 격자, 일 보기의 패널, 일정의 각 날짜, 작업 섹션이 각각 둥근 카"
+"드에 표시됩니다."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Islands (cards)"
+msgstr "아일랜드 (카드)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Islands, translucent cards"
+msgstr "아일랜드, 반투명 카드"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Flat"
+msgstr "플랫"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Animations"
+msgstr "애니메이션"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Views slide and fade in, cards open, the small month's days ease."
+msgstr ""
+"보기가 미끄러지듯 나타나고, 카드가 열리며, 작은 달력의 날짜가 부드럽게 바뀝니"
+"다."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event look"
+msgstr "일정 모양"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All-day filled, timed light with a color bar"
+msgstr "종일 일정은 채우기, 시간 일정은 연한 색과 색 막대"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Filled in the event color"
+msgstr "일정 색으로 채우기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event colors"
+msgstr "이벤트 색상"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"Google's API still returns an older palette; \"As in Google Calendar\" shows "
+"the current one. \"Follow the system color scheme\" uses the nearest colors "
+"of your Plasma color scheme."
+msgstr ""
+"Google API는 아직 이전 팔레트를 반환합니다. \"Google 캘린더와 같게\"는 현재 "
+"색상을 표시합니다. \"시스템 색 구성표 따르기\"는 Plasma 색 구성표에서 가장 가"
+"까운 색을 사용합니다."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "As in Google Calendar"
+msgstr "Google 캘린더와 같게"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Classic (as returned by Google)"
+msgstr "클래식(Google에서 반환한 색상)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Follow the system color scheme"
+msgstr "시스템 색 구성표 따르기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event text size"
+msgstr "일정 글자 크기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Calendar"
+msgstr "달력"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "First day of week"
+msgstr "한 주의 시작 요일"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Week numbers"
+msgstr "주 번호"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Clicking a day opens it in the Day view"
+msgstr "날짜를 클릭하면 일 보기에서 열기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Month view"
+msgstr "월 보기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Double-clicking a day"
+msgstr "날짜를 두 번 클릭할 때"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "New event in Google Calendar (browser)"
+msgstr "Google 캘린더에서 새 이벤트(브라우저)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Do nothing"
+msgstr "아무것도 하지 않음"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Declined events"
+msgstr "거절한 이벤트"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show (struck through)"
+msgstr "표시(취소선)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "declined events"
+msgid "Hide"
+msgstr "숨기기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show an event in several calendars once"
+msgstr "여러 캘린더에 있는 일정을 한 번만 표시"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "A meeting in your calendar and in a shared one, for example."
+msgstr "예: 내 캘린더와 공유 캘린더에 모두 있는 회의."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Week and Day"
+msgstr "주 및 일"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "week view setting"
+msgid "Days shown"
+msgstr "표시할 요일"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "7 days"
+msgstr "7일"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Work week (without the weekend)"
+msgstr "근무 주간 (주말 제외)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Working hours"
+msgstr "근무 시간"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Second time zone"
+msgstr "보조 시간대"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "no second time zone"
+msgid "None"
+msgstr "없음"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "No second time zone"
+msgstr "보조 시간대 없음"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Its hours are shown next to the local ones in the Week and Day views."
+msgstr "주 및 일 보기에서 로컬 시간 옆에 해당 시간이 표시됩니다."
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/EventEditView.qml
+msgid "Search time zones"
+msgstr "시간대 검색"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"The forecast in the Week view's day headers, on each Agenda day, and the "
+"weather panel of the Day view and the Agenda."
+msgstr ""
+"주 보기의 날짜 머리글, 일정의 각 날짜, 일 보기와 일정의 날씨 패널에 표시되는 "
+"예보."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Day view and Agenda show"
+msgstr "일 보기와 일정에 표시"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Small calendar"
+msgstr "작은 달력"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Up next (Day view)"
+msgstr "다음 일정 (일 보기)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Moon"
+msgstr "달"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Up next shows"
+msgstr "다음 일정 표시 기간"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The days after the shown one; later ones under \"Show more\""
+msgstr "표시된 날 이후의 날짜, 그 이후는 \"더 보기\"에서"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "number of days, after the number"
+msgid "day"
+msgid_plural "days"
+msgstr[0] "일"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All-day events side by side"
+msgstr "종일 이벤트 나란히 표시"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"In the Day view, three or more all-day events take a third of the width "
+"each, three in a row. Hovering one shows it in full."
+msgstr ""
+"일 보기에서 종일 이벤트가 3개 이상이면 각각 너비의 3분의 1을 차지하며 한 줄"
+"에 3개씩 표시됩니다. 마우스를 올리면 전체 내용이 표시됩니다."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event descriptions"
+msgstr "이벤트 설명"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Meeting link button"
+msgstr "회의 링크 단추"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Multi-day events on every day"
+msgstr "여러 날 이벤트를 매일 표시"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Offline"
+msgstr "오프라인"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Keep events and tasks for offline start"
+msgstr "오프라인 시작을 위해 일정과 작업 보관"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"The last loaded events and tasks (no descriptions or notes) are stored in "
+"~/.cache/plasma-eventcalendar and shown until the first refresh. Off: "
+"nothing is stored, and the stored copy is deleted."
+msgstr ""
+"마지막으로 불러온 일정과 작업(설명과 메모 제외)은 ~/.cache/plasma-"
+"eventcalendar에 저장되어 첫 새로 고침까지 표시됩니다. 끔: 아무것도 저장되지 "
+"않으며 저장된 사본은 삭제됩니다."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Troubleshooting"
+msgstr "문제 해결"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Debug logging and extra settings pages"
+msgstr "디버그 로그 및 추가 설정 페이지"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Settings Backup"
+msgstr "설정 백업"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Export Settings…"
+msgstr "설정 내보내기…"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All settings of this widget to a file, without passwords and sign-ins"
+msgstr "이 위젯의 모든 설정을 파일로 (비밀번호와 로그인 제외)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Import Settings…"
+msgstr "설정 가져오기…"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "From an exported file; press Apply or OK to keep them"
+msgstr "내보낸 파일에서; 유지하려면 적용 또는 확인을 누르세요"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"Accounts come back with their calendars. On this computer they stay signed "
+"in; on another one, sign in again (passwords and sign-ins stay in the system "
+"keyring)."
+msgstr ""
+"계정은 캘린더와 함께 돌아옵니다. 이 컴퓨터에서는 로그인 상태가 유지되고, 다"
+"른 컴퓨터에서는 다시 로그인하세요 (비밀번호와 로그인은 시스템 키링에 남습니"
+"다)."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The file couldn't be written: %1"
+msgstr "파일을 쓸 수 없습니다: %1"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Exported to %1"
+msgstr "%1(으)로 내보냈습니다"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The file couldn't be read: %1"
+msgstr "파일을 읽을 수 없습니다: %1"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "This isn't a settings file of Event Calendar."
+msgstr "Event Calendar 설정 파일이 아닙니다."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Imported %1 setting. Press Apply or OK to keep it."
+msgid_plural "Imported %1 settings. Press Apply or OK to keep them."
+msgstr[0] "설정 %1개를 가져왔습니다. 유지하려면 적용 또는 확인을 누르세요."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"Not imported (not in this version, a password or sign-in, or a value of "
+"another kind): %2"
+msgid_plural ""
+"%1 not imported (not in this version, passwords or sign-ins, or values of "
+"another kind): %2"
+msgstr[0] ""
+"%1개를 가져오지 않았습니다 (이 버전에 없음, 비밀번호나 로그인, 또는 다른 종류"
+"의 값): %2"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Export Settings"
+msgstr "설정 내보내기"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Settings (*.json)"
+msgstr "설정 (*.json)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Import Settings"
+msgstr "설정 가져오기"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "an API the app id may use"
+msgid "yes"
+msgstr "예"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "an API the app id may not use"
+msgid "no"
+msgstr "아니요"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "%1 = error"
+msgid "failed (%1)"
+msgstr "실패(%1)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current weather, 3 hour steps: %1"
+msgstr "현재 날씨, 3시간 간격: %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "16 days (paid plan): %1"
+msgstr "16일(유료 요금제): %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One Call 3.0: %1"
+msgstr "One Call 3.0: %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid ""
+"OpenWeatherMap doesn't know this app id (a new one takes up to 2 hours)."
+msgstr ""
+"OpenWeatherMap에서 이 앱 ID를 인식하지 못합니다(새 ID는 사용 가능해지기까지 "
+"최대 2시간이 걸림)."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Choose One Call 3.0 above: by the hour and 8 days."
+msgstr "위에서 One Call 3.0을 선택하십시오: 시간별 및 8일."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Not subscribed to One Call 3.0: choose Free (2.5) above."
+msgstr "One Call 3.0을 구독하지 않았습니다: 위에서 Free (2.5)를 선택하십시오."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Source"
+msgstr "원본"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Service"
+msgstr "서비스"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Open-Meteo (free, no API key)"
+msgstr "Open-Meteo(무료, API 키 필요 없음)"
+
+#: ../contents/ui/config/ConfigWeather.qml ../contents/ui/EventEditView.qml
+msgid "Location"
+msgstr "위치"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current location"
+msgstr "현재 위치"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Not set"
+msgstr "설정 안 됨"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "City name, eg: Warszawa"
+msgstr "도시 이름, 예: Seoul"
+
+#: ../contents/ui/config/ConfigWeather.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+#: ../contents/ui/PopupHeader.qml
+msgid "Search"
+msgstr "검색"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "No places found."
+msgstr "장소를 찾을 수 없습니다."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "OpenWeatherMap"
+msgstr "OpenWeatherMap"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "City id"
+msgstr "도시 ID"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "eg: 5983720"
+msgstr "예: 5983720"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Find City…"
+msgstr "도시 찾기…"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "API app id"
+msgstr "API 앱 ID"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Required for OpenWeatherMap"
+msgstr "OpenWeatherMap에 필요"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "API"
+msgstr "API"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Free (2.5)"
+msgstr "Free (2.5)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One Call 3.0"
+msgstr "One Call 3.0"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Checking…"
+msgstr "확인 중…"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Check App Id"
+msgstr "앱 ID 확인"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid ""
+"Free (2.5) works with any app id: the current weather and a forecast in 3 "
+"hour steps for 5 days. Its forecast for 16 days needs a paid plan; without "
+"one, the days are made from the 3 hour steps."
+msgstr ""
+"Free (2.5)는 모든 앱 ID에서 작동합니다: 현재 날씨와 5일 동안의 3시간 간격 예"
+"보. 16일 예보에는 유료 요금제가 필요하며, 없으면 3시간 간격 예보로 일별 예보"
+"를 만듭니다."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid ""
+"One Call 3.0 needs the \"One Call by Call\" subscription on <a "
+"href=\"https://openweathermap.org/api/one-call-3\">openweathermap.org</a> "
+"(1000 calls a day are free, a payment card is required): the current "
+"weather, 48 hours by the hour and 8 days, in one call. The widget asks at "
+"most every 10 minutes, about 150 calls a day."
+msgstr ""
+"One Call 3.0을 사용하려면 <a href=\"https://openweathermap.org/api/one-"
+"call-3\">openweathermap.org</a>에서 ‘One Call by Call’ 구독이 필요합니다(하"
+"루 1000회 호출은 무료, 결제 카드 필요): 현재 날씨, 48시간 시간별 예보, 8일 예"
+"보를 한 번의 호출로 가져옵니다. 위젯은 최대 10분마다 요청하며, 하루 약 150회 "
+"호출합니다."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One app id works for both: Check App Id tells what yours may use."
+msgstr ""
+"하나의 앱 ID로 둘 다 사용할 수 있습니다: ‘앱 ID 확인’을 누르면 사용 가능한 항"
+"목을 알려 줍니다."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid ""
+"The built-in app id is shared by everyone using this widget, and so is its "
+"request limit: the weather may stop updating at times. A free app id of your "
+"own: sign up at <a href=\"https://home.openweathermap.org/users/"
+"sign_up\">openweathermap.org</a>, then copy it from \"API keys\". Open-Meteo "
+"needs none."
+msgstr ""
+"내장 앱 ID는 이 위젯의 모든 사용자가 공유하며 요청 한도도 공유합니다: 그래서 "
+"날씨가 가끔 업데이트되지 않을 수 있습니다. 무료 개인 앱 ID: <a "
+"href=\"https://home.openweathermap.org/users/sign_up\">openweathermap.org</a>"
+"에서 가입한 후 ‘API keys’에서 복사하십시오. Open-Meteo는 앱 ID가 필요하지 않"
+"습니다."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Weather Canada"
+msgstr "Weather Canada"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "eg: on-14"
+msgstr "예: on-14"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Units"
+msgstr "단위"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Celsius"
+msgstr "섭씨"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Fahrenheit"
+msgstr "화씨"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Kelvin"
+msgstr "절대온도"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Icons"
+msgstr "아이콘"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "System"
+msgstr "시스템"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Yr (MET Norway)"
+msgstr "Yr (MET Norway)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current weather icon background"
+msgstr "현재 날씨 아이콘 배경"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Sky, after the weather"
+msgstr "하늘, 날씨에 따라"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Subtle"
+msgstr "은은하게"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "no icon background"
+msgid "None"
+msgstr "없음"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Forecast chart"
+msgstr "예보 차트"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Simple"
+msgstr "간단"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Fancy"
+msgstr "화려"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Hours shown"
+msgstr "표시할 시간"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Today's chart in the Day view and the Agenda"
+msgstr "일 보기와 일정의 오늘 차트"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid " hours"
+msgstr " 시간"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Larger icons"
+msgstr "큰 아이콘"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "In the chart and the next days"
+msgstr "차트와 다음 날들에서"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Rain amounts"
+msgstr "강수량"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "The total above the chart, the amounts at the heaviest hours"
+msgstr "차트 위에 합계, 비가 가장 많이 오는 시간에 양 표시"
+
+#: ../contents/ui/config/GoogleLoginManager.qml
+msgid "Not signed in to this Google account. Sign in again."
+msgstr "이 Google 계정에 로그인되어 있지 않습니다. 다시 로그인하십시오."
+
+#: ../contents/ui/config/GoogleLoginManager.qml
+msgid "Could not save the calendar: %1"
+msgstr "달력을 저장할 수 없음: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Select city"
+msgstr "도시 선택"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Fetched from <a href=\"%1\">%1</a>"
+msgstr "<a href=\"%1\">%1</a>에서 가져옴"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "City name, eg: Berlin or Berlin, DE"
+msgstr "도시 이름, 예: Berlin 또는 Berlin, DE"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml ../contents/ui/TaskRow.qml
+msgid "Open Link"
+msgstr "링크 열기"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "north"
+msgid "N"
+msgstr "N"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "south"
+msgid "S"
+msgstr "S"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "east"
+msgid "E"
+msgstr "E"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "west"
+msgid "W"
+msgstr "W"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "OpenWeatherMap city id"
+msgid "Id %1"
+msgstr "ID %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "OpenWeatherMap didn't accept the app id: %1"
+msgstr "OpenWeatherMap에서 앱 ID를 허용하지 않았습니다: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "The search failed: %1"
+msgstr "검색 실패: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "No city found."
+msgstr "도시를 찾을 수 없습니다."
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "No app id set."
+msgstr "앱 ID가 설정되지 않았습니다."
+
+#: ../contents/ui/config/PimCalendarList.qml
+msgid ""
+"Its events come from the account signed in to in the Google Calendar tab."
+msgstr "이 캘린더의 일정은 Google 캘린더 탭에서 로그인한 계정에서 가져옵니다."
+
+#: ../contents/ui/config/SelectionRow.qml
+msgid "Edit calendar…"
+msgstr "달력 편집…"
+
+#: ../contents/ui/config/SelectionRow.qml
+msgid "Rename list…"
+msgstr "목록 이름 바꾸기…"
+
+#: ../contents/ui/config/SelectionRow.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TasksView.qml
+msgid "Delete list…"
+msgstr "목록 삭제…"
+
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Id"
+msgstr "ID"
+
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "City Webpage"
+msgstr "도시 웹페이지"
+
+#: ../contents/ui/DateTimeSelector.qml ../contents/ui/EventEditView.qml
+msgctxt "event editor date format"
+msgid "d MMM, yyyy"
+msgstr "yyyy년 MMM d일"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Hide tasks"
+msgstr "작업 숨기기"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Show tasks"
+msgstr "작업 표시"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/PopupHeader.qml
+msgid "New Task"
+msgstr "새 작업"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All lists"
+msgstr "모든 목록"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All open"
+msgstr "열린 항목 모두"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Tasks shown"
+msgstr "표시할 작업"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Due this day"
+msgstr "이 날 마감"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All open tasks"
+msgstr "열린 작업 모두"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TasksView.qml
+msgid "No open tasks"
+msgstr "열린 작업 없음"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All done"
+msgstr "모두 완료"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "No tasks"
+msgstr "작업 없음"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TaskCheck.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "In progress"
+msgstr "진행 중"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgctxt "tasks in the Day view, not in progress"
+msgid "To do"
+msgstr "할 일"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TasksView.qml
+msgid "Hide completed"
+msgstr "완료된 작업 숨기기"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "%1 completed"
+msgid_plural "%1 completed"
+msgstr[0] "완료 %1개"
+
+#: ../contents/ui/DurationSelector.qml
+msgid "to"
+msgstr "~"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Move to List"
+msgstr "목록으로 이동"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Couldn't save the task"
+msgstr "작업을 저장할 수 없습니다"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml
+msgid "Priority"
+msgstr "우선순위"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "High priority"
+msgstr "높은 우선순위"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "Medium priority"
+msgstr "중간 우선순위"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "Low priority"
+msgstr "낮은 우선순위"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/TaskDetailsBody.qml
+msgctxt "task priority"
+msgid "No priority"
+msgstr "우선순위 없음"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml
+msgid "Due date"
+msgstr "기한"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "tasks filter"
+msgid "Today"
+msgstr "오늘"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "tasks filter"
+msgid "Tomorrow"
+msgstr "내일"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Next week"
+msgstr "다음 주"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "No date"
+msgstr "날짜 없음"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "RSVP to an invitation"
+msgid "Respond"
+msgstr "응답"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Not Done"
+msgstr "완료 안 됨으로 표시"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Done"
+msgstr "완료로 표시"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Not in Progress"
+msgstr "진행 중 해제"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as in Progress"
+msgstr "진행 중으로 표시"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Show Details"
+msgstr "자세히 보기"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Check Camera"
+msgstr "카메라 확인"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Copy Event Details"
+msgstr "일정 세부 정보 복사"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Copy Meeting Link"
+msgstr "회의 링크 복사"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Unmute Notifications"
+msgstr "알림 음소거 해제"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Mute Notifications"
+msgstr "알림 음소거"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Open in Google Calendar"
+msgstr "Google 캘린더에서 열기"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Mark as Ended"
+msgstr "종료로 표시"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Email Guests…"
+msgstr "참석자에게 이메일 보내기…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Edit…"
+msgstr "편집…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Duplicate…"
+msgstr "복제…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "%1 = event title"
+msgid "Delete Only This Occurrence of “%1”"
+msgstr "“%1”의 이 일정만 삭제"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "%1 = event title"
+msgid "Delete All Events of “%1”"
+msgstr "“%1”의 모든 이벤트 삭제"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventModel.qml
+msgid "No due date"
+msgstr "기한 없음"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "a task's due date in its details"
+msgid "dddd, d MMMM"
+msgstr "M월 d일 dddd"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventModel.qml
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "date (%1) with time (%2)"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TasksView.qml
+msgid "Overdue"
+msgstr "기한 지남"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventMover.qml
+msgid "This event"
+msgstr "이 이벤트"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventMover.qml
+msgid "All events in the series"
+msgstr "시리즈의 모든 이벤트"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who accepted"
+msgid "%1 yes"
+msgstr "수락 %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who said maybe"
+msgid "%1 maybe"
+msgstr "미정 %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who declined"
+msgid "%1 no"
+msgstr "거절 %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who haven't responded"
+msgid "%1 awaiting"
+msgstr "응답 대기 %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "1 guest"
+msgid_plural "%1 guests"
+msgstr[0] "참석자 %1명"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "reminder at event start"
+msgid "at start"
+msgstr "시작 시"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "%1 = 10m, 2m"
+msgid "Reminders: %1 before"
+msgstr "미리 알림: %1 전"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/FindTimeView.qml
+#: ../contents/ui/ManageListsView.qml ../contents/ui/SearchView.qml
+msgid "Back"
+msgstr "뒤로"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete:"
+msgstr "삭제 대상:"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete this task?"
+msgstr "이 작업을 삭제하시겠습니까?"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete this event?"
+msgstr "이 이벤트를 삭제하시겠습니까?"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "This Occurrence"
+msgstr "이 일정만"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "All Events"
+msgstr "모든 이벤트"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Deletes every occurrence of this repeating event."
+msgstr "이 반복 이벤트의 모든 일정을 삭제합니다."
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Open in TickTick"
+msgstr "TickTick에서 열기"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Open in Google Tasks"
+msgstr "Google Tasks에서 열기"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskRow.qml
+msgid "Edit"
+msgstr "편집"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Duplicate"
+msgstr "복제"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Private event"
+msgstr "비공개 일정"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgid "All day"
+msgstr "종일"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Repeats"
+msgstr "반복"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = start and end time, %2 = city, %3 = time zone id"
+msgid "%1 %2 time (%3)"
+msgstr "%1 (%2 시간, %3)"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "RSVP to an invitation"
+msgid "Going?"
+msgstr "참석하시겠습니까?"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Out of office"
+msgstr "부재중"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Focus time"
+msgstr "집중 시간"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines all meetings at this time"
+msgstr "이 시간의 모든 회의 거절"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines new invitations at this time"
+msgstr "이 시간의 새 초대 거절"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = message sent when declining"
+msgid "Message: “%1”"
+msgstr "메시지: “%1”"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = titles of other events at the same time"
+msgid "Overlaps with: %1"
+msgstr "겹치는 일정: %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Write an email to the guests"
+msgstr "참석자에게 이메일 쓰기"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "event organizer"
+msgid "organizer"
+msgstr "주최자"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgctxt "the current user in a guest list"
+msgid "you"
+msgstr "나"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/UpNextPanel.qml
+msgid "Show less"
+msgstr "간단히 보기"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Show 1 more"
+msgid_plural "Show all %1"
+msgstr[0] "모두 표시(%1)"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskRow.qml
+msgctxt "checklist items done: %1 of %2"
+msgid "%1 of %2 subtasks done"
+msgstr "하위 작업 %2개 중 %1개 완료"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Subtasks"
+msgstr "하위 작업"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task reminder after the due day starts"
+msgid "%1 day later at %2"
+msgid_plural "%1 days later at %2"
+msgstr[0] "%1일 후 %2"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task reminder: %1 = time"
+msgid "On the day at %1"
+msgstr "당일 %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = start and end time in the local time zone"
+msgid "%1 your time"
+msgstr "%1 (내 시간)"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Lavender"
+msgstr "라벤더"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Sage"
+msgstr "세이지"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Grape"
+msgstr "포도"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Flamingo"
+msgstr "플라밍고"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Banana"
+msgstr "바나나"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Tangerine"
+msgstr "귤"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Peacock"
+msgstr "공작"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Graphite"
+msgstr "흑연"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Blueberry"
+msgstr "블루베리"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Basil"
+msgstr "바질"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Tomato"
+msgstr "토마토"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Enter an email address, like name@example.com"
+msgstr "이메일 주소 입력(예: name@example.com)"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "you, in Find a time"
+msgid "You"
+msgstr "나"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/QuickAddView.qml
+msgctxt "%1 = task list name"
+msgid "%1 (tasks)"
+msgstr "%1 (작업)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Task list"
+msgstr "작업 목록"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Edit Task"
+msgstr "작업 편집"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Edit Event"
+msgstr "이벤트 편집"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send invitation emails to the guests?"
+msgstr "참석자에게 초대 이메일을 보내시겠습니까?"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send update emails to the guests?"
+msgstr "참석자에게 업데이트 이메일을 보내시겠습니까?"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send invitations"
+msgstr "초대 보내기"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "send update emails to guests"
+msgid "Send"
+msgstr "보내기"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "don't send emails to guests"
+msgid "Don't send"
+msgstr "보내지 않음"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Change:"
+msgstr "변경 대상:"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Title"
+msgstr "제목"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Due time"
+msgstr "기한 시간"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "Low priority"
+msgstr "낮은 우선순위"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "Medium priority"
+msgstr "보통 우선순위"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "High priority"
+msgstr "높은 우선순위"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Event"
+msgstr "이벤트"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Out of office"
+msgstr "부재중"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Focus time"
+msgstr "집중 시간"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Event type"
+msgstr "이벤트 유형"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Don't decline invitations"
+msgstr "초대 거절 안 함"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new invitations in this time"
+msgstr "이 시간의 새 초대 거절"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new and existing invitations in this time"
+msgstr "이 시간의 새 초대 및 기존 초대 거절"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Automatically decline"
+msgstr "자동으로 거절"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Message for declined invitations"
+msgstr "거절된 초대에 대한 메시지"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Do not disturb"
+msgstr "방해 금지"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Available"
+msgstr "대화 가능"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Do not disturb or Available"
+msgid "Chat status: %1"
+msgstr "채팅 상태: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Chat status"
+msgstr "채팅 상태"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Calendar color"
+msgstr "달력 색상"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Local time"
+msgstr "현지 시간"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = time zone id, eg: Europe/Warsaw"
+msgid "Time zone: %1"
+msgstr "시간대: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Time zone"
+msgstr "시간대"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Does not repeat"
+msgstr "반복 안 함"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/ImportView.qml
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Daily"
+msgstr "매일"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Every weekday (Monday to Friday)"
+msgstr "매 평일(월요일~금요일)"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = day name"
+msgid "Weekly on %1"
+msgstr "매주 %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = day of the month"
+msgid "Monthly on day %1"
+msgstr "매월 %1일"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = date, eg: 16 October"
+msgid "Yearly on %1"
+msgstr "매년 %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Custom (as set in TickTick)"
+msgstr "사용자 지정 (TickTick에서 설정한 대로)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Custom (as set in Google Calendar)"
+msgstr "사용자 정의(Google 캘린더에서 설정)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Loading…"
+msgstr "불러오는 중…"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every [2] [weeks]"
+msgid "Every"
+msgstr "매"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "day"
+msgid_plural "days"
+msgstr[0] "일"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "주"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "month"
+msgid_plural "months"
+msgstr[0] "개월"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "year"
+msgid_plural "years"
+msgstr[0] "년"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends: never / on date / after N times"
+msgid "Ends:"
+msgstr "종료:"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends"
+msgid "Never"
+msgstr "안 함"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends on [date]"
+msgid "On"
+msgstr "날짜"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends after [N] times"
+msgid "After"
+msgstr "횟수"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends after N"
+msgid "time"
+msgid_plural "times"
+msgstr[0] "회"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add Google Meet video conferencing"
+msgstr "Google Meet 화상 회의 추가"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Video conferencing will be removed when you save"
+msgstr "저장하면 화상 회의가 삭제됩니다"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/PopupView.qml
+#: ../contents/ui/TaskUndoBar.qml
+msgid "Undo"
+msgstr "실행 취소"
+
+#: ../contents/ui/EventEditView.qml
+msgid "A Google Meet link will be created when you save"
+msgstr "저장하면 Google Meet 링크가 생성됩니다"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Video conferencing"
+msgstr "화상 회의"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove video conferencing"
+msgstr "화상 회의 삭제"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Busy"
+msgstr "바쁨"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Free"
+msgstr "한가함"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Busy or Free"
+msgid "Show as: %1"
+msgstr "표시 방법: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Show as"
+msgstr "표시 방법"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Calendar default"
+msgstr "캘린더 기본값"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Public"
+msgstr "공개"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Private"
+msgstr "비공개"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Calendar default, Public or Private"
+msgid "Visibility: %1"
+msgstr "공개 설정: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Visibility"
+msgstr "공개 설정"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Reminders"
+msgstr "알림"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Calendar's default"
+msgstr "캘린더 기본값"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Set for this event"
+msgstr "이 일정에 설정"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "minute before"
+msgid_plural "minutes before"
+msgstr[0] "분 전"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "hour before"
+msgid_plural "hours before"
+msgstr[0] "시간 전"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "day before"
+msgid_plural "days before"
+msgstr[0] "일 전"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "week before"
+msgid_plural "weeks before"
+msgstr[0] "주 전"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove reminder"
+msgstr "알림 삭제"
+
+#: ../contents/ui/EventEditView.qml
+msgid "No notification reminders"
+msgstr "알림 없음"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add Reminder"
+msgstr "알림 추가"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Guests"
+msgstr "참석자"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Only the organizer can change the guest list"
+msgstr "주최자만 참석자 목록을 변경할 수 있습니다"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add guests by email"
+msgstr "이메일로 참석자 추가"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "add a guest"
+msgid "Add"
+msgstr "추가"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "guest suggestion: %1 = name, %2 = email"
+msgid "%1 <%2>"
+msgstr "%1 <%2>"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/FindTimeView.qml
+msgid "Find a Time"
+msgstr "시간 찾기"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Subtask"
+msgstr "하위 작업"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove subtask"
+msgstr "하위 작업 제거"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add a subtask…"
+msgstr "하위 작업 추가…"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Notes"
+msgstr "메모"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Description"
+msgstr "설명"
+
+#: ../contents/ui/EventModel.qml ../contents/ui/LocaleFuncs.js
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml
+msgctxt "short month+date format"
+msgid "MMM d"
+msgstr "MMM d일"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "%1 = date"
+msgid "Due %1"
+msgstr "기한 %1"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Home"
+msgstr "집"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Office"
+msgstr "사무실"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Elsewhere"
+msgstr "기타 장소"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't show free / busy times"
+msgstr "이 달력은 바쁨 / 한가함 시간을 표시할 수 없습니다"
+
+#: ../contents/ui/EventMover.qml
+msgid "Event moved"
+msgstr "이벤트 이동됨"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No suggestions: the guests' busy times aren't available."
+msgstr "제안 없음: 참석자의 바쁜 시간을 확인할 수 없습니다."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "Suggested times (not counting %1):"
+msgstr "추천 시간(%1 제외):"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Suggested times:"
+msgstr "추천 시간:"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "No time free in the working hours of this day (not counting %1)."
+msgstr "이날 근무 시간에 빈 시간이 없습니다(%1 제외)."
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No time free for everyone in the working hours of this day."
+msgstr "이 날의 근무 시간에 모두가 한가한 시간이 없습니다."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time"
+msgid "Not available"
+msgstr "사용할 수 없음"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time: %1 = Google's reason"
+msgid "Not available (%1)"
+msgstr "사용할 수 없음(%1)"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Previous day"
+msgstr "이전 날"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "Find a time: the day shown"
+msgid "ddd, d MMM"
+msgstr "MMM d일 (ddd)"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Next day"
+msgstr "다음 날"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Go to Date"
+msgstr "날짜로 이동"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Go"
+msgstr "이동"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Eg: next friday, 15 nov, +2w"
+msgstr "예: 2026-11-15, tomorrow, +2w"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "No day found in the text"
+msgstr "텍스트에서 날짜를 찾을 수 없습니다"
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file."
+msgstr "파일을 읽을 수 없습니다."
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading .ics files needs the Python icalendar module."
+msgstr ".ics 파일을 읽으려면 Python icalendar 모듈이 필요합니다."
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file: %1"
+msgstr "파일을 읽을 수 없습니다: %1"
+
+#: ../contents/ui/ImportView.qml
+msgid "Changed occurrence of a repeating event"
+msgstr "반복 일정의 변경된 일정"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 day"
+msgid_plural "Every %1 days"
+msgstr[0] "%1일마다"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "%1주마다"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml
+msgid "Weekly"
+msgstr "매주"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly / Every 2 weeks, %2 = days"
+msgid "%1 on %2"
+msgstr "%1 %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 month"
+msgid_plural "Every %1 months"
+msgstr[0] "%1개월마다"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml
+msgid "Monthly"
+msgstr "매월"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 year"
+msgid_plural "Every %1 years"
+msgstr[0] "%1년마다"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml
+msgid "Yearly"
+msgstr "매년"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%2 = Weekly on Monday, ..."
+msgid "%2, %1 time"
+msgid_plural "%2, %1 times"
+msgstr[0] "%2, %1회"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly on Monday, ..., %2 = date"
+msgid "%1, until %2"
+msgstr "%1, %2까지"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 exception"
+msgid_plural "%1 exceptions"
+msgstr[0] "예외 %1개"
+
+#: ../contents/ui/ImportView.qml
+msgid "Close"
+msgstr "닫기"
+
+#: ../contents/ui/ImportView.qml
+msgid "Import"
+msgstr "가져오기"
+
+#: ../contents/ui/ImportView.qml
+msgid "No file chosen"
+msgstr "선택한 파일 없음"
+
+#: ../contents/ui/ImportView.qml
+msgid "Choose File…"
+msgstr "파일 선택…"
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading the file…"
+msgstr "파일을 읽는 중…"
+
+#: ../contents/ui/ImportView.qml
+msgid "No events in this file"
+msgstr "이 파일에 일정이 없습니다"
+
+#: ../contents/ui/ImportView.qml
+msgid "(No title)"
+msgstr "(제목 없음)"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 cancelled event isn't imported."
+msgid_plural "%1 cancelled events aren't imported."
+msgstr[0] "취소된 일정 %1개는 가져오지 않습니다."
+
+#: ../contents/ui/ImportView.qml
+msgid "Calendar:"
+msgstr "달력:"
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Guests and the organizer aren't imported, and no invitations are sent. "
+"Importing the same event again updates it."
+msgstr ""
+"참석자와 주최자는 가져오지 않으며 초대장도 전송되지 않습니다. 같은 일정을 다"
+"시 가져오면 업데이트됩니다."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Importing needs a Google Calendar you can edit. Log in to Google Calendar in "
+"the settings."
+msgstr ""
+"가져오려면 편집할 수 있는 Google 캘린더가 필요합니다. 설정에서 Google 캘린더"
+"에 로그인하세요."
+
+#: ../contents/ui/ImportView.qml
+msgid "Importing… %1 of %2"
+msgstr "가져오는 중… %1/%2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 event imported"
+msgid_plural "%1 events imported"
+msgstr[0] "일정 %1개를 가져왔습니다"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 failed: %2"
+msgid_plural "%1 failed, eg: %2"
+msgstr[0] "%1개 실패: %2"
+
+#: ../contents/ui/JoinPill.qml ../contents/ui/MeetingAlertContent.qml
+msgid "Join"
+msgstr "참가"
+
+#: ../contents/ui/lib/ConfigFontFamily.qml
+msgctxt "Use default font"
+msgid "Default"
+msgstr "기본값"
+
+#: ../contents/ui/lib/ConfigFontFamily.qml
+msgid "Choose a Font"
+msgstr "글꼴 선택"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Play"
+msgstr "재생"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Choose a sound effect"
+msgstr "효과음 선택"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Sound files (%1)"
+msgstr "소리 파일 (%1)"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "All files (%1)"
+msgstr "모든 파일 (%1)"
+
+#: ../contents/ui/lib/PythonModules.qml
+msgid ""
+"Couldn't install the modules. Install python3-icalendar (python-icalendar on "
+"Arch) with your package manager."
+msgstr ""
+"모듈을 설치할 수 없습니다. 패키지 관리자로 python3-icalendar(Arch에서는 "
+"python-icalendar)를 설치하십시오."
+
+#: ../contents/ui/lib/PythonModules.qml
+msgid "Couldn't install the modules: %1"
+msgstr "모듈을 설치할 수 없음: %1"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time on the hour (24 hour clock)"
+msgid "h"
+msgstr "h시"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time (24 hour clock)"
+msgid "h:mm"
+msgstr "h:mm"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time on the hour (12 hour clock)"
+msgid "h AP"
+msgstr "AP h시"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time (12 hour clock)"
+msgid "h:mm AP"
+msgstr "AP h:mm"
+
+#: ../contents/ui/LocaleFuncs.js
+msgid "All Day"
+msgstr "하루 종일"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "from date/time %1 until date/time %2"
+msgid "%1 - %2"
+msgstr "%1 - %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event span, %1 = start, %2 = end"
+msgid "%1 – %2"
+msgstr "%1 – %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date"
+msgid "%1 · All day"
+msgstr "%1 · 하루 종일"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
+msgid "%1 · %2 – %3"
+msgstr "%1 · %2 – %3"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 hours"
+msgid "%1h"
+msgstr "%1시간"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 minutes"
+msgid "%1m"
+msgstr "%1m"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 seconds"
+msgid "%1s"
+msgstr "%1s"
+
+#: ../contents/ui/Logic.qml
+msgid "Could not connect."
+msgstr "연결할 수 없습니다."
+
+#: ../contents/ui/Logic.qml
+msgid "The weather service is not available right now."
+msgstr "지금은 날씨 서비스를 사용할 수 없습니다."
+
+#: ../contents/ui/Logic.qml
+msgid "Weather API limit reached"
+msgstr "날씨 API의 제한에 도달하였습니다"
+
+#: ../contents/ui/Logic.qml
+msgid ""
+"OpenWeatherMap refused the app id for One Call 3.0: subscribe to it, or "
+"choose Free (2.5) in Settings > Weather."
+msgstr ""
+"OpenWeatherMap에서 One Call 3.0에 대한 앱 ID를 거부했습니다: 구독하거나 설정 "
+"> 날씨에서 Free (2.5)를 선택하십시오."
+
+#: ../contents/ui/Logic.qml
+msgid ""
+"OpenWeatherMap refused the app id. A new one takes up to 2 hours to work; "
+"check it in Settings > Weather."
+msgstr ""
+"OpenWeatherMap에서 앱 ID를 거부했습니다. 새 ID는 작동하기까지 최대 2시간이 걸"
+"립니다. 설정 > 날씨에서 확인하십시오."
+
+#: ../contents/ui/Logic.qml
+msgctxt ""
+"The language code for OpenWeatherMap's weather texts, as listed on https://"
+"openweathermap.org/current#multi (eg: de, fr, pt_br, zh_cn); en if yours "
+"isn't there"
+msgid "en"
+msgstr "kr"
+
+#: ../contents/ui/Logic.qml
+msgid ""
+"Google authorization expired or was revoked. Open Event Calendar Settings > "
+"Calendars > Google Calendar and sign in to that account again."
+msgstr ""
+"Google 인증이 만료되었거나 취소되었습니다. 이벤트 달력 설정 > 달력 > Google "
+"캘린더를 열고 해당 계정에 다시 로그인하십시오."
+
+#: ../contents/ui/Logic.qml
+msgid "Logged out of Google. Please login again."
+msgstr "Google에 로그아웃되었습니다. 다시 로그인하십시오."
+
+#: ../contents/ui/Logic.qml ../contents/ui/UpcomingEvents.qml
+msgid "Event Calendar NG"
+msgstr "이벤트 달력 NG"
+
+#: ../contents/ui/Logic.qml
+msgid "Calendar is back in sync"
+msgstr "달력이 다시 동기화되었습니다"
+
+#: ../contents/ui/Logic.qml
+msgid "Calendar can't sync"
+msgstr "달력을 동기화할 수 없음"
+
+#: ../contents/ui/Logic.qml
+msgid "No connection. Showing the last loaded events; retrying automatically."
+msgstr ""
+"연결 없음. 마지막으로 불러온 이벤트를 표시하며 자동으로 다시 시도합니다."
+
+#: ../contents/ui/main.qml
+msgctxt "%1 = event title, %2 = in 12 min / 25 min left"
+msgid "%1 · %2"
+msgstr "%1 · %2"
+
+#: ../contents/ui/main.qml
+msgid "Camera Check…"
+msgstr "카메라 확인…"
+
+#: ../contents/ui/main.qml ../contents/ui/PopupHeader.qml
+msgid "Refresh"
+msgstr "새로고침"
+
+#: ../contents/ui/main.qml
+msgid "Date and Time Formats…"
+msgstr "날짜 및 시간 형식…"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Manage lists"
+msgstr "목록 관리"
+
+#: ../contents/ui/ManageListsView.qml
+msgid "No lists"
+msgstr "목록 없음"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "%1 open task"
+msgid_plural "%1 open tasks"
+msgstr[0] "열린 작업 %1개"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Show in smart lists"
+msgstr "스마트 목록에 표시"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Rename…"
+msgstr "이름 바꾸기…"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Clear completed"
+msgstr "완료된 작업 지우기"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgctxt "%2 = task list name"
+msgid "Delete the list \"%2\" and its %1 task? This can't be undone."
+msgid_plural "Delete the list \"%2\" and its %1 tasks? This can't be undone."
+msgstr[0] ""
+"“%2” 목록과 작업 %1개를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "New list name"
+msgstr "새 목록 이름"
+
+#: ../contents/ui/ManageListsView.qml
+msgid "Create"
+msgstr "만들기"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Starting soon"
+msgstr "곧 시작"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Starting now"
+msgstr "지금 시작"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Show Less"
+msgstr "간단히 보기"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Microphone and Speaker…"
+msgstr "마이크 및 스피커…"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Choose the Camera…"
+msgstr "카메라 선택…"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Snooze 1 min"
+msgstr "1분 후 다시 알림"
+
+#: ../contents/ui/MeetingAlertContent.qml ../contents/ui/PopupView.qml
+msgid "Dismiss"
+msgstr "닫기"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Return: join · Esc: dismiss"
+msgstr "Enter: 참여 · Esc: 닫기"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Esc: dismiss"
+msgstr "Esc: 닫기"
+
+#: ../contents/ui/MeetingAlertWindow.qml
+msgid "Meeting"
+msgstr "회의"
+
+#: ../contents/ui/MicMeter.qml
+msgid "Couldn't play the microphone on the speaker (pactl)."
+msgstr "마이크 소리를 스피커로 재생할 수 없습니다 (pactl)."
+
+#: ../contents/ui/MicMeter.qml
+msgid "Hear yourself (use headphones: speakers would whistle)"
+msgstr "내 목소리 듣기 (헤드폰 사용: 스피커는 하울링이 생김)"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "volume percentage, the widest"
+msgid "%1%"
+msgstr "%1%"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "the microphone's input level now"
+msgid "Level"
+msgstr "레벨"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "volume percentage"
+msgid "%1%"
+msgstr "%1%"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "the microphone's input volume"
+msgid "Sensitivity"
+msgstr "감도"
+
+#: ../contents/ui/MicMeter.qml
+msgid "The microphone is muted."
+msgstr "마이크가 음소거되어 있습니다."
+
+#: ../contents/ui/MicMeter.qml
+msgid "Unmute"
+msgstr "음소거 해제"
+
+#: ../contents/ui/MicMeter.qml
+msgid "Test: play a sound on each side"
+msgstr "테스트: 양쪽에서 소리 재생"
+
+#: ../contents/ui/MiniMonth.qml ../contents/ui/PopupHeader.qml
+msgid "Previous Month"
+msgstr "이전 달"
+
+#: ../contents/ui/MiniMonth.qml ../contents/ui/PopupHeader.qml
+msgid "Next Month"
+msgstr "다음 달"
+
+#: ../contents/ui/MiniMonth.qml
+msgctxt "%2 = date"
+msgid "%2, %1 event"
+msgid_plural "%2, %1 events"
+msgstr[0] "%2, 일정 %1개"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "New moon"
+msgstr "삭"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waxing crescent"
+msgstr "초승달"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "First quarter"
+msgstr "상현달"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waxing gibbous"
+msgstr "차오르는 달"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Full moon"
+msgstr "보름달"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waning gibbous"
+msgstr "기우는 달"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Last quarter"
+msgstr "하현달"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waning crescent"
+msgstr "그믐달"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon"
+msgid "Up all day"
+msgstr "종일 지평선 위"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon"
+msgid "Down all day"
+msgstr "종일 지평선 아래"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 and %2 = times"
+msgid "Rises %1, sets %2"
+msgstr "월출 %1, 월몰 %2"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 and %2 = times"
+msgid "Sets %1, rises %2"
+msgstr "월몰 %1, 월출 %2"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = time"
+msgid "Rises %1"
+msgstr "월출 %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = time"
+msgid "Sets %1"
+msgstr "월몰 %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "%1 = date"
+msgid "Full moon %1"
+msgstr "보름달 %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "%1 = date"
+msgid "New moon %1"
+msgstr "삭 %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase %1 at time %2"
+msgid "%1 at %2"
+msgstr "%2에 %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = percent"
+msgid "%1% lit"
+msgstr "%1% 밝음"
+
+#: ../contents/ui/NewEventForm.qml
+msgid "Eg: 9am-5pm Work"
+msgstr "예: 오전 9시 - 오후 5시 근무"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Buttons in the header"
+msgstr "헤더의 버튼"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Previous Week"
+msgstr "이전 주"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Previous Day"
+msgstr "이전 날"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Today (press and hold, or G: go to a date)"
+msgstr "오늘 (길게 누르거나 G: 날짜로 이동)"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Next Week"
+msgstr "다음 주"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Next Day"
+msgstr "다음 날"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "New Event (press and hold: a meeting now)"
+msgstr "새 일정 (길게 누르기: 지금 회의)"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Start a Google Meet"
+msgstr "Google Meet 시작"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Start a Zoom Meeting"
+msgstr "Zoom 회의 시작"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "More Actions"
+msgstr "추가 작업"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Keep Open"
+msgstr "열어 두기"
+
+#: ../contents/ui/PopupView.qml
+msgid "Couldn't delete the event"
+msgstr "일정을 삭제할 수 없습니다"
+
+#: ../contents/ui/PopupView.qml
+msgid "Repeating event deleted"
+msgstr "반복 이벤트 삭제됨"
+
+#: ../contents/ui/PopupView.qml
+msgid "Task deleted"
+msgstr "작업 삭제됨"
+
+#: ../contents/ui/PopupView.qml
+msgid "Event deleted"
+msgstr "이벤트 삭제됨"
+
+#: ../contents/ui/PopupView.qml
+msgid "Couldn't delete the task"
+msgstr "할 일을 삭제할 수 없습니다"
+
+#: ../contents/ui/PopupView.qml
+msgid "Loading calendars…"
+msgstr "달력 불러오는 중…"
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying…"
+msgstr "다시 시도하는 중…"
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying in %1 second."
+msgid_plural "Retrying in %1 seconds."
+msgstr[0] "%1초 후 다시 시도합니다."
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying in %1 minute."
+msgid_plural "Retrying in %1 minutes."
+msgstr[0] "%1분 후 다시 시도합니다."
+
+#: ../contents/ui/PopupView.qml
+msgid "Can't connect. Showing the last loaded events."
+msgstr "연결할 수 없습니다. 마지막으로 불러온 이벤트를 표시합니다."
+
+#: ../contents/ui/PopupView.qml ../contents/ui/WeatherPanel.qml
+msgid "Retry Now"
+msgstr "지금 다시 시도"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml
+#: ../contents/ui/TasksView.qml
+msgid "Today"
+msgstr "오늘"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml
+#: ../contents/ui/TasksView.qml
+msgid "Tomorrow"
+msgstr "내일"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = weekday, %2 = short date"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every weekday"
+msgstr "평일마다"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "%1 = weekday"
+msgid "Every %1"
+msgstr "매주 %1"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every day"
+msgid_plural "Every %1 days"
+msgstr[0] "%1일마다"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "%1주마다"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every month"
+msgid_plural "Every %1 months"
+msgstr[0] "%1개월마다"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every year"
+msgid_plural "Every %1 years"
+msgstr[0] "%1년마다"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Couldn't add the task"
+msgstr "작업을 추가할 수 없음"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Add a task…"
+msgstr "작업 추가…"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = task list name"
+msgid "Add a task to %1"
+msgstr "%1에 작업 추가"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = task list name"
+msgid "Task list: %1"
+msgstr "작업 목록: %1"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "The list new tasks go to"
+msgstr "새 작업이 추가될 목록"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = recognized day, time, …"
+msgid "%1 (not supported by Google Tasks)"
+msgstr "%1(Google Tasks에서 지원하지 않음)"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Not supported by Google Tasks"
+msgstr "Google Tasks에서 지원하지 않음"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = the recognized words"
+msgid "Keep \"%1\" in the title"
+msgstr "제목에 \"%1\" 유지"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Keep these words in the title"
+msgstr "제목에 이 단어 유지"
+
+#: ../contents/ui/QuickAddView.qml
+msgid "Quick Add"
+msgstr "빠른 추가"
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "quick add example"
+msgid "Lunch with Anna tomorrow 13:00"
+msgstr "내일 13:00 안나와 점심"
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "The task is due on %1."
+msgstr "이 작업의 기한은 %1입니다."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date, %2 = time"
+msgid "The event is added on %1 at %2."
+msgstr "일정이 %1 %2에 추가됩니다."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "The event is added on %1, all day."
+msgstr "일정이 %1에 종일로 추가됩니다."
+
+#: ../contents/ui/QuickAddView.qml
+msgid "Type what, when and where. Without a day, the event is added today."
+msgstr ""
+"무엇을, 언제, 어디서 할지 입력하십시오. 날짜가 없으면 이벤트가 오늘에 추가됩"
+"니다."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "Type what, when and where. Without a day, the event is added on %1."
+msgstr ""
+"무엇을, 언제, 어디서 할지 입력하십시오. 날짜가 없으면 이벤트가 %1에 추가됩니"
+"다."
+
+#: ../contents/ui/QuickAddView.qml
+msgid "More options…"
+msgstr "추가 옵션…"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Yes"
+msgstr "예"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Yes to All Events"
+msgstr "모든 이벤트에 예"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Maybe"
+msgstr "미정"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Maybe to All Events"
+msgstr "모든 이벤트에 미정"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "No"
+msgstr "아니요"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "No to All Events"
+msgstr "모든 이벤트에 아니요"
+
+#: ../contents/ui/SearchView.qml
+msgid "Search events and tasks…"
+msgstr "이벤트 및 작업 검색…"
+
+#: ../contents/ui/SearchView.qml
+msgid "Type to search events and tasks"
+msgstr "입력하여 이벤트 및 작업 검색"
+
+#: ../contents/ui/SearchView.qml
+msgid "Searching…"
+msgstr "검색 중…"
+
+#: ../contents/ui/SearchView.qml
+msgid "No events found"
+msgstr "이벤트를 찾을 수 없음"
+
+#: ../contents/ui/SearchView.qml ../contents/ui/UpNextPanel.qml
+msgid "Show more"
+msgstr "더 보기"
+
+#: ../contents/ui/SearchView.qml
+msgid "Couldn't search Google Calendar"
+msgstr "Google 캘린더를 검색할 수 없음"
+
+#: ../contents/ui/SearchView.qml
+msgid "Searching Google Calendar…"
+msgstr "Google 캘린더 검색 중…"
+
+#: ../contents/ui/TaskCheck.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Mark as not done"
+msgstr "완료 안 됨으로 표시"
+
+#: ../contents/ui/TaskCheck.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Mark as done"
+msgstr "완료로 표시"
+
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+msgid "Couldn't move the task"
+msgstr "작업을 이동할 수 없음"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "task due: %1 = day (Today, Oct 28), %2 = time"
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "%1 = short date"
+msgid "Overdue · due %1"
+msgstr "기한 지남 · 기한 %1"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Task"
+msgstr "작업"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Done"
+msgstr "완료"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Not done"
+msgstr "완료 안 됨"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "checklist items done: %1 of %2"
+msgid "%1/%2"
+msgstr "%1/%2"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Hide subtasks"
+msgstr "하위 작업 숨기기"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Show subtasks"
+msgstr "하위 작업 표시"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Due today"
+msgstr "기한을 오늘로"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Due tomorrow"
+msgstr "기한을 내일로"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "All"
+msgstr "전체"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "Next 7 days"
+msgstr "다음 7일"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "Overdue"
+msgstr "기한 지남"
+
+#: ../contents/ui/TasksView.qml
+msgid "Couldn't change the list's color"
+msgstr "목록 색상을 바꿀 수 없습니다"
+
+#: ../contents/ui/TasksView.qml
+msgid "Couldn't clear the completed tasks"
+msgstr "완료된 작업을 지울 수 없습니다"
+
+#: ../contents/ui/TasksView.qml
+msgid "Tasks can only move to a list of the same account"
+msgstr "작업은 같은 계정의 목록으로만 이동할 수 있습니다"
+
+#: ../contents/ui/TasksView.qml
+msgid "The task was copied but couldn't be removed from its old list"
+msgstr "작업이 복사되었지만 이전 목록에서 제거하지 못했습니다"
+
+#: ../contents/ui/TasksView.qml
+msgid "Hide filters"
+msgstr "필터 숨기기"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show filters"
+msgstr "필터 표시"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = tasks filter or list name"
+msgid "Show: %1"
+msgstr "표시: %1"
+
+#: ../contents/ui/TasksView.qml
+msgid "By date"
+msgstr "날짜별"
+
+#: ../contents/ui/TasksView.qml
+msgid "By list"
+msgstr "목록별"
+
+#: ../contents/ui/TasksView.qml
+msgid "View options"
+msgstr "보기 옵션"
+
+#: ../contents/ui/TasksView.qml
+msgid "Group by"
+msgstr "그룹화 기준"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "Date"
+msgstr "날짜"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "List"
+msgstr "목록"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "None"
+msgstr "없음"
+
+#: ../contents/ui/TasksView.qml
+msgid "Sort by"
+msgstr "정렬 기준"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Due date"
+msgstr "기한"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Title"
+msgstr "제목"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "List order"
+msgstr "목록 순서"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Priority"
+msgstr "우선순위"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show details"
+msgstr "세부 정보 표시"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show completed"
+msgstr "완료된 작업 표시"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = task list name"
+msgid "Manage %1"
+msgstr "%1 관리"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = account name"
+msgid "Account: %1"
+msgstr "계정: %1"
+
+#: ../contents/ui/TasksView.qml
+msgid "The account the new list goes to"
+msgstr "새 목록을 추가할 계정"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Red"
+msgstr "빨간색"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Orange"
+msgstr "주황색"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Yellow"
+msgstr "노란색"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Blue"
+msgstr "파란색"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Green"
+msgstr "초록색"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Indigo"
+msgstr "남색"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Purple"
+msgstr "보라색"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Gray"
+msgstr "회색"
+
+#: ../contents/ui/TasksView.qml
+msgid "This week"
+msgstr "이번 주"
+
+#: ../contents/ui/TasksView.qml
+msgid "Later"
+msgstr "나중"
+
+#: ../contents/ui/TasksView.qml
+msgid "No date"
+msgstr "날짜 없음"
+
+#: ../contents/ui/TasksView.qml
+msgid "Completed"
+msgstr "완료됨"
+
+#: ../contents/ui/TaskUndoBar.qml
+msgctxt "a task was checked"
+msgid "Completed"
+msgstr "완료됨"
+
+#: ../contents/ui/TooltipView.qml
+msgctxt "high / low temperature"
+msgid "%1 / %2"
+msgstr "%1 / %2"
+
+#: ../contents/ui/TooltipView.qml
+msgctxt "precipitation in inches"
+msgid "%1 in"
+msgstr "%1인치"
+
+#: ../contents/ui/TooltipView.qml ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation in mm"
+msgid "%1 mm"
+msgstr "%1 mm"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Snooze 1 minute"
+msgid_plural "Snooze %1 minutes"
+msgstr[0] "%1분 후 다시 알림"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 15 minutes, %2 = event title"
+msgid "In %1: %2"
+msgstr "%1 후: %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "invitation, %1 = organizer"
+msgid "From %1"
+msgstr "보낸 사람: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title"
+msgid "Invitation: %1"
+msgstr "초대: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, %1 = event title"
+msgid "All day: %1"
+msgstr "종일: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, more events"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "외 %1개"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Today: %1 event"
+msgid_plural "Today: %1 events"
+msgstr[0] "오늘: 이벤트 %1개"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Nothing planned today"
+msgstr "오늘 예정된 일정 없음"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Overdue"
+msgstr "기한 지남"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = time"
+msgid "Due today %1"
+msgstr "오늘 기한 %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Due today"
+msgstr "오늘 기한"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = time"
+msgid "Due tomorrow %1"
+msgstr "내일 기한 %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Due tomorrow"
+msgstr "내일 기한"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = date (and time)"
+msgid "Due %1"
+msgstr "기한 %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Mark as done"
+msgstr "완료로 표시"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "%1 task due today"
+msgid_plural "%1 tasks due today"
+msgstr[0] "오늘 기한인 작업 %1개"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "%1 overdue task"
+msgid_plural "%1 overdue tasks"
+msgstr[0] "기한 지난 작업 %1개"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "tasks"
+msgid "%1 overdue"
+msgid_plural "%1 overdue"
+msgstr[0] "기한 지남 %1개"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 3 tasks due today, %2 = 2 overdue"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task summary, more tasks"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+%1개 더"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Show Tasks"
+msgstr "할 일 보기"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = time"
+msgid "tomorrow %1"
+msgstr "내일 %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 3h20m"
+msgid "(in %1)"
+msgstr "(%1 후)"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title, %2 = end time"
+msgid "Now: %1, until %2"
+msgstr "지금: %1, %2까지"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title, %2 = when"
+msgid "Next: %1, %2"
+msgstr "다음: %1, %2"
+
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "Up next: a day's heading"
+msgid "dddd, d MMM"
+msgstr "M월 d일 dddd"
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Up next"
+msgstr "다음 일정"
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Nothing tomorrow."
+msgid_plural "Nothing in the next %1 days."
+msgstr[0] "다음 %1일 동안 일정이 없습니다."
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Nothing planned in the coming days."
+msgstr "앞으로 며칠 동안 계획된 일정이 없습니다."
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Clear"
+msgstr "맑음"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Mainly clear"
+msgstr "대체로 맑음"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Partly cloudy"
+msgstr "구름 조금"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Overcast"
+msgstr "흐림"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Fog"
+msgstr "안개"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rime fog"
+msgstr "착빙성 안개"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light drizzle"
+msgstr "약한 이슬비"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Drizzle"
+msgstr "이슬비"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy drizzle"
+msgstr "강한 이슬비"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Freezing drizzle"
+msgstr "어는 이슬비"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light rain"
+msgstr "약한 비"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rain"
+msgstr "비"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy rain"
+msgstr "강한 비"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Freezing rain"
+msgstr "어는 비"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light snow"
+msgstr "약한 눈"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow"
+msgstr "눈"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy snow"
+msgstr "강한 눈"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow grains"
+msgstr "쌀알눈"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rain showers"
+msgstr "소나기"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy rain showers"
+msgstr "강한 소나기"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow showers"
+msgstr "소낙눈"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy snow showers"
+msgstr "강한 소낙눈"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Thunderstorm"
+msgstr "뇌우"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Thunderstorm with hail"
+msgstr "우박을 동반한 뇌우"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "%1 = time"
+msgid "Sunrise %1"
+msgstr "일출 %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "%1 = time"
+msgid "Sunset %1"
+msgstr "일몰 %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "the sun up all day"
+msgid "Midnight sun"
+msgstr "백야"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "the sun down all day"
+msgid "Polar night"
+msgstr "극야"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Set a location in Settings > Weather to see the forecast here."
+msgstr "여기에 일기 예보를 표시하려면 설정 > 날씨에서 위치를 설정하십시오."
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Loading weather…"
+msgstr "날씨 불러오는 중…"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Full forecast on the web"
+msgstr "웹에서 전체 예보 보기"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "high / low temperature"
+msgid "High %1 · Low %2"
+msgstr "최고 %1 · 최저 %2"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation during the day"
+msgid "Rain: %1"
+msgstr "강수량: %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "No forecast for this day."
+msgstr "이 날의 일기 예보가 없습니다."
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Next hour"
+msgid_plural "Next %1 hours"
+msgstr[0] "다음 %1시간"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "weather by hour of the shown day"
+msgid "During the day"
+msgstr "하루 동안"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation during the hours of the chart"
+msgid "Rain: %1"
+msgstr "강수량: %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Next days"
+msgstr "다음 며칠"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "%1 = day and time, %2 = event title"
+msgid "Next: %1 · %2"
+msgstr "다음: %1 · %2"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "the day before today"
+msgid "Yesterday"
+msgstr "어제"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "%1 = time zone, %2 = a date"
+msgid ""
+"%1\n"
+"The time difference changes during these days: the hours shown are those of "
+"%2."
+msgstr ""
+"%1\n"
+"이 기간 중 시차가 바뀝니다: 표시된 시간은 %2 기준입니다."
+
+#: ../contents/ui/WeekView.qml
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] "%1일"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "more events not shown"
+msgid "+%1"
+msgstr "+%1"
+
+#: ../contents/ui/WeekView.qml
+msgid "No more events today"
+msgstr "오늘은 더 이상 일정이 없습니다"
+
+#: ../contents/ui/WorkingLocationLabel.qml
+msgctxt "%1 = Home, Office, ..."
+msgid "Working location: %1"
+msgstr "근무 위치: %1"
+
+#~ msgid "Forecast in the day headers and, in the Day view, a weather panel."
+#~ msgstr ""
+#~ "날짜 헤더에 일기 예보를 표시하고, 일 보기에서는 날씨 패널을 표시합니다."
+
+#~ msgid "Day view shows"
+#~ msgstr "일 보기에 표시"
+
+#~ msgid "Meteogram above the agenda"
+#~ msgstr "일정 위에 기상 그래프"
+
+#~ msgid "The weather forecast chart above the Agenda's list"
+#~ msgstr "일정 목록 위의 일기 예보 차트"
+
+#~ msgid "Timer above the agenda"
+#~ msgstr "일정 위에 타이머"
+
+#~ msgid "Timer sound"
+#~ msgstr "타이머 소리"
+
+#~ msgid "Meteogram / timer height"
+#~ msgstr "기상 그래프 / 타이머 높이"
+
+#~ msgid "Also the meteogram above the agenda"
+#~ msgstr "일정 위 기상 그래프에도 적용"
+
+#~ msgid "Today's chart in the Day view and the meteogram above the agenda"
+#~ msgstr "일 보기의 오늘 차트와 일정 위의 기상도"
+
+#, no-c-format
+#~ msgid "%1mm"
+#~ msgstr "%1mm"
+
+#~ msgid ""
+#~ "Weather not configured.\n"
+#~ "Go to Weather in the config and set your city,\n"
+#~ "and/or disable the meteogram to hide this area."
+#~ msgstr ""
+#~ "날씨가 설정되지 않았습니다.\n"
+#~ "설정 창의 날씨 항목에서 도시를 설정하십시오.\n"
+#~ "천문 현상을 비활성화하셔도 됩니다."
+
+#~ msgid "Error fetching weather."
+#~ msgstr "날씨 확인에 실패하였습니다."
+
+#~ msgid "&Start"
+#~ msgstr "시작(&S)"
+
+#~ msgid "&Cancel"
+#~ msgstr "취소(&C)"
+
+#~ msgid "Timer"
+#~ msgstr "타이머"
+
+#~ msgid "Timer finished"
+#~ msgstr "타이머 완료"
+
+#~ msgid "%1 has passed"
+#~ msgstr "%1 초과"
+
+#~ msgid "Repeat"
+#~ msgstr "반복"
+
+#~ msgid "Timer, %1 remaining. Activate to pause."
+#~ msgstr "타이머, %1 남음. 활성화하면 일시 정지합니다."
+
+#~ msgid "Timer, %1 remaining. Activate to start."
+#~ msgstr "타이머, %1 남음. 활성화하면 시작합니다."
+
+#~ msgid "Timer set to %1. Use plus or minus to change the duration."
+#~ msgstr ""
+#~ "타이머가 %1(으)로 설정되었습니다. 더하기 또는 빼기로 시간을 변경하십시오."
+
+#~ msgid "Pause Timer"
+#~ msgstr "타이머 일시정지"
+
+#~ msgid "Start Timer"
+#~ msgstr "타이머 시작"
+
+#~ msgid "Scroll or use plus and minus keys to adjust duration"
+#~ msgstr "스크롤하거나 더하기/빼기 키로 시간 조정"
+
+#~ msgid "Set Timer"
+#~ msgstr "타이머 설정"
+
+#~ msgctxt "the sun"
+#~ msgid "Up all day (midnight sun)"
+#~ msgstr "종일 지평선 위 (백야)"
+
+#~ msgctxt "the sun"
+#~ msgid "Down all day (polar night)"
+#~ msgstr "종일 지평선 아래 (극야)"
+
+#~ msgid "Skipped %1 setting this version doesn't have: %2"
+#~ msgid_plural "Skipped %1 settings this version doesn't have: %2"
+#~ msgstr[0] "이 버전에 없는 설정 %1개를 건너뛰었습니다: %2"
+
+#~ msgid ""
+#~ "Not selected now: %1. Select them on the PIM Events Plugin page of the "
+#~ "Digital Clock's settings."
+#~ msgstr ""
+#~ "현재 선택되지 않음: %1. 디지털 시계 설정의 PIM Events Plugin 페이지에서 선"
+#~ "택하십시오."
+
+#~ msgid "All the calendars Akonadi has now are selected."
+#~ msgstr "Akonadi에 현재 있는 모든 달력이 선택되어 있습니다."
+
+#~ msgid ""
+#~ "Shown read-only. Which Akonadi calendars are shown is set on the PIM "
+#~ "Events Plugin page of the Digital Clock's settings (the plugin itself is "
+#~ "turned on in Calendars > Plasma calendars). In the popup's calendar menu "
+#~ "they are shown and hidden by color: calendars of one color together. The "
+#~ "Google calendars of an account signed in here are listed above, with the "
+#~ "account."
+#~ msgstr ""
+#~ "읽기 전용으로 표시됩니다. 표시할 Akonadi 달력은 디지털 시계 설정의 PIM 행"
+#~ "사 플러그인 페이지에서 설정합니다(플러그인 자체는 달력 > Plasma 달력에서 "
+#~ "켭니다). 팝업의 달력 메뉴에서는 색상별로 표시하거나 숨깁니다: 같은 색상의 "
+#~ "달력은 함께 처리됩니다. 여기에서 로그인한 계정의 Google 달력은 위쪽에 계정"
+#~ "과 함께 표시됩니다."
+
+#~ msgid "ICalendar (.ics)"
+#~ msgstr "iCalendar (.ics)"
+
+#~ msgid ""
+#~ "Reading .ics files needs the Python icalendar module (python-icalendar)."
+#~ msgstr ""
+#~ ".ics 파일을 읽으려면 Python icalendar 모듈(python-icalendar)이 필요합니다."
+
+#~ msgid ""
+#~ "Before you join a meeting with a video link: your camera, the "
+#~ "microphone's level and sensitivity, hearing yourself, and the speaker. "
+#~ "Nothing is recorded; they're on only while the alert is shown."
+#~ msgstr ""
+#~ "화상 링크가 있는 회의에 참여하기 전: 카메라, 마이크 레벨과 감도, 내 목소"
+#~ "리 듣기, 스피커. 아무것도 녹화되지 않으며 알림이 표시되는 동안에만 켜집니"
+#~ "다."
+
+#~ msgid "Full screen only for meetings with a video link"
+#~ msgstr "화상 링크가 있는 회의만 전체 화면"
+
+#~ msgid "Show the camera"
+#~ msgstr "카메라 표시"
+
+#~ msgid ""
+#~ "How you look before you join, for meetings with a video link. Nothing is "
+#~ "recorded; the camera is on only while the alert is shown."
+#~ msgstr ""
+#~ "화상 링크가 있는 회의에 참여하기 전 내 모습을 보여 줍니다. 아무것도 녹화되"
+#~ "지 않으며, 카메라는 알림이 표시되는 동안에만 켜집니다."
+
+#~ msgid ""
+#~ "Nothing is saved. The camera and the microphone are used only while this "
+#~ "is open; a microphone test is kept in memory until it's played."
+#~ msgstr ""
+#~ "아무것도 저장되지 않습니다. 카메라와 마이크는 이 창이 열려 있는 동안에만 "
+#~ "사용되며, 마이크 테스트는 재생될 때까지 메모리에만 보관됩니다."
+
+#~ msgid "Test: record %1 seconds and play them back"
+#~ msgstr "테스트: %1초 녹음 후 재생"
+
+#~ msgid "Recording… speak now"
+#~ msgstr "녹음 중… 지금 말하세요"
+
+#~ msgid "Playing back…"
+#~ msgstr "재생 중…"
+
+#~ msgid "New Event…"
+#~ msgstr "새 이벤트…"
+
+#~ msgid "Go to Date…"
+#~ msgstr "날짜로 이동…"
+
+#~ msgid "Import Events…"
+#~ msgstr "일정 가져오기…"
+
+#~ msgid "Open Google Calendar"
+#~ msgstr "Google 캘린더 열기"
+
+#~ msgid "Copy Date and Time"
+#~ msgstr "날짜 및 시간 복사"
+
+#~ msgid ""
+#~ "Google authorization expired or was revoked. Open Event Calendar Settings "
+#~ "> Google Calendar and sign in to that account again."
+#~ msgstr ""
+#~ "Google 인증이 만료되었거나 취소되었습니다. 이벤트 달력 설정 > Google 캘린"
+#~ "더를 열고 해당 계정에 다시 로그인하십시오."
+
+#~ msgid ""
+#~ "Shown read-only. Which Akonadi calendars are shown is set on the PIM "
+#~ "Events Plugin page of the Digital Clock's settings (the plugin itself is "
+#~ "turned on in Events > Plasma calendars). In the popup's calendar menu "
+#~ "they are shown and hidden by color: calendars of one color together. The "
+#~ "Google calendars of an account signed in here are listed above, with the "
+#~ "account."
+#~ msgstr ""
+#~ "읽기 전용으로 표시됩니다. 표시할 Akonadi 달력은 디지털 시계 설정의 PIM 행"
+#~ "사 플러그인 페이지에서 설정합니다(플러그인 자체는 행사 > Plasma 달력에서 "
+#~ "켭니다). 팝업의 달력 메뉴에서는 색상별로 표시하거나 숨깁니다: 같은 색상의 "
+#~ "달력은 함께 처리됩니다. 여기에서 로그인한 계정의 Google 달력은 위쪽에 계정"
+#~ "과 함께 표시됩니다."
+
+#~ msgctxt "%1 = a few event titles"
+#~ msgid "Akonadi calendar: %1"
+#~ msgstr "Akonadi 달력: %1"
+
+#~ msgid ""
+#~ "Shown read-only. Which Akonadi calendars are shown is set on the settings "
+#~ "page of the PIM events plugin (Events > Plasma calendars). In the popup's "
+#~ "calendar menu they are shown and hidden by color: calendars of one color "
+#~ "together. The Google calendars of an account signed in here are listed "
+#~ "above, with the account."
+#~ msgstr ""
+#~ "읽기 전용으로 표시됩니다. 표시할 Akonadi 달력은 PIM 행사 플러그인의 설정 "
+#~ "페이지(행사 > Plasma 달력)에서 설정합니다. 팝업의 달력 메뉴에서는 색상별"
+#~ "로 표시하거나 숨깁니다: 같은 색상의 달력은 함께 처리됩니다. 여기에서 로그"
+#~ "인한 계정의 Google 달력은 위쪽에 계정과 함께 표시됩니다."
+
+#~ msgctxt "number of days"
+#~ msgid " days"
+#~ msgstr "일"
+
+#~ msgid "Up next lists"
+#~ msgstr "다음 일정 표시 개수"
+
+#~ msgid "0 = as many as fit; the rest under \"Show more\""
+#~ msgstr "0 = 들어가는 만큼, 나머지는 \"더 보기\"에서"
+
+#~ msgctxt "number of events"
+#~ msgid " events"
+#~ msgstr "개"
+
+#~ msgid "Meteogram shows"
+#~ msgstr "기상 그래프 표시 기간"
+
+#~ msgid ""
+#~ "Shown read-only. Which Akonadi calendars are shown is set on the settings "
+#~ "page of the PIM events plugin (Events > Plasma calendars). In the popup's "
+#~ "calendar menu they are one entry."
+#~ msgstr ""
+#~ "읽기 전용으로 표시됩니다. 표시할 Akonadi 캘린더는 PIM 일정 플러그인의 설"
+#~ "정 페이지(일정 > Plasma 캘린더)에서 정합니다. 팝업의 캘린더 메뉴에서는 하"
+#~ "나의 항목입니다."
+
+#~ msgid "Next 12 hours"
+#~ msgstr "다음 12시간"
+
+#~ msgid "Task list shown"
+#~ msgstr "표시할 작업 목록"
+
+#~ msgctxt "%1 = Google Meet, Zoom, ..., %2 = event title, %3 = when"
+#~ msgid "Join %1: %2 (%3)"
+#~ msgstr "%1 참가: %2 (%3)"
+
+#~ msgctxt "%1 = event title"
+#~ msgid "Mark “%1” as Ended"
+#~ msgstr "“%1” 종료로 표시"
+
+#~ msgid "Open Agenda"
+#~ msgstr "일정 열기"
+
+#~ msgid "Event Calendar"
+#~ msgstr "이벤트 달력"
+
+#~ msgctxt "%1 = event title"
+#~ msgid "Delete “%1”"
+#~ msgstr "“%1” 삭제"
+
+#~ msgid "Full-screen alert when a meeting starts"
+#~ msgstr "회의 시작 시 전체 화면 알림"
+
+#~ msgid ""
+#~ "On every screen, with Join, Snooze 1 min and Dismiss (Esc), instead of "
+#~ "the notification when it starts. Not for muted events."
+#~ msgstr ""
+#~ "시작 알림 대신 모든 화면에 참여, 1분 후 다시 알림, 닫기(Esc)와 함께 표시합"
+#~ "니다. 음소거한 일정은 제외합니다."
+
+#~ msgid ""
+#~ "On every screen, with Join, Snooze 1 min and Dismiss (Esc). Not for muted "
+#~ "events."
+#~ msgstr ""
+#~ "모든 화면에 참여, 1분 후 다시 알림, 닫기(Esc)와 함께 표시합니다. 음소거한 "
+#~ "일정은 제외합니다."
+
+#~ msgctxt "%1 = event title, %2 = in 5 min / 12 min left"
+#~ msgid "%1 · %2"
+#~ msgstr "%1 · %2"
+
+#~ msgid "View switcher in the header"
+#~ msgstr "헤더의 보기 전환기"
+
+#~ msgctxt "calendar title format for current month"
+#~ msgid "MMMM d, yyyy"
+#~ msgstr "yyyy년 MMMM d일"
+
+#~ msgctxt "calendar title format for other months of current year"
+#~ msgid "MMMM"
+#~ msgstr "MMMM"
+
+#~ msgctxt "calendar title format for months not from current year"
+#~ msgid "MMMM, yyyy"
+#~ msgstr "yyyy년 MMMM"
+
+#~ msgid "Not in progress"
+#~ msgstr "진행 중 아님"
+
+#~ msgctxt "%1 = date"
+#~ msgid "%1, has events"
+#~ msgstr "%1, 일정 있음"
+
+#~ msgid "Sounds"
+#~ msgstr "소리"
+
+#~ msgid "Reminder"
+#~ msgstr "미리 알림"
+
+#~ msgid "Event starts"
+#~ msgstr "이벤트 시작"
+
+#~ msgid "Google Meet"
+#~ msgstr "Google Meet"
+
+#~ msgid "Open meeting links in"
+#~ msgstr "회의 링크를 열 앱"
+
+#~ msgid "Invitations"
+#~ msgstr "초대"
+
+#~ msgid "Daily Agenda"
+#~ msgstr "오늘의 일정"
+
+#~ msgid "All Event Notifications"
+#~ msgstr "모든 이벤트 알림"
+
+#~ msgid "In the notification when a meeting starts."
+#~ msgstr "회의가 시작될 때 알림에 표시합니다."
+
+#~ msgid "Popup width"
+#~ msgstr "팝업 너비"
+
+#~ msgid "Popup height"
+#~ msgstr "팝업 높이"
+
+#~ msgid "Working hours start"
+#~ msgstr "근무 시간 시작"
+
+#~ msgid "Working hours end"
+#~ msgstr "근무 시간 종료"
+
+#~ msgctxt "today's high / low temperature"
+#~ msgid "Today: high %1, low %2"
+#~ msgstr "오늘: 최고 %1, 최저 %2"
+
+#~ msgctxt "precipitation"
+#~ msgid "rain %1"
+#~ msgstr "강수 %1"
+
+#~ msgctxt "current weather"
+#~ msgid "Now"
+#~ msgstr "지금"
+
+#~ msgctxt "weather of the day shown in the Day view"
+#~ msgid "Forecast"
+#~ msgstr "일기 예보"
+
+#~ msgid "Search events…"
+#~ msgstr "이벤트 검색…"
+
+#~ msgid "Type to search event titles, places and descriptions"
+#~ msgstr "이벤트 제목, 장소, 설명을 검색하려면 입력하십시오"
+
+#~ msgctxt "%1 = task list name"
+#~ msgid "New task in %1"
+#~ msgstr "%1에 새 작업"
+
+#~ msgid "Done managing lists"
+#~ msgstr "목록 관리 완료"
+
+#~ msgid "Done managing lists (shows the tasks by date)"
+#~ msgstr "목록 관리 완료 (작업을 날짜별로 표시)"
+
+#~ msgid "Manage lists (shows the tasks by list)"
+#~ msgstr "목록 관리 (작업을 목록별로 표시)"
+
+#~ msgid "Hide completed tasks"
+#~ msgstr "완료된 작업 숨기기"
+
+#~ msgid "Show completed tasks"
+#~ msgstr "완료된 작업 표시"
+
+#~ msgid ""
+#~ "Islands: the Day view's panels, the agenda days and the task sections "
+#~ "each sit in a rounded card."
+#~ msgstr ""
+#~ "아일랜드: 일 보기의 패널, 일정의 각 날짜, 작업 섹션이 각각 둥근 카드에 표"
+#~ "시됩니다."
+
+#~ msgid "Due %1"
+#~ msgstr "기한 %1"
+
+#~ msgctxt "%1 is a date, %2 a time"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgctxt "%1 is a date"
+#~ msgid "Due %1"
+#~ msgstr "기한 %1"
+
+#~ msgid "Delete Event"
+#~ msgstr "행사 삭제"
+
+#~ msgid "Confirm Deletion"
+#~ msgstr "삭제 확인"
+
+#~ msgid "Edit in browser"
+#~ msgstr "브라우저에서 편집"
+
+#~ msgid "Event Title"
+#~ msgstr "이벤트 제목"
+
+#~ msgid "Add description"
+#~ msgstr "설명 추가"
+
+#~ msgid "Add due date"
+#~ msgstr "기한 추가"
+
+#~ msgid "&Save"
+#~ msgstr "저장(&S)"
+
+#~ msgid "Error fetching calendar: %1"
+#~ msgstr "달력 가져오기 오류: %1"
+
+#~ msgid "Not logged in to Google Calendar"
+#~ msgstr "Google 캘린더에 로그인하지 않았습니다"
+
+#~ msgid "Waiting for the helper page to send the code..."
+#~ msgstr "도우미 페이지에서 코드를 보내기를 기다리는 중..."
+
+#~ msgid ""
+#~ "Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
+#~ "the browser redirects to the helper page and will try to send the code "
+#~ "back automatically. If it fails, copy the code and paste it below."
+#~ msgstr ""
+#~ "로그인(자동)을 클릭하면 <a href=\"%1\">%2</a>이(가) 열립니다. 접근을 허용"
+#~ "하면 브라우저가 도우미 페이지로 리디렉션되며 코드를 자동으로 다시 보내려"
+#~ "고 시도합니다. 실패하면 코드를 복사하여 아래에 붙여 넣으십시오."
+
+#~ msgid "Helper page: <a href=\"%1\">%1</a>"
+#~ msgstr "도우미 페이지: <a href=\"%1\">%1</a>"
+
+#~ msgid ""
+#~ "If auto-capture fails, copy the code from the helper page and paste it "
+#~ "below."
+#~ msgstr ""
+#~ "자동 캡처에 실패하면 도우미 페이지에서 코드를 복사하여 아래에 붙여 넣으십"
+#~ "시오."
+
+#~ msgid "Add location"
+#~ msgstr "위치 추가"
+
+#~ msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
+#~ msgstr "\"회의 참가\" 및 \"달력에서 열기\" 단추"
+
+#~ msgid "Open in Calendar"
+#~ msgstr "달력에서 열기"
+
+#~ msgctxt "calendar view showing a year"
+#~ msgid "Year"
+#~ msgstr "연도"
+
+#~ msgid "Previous Year"
+#~ msgstr "이전 연도"
+
+#~ msgid "Next Year"
+#~ msgstr "다음 연도"
+
+#~ msgid "1 event"
+#~ msgid_plural "%1 events"
+#~ msgstr[0] "이벤트 %1개"
+
+#~ msgid "Vertical Panel"
+#~ msgstr "세로 패널"
+
+#~ msgid "Date under the time"
+#~ msgstr "시간 아래에 날짜"
+
+#~ msgid "A small calendar tile with the weekday and the day."
+#~ msgstr "요일과 날짜를 보여 주는 작은 달력 타일입니다."
+
+#~ msgid "In a vertical panel: a dot in the meeting's color."
+#~ msgstr "세로 패널: 회의 색상의 점을 표시합니다."
+
+#~ msgid "First hour shown"
+#~ msgstr "표시할 첫 시간"
+
+#~ msgid "Last hour shown"
+#~ msgstr "표시할 마지막 시간"
+
+#~ msgid "Week and Today"
+#~ msgstr "주 및 오늘"
+
+#~ msgid "Forecast in the day headers and, in the Today view, a weather panel."
+#~ msgstr "날짜 헤더에 일기 예보를, 오늘 보기에 날씨 패널을 표시합니다."
+
+#~ msgid "Clicking a day shows its events"
+#~ msgstr "날짜를 클릭하면 이벤트 표시"
+
+#~ msgid "Add Event"
+#~ msgstr "이벤트 추가"
+
+#~ msgid "Delete This Occurrence"
+#~ msgstr "이 항목만 삭제"
+
+#~ msgid "Deletes only this occurrence."
+#~ msgstr "반복 일정 중 이 항목만 삭제합니다."
+
+#~ msgctxt "event in progress"
+#~ msgid "now"
+#~ msgstr "지금"
+
+#~ msgctxt "%1 = event title, %2 = 5m / now"
+#~ msgid "%1 · %2"
+#~ msgstr "%1 · %2"
+
+#~ msgid "Layout"
+#~ msgstr "레이아웃"
+
+#~ msgid "Timezones"
+#~ msgstr "시간대"
+
+#~ msgid "Hangout"
+#~ msgstr "행아웃"
+
+#~ msgctxt "agenda date format line 1"
+#~ msgid "MMM d"
+#~ msgstr "MMM d일"
+
+#~ msgctxt "agenda date format line 2"
+#~ msgid "ddd"
+#~ msgstr "ddd"
+
+#~ msgid "Events Starting"
+#~ msgstr "이벤트 시작"
+
+#~ msgid "Events In Progress"
+#~ msgstr "진행 중인 이벤트"
+
+#~ msgid "Upcoming Events"
+#~ msgstr "예정된 이벤트"
+
+#~ msgctxt "%1 = 15 minutes"
+#~ msgid "Starting in %1"
+#~ msgstr "%1부터 시작"
+
+#~ msgid "Show agenda"
+#~ msgstr "일정 표시"
+
+#~ msgid "Font Size:"
+#~ msgstr "글꼴 크기:"
+
+#~ msgid "px"
+#~ msgstr "픽셀"
+
+#~ msgid " (0px = <b>System Settings > Fonts > General</b>)"
+#~ msgstr " (0픽셀 = <b>시스템 설정 > 글꼴 > 일반</b>)"
+
+#~ msgid "Weather Icon"
+#~ msgstr "날씨 아이콘"
+
+#~ msgid "Icon Outline"
+#~ msgstr "아이콘 윤곽선"
+
+#~ msgid "Weather Text"
+#~ msgstr "날씨 텍스트"
+
+#~ msgid "Position:"
+#~ msgstr "위치:"
+
+#~ msgid "Left"
+#~ msgstr "왼쪽"
+
+#~ msgid "Right"
+#~ msgstr "오른쪽"
+
+#~ msgid "Click Weather:"
+#~ msgstr "날씨 클릭:"
+
+#~ msgid "Click Date:"
+#~ msgstr "날짜 클릭:"
+
+#~ msgid "Event description"
+#~ msgstr "이벤트 설명"
+
+#~ msgid "Hide 'All Day' text"
+#~ msgstr "'하루 종일' 텍스트 숨기기"
+
+#~ msgid "Google Hangouts link"
+#~ msgstr "Google 행아웃 링크"
+
+#~ msgid "Click Event:"
+#~ msgstr "이벤트 클릭:"
+
+#~ msgid "Show multi-day events:"
+#~ msgstr "정기적인 이벤트 표시:"
+
+#~ msgid "On all days"
+#~ msgstr "하루 종일"
+
+#~ msgid "Only on the first and current day"
+#~ msgstr "현재 날짜의 첫 일정에만"
+
+#~ msgid "Remember selected calendar in New Event Form"
+#~ msgstr "새 이벤트 창에서 선택된 달력 기억"
+
+#~ msgid "Current Month"
+#~ msgstr "이번 달"
+
+#~ msgid "Always show next 14 days"
+#~ msgstr "14일 동안 항상 표시"
+
+#~ msgid "Hide completed events"
+#~ msgstr "완료된 이벤트 숨기기"
+
+#~ msgid "Show all events of the current day (including completed events)"
+#~ msgstr "모든 이벤트 표시 (완료된 이벤트 포함)"
+
+#~ msgid "Colors"
+#~ msgstr "색"
+
+#~ msgid "In Progress"
+#~ msgstr "진행 중"
+
+#~ msgid "Day Spacing:"
+#~ msgstr "날짜 간격:"
+
+#~ msgid "Event Spacing:"
+#~ msgstr "행사 간격:"
+
+#~ msgid "Show calendar"
+#~ msgstr "달력 표시"
+
+#~ msgid "Scroll to event in Agenda"
+#~ msgstr "일정에서 이벤트 스크롤"
+
+#~ msgid "Double-click on Date:"
+#~ msgstr "날짜 더블클릭:"
+
+#~ msgid "New Google Calendar Event (Web Browser)"
+#~ msgstr "새 Google 캘린더 이벤트 (웹 브라우저)"
+
+#~ msgid "Do Nothing"
+#~ msgstr "아무것도 안 함"
+
+#~ msgid "Current Month Title:"
+#~ msgstr "이번 달 제목:"
+
+#~ msgid "Show Borders"
+#~ msgstr "윤곽선 표시"
+
+#~ msgid "Show Week Numbers"
+#~ msgstr "주 번호 표시"
+
+#~ msgid "Highlight Current Day / Week"
+#~ msgstr "오늘 날짜 강조"
+
+#~ msgid "First day of week:"
+#~ msgstr "일주일의 시작 요일:"
+
+#~ msgid "Event Badge:"
+#~ msgstr "이벤트 배지:"
+
+#~ msgid "Theme"
+#~ msgstr "테마"
+
+#~ msgid "Dots (3 Maximum)"
+#~ msgstr "점 (최대 3개)"
+
+#~ msgid "Bottom Bar (Event Color)"
+#~ msgstr "아래 바 (이벤트 색)"
+
+#~ msgid "Bottom Bar (Highlight)"
+#~ msgstr "아래 바 (강조)"
+
+#~ msgid "Count"
+#~ msgstr "숫자"
+
+#~ msgid "Radius:"
+#~ msgstr "반지름:"
+
+#~ msgid "Selected:"
+#~ msgstr "선택됨:"
+
+#~ msgid "Solid Color (Highlight)"
+#~ msgstr "단색 (강조)"
+
+#~ msgid "Today:"
+#~ msgstr "오늘:"
+
+#~ msgid "Solid Color (Inverted)"
+#~ msgstr "단색 (반전됨)"
+
+#~ msgid "Big Number"
+#~ msgstr "큰 숫자"
+
+#~ msgid "Event Calendar Plugins"
+#~ msgstr "이벤트 달력 플러그인"
+
+#~ msgid "Plasma Calendar Plugins"
+#~ msgstr "Plasma 달력 플러그인"
+
+#~ msgid "Misc"
+#~ msgstr "그 외"
+
+#~ msgid "Refresh events every: "
+#~ msgstr "이벤트 갱신 주기: "
+
+#~ msgctxt "Polling interval in minutes"
+#~ msgid "min"
+#~ msgstr "분"
+
+#~ msgid "Event Reminder"
+#~ msgstr "이벤트 리마인더"
+
+#~ msgid "Event Starting"
+#~ msgstr "이벤트 시작"
+
+#~ msgid "Widgets"
+#~ msgstr "위젯"
+
+#~ msgid ""
+#~ "Show/Hide widgets above the calendar. Toggle Agenda/Calendar on their "
+#~ "respective tabs."
+#~ msgstr "달력 밑에 위젯을 표시하거나 숨깁니다."
+
+#~ msgid "Meteogram"
+#~ msgstr "천문 현상"
+
+#~ msgid "SFX:"
+#~ msgstr "효과음:"
+
+#~ msgid "Time Format"
+#~ msgstr "시간 형식"
+
+#~ msgid "Time Format Documentation"
+#~ msgstr "시간 형식 문서"
+
+#~ msgid ""
+#~ "The default font for the Breeze theme is Noto Sans which is hard to read "
+#~ "with small text. Try using the Sans Serif font if you find the text too "
+#~ "small when adding a second line."
+#~ msgstr ""
+#~ "Breeze의 기본 글꼴인 Noto Sans는 작은 글씨에서 읽기 힘듭니다. 줄 바꿈 시 "
+#~ "텍스트가 너무 작다고 느껴지면 산 세리프를 사용해보십시오."
+
+#~ msgid "Font:"
+#~ msgstr "글꼴:"
+
+#~ msgid "Fixed Clock Height: "
+#~ msgstr "시계 높이 고정: "
+
+#~ msgid " (0px = scale to fit)"
+#~ msgstr " (0픽셀 = 크기에 맞춤)"
+
+#~ msgid "Line 1:"
+#~ msgstr "1열:"
+
+#~ msgid "Preset:"
+#~ msgstr "프리셋:"
+
+#~ msgid "Line 2:"
+#~ msgstr "2열:"
+
+#~ msgid "Height:"
+#~ msgstr "높이:"
+
+#~ msgid "Mouse Wheel"
+#~ msgstr "마우스 휠"
+
+#~ msgid "Run Commands"
+#~ msgstr "명령 실행"
+
+#~ msgid "Scroll Up:"
+#~ msgstr "위로 스크롤:"
+
+#~ msgid "Scroll Down:"
+#~ msgstr "아래로 스크롤:"
+
+#~ msgid "Volume (No UI) (amixer)"
+#~ msgstr "음량 (UI 없음) (amixer)"
+
+#~ msgid "Volume (UI) (qdbus)"
+#~ msgstr "음량 (UI) (qdbus)"
+
+#~ msgid "Desktop Widget: Show background"
+#~ msgstr "바탕화면 위젯: 배경 표시"
+
+#~ msgid "Debugging"
+#~ msgstr "디버깅"
+
+#~ msgid "Debugging will log sensitive information to:"
+#~ msgstr "디버그 시 상세 정보를 기록할 위치:"
+
+#~ msgid "Enable Debugging"
+#~ msgstr "디버깅 사용"
+
+#~ msgid "To sync with Google Calendar"
+#~ msgstr "Google 캘린더랑 동기화"
+
+#~ msgid "Event Click:"
+#~ msgstr "이벤트 클릭:"
+
+#~ msgid "Open Web Event View"
+#~ msgstr "웹에서 이벤트 표시"
+
+#~ msgid "Open Web Month View"
+#~ msgstr "웹에서 월 표시"
+
+#~ msgid "Calendar to the left of the Agenda (Two Columns)"
+#~ msgstr "달력 옆에 일정 표시 (두 줄)"
+
+#~ msgid "Agenda below the Calendar (Single Column)"
+#~ msgstr "일정 밑에 달력 표시 (한 줄)"
+
+#~ msgid "Data"
+#~ msgstr "데이터"
+
+#~ msgid "API App Id:"
+#~ msgstr "API 앱 ID:"
+
+#~ msgid "City Id:"
+#~ msgstr "도시 ID:"
+
+#~ msgid "Eg: 5983720"
+#~ msgstr "예: 5983720"
+
+#~ msgid "Find City"
+#~ msgstr "도시 찾기"
+
+#~ msgid "Eg: on-14"
+#~ msgstr "예: on-14"
+
+#~ msgid "Settings"
+#~ msgstr "설정"
+
+#~ msgid "Update forecast every: "
+#~ msgstr "날씨 업데이트 주기: "
+
+#~ msgid "Show next "
+#~ msgstr "옆에 표시 "
+
+#~ msgid " hour"
+#~ msgid_plural " hours"
+#~ msgstr[0] " 시간"
+
+#~ msgid " in the meteogram."
+#~ msgstr " 천문 현상에서 표시됨."
+
+#~ msgid "Units:"
+#~ msgstr "단위:"
+
+#~ msgid "Text"
+#~ msgstr "텍스트"
+
+#~ msgid "Grid"
+#~ msgstr "격자"
+
+#~ msgid "Positive Temp"
+#~ msgstr "영상"
+
+#~ msgid "Negative Temp"
+#~ msgstr "영하"
+
+#~ msgid "<b>Version:</b> %1"
+#~ msgstr "<b>버전:</b> %1"
+
+#~ msgid "Set Language…"
+#~ msgstr "언어 설정…"
+
+#~ msgid ""
+#~ "Plasmoid for a calendar+agenda with weather that syncs to Google Calendar."
+#~ msgstr ""
+#~ "Google 캘린더랑 동기화할 수 있는 달력, 일정 및 날씨 Plasmoid 위젯입니다."
+
+#~ msgid "Open City Forecast In Browser"
+#~ msgstr "브라우저에서 도시 날씨 열기"
+
+#~ msgid "Open New Event In Browser"
+#~ msgstr "브라우저에서 새 이벤트 열기"
+
+#~ msgid "Open New Event Form"
+#~ msgstr "새 이벤트 창 열기"
+
+#~ msgid "Open Event In Browser"
+#~ msgstr "브라우저에서 이벤트 열기"
+
+#~ msgid "Login"
+#~ msgstr "로그인"
+
+#~ msgid "Currently Synched."
+#~ msgstr "동기화되었습니다."
+
+#~ msgid "Logout"
+#~ msgstr "로그아웃"
+
+#~ msgid ""
+#~ "Visit <a href=\"%1\">%2</a> (opens in your web browser). After you login "
+#~ "and give permission to access your calendar, it will give you a code to "
+#~ "paste below."
+#~ msgstr ""
+#~ "<a href=\"%1\">%2</a>으로 가십시오 (웹 브라우저에서 열림). 로그인 후 달력 "
+#~ "접근 권한을 부여하시면 이곳으로 복사할 코드가 주어집니다."
+
+#~ msgid "Enter code here (Eg: %1)"
+#~ msgstr "코드 입력 (예: %1)"
+
+#~ msgid "Invalid Google Authorization Code"
+#~ msgstr "잘못된 Google 인증 코드"
+
+#~ msgid "Tooltip"
+#~ msgstr "툴팁"
+
+#~ msgid "Cannot deselect Local time from the tooltip"
+#~ msgstr "툴팁에서 지역 시간 선택을 해제할 수 없음"
+
+#~ msgid "Set Locale…"
+#~ msgstr "지역 설정…"

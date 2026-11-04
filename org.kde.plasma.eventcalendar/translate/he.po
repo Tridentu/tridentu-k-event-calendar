@@ -1,0 +1,5297 @@
+# Translation of eventcalendar in Hebrew
+# Copyright (C) 2021
+# This file is distributed under the same license as the eventcalendar package.
+# Omer I.S. <omeritzicschwartz@gmail.com>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: eventcalendar\n"
+"Report-Msgid-Bugs-To: https://github.com/divinae/plasma-applet-"
+"eventcalendar\n"
+"POT-Creation-Date: 2026-11-04 10:49+0100\n"
+"PO-Revision-Date: 2022-04-05 00:34+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
+"2 : 3);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: ../contents/config/config.qml
+msgid "Views"
+msgstr "תצוגות"
+
+#: ../contents/config/config.qml
+msgid "Clock"
+msgstr "שעון"
+
+#: ../contents/config/config.qml
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/config/ConfigEvents.qml ../contents/ui/SearchView.qml
+msgid "Events"
+msgstr "אירועים"
+
+#: ../contents/config/config.qml ../contents/ui/CalendarToggles.qml
+#: ../contents/ui/config/CalendarsGeneral.qml
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/PopupHeader.qml
+msgid "Calendars"
+msgstr "לוחות שנה"
+
+#: ../contents/config/config.qml ../contents/ui/config/ConfigViews.qml
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/PopupHeader.qml
+#: ../contents/ui/SearchView.qml
+msgid "Tasks"
+msgstr "משימות"
+
+#: ../contents/config/config.qml ../contents/ui/config/ConfigViews.qml
+#: ../contents/ui/WeatherPanel.qml
+msgid "Weather"
+msgstr "מזג האוויר"
+
+#: ../contents/config/config.qml
+msgid "Time Zones"
+msgstr "אזורי זמן"
+
+#: ../contents/config/config.qml
+msgid "Advanced"
+msgstr "מתקדם"
+
+#: ../contents/ui/AgendaEventItem.qml
+msgid "Calendar event"
+msgstr "אירוע בלוח השנה"
+
+#: ../contents/ui/AgendaEventItem.qml
+msgid "In progress"
+msgstr "מתקיים כעת"
+
+#: ../contents/ui/AgendaListItem.qml
+msgctxt "agenda day header, %1 = Fri, 16 Oct"
+msgid "Today · %1"
+msgstr "היום · %1"
+
+#: ../contents/ui/AgendaListItem.qml
+msgctxt "agenda day header, %1 = Sat, 17 Oct"
+msgid "Tomorrow · %1"
+msgstr "מחר · %1"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/PopupHeader.qml
+msgid "New Event"
+msgstr "אירוע חדש"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/QuickAddView.qml
+msgid "New Task…"
+msgstr "משימה חדשה…"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/WeekView.qml
+msgid "No events"
+msgstr "אין אירועים"
+
+#: ../contents/ui/badges/EventTitlesBadge.qml
+msgctxt "more events not shown in a month day cell"
+msgid "+%1"
+msgstr "+%1"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: %1 didn't accept the user name or password"
+msgstr "CalDAV: ‏%1 לא קיבל את שם המשתמש או את הסיסמה"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+#: ../contents/ui/calendars/ICalManager.qml
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Could not connect"
+msgstr "לא היה ניתן להתחבר"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid ""
+"CalDAV needs Python modules: install them in Settings > Calendars > CalDAV"
+msgstr ""
+"‏CalDAV זקוק למודולים של Python: יש להתקין אותם בהגדרות > לוחות שנה > CalDAV"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "The event was changed elsewhere meanwhile; it's loaded again"
+msgstr "האירוע שונה במקום אחר בינתיים; הוא נטען מחדש"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Unknown error"
+msgstr "שגיאה לא ידועה"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: %1"
+msgstr "CalDAV: ‏%1"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: an unexpected answer"
+msgstr "CalDAV: תשובה לא צפויה"
+
+#: ../contents/ui/calendars/CalDAVManager.qml ../contents/ui/EventModel.qml
+msgid "This calendar can't import events"
+msgstr "לוח שנה זה לא יכול לייבא אירועים"
+
+#: ../contents/ui/calendars/CalendarManager.qml
+msgctxt "event with no summary"
+msgid "(No title)"
+msgstr "(אין כותרת)"
+
+#: ../contents/ui/CalendarSelector.qml
+msgid "[No Calendars]"
+msgstr "[אין לוחות שנה]"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+#: ../contents/ui/calendars/TickTickTasksManager.qml ../contents/ui/Logic.qml
+msgid "HTTP Error %1: %2"
+msgstr "שגיאת HTTP‏ %1:‏ %2"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+#: ../contents/ui/calendars/TickTickTasksManager.qml ../contents/ui/Logic.qml
+msgid "Will try again soon."
+msgstr "ננסה שוב בקרוב."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml ../contents/ui/Logic.qml
+msgid ""
+"Widget has been updated. Please logout and login to Google Calendar again."
+msgstr "היישומון עודכן. נא לצאת ולהיכנס בחזרה אל Google Calendar."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Too many web requests. Will try again soon."
+msgstr "יותר מדי בקשות. ננסה שוב בקרוב."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+#: ../contents/ui/calendars/GoogleTasksManager.qml
+msgid "Google authentication failed: %1"
+msgstr "האימות מול Google נכשל: %1"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+msgid "Could not get the free / busy times"
+msgstr "לא ניתן לקבל את זמני הפנוי / עסוק"
+
+#: ../contents/ui/calendars/ICalManager.qml
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "iCalendar"
+msgstr "iCalendar"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid ""
+"Reading .ics calendars needs Python modules: install them in Settings > "
+"Calendars > iCalendar"
+msgstr ""
+"קריאת לוחות שנה .ics דורשת מודולים של Python: יש להתקין אותם בהגדרות > לוחות "
+"שנה > iCalendar"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid "Unknown iCalendar helper error"
+msgstr "שגיאה לא ידועה ברכיב העזר של iCalendar"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid "Could not load %1: %2"
+msgstr "לא ניתן לטעון את %1: %2"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/config/CalendarsGoogle.qml ../contents/ui/FindTimeView.qml
+msgctxt "separator of names in a list"
+msgid ", "
+msgstr ", "
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/config/PimCalendarList.qml
+msgid "KDE PIM (Akonadi)"
+msgstr "KDE PIM (Akonadi)"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/WeekView.qml
+msgid "%1 event"
+msgid_plural "%1 events"
+msgstr[0] "אירוע %1"
+msgstr[1] "%1 אירועים"
+msgstr[2] "%1 אירועים"
+msgstr[3] "%1 אירועים"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+msgctxt "%1 = calendar names"
+msgid "Akonadi: %1"
+msgstr "Akonadi: %1"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/EventModel.qml
+msgid "Holidays"
+msgstr "חגים"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+msgid "Todo"
+msgstr "מטלות"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Other"
+msgstr "אחר"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Inbox"
+msgstr "נכנסים"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "TickTick: sign in again"
+msgstr "TickTick: יש להיכנס שוב"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Connect the account again with a new API token in the Tasks settings."
+msgstr "יש לחבר את החשבון מחדש עם אסימון API חדש בהגדרות המשימות."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "No calendars selected in the settings."
+msgstr "לא נבחרו לוחות שנה בהגדרות."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "In the clock's countdown. Click to leave it out."
+msgstr "בספירה לאחור של השעון. לחיצה תוציא אותו."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "Left out of the clock's countdown. Click to include it."
+msgstr "מחוץ לספירה לאחור של השעון. לחיצה תכליל אותו."
+
+#: ../contents/ui/CalendarToggles.qml
+msgctxt "%1 = calendar name"
+msgid "Include %1 in the clock's countdown"
+msgstr "הכללת %1 בספירה לאחור של השעון"
+
+#: ../contents/ui/CalendarToggles.qml ../contents/ui/UpcomingEvents.qml
+msgid "Show All"
+msgstr "הצגת הכול"
+
+#: ../contents/ui/CameraCheckView.qml ../contents/ui/CameraCheckWindow.qml
+msgid "Camera Check"
+msgstr "בדיקת מצלמה"
+
+#: ../contents/ui/CameraCheckView.qml ../contents/ui/EventContextMenu.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/JoinPill.qml
+#: ../contents/ui/main.qml ../contents/ui/MeetingAlertContent.qml
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = Google Meet, Zoom, ..."
+msgid "Join %1"
+msgstr "הצטרפות ל־%1"
+
+#: ../contents/ui/CameraCheckView.qml
+msgid ""
+"Nothing is recorded. The camera and the microphone are used only while this "
+"is open."
+msgstr "שום דבר לא מוקלט. המצלמה והמיקרופון בשימוש רק כל עוד זה פתוח."
+
+#: ../contents/ui/CameraMirror.qml
+msgid "The camera can't be used"
+msgstr "לא ניתן להשתמש במצלמה"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "No camera found"
+msgstr "לא נמצאה מצלמה"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "The camera can't be used. Another app may be using it."
+msgstr "לא ניתן להשתמש במצלמה. ייתכן שיישום אחר משתמש בה."
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Starting the camera…"
+msgstr "המצלמה מופעלת…"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Try Again"
+msgstr "לנסות שוב"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "No camera"
+msgstr "אין מצלמה"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Mirror the picture"
+msgstr "שיקוף התמונה"
+
+#: ../contents/ui/CardHeader.qml ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/ImportView.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TasksView.qml
+msgid "Cancel"
+msgstr "ביטול"
+
+#: ../contents/ui/ClockView.qml ../contents/ui/main.qml
+msgctxt "time left in the current meeting"
+msgid "%1 min left"
+msgid_plural "%1 min left"
+msgstr[0] "נותרו %1 דק׳"
+msgstr[1] "נותרו %1 דק׳"
+msgstr[2] "נותרו %1 דק׳"
+msgstr[3] "נותרו %1 דק׳"
+
+#: ../contents/ui/ClockView.qml
+msgctxt "time left in the current meeting, %1 = 1h20m"
+msgid "%1 left"
+msgstr "נותרו %1"
+
+#: ../contents/ui/ClockView.qml ../contents/ui/main.qml
+msgctxt "meeting starts in"
+msgid "in %1 min"
+msgid_plural "in %1 min"
+msgstr[0] "בעוד %1 דק׳"
+msgstr[1] "בעוד %1 דק׳"
+msgstr[2] "בעוד %1 דק׳"
+msgstr[3] "בעוד %1 דק׳"
+
+#: ../contents/ui/ClockView.qml
+msgctxt "meeting starts in, %1 = 1h20m"
+msgid "in %1"
+msgstr "בעוד %1"
+
+#: ../contents/ui/config/CalendarColorButton.qml
+#: ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Color"
+msgstr "צבע"
+
+#: ../contents/ui/config/CalendarColorButton.qml
+#: ../contents/ui/config/ConfigClock.qml ../contents/ui/EventEditView.qml
+msgid "Custom…"
+msgstr "מותאם אישית…"
+
+#: ../contents/ui/config/CalendarColorButton.qml
+msgid "Calendar Color"
+msgstr "צבע לוח השנה"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Edit Calendar"
+msgstr "עריכת לוח שנה"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Name"
+msgstr "שם"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Name in my list"
+msgstr "השם ברשימה שלי"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Only you see this name. The calendar keeps its name for others."
+msgstr "רק את/ה רואה את השם הזה. עבור אחרים לוח השנה שומר על שמו."
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+#: ../contents/ui/EventEditView.qml ../contents/ui/ManageListsView.qml
+msgid "Save"
+msgstr "שמירה"
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid ""
+"Turn on the PIM Events plugin in the General tab (Plasma calendars) to show "
+"the calendars of KDE PIM (Akonadi)."
+msgstr ""
+"יש להפעיל את התוסף PIM Events בלשונית כללי (לוחות השנה של Plasma) כדי להציג "
+"את לוחות השנה של KDE PIM‏ (Akonadi)."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid ""
+"This version of KDE PIM can't change the selection here: choose the "
+"calendars on the PIM Events Plugin page of these settings."
+msgstr ""
+"גרסה זו של KDE PIM לא יכולה לשנות כאן את הבחירה: יש לבחור את לוחות השנה "
+"בעמוד התוסף PIM Events בהגדרות אלה."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid ""
+"One calendar selected in the PIM events plugin no longer exists in Akonadi, "
+"eg because its account was set up anew, which gives its calendars new ids."
+msgid_plural ""
+"%1 calendars selected in the PIM events plugin no longer exist in Akonadi, "
+"eg because their account was set up anew, which gives its calendars new ids."
+msgstr[0] ""
+"לוח שנה אחד שנבחר בתוסף אירועי PIM כבר לא קיים ב־Akonadi, למשל כי החשבון שלו "
+"הוגדר מחדש, מה שנותן ללוחות השנה שלו מזהים חדשים."
+msgstr[1] ""
+"שני לוחות שנה שנבחרו בתוסף אירועי PIM כבר לא קיימים ב־Akonadi, למשל כי "
+"החשבון שלהם הוגדר מחדש, מה שנותן ללוחות השנה שלו מזהים חדשים."
+msgstr[2] ""
+"%1 לוחות שנה שנבחרו בתוסף אירועי PIM כבר לא קיימים ב־Akonadi, למשל כי החשבון "
+"שלהם הוגדר מחדש, מה שנותן ללוחות השנה שלו מזהים חדשים."
+msgstr[3] ""
+"%1 לוחות שנה שנבחרו בתוסף אירועי PIM כבר לא קיימים ב־Akonadi, למשל כי החשבון "
+"שלהם הוגדר מחדש, מה שנותן ללוחות השנה שלו מזהים חדשים."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid "Forget the Missing Ones"
+msgstr "לשכוח את החסרים"
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid ""
+"In the popup's calendar menu they are shown and hidden by color: calendars "
+"of one color together."
+msgstr ""
+"בתפריט לוחות השנה של החלון הקופץ הם מוצגים ומוסתרים לפי צבע: לוחות שנה באותו "
+"צבע יחד."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid "Installing…"
+msgstr "מתקין…"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "CalDAV needs the Python modules icalendar and recurring-ical-events."
+msgstr "‏CalDAV זקוק למודולי Python בשם icalendar ו־recurring-ical-events."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid ""
+"The server didn't accept the user name or password. Some services need an "
+"app password (iCloud, Fastmail, Nextcloud with two-factor sign-in)."
+msgstr ""
+"השרת לא קיבל את שם המשתמש או את הסיסמה. שירותים מסוימים דורשים סיסמת יישום "
+"(iCloud,‏ Fastmail,‏ Nextcloud עם כניסה דו־שלבית)."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Couldn't connect to the server. Check the address and your connection."
+msgstr "לא היה ניתן להתחבר לשרת. יש לבדוק את הכתובת ואת החיבור."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid ""
+"No CalDAV calendars at that address. Try the address your service gives for "
+"CalDAV."
+msgstr ""
+"אין לוחות שנה של CalDAV בכתובת הזאת. כדאי לנסות את הכתובת שהשירות מספק עבור "
+"CalDAV."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "The server's answer couldn't be read"
+msgstr "לא היה ניתן לקרוא את תשובת השרת"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Enter the server address (https://…), your user name and your password."
+msgstr "יש להזין את כתובת השרת (https://…), את שם המשתמש ואת הסיסמה."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connecting…"
+msgstr "מתבצעת התחברות…"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "The password couldn't be stored in the keyring: %1"
+msgstr "לא היה ניתן לשמור את הסיסמה במחזיק המפתחות: %1"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connected: %1 calendar"
+msgid_plural "Connected: %1 calendars"
+msgstr[0] "מחובר: %1 לוח שנה"
+msgstr[1] "מחובר: %1 לוחות שנה"
+msgstr[2] "מחובר: %1 לוחות שנה"
+msgstr[3] "מחובר: %1 לוחות שנה"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connected, but the account has no calendars for events."
+msgstr "מחובר, אך אין בחשבון לוחות שנה לאירועים."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsICal.qml
+msgid ""
+"The Python modules icalendar and recurring-ical-events aren't all installed: "
+"calendars, or their repeating events, can be missing."
+msgstr ""
+"מודולי Python בשם icalendar ו־recurring-ical-events אינם כולם מותקנים: לוחות "
+"שנה, או האירועים החוזרים שלהם, עלולים לחסור."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid "Install"
+msgstr "התקנה"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid ""
+"Downloads icalendar and recurring-ical-events into the widget's own folder."
+msgstr "מוריד את icalendar ו־recurring-ical-events לתיקייה של היישומון."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Read-only"
+msgstr "לקריאה בלבד"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Server's Color"
+msgstr "הצבע מהשרת"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Refresh Calendars"
+msgstr "ריענון לוחות השנה"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Remove Account"
+msgstr "הסרת חשבון"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Add a CalDAV Account"
+msgstr "הוספת חשבון CalDAV"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Server"
+msgstr "שרת"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "eg: https://cloud.example.org/remote.php/dav"
+msgstr "למשל: https://cloud.example.org/remote.php/dav"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "User name"
+msgstr "שם משתמש"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Password"
+msgstr "סיסמה"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Connect"
+msgstr "התחברות"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid ""
+"Plain http works only for a server on your own network; the password isn't "
+"encrypted on the way."
+msgstr "http רגיל עובד רק עם שרת ברשת שלך; הסיסמה לא מוצפנת בדרך."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid ""
+"Nextcloud, Fastmail, iCloud (with an app password), Radicale, Baïkal and "
+"others. The password is kept in the system keyring. Repeating events are "
+"shown, but changed only in their own app for now."
+msgstr ""
+"Nextcloud,‏ Fastmail,‏ iCloud (עם סיסמת יישום), Radicale,‏ Baïkal ואחרים. "
+"הסיסמה נשמרת במחזיק המפתחות של המערכת. אירועים חוזרים מוצגים, אך בינתיים "
+"ניתן לשנות אותם רק ביישום שלהם."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Import Events from a File…"
+msgstr "ייבוא אירועים מקובץ…"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid ""
+"Copy the events of an .ics file (exported from another calendar app) into "
+"one of your calendars. The widget shows them first, to pick the calendar."
+msgstr ""
+"העתקת האירועים מקובץ ‎.ics (שיוצא מיישום לוח שנה אחר) לאחד מלוחות השנה שלך. "
+"היישומון מציג אותם קודם, כדי לבחור את לוח השנה."
+
+#: ../contents/ui/config/CalendarsGeneral.qml ../contents/ui/ImportView.qml
+#: ../contents/ui/main.qml
+msgid "Import Events"
+msgstr "ייבוא אירועים"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+#: ../contents/ui/config/CalendarsICal.qml ../contents/ui/main.qml
+msgid "iCalendar (*.ics)"
+msgstr "iCalendar (.ics)"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Share events with Glance"
+msgstr "שיתוף אירועים עם Glance"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid ""
+"Today's and tomorrow's events, with meeting links, for the Glance panel "
+"widget. Only on this computer; no descriptions or guest addresses."
+msgstr ""
+"האירועים של היום ומחר, עם קישורי פגישות, ליישומון הלוח Glance. רק במחשב זה; "
+"ללא תיאורים או כתובות של מוזמנים."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Refresh every"
+msgstr "רענון כל"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgctxt "Polling interval in minutes"
+msgid " min"
+msgstr " דק׳"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Plasma calendar plugins are unavailable."
+msgstr "תוספי לוח השנה של Plasma אינם זמינים."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Plasma calendars"
+msgstr "לוחות שנה של Plasma"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Google Account"
+msgstr "חשבון Google"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Google Account %1"
+msgstr "חשבון Google‏ %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login failed: %1"
+msgstr "הכניסה נכשלה: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login complete."
+msgstr "הכניסה הושלמה."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Could not prepare Google login: %1"
+msgstr "לא ניתן להכין את הכניסה ל־Google: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Waiting for browser callback..."
+msgstr "בהמתנה לקריאה חוזרת מהדפדפן..."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign-in timed out. Try again."
+msgstr "תם הזמן לכניסה. נא לנסות שוב."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed. See logs for details."
+msgstr "הכניסה האוטומטית נכשלה. הפרטים מופיעים ביומנים."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: invalid callback data."
+msgstr "הכניסה האוטומטית נכשלה: נתוני קריאה חוזרת שגויים."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: %1"
+msgstr "הכניסה האוטומטית נכשלה: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: authorization code missing."
+msgstr "הכניסה האוטומטית נכשלה: חסר קוד אימות."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"The desktop could not open the browser automatically. Use the login link in "
+"Advanced sign-in options instead."
+msgstr ""
+"שולחן העבודה לא הצליח לפתוח את הדפדפן אוטומטית. יש להשתמש במקום זאת בקישור "
+"הכניסה שבאפשרויות כניסה מתקדמות."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Sign in to show your Google calendars and task lists. Your browser opens to "
+"sign in; when access is granted the widget picks it up automatically."
+msgstr ""
+"יש להיכנס כדי להציג את לוחות השנה ורשימות המשימות שלך מ־Google. הדפדפן ייפתח "
+"לצורך הכניסה; לאחר מתן הגישה היישומון יקלוט זאת אוטומטית."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgctxt "%1 = email addresses"
+msgid ""
+"KDE PIM (Akonadi) already brings in the Google calendars of %1, read-only. "
+"Sign in here as well to answer invitations, edit and delete events and join "
+"meetings from the widget. Events of an account synced both ways are shown "
+"once, from the sign-in here."
+msgstr ""
+"KDE PIM (Akonadi) כבר מביא את יומני Google של %1, לקריאה בלבד. יש להתחבר גם "
+"כאן כדי לענות להזמנות, לערוך ולמחוק אירועים ולהצטרף לפגישות מהווידג׳ט. "
+"אירועים של חשבון המסונכרן בשתי הדרכים מוצגים פעם אחת, מההתחברות כאן."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgctxt "%1 = email addresses"
+msgid ""
+"Also synced by KDE PIM (Akonadi): %1. Their events are shown once, from the "
+"sign-in here, where they can be answered and edited."
+msgstr ""
+"מסונכרן גם על ידי KDE PIM (Akonadi): %1. האירועים שלהם מוצגים פעם אחת, "
+"מההתחברות כאן, שם ניתן לענות עליהם ולערוך אותם."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign In Again"
+msgstr "כניסה מחדש"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Reload calendars and task lists"
+msgstr "טעינה מחדש של לוחות שנה ורשימות משימות"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+#: ../contents/ui/config/CalendarsICal.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Remove"
+msgstr "הסרה"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Google access for this account expired or was revoked. Sign in again to "
+"reconnect it (the account and its settings are kept)."
+msgstr ""
+"הגישה ל־Google עבור חשבון זה פגה או נשללה. יש להיכנס שוב כדי לחבר אותו מחדש "
+"(החשבון וההגדרות שלו נשמרים)."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "The widget was updated. Sign in again to keep this account in sync."
+msgstr "היישומון עודכן. יש להיכנס שוב כדי להמשיך לסנכרן את החשבון הזה."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "No calendars loaded yet. Use the reload button."
+msgstr "עדיין לא נטענו לוחות שנה. יש להשתמש בכפתור הטעינה מחדש."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Task lists are chosen on the Tasks page."
+msgstr "רשימות המשימות נבחרות בעמוד המשימות."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Add Account…"
+msgstr "הוספת חשבון…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign in with Google…"
+msgstr "כניסה עם Google…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Waiting for the browser sign-in…"
+msgstr "בהמתנה לכניסה בדפדפן…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Advanced sign-in options"
+msgstr "אפשרויות כניסה מתקדמות"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Your own Google OAuth client, or pasting the sign-in code by hand"
+msgstr "לקוח Google OAuth משלך, או הדבקה ידנית של קוד הכניסה"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client Credentials"
+msgstr "פרטי גישה של הלקוח"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Using a previously stored Google OAuth client for compatibility. If login "
+"still fails, add your own client ID and client secret."
+msgstr ""
+"נעשה שימוש בלקוח Google OAuth שנשמר קודם לכן לצורך תאימות. אם הכניסה עדיין "
+"נכשלת, יש להוסיף מזהה לקוח וסוד לקוח משלך."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Try desktop built-in client (no secret)"
+msgstr "ניסיון עם הלקוח המובנה לשולחן העבודה (ללא סוד)"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client ID"
+msgstr "מזהה לקוח"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Optional"
+msgstr "רשות"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client Secret"
+msgstr "סוד לקוח"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Leave these empty to use the built-in client. A custom client must be a "
+"Google Cloud OAuth Desktop client, or a Web client with its secret and the "
+"redirect URI set to %1."
+msgstr ""
+"יש להשאיר ריק כדי להשתמש בלקוח המובנה. לקוח מותאם אישית חייב להיות לקוח "
+"OAuth מסוג Desktop של Google Cloud, או לקוח Web עם הסוד שלו וכתובת הפניה "
+"(Redirect URI) שמוגדרת ל־%1."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"For a custom OAuth client, publish the OAuth consent screen to Production. "
+"Google expires refresh tokens for external apps left in Testing after seven "
+"days; Workspace session controls can also require reauthorization."
+msgstr ""
+"עבור לקוח OAuth מותאם אישית, יש לפרסם את מסך ההסכמה של OAuth למצב "
+"Production. ‏Google מבטלת את תוקפם של אסימוני רענון של יישומים חיצוניים "
+"שנותרו במצב Testing לאחר שבעה ימים; גם בקרות הפעלה של Workspace עשויות לדרוש "
+"אימות מחדש."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Manual Sign-in"
+msgstr "כניסה ידנית"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login (Auto) - Add Account"
+msgstr "כניסה (אוטומטית) - הוספת חשבון"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login (Auto)"
+msgstr "כניסה (אוטומטית)"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, "
+"the browser redirects to a localhost URL. If auto-capture succeeds you can "
+"ignore the field below; otherwise copy the full URL (or just the code) and "
+"paste it."
+msgstr ""
+"יש ללחוץ על כניסה (אוטומטית) כדי לפתוח את <a href=\"%1\">%2</a>. לאחר מתן "
+"הגישה, הדפדפן יפנה לכתובת localhost. אם הקליטה האוטומטית מצליחה אפשר להתעלם "
+"מהשדה שלהלן; אחרת יש להעתיק את הכתובת המלאה (או רק את הקוד) ולהדביק אותה."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "The desktop could not open the browser automatically."
+msgstr "שולחן העבודה לא הצליח לפתוח את הדפדפן אוטומטית."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Copy Link"
+msgstr "העתקת הקישור"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Helper page (optional): <a href=\"%1\">%1</a>"
+msgstr "עמוד עזר (רשות): <a href=\"%1\">%1</a>"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"If your browser shows a connection error, that's expected. Copy the URL from "
+"the address bar anyway and paste it below. If auto-capture works, you do not "
+"need to paste anything."
+msgstr ""
+"אם הדפדפן מציג שגיאת חיבור, זה צפוי. יש להעתיק בכל זאת את הכתובת משורת "
+"הכתובת ולהדביק אותה להלן. אם הקליטה האוטומטית עובדת, אין צורך להדביק דבר."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Paste the authorization code or redirect URL here"
+msgstr "יש להדביק כאן את קוד האימות או את כתובת ההפניה"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Google authorization code or redirect URL"
+msgstr "קוד אימות של Google או כתובת הפניה"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid ""
+"Paste the Google authorization code or the full redirect URL from the browser"
+msgstr "יש להדביק את קוד האימות של Google או את כתובת ההפניה המלאה מהדפדפן"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Add Account"
+msgstr "הוספת חשבון"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Submit"
+msgstr "שליחה"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Options"
+msgstr "אפשרויות"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Hide \"This event was added from Goals in Google Calendar\" description"
+msgstr "הסתרת התיאור \"אירוע זה נוסף מהמטרות שב־Google Calendar\""
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Show this calendar"
+msgstr "הצגת לוח שנה זה"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Calendar Label"
+msgstr "תווית לוח שנה"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "https:// URL or local %1/*.ics file"
+msgstr "כתובת https://‎ או קובץ %1/*.ics מקומי"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Browse"
+msgstr "עיון"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Add Calendar"
+msgstr "הוספת לוח שנה"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "An .ics link or a file"
+msgstr "קישור .ics או קובץ"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "New Calendar"
+msgstr "לוח שנה חדש"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "A file in %1"
+msgstr "קובץ ב־%1"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid ""
+".ics files and links show here as calendars, read-only, offline too. Local "
+"files are read from %1. To add events to one of your calendars instead, "
+"import the file into a Google or CalDAV calendar (Calendars > General)."
+msgstr ""
+"קבצים וקישורי .ics מוצגים כאן כלוחות שנה, לקריאה בלבד, גם ללא חיבור. קבצים "
+"מקומיים נקראים מ־%1. כדי להוסיף את האירועים ללוח שנה שלך, יש לייבא את הקובץ "
+"ללוח שנה של Google או CalDAV (לוחות שנה > כללי)."
+
+#: ../contents/ui/config/ConfigCalendars.qml
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "General"
+msgstr "כללי"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "Google Calendar"
+msgstr "Google Calendar"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "Akonadi"
+msgstr "Akonadi"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "CalDAV"
+msgstr "CalDAV"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Default (%1)"
+msgstr "ברירת מחדל (%1)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(24-hour)"
+msgstr "(24 שעות)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(12-hour)"
+msgstr "(12 שעות)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(with seconds)"
+msgstr "(עם שניות)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Time"
+msgstr "שעה"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Format"
+msgstr "תבנית"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Bold"
+msgstr "מודגש"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Font"
+msgstr "גופן"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Maximum height"
+msgstr "גובה מרבי"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "0 = fit the panel"
+msgstr "0 = התאמה ללוח"
+
+#: ../contents/ui/config/ConfigClock.qml ../contents/ui/config/ConfigViews.qml
+msgid " px"
+msgstr " px"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid ""
+"Custom formats use the <a href=\"https://doc.qt.io/qt-6/qml-qtqml-"
+"qt.html#formatDateTime-method\">Qt date and time format</a>, eg: HH:mm, ddd "
+"d MMM."
+msgstr ""
+"תבניות מותאמות אישית משתמשות ב<a href=\"https://doc.qt.io/qt-6/qml-qtqml-"
+"qt.html#formatDateTime-method\">תבנית התאריך והשעה של Qt</a>, למשל: HH:mm, "
+"ddd d MMM."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Second Line"
+msgstr "שורה שנייה"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show a second line"
+msgstr "הצגת שורה שנייה"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Eg: the date"
+msgstr "למשל: התאריך"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Size"
+msgstr "גודל"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Next Meeting"
+msgstr "הפגישה הבאה"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show next to the clock"
+msgstr "הצגה ליד השעון"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "When it starts within"
+msgstr "כשהיא מתחילה בתוך"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid " min"
+msgstr " דק׳"
+
+#: ../contents/ui/config/ConfigClock.qml ../contents/ui/config/ConfigEvents.qml
+msgid "Skip all-day events"
+msgstr "דילוג על אירועים של יום שלם"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "They still show in the agenda."
+msgstr "הם עדיין מוצגים בסדר היום."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Only meetings with a video link"
+msgstr "רק פגישות עם קישור וידאו"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Only accepted invitations"
+msgstr "רק הזמנות שאושרו"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Not the ones answered maybe or not answered yet."
+msgstr "לא אלו שנענו 'אולי' או שעדיין לא נענו."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Longest title"
+msgstr "כותרת ארוכה ביותר"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "0: as much as fits."
+msgstr "0: כמה שנכנס."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgctxt "characters, after a number"
+msgid " characters"
+msgstr " תווים"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Progress of the current meeting"
+msgstr "התקדמות הפגישה הנוכחית"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "A thin bar under the meeting's name, in its calendar's color."
+msgstr "פס דק מתחת לשם הפגישה, בצבע של לוח השנה שלה."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Middle-click the clock to join the current or next meeting."
+msgstr "לחיצה אמצעית על השעון מצרפת אותך לפגישה הנוכחית או הבאה."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show background"
+msgstr "הצגת רקע"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Desktop widget"
+msgstr "יישומון לשולחן העבודה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Clicking an event opens"
+msgstr "לחיצה על אירוע פותחת"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Event details in the widget"
+msgstr "את פרטי האירוע ביישומון"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Google Calendar in the browser"
+msgstr "את Google Calendar בדפדפן"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Reminder Before an Event"
+msgstr "תזכורת לפני אירוע"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Show a reminder"
+msgstr "הצגת תזכורת"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Time before"
+msgstr "זמן מראש"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "Time in minutes"
+msgid " min"
+msgstr " דק׳"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Use the reminder times set in Google Calendar"
+msgstr "שימוש בזמני התזכורת שהוגדרו ב־Google Calendar"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Keep until dismissed"
+msgstr "להשאיר עד לסגירה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Hide after"
+msgstr "הסתרה לאחר"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "notification shown for"
+msgid "%1 second"
+msgid_plural "%1 seconds"
+msgstr[0] "שנייה %1"
+msgstr[1] "%1 שניות"
+msgstr[2] "%1 שניות"
+msgstr[3] "%1 שניות"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "notification timeout"
+msgid "System default"
+msgstr "ברירת המחדל של המערכת"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"System default: as set in System Settings > Notifications. A reminder hidden "
+"after a set time isn't kept in the notification history."
+msgstr ""
+"ברירת המחדל של המערכת: כפי שמוגדר בהגדרות המערכת > התראות. תזכורת שמוסתרת "
+"לאחר זמן קבוע אינה נשמרת בהיסטוריית ההתראות."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Snooze"
+msgstr "נודניק"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "0 = no Snooze button"
+msgstr "0 = ללא כפתור נודניק"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Sound"
+msgstr "צליל"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "When an Event Starts"
+msgstr "כשאירוע מתחיל"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Show a notification"
+msgstr "הצגת התראה"
+
+#: ../contents/ui/config/ConfigEvents.qml ../contents/ui/config/ConfigViews.qml
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Style"
+msgstr "סגנון"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "the notification's style"
+msgid "Notification"
+msgstr "התראה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "the notification's style"
+msgid "Full screen"
+msgstr "מסך מלא"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Full Screen"
+msgstr "מסך מלא"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only for meetings with a video link"
+msgstr "רק לפגישות עם קישור וידאו"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other events: a notification. Muted events: none."
+msgstr "אירועים אחרים: התראה. מושתקים: ללא."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Camera check"
+msgstr "בדיקת מצלמה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Before you join a meeting with a video link: your camera, and on request the "
+"microphone and the speaker. Nothing is recorded; they're on only while the "
+"alert is shown."
+msgstr ""
+"לפני הצטרפות לפגישה עם קישור וידאו: המצלמה, ולפי בקשה גם המיקרופון והרמקול. "
+"שום דבר לא מוקלט; הם פועלים רק כל עוד ההתראה מוצגת."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Notification"
+msgstr "התראה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For the events without a video link."
+msgstr "לאירועים ללא קישור וידאו."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Critical"
+msgstr "קריטי"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Shown even in Do Not Disturb"
+msgstr "מוצג גם במצב נא לא להפריע"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "\"Join meeting\" button"
+msgstr "הכפתור \"הצטרפות לפגישה\""
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Meetings"
+msgstr "פגישות"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open the meeting link when a meeting starts"
+msgstr "פתיחת קישור הפגישה כשהפגישה מתחילה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For meetings you accepted or organize, not marked as ended."
+msgstr "לפגישות שאישרת או שארגנת, שלא סומנו כהסתיימו."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command when a meeting starts"
+msgstr "פקודה כשפגישה מתחילה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Eg: notify-send \"In a meeting: $1\""
+msgstr "לדוגמה: notify-send \"בפגישה: $1\""
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command when it ends"
+msgstr "פקודה כשהיא מסתיימת"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Run with sh: $1 is the meeting's title, $2 its link, $3 and $4 its start and "
+"end. For a meeting with guests or a link, not declined; it ends when it's "
+"over or marked as ended."
+msgstr ""
+"מורץ עם sh: $1 כותרת הפגישה, $2 הקישור שלה, $3 ו-$4 תחילתה וסופה. לפגישה עם "
+"אורחים או קישור, שלא נדחתה; היא מסתיימת כשהיא נגמרת או מסומנת כהסתיימה."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Pause music and videos when joining a meeting"
+msgstr "השהיית מוזיקה וסרטונים בהצטרפות לפגישה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Players that are playing (eg: Spotify, Elisa, a video in the browser), when "
+"a Join button opens a meeting or it opens when the meeting starts."
+msgstr ""
+"נגנים שמנגנים (למשל Spotify,‏ Elisa, סרטון בדפדפן), כשכפתור הצטרפות פותח "
+"פגישה או כשהיא נפתחת בתחילתה."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Do Not Disturb during meetings"
+msgstr "לא להפריע במהלך פגישות"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Plasma's Do Not Disturb from the start until the end of a meeting with "
+"guests or a meeting link. Mark as Ended turns it off."
+msgstr ""
+"מצב „לא להפריע” של Plasma מתחילת פגישה עם אורחים או קישור לפגישה ועד סופה. "
+"„סימון כהסתיים” מכבה אותו."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only meetings I accepted"
+msgstr "רק פגישות שאישרתי"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open Google Meet links in"
+msgstr "פתיחת קישורי Google Meet ב־"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Default browser"
+msgstr "דפדפן ברירת המחדל"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other command…"
+msgstr "פקודה אחרת…"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command"
+msgstr "פקודה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Google account"
+msgstr "חשבון Google"
+
+#: ../contents/ui/config/ConfigEvents.qml ../contents/ui/config/ConfigViews.qml
+msgid "Default"
+msgstr "ברירת מחדל"
+
+#: ../contents/ui/config/ConfigEvents.qml
+#, c-format
+msgid ""
+"Join buttons open Google Meet links there; other meeting links open in the "
+"default browser. In a command, %u stands for the meeting link. Google "
+"account: its number (0, 1, …) or email, as in Google's account switcher; "
+"empty uses the app's default."
+msgstr ""
+"כפתורי ההצטרפות פותחים שם קישורי Google Meet; קישורי פגישה אחרים נפתחים "
+"בדפדפן ברירת המחדל. בפקודה, %u מייצג את קישור הפגישה. חשבון Google: המספר "
+"שלו (0, 1, …) או הדוא״ל, כמו בבורר החשבונות של Google; ריק משתמש בברירת "
+"המחדל של היישום."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other Notifications"
+msgstr "התראות אחרות"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "New invitations for today"
+msgstr "הזמנות חדשות להיום"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification for each meeting today you haven't answered yet, with Yes, "
+"Maybe and No."
+msgstr "התראה לכל פגישה היום שעוד לא עניתם עליה, עם כן, אולי ולא."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Today's events every morning"
+msgstr "אירועי היום בכל בוקר"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"A notification with today's events once a day, also when the computer is "
+"turned on later."
+msgstr "התראה עם אירועי היום פעם ביום, גם כשהמחשב מופעל מאוחר יותר."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "At"
+msgstr "בשעה"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Skip events I declined"
+msgstr "דילוג על אירועים שדחיתי"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only calendars in the clock's countdown"
+msgstr "רק לוחות שנה בספירה לאחור של השעון"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Reminders and starting events only of the calendars with the clock button on "
+"in the popup's calendar menu."
+msgstr ""
+"תזכורות ואירועים שמתחילים רק מלוחות השנה שכפתור השעון שלהם פעיל בתפריט לוחות "
+"השנה של החלון הקופץ."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid ""
+"Popups and sounds for each kind of notification can also be set in System "
+"Settings > Notifications > Event Calendar."
+msgstr ""
+"ניתן להגדיר חלונות קופצים וצלילים לכל סוג התראה גם בהגדרות המערכת > התראות > "
+"לוח שנה עם אירועים."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick did not accept the API token. Check it and try again."
+msgstr "TickTick לא קיבל את אסימון ה־API. יש לבדוק אותו ולנסות שוב."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Could not connect to TickTick. Check your connection and try again."
+msgstr "לא היה ניתן להתחבר ל־TickTick. יש לבדוק את החיבור ולנסות שוב."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick error: %1"
+msgstr "שגיאת TickTick:‏ %1"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Connecting to TickTick…"
+msgstr "מתבצעת התחברות ל־TickTick…"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Could not store the API token in the system keyring: %1"
+msgstr "לא היה ניתן לשמור את אסימון ה־API במחזיק המפתחות של המערכת: %1"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick account added."
+msgstr "חשבון TickTick נוסף."
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't rename the list"
+msgstr "לא ניתן לשנות את שם הרשימה"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't delete the list"
+msgstr "לא ניתן למחוק את הרשימה"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't create the list"
+msgstr "לא ניתן ליצור את הרשימה"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TasksView.qml
+msgid "List name"
+msgstr "שם הרשימה"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Rename"
+msgstr "שינוי שם"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgctxt "%1 = task list name"
+msgid "Delete the list \"%1\" and all its tasks? This can't be undone."
+msgstr "למחוק את הרשימה “%1” ואת כל המשימות שבה? לא ניתן לבטל פעולה זו."
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/EventContextMenu.qml
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TaskRow.qml ../contents/ui/TasksView.qml
+msgid "Delete"
+msgstr "מחיקה"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TasksView.qml
+msgid "New list"
+msgstr "רשימה חדשה"
+
+#: ../contents/ui/config/ConfigTasks.qml
+#: ../contents/ui/config/ConfigTimezones.qml ../contents/ui/QuickAddView.qml
+msgid "Add"
+msgstr "הוספה"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Overdue tasks on today"
+msgstr "משימות באיחור מוצגות בהיום"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Open tasks due on an earlier day are shown on today, in every view."
+msgstr "משימות פתוחות שהיעד שלהן ביום קודם מוצגות ביום הנוכחי, בכל התצוגות."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Smart recognition in Add a task"
+msgstr "זיהוי חכם ב„הוספת משימה”"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"Words like \"tomorrow 17:00\", \"!high\", \"#List\" or \"every week\" set "
+"the new task's day, time, priority, list and repeat."
+msgstr ""
+"מילים כמו \"tomorrow 17:00\", \"!high\", \"#List\" or \"every week\" קובעות "
+"את היום, השעה, העדיפות, הרשימה והחזרה של המשימה החדשה."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Notifications"
+msgstr "התראות"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Task reminders"
+msgstr "תזכורות משימות"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"A notification when a task with a due time or a reminder is due, and the "
+"tasks due today at the daily agenda time."
+msgstr ""
+"התראה כשמגיע מועד היעד או התזכורת של משימה עם שעת יעד, והמשימות שהיעד שלהן "
+"היום בשעת סדר היום היומי."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Tasks in the daily agenda"
+msgstr "משימות בסדר היום היומי"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "The daily agenda notification also lists today's and overdue tasks."
+msgstr "התראת סדר היום היומי מציגה גם את משימות היום ואת המשימות באיחור."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Google Tasks"
+msgstr "Google Tasks"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"Sign in on the Google Calendar page to choose the Google task lists shown "
+"here."
+msgstr ""
+"יש להיכנס בעמוד Google Calendar כדי לבחור את רשימות המשימות של Google שיוצגו "
+"כאן."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Task Lists"
+msgstr "רשימות משימות"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"No task lists loaded yet. Reload the account on the Google Calendar page."
+msgstr ""
+"עדיין לא נטענו רשימות משימות. יש לטעון מחדש את החשבון בעמוד Google Calendar."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick"
+msgstr "TickTick"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Reload projects"
+msgstr "טעינה מחדש של פרויקטים"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"This account's API token is not in the system keyring. Remove the account "
+"and connect it again."
+msgstr ""
+"אסימון ה־API של החשבון הזה לא נמצא במחזיק המפתחות של המערכת. יש להסיר את "
+"החשבון ולחבר אותו שוב."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "No projects loaded yet. Use the reload button."
+msgstr "עדיין לא נטענו פרויקטים. יש להשתמש בכפתור הטעינה מחדש."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick (ticktick.com)"
+msgstr "TickTick‏ (ticktick.com)"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Dida365 (dida365.com)"
+msgstr "Dida365‏ (dida365.com)"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "API token"
+msgstr "אסימון API"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Paste the API token"
+msgstr "יש להדביק את אסימון ה־API"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Connect Another Account"
+msgstr "חיבור חשבון נוסף"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid ""
+"Create an API token on the TickTick website: Settings > Account > API Token "
+"(on dida365.com for Dida365). The token is kept in the system keyring "
+"(KWallet or Secret Service), not in the widget's settings."
+msgstr ""
+"יש ליצור אסימון API באתר של TickTick:‏ Settings > Account > API Token "
+"(ב־dida365.com עבור Dida365). האסימון נשמר במחזיק המפתחות של המערכת (KWallet "
+"או Secret Service), לא בהגדרות היישומון."
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Local"
+msgstr "מקומי"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Extra Time Zones in the Tooltip"
+msgstr "אזורי זמן נוספים בחלונית העצה"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "The name shown in the tooltip (empty: the city)"
+msgstr "השם שמוצג בתיאור הצץ (ריק: העיר)"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Move up"
+msgstr "הזזה למעלה"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Move down"
+msgstr "הזזה למטה"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Remove time zone"
+msgstr "הסרת אזור זמן"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Add a time zone, eg: America/New_York"
+msgstr "הוספת אזור זמן, למשל: Asia/Jerusalem"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Zones with the same time as yours are not shown."
+msgstr "אזורים עם אותה שעה כמו שלך אינם מוצגים."
+
+#: ../contents/ui/config/ConfigTimezones.qml
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Display"
+msgstr "תצוגה"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Show time zones as"
+msgstr "הצגת אזורי זמן בתור"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "City name"
+msgstr "שם העיר"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Abbreviation (eg: CEST)"
+msgstr "קיצור (למשל: IDT)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Popup"
+msgstr "חלון קופץ"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Default view"
+msgstr "תצוגת ברירת מחדל"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Month"
+msgstr "חודש"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Week"
+msgstr "שבוע"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgctxt "calendar view showing one day"
+msgid "Day"
+msgstr "יום"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Agenda"
+msgstr "סדר יום"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Open in the last used view"
+msgstr "פתיחה בתצוגה האחרונה שהייתה בשימוש"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "View switcher"
+msgstr "בורר תצוגה"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Tabs"
+msgstr "לשוניות"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Drop-down menu"
+msgstr "תפריט נפתח"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Views offered"
+msgstr "תצוגות זמינות"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Popup size"
+msgstr "גודל החלון"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Appearance"
+msgstr "מראה"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"Islands: the calendar grids, the Day view's panels, the agenda days and the "
+"task sections each sit in a rounded card."
+msgstr ""
+"איים: רשתות לוח השנה, הלוחות של תצוגת היום, ימי סדר היום וקטעי המשימות "
+"נמצאים כל אחד בכרטיס מעוגל."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Islands (cards)"
+msgstr "איים (כרטיסים)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Islands, translucent cards"
+msgstr "איים, כרטיסים שקופים למחצה"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Flat"
+msgstr "שטוח"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Animations"
+msgstr "הנפשות"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Views slide and fade in, cards open, the small month's days ease."
+msgstr ""
+"התצוגות מחליקות ומופיעות בהדרגה, כרטיסים נפתחים, ימי החודש הקטן משתנים ברכות."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event look"
+msgstr "מראה האירועים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All-day filled, timed light with a color bar"
+msgstr "אירועי יום שלם ממולאים, אירועים עם שעה בהירים עם פס צבע"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Filled in the event color"
+msgstr "ממולאים בצבע האירוע"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event colors"
+msgstr "צבעי אירועים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"Google's API still returns an older palette; \"As in Google Calendar\" shows "
+"the current one. \"Follow the system color scheme\" uses the nearest colors "
+"of your Plasma color scheme."
+msgstr ""
+"ה־API של Google עדיין מחזיר לוח צבעים ישן; „כמו ב־Google Calendar” מציג את "
+"הנוכחי. „לפי ערכת הצבעים של המערכת” משתמש בצבעים הקרובים ביותר מערכת הצבעים "
+"של Plasma."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "As in Google Calendar"
+msgstr "כמו ב־Google Calendar"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Classic (as returned by Google)"
+msgstr "קלאסיים (כפי ש־Google מחזירה)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Follow the system color scheme"
+msgstr "לפי ערכת הצבעים של המערכת"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event text size"
+msgstr "גודל הטקסט של אירועים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Calendar"
+msgstr "לוח שנה"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "First day of week"
+msgstr "היום הראשון בשבוע"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Week numbers"
+msgstr "מספרי שבועות"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Clicking a day opens it in the Day view"
+msgstr "לחיצה על יום פותחת אותו בתצוגת יום"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Month view"
+msgstr "תצוגת חודש"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Double-clicking a day"
+msgstr "לחיצה כפולה על יום"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "New event in Google Calendar (browser)"
+msgstr "אירוע חדש ב־Google Calendar (בדפדפן)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Do nothing"
+msgstr "לא לעשות דבר"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Declined events"
+msgstr "אירועים שנדחו"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show (struck through)"
+msgstr "הצגה (עם קו חוצה)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "declined events"
+msgid "Hide"
+msgstr "הסתרה"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show an event in several calendars once"
+msgstr "הצגת אירוע שנמצא בכמה יומנים פעם אחת"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "A meeting in your calendar and in a shared one, for example."
+msgstr "לדוגמה, פגישה ביומן שלך וביומן משותף."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Week and Day"
+msgstr "שבוע ויום"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "week view setting"
+msgid "Days shown"
+msgstr "ימים מוצגים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "7 days"
+msgstr "7 ימים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Work week (without the weekend)"
+msgstr "שבוע עבודה (ללא סוף השבוע)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Working hours"
+msgstr "שעות עבודה"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Second time zone"
+msgstr "אזור זמן שני"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "no second time zone"
+msgid "None"
+msgstr "ללא"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "No second time zone"
+msgstr "ללא אזור זמן שני"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Its hours are shown next to the local ones in the Week and Day views."
+msgstr "השעות שלו מוצגות לצד השעות המקומיות בתצוגות שבוע ויום."
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/EventEditView.qml
+msgid "Search time zones"
+msgstr "חיפוש אזורי זמן"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"The forecast in the Week view's day headers, on each Agenda day, and the "
+"weather panel of the Day view and the Agenda."
+msgstr ""
+"התחזית בכותרות הימים של תצוגת השבוע, בכל יום בסדר היום, ולוח מזג האוויר של "
+"תצוגת היום וסדר היום."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Day view and Agenda show"
+msgstr "תצוגת היום וסדר היום מציגים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Small calendar"
+msgstr "לוח שנה קטן"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Up next (Day view)"
+msgstr "הבא בתור (תצוגת יום)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Moon"
+msgstr "ירח"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Up next shows"
+msgstr "הבא מציג"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The days after the shown one; later ones under \"Show more\""
+msgstr "הימים שאחרי היום המוצג; המאוחרים יותר תחת „הצג עוד”"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "number of days, after the number"
+msgid "day"
+msgid_plural "days"
+msgstr[0] "יום"
+msgstr[1] "ימים"
+msgstr[2] "ימים"
+msgstr[3] "ימים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All-day events side by side"
+msgstr "אירועים של יום שלם זה לצד זה"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"In the Day view, three or more all-day events take a third of the width "
+"each, three in a row. Hovering one shows it in full."
+msgstr ""
+"בתצוגת היום, שלושה אירועים של יום שלם או יותר תופסים כל אחד שליש מהרוחב, "
+"שלושה בשורה. ריחוף מעל אירוע מציג אותו במלואו."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event descriptions"
+msgstr "תיאורי אירועים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Meeting link button"
+msgstr "כפתור קישור לפגישה"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Multi-day events on every day"
+msgstr "אירועים רב־יומיים בכל יום"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Offline"
+msgstr "לא מקוון"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Keep events and tasks for offline start"
+msgstr "שמירת אירועים ומשימות להפעלה לא מקוונת"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"The last loaded events and tasks (no descriptions or notes) are stored in "
+"~/.cache/plasma-eventcalendar and shown until the first refresh. Off: "
+"nothing is stored, and the stored copy is deleted."
+msgstr ""
+"האירועים והמשימות האחרונים שנטענו (ללא תיאורים או הערות) נשמרים ב־~/.cache/"
+"plasma-eventcalendar ומוצגים עד הרענון הראשון. כבוי: דבר אינו נשמר, והעותק "
+"השמור נמחק."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Troubleshooting"
+msgstr "פתרון תקלות"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Debug logging and extra settings pages"
+msgstr "רישום ניפוי שגיאות ועמודי הגדרות נוספים"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Settings Backup"
+msgstr "גיבוי הגדרות"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Export Settings…"
+msgstr "ייצוא הגדרות…"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All settings of this widget to a file, without passwords and sign-ins"
+msgstr "כל ההגדרות של יישומון זה לקובץ, ללא סיסמאות והתחברויות"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Import Settings…"
+msgstr "ייבוא הגדרות…"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "From an exported file; press Apply or OK to keep them"
+msgstr "מקובץ שיוצא; יש ללחוץ על החלה או אישור כדי לשמור אותן"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"Accounts come back with their calendars. On this computer they stay signed "
+"in; on another one, sign in again (passwords and sign-ins stay in the system "
+"keyring)."
+msgstr ""
+"החשבונות חוזרים עם לוחות השנה שלהם. במחשב זה הם נשארים מחוברים; במחשב אחר יש "
+"להתחבר שוב (הסיסמאות וההתחברויות נשארות במחזיק המפתחות של המערכת)."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The file couldn't be written: %1"
+msgstr "לא ניתן לכתוב את הקובץ: %1"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Exported to %1"
+msgstr "יוצא אל %1"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The file couldn't be read: %1"
+msgstr "לא ניתן לקרוא את הקובץ: %1"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "This isn't a settings file of Event Calendar."
+msgstr "זה אינו קובץ הגדרות של Event Calendar."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Imported %1 setting. Press Apply or OK to keep it."
+msgid_plural "Imported %1 settings. Press Apply or OK to keep them."
+msgstr[0] "יובאה הגדרה %1. יש ללחוץ על החלה או אישור כדי לשמור אותה."
+msgstr[1] "יובאו %1 הגדרות. יש ללחוץ על החלה או אישור כדי לשמור אותן."
+msgstr[2] "יובאו %1 הגדרות. יש ללחוץ על החלה או אישור כדי לשמור אותן."
+msgstr[3] "יובאו %1 הגדרות. יש ללחוץ על החלה או אישור כדי לשמור אותן."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid ""
+"Not imported (not in this version, a password or sign-in, or a value of "
+"another kind): %2"
+msgid_plural ""
+"%1 not imported (not in this version, passwords or sign-ins, or values of "
+"another kind): %2"
+msgstr[0] "לא יובא (לא קיים בגרסה זו, סיסמה או התחברות, או ערך מסוג אחר): %2"
+msgstr[1] ""
+"%1 לא יובאו (לא קיימים בגרסה זו, סיסמאות או התחברויות, או ערכים מסוג אחר): %2"
+msgstr[2] ""
+"%1 לא יובאו (לא קיימים בגרסה זו, סיסמאות או התחברויות, או ערכים מסוג אחר): %2"
+msgstr[3] ""
+"%1 לא יובאו (לא קיימים בגרסה זו, סיסמאות או התחברויות, או ערכים מסוג אחר): %2"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Export Settings"
+msgstr "ייצוא הגדרות"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Settings (*.json)"
+msgstr "הגדרות (*.json)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Import Settings"
+msgstr "ייבוא הגדרות"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "an API the app id may use"
+msgid "yes"
+msgstr "כן"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "an API the app id may not use"
+msgid "no"
+msgstr "לא"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "%1 = error"
+msgid "failed (%1)"
+msgstr "נכשל (%1)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current weather, 3 hour steps: %1"
+msgstr "מזג האוויר הנוכחי, בקפיצות של 3 שעות: %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "16 days (paid plan): %1"
+msgstr "16 ימים (תוכנית בתשלום): %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One Call 3.0: %1"
+msgstr "One Call 3.0: %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid ""
+"OpenWeatherMap doesn't know this app id (a new one takes up to 2 hours)."
+msgstr ""
+"OpenWeatherMap לא מכיר את מזהה היישום הזה (מזהה חדש מתחיל לעבוד תוך עד "
+"שעתיים)."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Choose One Call 3.0 above: by the hour and 8 days."
+msgstr "יש לבחור למעלה ב־One Call 3.0: לפי שעה ו־8 ימים."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Not subscribed to One Call 3.0: choose Free (2.5) above."
+msgstr "אין מינוי ל־One Call 3.0: יש לבחור למעלה ב־Free (2.5)."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Source"
+msgstr "מקור"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Service"
+msgstr "שירות"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Open-Meteo (free, no API key)"
+msgstr "Open-Meteo (חינמי, ללא מפתח API)"
+
+#: ../contents/ui/config/ConfigWeather.qml ../contents/ui/EventEditView.qml
+msgid "Location"
+msgstr "מיקום"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current location"
+msgstr "המיקום הנוכחי"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Not set"
+msgstr "לא הוגדר"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "City name, eg: Warszawa"
+msgstr "שם העיר, למשל: ירושלים"
+
+#: ../contents/ui/config/ConfigWeather.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+#: ../contents/ui/PopupHeader.qml
+msgid "Search"
+msgstr "חיפוש"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "No places found."
+msgstr "לא נמצאו מקומות."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "OpenWeatherMap"
+msgstr "OpenWeatherMap"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "City id"
+msgstr "מזהה עיר"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "eg: 5983720"
+msgstr "למשל: 5983720"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Find City…"
+msgstr "חיפוש עיר…"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "API app id"
+msgstr "מזהה יישום API"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Required for OpenWeatherMap"
+msgstr "נדרש עבור OpenWeatherMap"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "API"
+msgstr "API"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Free (2.5)"
+msgstr "Free (2.5)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One Call 3.0"
+msgstr "One Call 3.0"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Checking…"
+msgstr "בבדיקה…"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Check App Id"
+msgstr "בדיקת מזהה יישום"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid ""
+"Free (2.5) works with any app id: the current weather and a forecast in 3 "
+"hour steps for 5 days. Its forecast for 16 days needs a paid plan; without "
+"one, the days are made from the 3 hour steps."
+msgstr ""
+"Free (2.5) עובד עם כל מזהה יישום: מזג האוויר הנוכחי ותחזית בקפיצות של 3 שעות "
+"ל־5 ימים. התחזית ל־16 ימים דורשת תוכנית בתשלום; בלעדיה, הימים מחושבים "
+"מהקפיצות של 3 שעות."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid ""
+"One Call 3.0 needs the \"One Call by Call\" subscription on <a "
+"href=\"https://openweathermap.org/api/one-call-3\">openweathermap.org</a> "
+"(1000 calls a day are free, a payment card is required): the current "
+"weather, 48 hours by the hour and 8 days, in one call. The widget asks at "
+"most every 10 minutes, about 150 calls a day."
+msgstr ""
+"One Call 3.0 דורש את המינוי “One Call by Call” ב־<a href=\"https://"
+"openweathermap.org/api/one-call-3\">openweathermap.org</a> (1000 קריאות ביום "
+"בחינם, נדרש כרטיס תשלום): מזג האוויר הנוכחי, 48 שעות לפי שעה ו־8 ימים, "
+"בקריאה אחת. היישומון שואל לכל היותר פעם ב־10 דקות, כ־150 קריאות ביום."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One app id works for both: Check App Id tells what yours may use."
+msgstr ""
+"מזהה יישום אחד מתאים לשניהם: “בדיקת מזהה יישום” מראה במה המזהה שלך רשאי "
+"להשתמש."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid ""
+"The built-in app id is shared by everyone using this widget, and so is its "
+"request limit: the weather may stop updating at times. A free app id of your "
+"own: sign up at <a href=\"https://home.openweathermap.org/users/"
+"sign_up\">openweathermap.org</a>, then copy it from \"API keys\". Open-Meteo "
+"needs none."
+msgstr ""
+"מזהה היישום המובנה משותף לכל מי שמשתמש ביישומון הזה, וכך גם מגבלת הבקשות "
+"שלו: מזג האוויר עלול להפסיק להתעדכן מדי פעם. מזהה יישום חינמי משלך: יש "
+"להירשם ב־<a href=\"https://home.openweathermap.org/users/"
+"sign_up\">openweathermap.org</a> ולהעתיק אותו מ־“API keys”. Open-Meteo לא "
+"צריך מזהה."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Weather Canada"
+msgstr "Weather Canada"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "eg: on-14"
+msgstr "למשל: on-14"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Units"
+msgstr "יחידות"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Celsius"
+msgstr "צלזיוס"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Fahrenheit"
+msgstr "פרנהייט"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Kelvin"
+msgstr "קלווין"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Icons"
+msgstr "סמלים"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "System"
+msgstr "מערכת"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Yr (MET Norway)"
+msgstr "Yr (MET Norway)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current weather icon background"
+msgstr "רקע סמל מזג האוויר הנוכחי"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Sky, after the weather"
+msgstr "שמיים, לפי מזג האוויר"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Subtle"
+msgstr "עדין"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "no icon background"
+msgid "None"
+msgstr "ללא"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Forecast chart"
+msgstr "תרשים תחזית"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Simple"
+msgstr "פשוט"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Fancy"
+msgstr "מהודר"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Hours shown"
+msgstr "שעות מוצגות"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Today's chart in the Day view and the Agenda"
+msgstr "התרשים של היום בתצוגת היום ובסדר היום"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid " hours"
+msgstr " שעות"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Larger icons"
+msgstr "סמלים גדולים יותר"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "In the chart and the next days"
+msgstr "בתרשים ובימים הבאים"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Rain amounts"
+msgstr "כמויות גשם"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "The total above the chart, the amounts at the heaviest hours"
+msgstr "הסכום מעל התרשים, הכמויות בשעות הגשומות ביותר"
+
+#: ../contents/ui/config/GoogleLoginManager.qml
+msgid "Not signed in to this Google account. Sign in again."
+msgstr "לא מחובר לחשבון Google הזה. יש להתחבר מחדש."
+
+#: ../contents/ui/config/GoogleLoginManager.qml
+msgid "Could not save the calendar: %1"
+msgstr "לא ניתן לשמור את לוח השנה: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Select city"
+msgstr "בחירת עיר"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Fetched from <a href=\"%1\">%1</a>"
+msgstr "הנתונים נמשכו מתוך <a href=\"%1\">%1</a>"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "City name, eg: Berlin or Berlin, DE"
+msgstr "שם עיר, למשל: Berlin או Berlin, DE"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml ../contents/ui/TaskRow.qml
+msgid "Open Link"
+msgstr "פתיחת הקישור"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "north"
+msgid "N"
+msgstr "N"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "south"
+msgid "S"
+msgstr "S"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "east"
+msgid "E"
+msgstr "E"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "west"
+msgid "W"
+msgstr "W"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "OpenWeatherMap city id"
+msgid "Id %1"
+msgstr "מזהה %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "OpenWeatherMap didn't accept the app id: %1"
+msgstr "OpenWeatherMap לא קיבל את מזהה היישום: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "The search failed: %1"
+msgstr "החיפוש נכשל: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "No city found."
+msgstr "לא נמצאה עיר."
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "No app id set."
+msgstr "לא הוגדר מזהה יישום."
+
+#: ../contents/ui/config/PimCalendarList.qml
+msgid ""
+"Its events come from the account signed in to in the Google Calendar tab."
+msgstr "האירועים שלו מגיעים מהחשבון המחובר בלשונית יומן Google."
+
+#: ../contents/ui/config/SelectionRow.qml
+msgid "Edit calendar…"
+msgstr "עריכת לוח שנה…"
+
+#: ../contents/ui/config/SelectionRow.qml
+msgid "Rename list…"
+msgstr "שינוי שם הרשימה…"
+
+#: ../contents/ui/config/SelectionRow.qml ../contents/ui/ManageListsView.qml
+#: ../contents/ui/TasksView.qml
+msgid "Delete list…"
+msgstr "מחיקת הרשימה…"
+
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Id"
+msgstr "מזהה"
+
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "City Webpage"
+msgstr "אתר האינטרנט של העיר"
+
+#: ../contents/ui/DateTimeSelector.qml ../contents/ui/EventEditView.qml
+msgctxt "event editor date format"
+msgid "d MMM, yyyy"
+msgstr "d ב־MMM, yyyy"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Hide tasks"
+msgstr "הסתרת משימות"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Show tasks"
+msgstr "הצגת משימות"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/PopupHeader.qml
+msgid "New Task"
+msgstr "משימה חדשה"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All lists"
+msgstr "כל הרשימות"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All open"
+msgstr "כל הפתוחות"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Tasks shown"
+msgstr "משימות מוצגות"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Due this day"
+msgstr "לביצוע ביום זה"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All open tasks"
+msgstr "כל המשימות הפתוחות"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TasksView.qml
+msgid "No open tasks"
+msgstr "אין משימות פתוחות"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All done"
+msgstr "הכול בוצע"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "No tasks"
+msgstr "אין משימות"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TaskCheck.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "In progress"
+msgstr "בתהליך"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgctxt "tasks in the Day view, not in progress"
+msgid "To do"
+msgstr "לביצוע"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TasksView.qml
+msgid "Hide completed"
+msgstr "הסתרת משימות שהושלמו"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "%1 completed"
+msgid_plural "%1 completed"
+msgstr[0] "%1 הושלמה"
+msgstr[1] "%1 הושלמו"
+msgstr[2] "%1 הושלמו"
+msgstr[3] "%1 הושלמו"
+
+#: ../contents/ui/DurationSelector.qml
+msgid "to"
+msgstr "עד"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Move to List"
+msgstr "העברה לרשימה"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Couldn't save the task"
+msgstr "לא ניתן היה לשמור את המשימה"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml
+msgid "Priority"
+msgstr "עדיפות"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "High priority"
+msgstr "עדיפות גבוהה"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "Medium priority"
+msgstr "עדיפות בינונית"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "Low priority"
+msgstr "עדיפות נמוכה"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/TaskDetailsBody.qml
+msgctxt "task priority"
+msgid "No priority"
+msgstr "ללא עדיפות"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml
+msgid "Due date"
+msgstr "תאריך יעד"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "tasks filter"
+msgid "Today"
+msgstr "היום"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "tasks filter"
+msgid "Tomorrow"
+msgstr "מחר"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Next week"
+msgstr "השבוע הבא"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "No date"
+msgstr "ללא תאריך"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "RSVP to an invitation"
+msgid "Respond"
+msgstr "מענה"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Not Done"
+msgstr "סימון כלא הושלמה"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Done"
+msgstr "סימון כהושלמה"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Not in Progress"
+msgstr "סימון כלא בתהליך"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as in Progress"
+msgstr "סימון כבתהליך"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Show Details"
+msgstr "הצגת פרטים"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Check Camera"
+msgstr "בדיקת מצלמה"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Copy Event Details"
+msgstr "העתקת פרטי האירוע"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Copy Meeting Link"
+msgstr "העתקת קישור הפגישה"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Unmute Notifications"
+msgstr "ביטול השתקת התראות"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Mute Notifications"
+msgstr "השתקת התראות"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Open in Google Calendar"
+msgstr "פתיחה ב־Google Calendar"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Mark as Ended"
+msgstr "סימון כהסתיים"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Email Guests…"
+msgstr "שליחת דוא״ל לאורחים…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Edit…"
+msgstr "עריכה…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Duplicate…"
+msgstr "שכפול…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "%1 = event title"
+msgid "Delete Only This Occurrence of “%1”"
+msgstr "מחיקת המופע הזה בלבד של “%1”"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "%1 = event title"
+msgid "Delete All Events of “%1”"
+msgstr "מחיקת כל האירועים של “%1”"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventModel.qml
+msgid "No due date"
+msgstr "אין תאריך יעד"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "a task's due date in its details"
+msgid "dddd, d MMMM"
+msgstr "dddd, d MMMM"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventModel.qml
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "date (%1) with time (%2)"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TasksView.qml
+msgid "Overdue"
+msgstr "באיחור"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventMover.qml
+msgid "This event"
+msgstr "האירוע הזה"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/EventMover.qml
+msgid "All events in the series"
+msgstr "כל האירועים בסדרה"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who accepted"
+msgid "%1 yes"
+msgstr "%1 כן"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who said maybe"
+msgid "%1 maybe"
+msgstr "%1 אולי"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who declined"
+msgid "%1 no"
+msgstr "%1 לא"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who haven't responded"
+msgid "%1 awaiting"
+msgstr "%1 ממתינים"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "1 guest"
+msgid_plural "%1 guests"
+msgstr[0] "אורח אחד"
+msgstr[1] "שני אורחים"
+msgstr[2] "%1 אורחים"
+msgstr[3] "%1 אורחים"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "reminder at event start"
+msgid "at start"
+msgstr "בהתחלה"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "%1 = 10m, 2m"
+msgid "Reminders: %1 before"
+msgstr "תזכורות: %1 לפני"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/FindTimeView.qml
+#: ../contents/ui/ManageListsView.qml ../contents/ui/SearchView.qml
+msgid "Back"
+msgstr "חזרה"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete:"
+msgstr "מחיקה:"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete this task?"
+msgstr "למחוק את המשימה הזו?"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete this event?"
+msgstr "למחוק את האירוע הזה?"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "This Occurrence"
+msgstr "המופע הזה"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "All Events"
+msgstr "כל האירועים"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Deletes every occurrence of this repeating event."
+msgstr "מוחק את כל המופעים של האירוע החוזר הזה."
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Open in TickTick"
+msgstr "פתיחה ב־TickTick"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Open in Google Tasks"
+msgstr "פתיחה ב־Google Tasks"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskRow.qml
+msgid "Edit"
+msgstr "עריכה"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Duplicate"
+msgstr "שכפול"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Private event"
+msgstr "אירוע פרטי"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgid "All day"
+msgstr "כל היום"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Repeats"
+msgstr "חוזר"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = start and end time, %2 = city, %3 = time zone id"
+msgid "%1 %2 time (%3)"
+msgstr "%1 לפי שעון %2 (%3)"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "RSVP to an invitation"
+msgid "Going?"
+msgstr "מגיע/ה?"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Out of office"
+msgstr "מחוץ למשרד"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Focus time"
+msgstr "זמן ריכוז"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines all meetings at this time"
+msgstr "דוחה את כל הפגישות בזמן זה"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines new invitations at this time"
+msgstr "דוחה הזמנות חדשות בזמן זה"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = message sent when declining"
+msgid "Message: “%1”"
+msgstr "הודעה: “%1”"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = titles of other events at the same time"
+msgid "Overlaps with: %1"
+msgstr "חופף ל: %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Write an email to the guests"
+msgstr "כתיבת דוא״ל לאורחים"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "event organizer"
+msgid "organizer"
+msgstr "מארגן"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgctxt "the current user in a guest list"
+msgid "you"
+msgstr "את/ה"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/UpNextPanel.qml
+msgid "Show less"
+msgstr "הצגת פחות"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Show 1 more"
+msgid_plural "Show all %1"
+msgstr[0] "הצגת אחד נוסף"
+msgstr[1] "הצגת כל ה־%1"
+msgstr[2] "הצגת כל ה־%1"
+msgstr[3] "הצגת כל ה־%1"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskRow.qml
+msgctxt "checklist items done: %1 of %2"
+msgid "%1 of %2 subtasks done"
+msgstr "%1 מתוך %2 תת־משימות הושלמו"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Subtasks"
+msgstr "תת־משימות"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task reminder after the due day starts"
+msgid "%1 day later at %2"
+msgid_plural "%1 days later at %2"
+msgstr[0] "יום %1 אחרי בשעה %2"
+msgstr[1] "יומיים אחרי בשעה %2"
+msgstr[2] "%1 ימים אחרי בשעה %2"
+msgstr[3] "%1 ימים אחרי בשעה %2"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task reminder: %1 = time"
+msgid "On the day at %1"
+msgstr "באותו יום בשעה %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = start and end time in the local time zone"
+msgid "%1 your time"
+msgstr "%1 לפי השעון שלך"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Lavender"
+msgstr "לבנדר"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Sage"
+msgstr "מרווה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Grape"
+msgstr "ענבים"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Flamingo"
+msgstr "פלמינגו"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Banana"
+msgstr "בננה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Tangerine"
+msgstr "מנדרינה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Peacock"
+msgstr "טווס"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Graphite"
+msgstr "גרפיט"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Blueberry"
+msgstr "אוכמניות"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Basil"
+msgstr "בזיליקום"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Tomato"
+msgstr "עגבנייה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Enter an email address, like name@example.com"
+msgstr "יש להזין כתובת דוא״ל, למשל name@example.com"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "you, in Find a time"
+msgid "You"
+msgstr "את/ה"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/QuickAddView.qml
+msgctxt "%1 = task list name"
+msgid "%1 (tasks)"
+msgstr "%1 (משימות)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Task list"
+msgstr "רשימת משימות"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Edit Task"
+msgstr "עריכת משימה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Edit Event"
+msgstr "עריכת אירוע"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send invitation emails to the guests?"
+msgstr "לשלוח לאורחים הזמנות בדוא״ל?"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send update emails to the guests?"
+msgstr "לשלוח לאורחים עדכונים בדוא״ל?"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send invitations"
+msgstr "שליחת הזמנות"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "send update emails to guests"
+msgid "Send"
+msgstr "שליחה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "don't send emails to guests"
+msgid "Don't send"
+msgstr "לא לשלוח"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Change:"
+msgstr "שינוי:"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Title"
+msgstr "כותרת"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Due time"
+msgstr "שעת יעד"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "Low priority"
+msgstr "עדיפות נמוכה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "Medium priority"
+msgstr "עדיפות בינונית"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "High priority"
+msgstr "עדיפות גבוהה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Event"
+msgstr "אירוע"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Out of office"
+msgstr "מחוץ למשרד"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Focus time"
+msgstr "זמן ריכוז"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Event type"
+msgstr "סוג אירוע"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Don't decline invitations"
+msgstr "לא לדחות הזמנות"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new invitations in this time"
+msgstr "דחיית הזמנות חדשות בזמן זה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new and existing invitations in this time"
+msgstr "דחיית הזמנות חדשות וקיימות בזמן זה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Automatically decline"
+msgstr "דחייה אוטומטית"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Message for declined invitations"
+msgstr "הודעה להזמנות שנדחו"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Do not disturb"
+msgstr "נא לא להפריע"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Available"
+msgstr "זמין"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Do not disturb or Available"
+msgid "Chat status: %1"
+msgstr "סטטוס בצ׳אט: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Chat status"
+msgstr "סטטוס בצ׳אט"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Calendar color"
+msgstr "צבע לוח השנה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Local time"
+msgstr "שעון מקומי"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = time zone id, eg: Europe/Warsaw"
+msgid "Time zone: %1"
+msgstr "אזור זמן: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Time zone"
+msgstr "אזור זמן"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Does not repeat"
+msgstr "ללא חזרה"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/ImportView.qml
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Daily"
+msgstr "יומי"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Every weekday (Monday to Friday)"
+msgstr "כל יום חול (שני עד שישי)"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = day name"
+msgid "Weekly on %1"
+msgstr "שבועי ביום %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = day of the month"
+msgid "Monthly on day %1"
+msgstr "חודשי ביום %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = date, eg: 16 October"
+msgid "Yearly on %1"
+msgstr "שנתי ב־%1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Custom (as set in TickTick)"
+msgstr "מותאם אישית (כפי שהוגדר ב־TickTick)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Custom (as set in Google Calendar)"
+msgstr "מותאם אישית (כפי שהוגדר ב־Google Calendar)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Loading…"
+msgstr "בטעינה…"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every [2] [weeks]"
+msgid "Every"
+msgstr "כל"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "day"
+msgid_plural "days"
+msgstr[0] "יום"
+msgstr[1] "ימים"
+msgstr[2] "ימים"
+msgstr[3] "ימים"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "שבוע"
+msgstr[1] "שבועות"
+msgstr[2] "שבועות"
+msgstr[3] "שבועות"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "month"
+msgid_plural "months"
+msgstr[0] "חודש"
+msgstr[1] "חודשים"
+msgstr[2] "חודשים"
+msgstr[3] "חודשים"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "year"
+msgid_plural "years"
+msgstr[0] "שנה"
+msgstr[1] "שנים"
+msgstr[2] "שנים"
+msgstr[3] "שנים"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends: never / on date / after N times"
+msgid "Ends:"
+msgstr "סיום:"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends"
+msgid "Never"
+msgstr "אף פעם"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends on [date]"
+msgid "On"
+msgstr "בתאריך"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends after [N] times"
+msgid "After"
+msgstr "אחרי"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends after N"
+msgid "time"
+msgid_plural "times"
+msgstr[0] "פעם"
+msgstr[1] "פעמים"
+msgstr[2] "פעמים"
+msgstr[3] "פעמים"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add Google Meet video conferencing"
+msgstr "הוספת שיחת וידאו ב־Google Meet"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Video conferencing will be removed when you save"
+msgstr "שיחת הווידאו תוסר בעת השמירה"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/PopupView.qml
+#: ../contents/ui/TaskUndoBar.qml
+msgid "Undo"
+msgstr "ביטול"
+
+#: ../contents/ui/EventEditView.qml
+msgid "A Google Meet link will be created when you save"
+msgstr "קישור ל־Google Meet ייווצר בעת השמירה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Video conferencing"
+msgstr "שיחת וידאו"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove video conferencing"
+msgstr "הסרת שיחת הווידאו"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Busy"
+msgstr "עסוק"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Free"
+msgstr "פנוי"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Busy or Free"
+msgid "Show as: %1"
+msgstr "הצגה בתור: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Show as"
+msgstr "הצגה בתור"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Calendar default"
+msgstr "ברירת המחדל של לוח השנה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Public"
+msgstr "ציבורי"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Private"
+msgstr "פרטי"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Calendar default, Public or Private"
+msgid "Visibility: %1"
+msgstr "חשיפה: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Visibility"
+msgstr "חשיפה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Reminders"
+msgstr "תזכורות"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Calendar's default"
+msgstr "ברירת המחדל של היומן"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Set for this event"
+msgstr "מוגדרות לאירוע זה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "minute before"
+msgid_plural "minutes before"
+msgstr[0] "דקה לפני"
+msgstr[1] "דקות לפני"
+msgstr[2] "דקות לפני"
+msgstr[3] "דקות לפני"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "hour before"
+msgid_plural "hours before"
+msgstr[0] "שעה לפני"
+msgstr[1] "שעות לפני"
+msgstr[2] "שעות לפני"
+msgstr[3] "שעות לפני"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "day before"
+msgid_plural "days before"
+msgstr[0] "יום לפני"
+msgstr[1] "ימים לפני"
+msgstr[2] "ימים לפני"
+msgstr[3] "ימים לפני"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "week before"
+msgid_plural "weeks before"
+msgstr[0] "שבוע לפני"
+msgstr[1] "שבועות לפני"
+msgstr[2] "שבועות לפני"
+msgstr[3] "שבועות לפני"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove reminder"
+msgstr "הסרת תזכורת"
+
+#: ../contents/ui/EventEditView.qml
+msgid "No notification reminders"
+msgstr "אין תזכורות"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add Reminder"
+msgstr "הוספת תזכורת"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Guests"
+msgstr "אורחים"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Only the organizer can change the guest list"
+msgstr "רק המארגן יכול לשנות את רשימת האורחים"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add guests by email"
+msgstr "הוספת אורחים לפי דוא״ל"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "add a guest"
+msgid "Add"
+msgstr "הוספה"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "guest suggestion: %1 = name, %2 = email"
+msgid "%1 <%2>"
+msgstr "%1 <%2>"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/FindTimeView.qml
+msgid "Find a Time"
+msgstr "מציאת זמן"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Subtask"
+msgstr "תת־משימה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove subtask"
+msgstr "הסרת תת־משימה"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add a subtask…"
+msgstr "הוספת תת־משימה…"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Notes"
+msgstr "הערות"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Description"
+msgstr "תיאור"
+
+#: ../contents/ui/EventModel.qml ../contents/ui/LocaleFuncs.js
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml
+msgctxt "short month+date format"
+msgid "MMM d"
+msgstr "d ב־MMM"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "%1 = date"
+msgid "Due %1"
+msgstr "יעד: %1"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Home"
+msgstr "בית"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Office"
+msgstr "משרד"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Elsewhere"
+msgstr "מקום אחר"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't show free / busy times"
+msgstr "לוח שנה זה לא יכול להציג זמני פנוי / עסוק"
+
+#: ../contents/ui/EventMover.qml
+msgid "Event moved"
+msgstr "האירוע הועבר"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No suggestions: the guests' busy times aren't available."
+msgstr "אין הצעות: זמני העיסוק של האורחים אינם זמינים."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "Suggested times (not counting %1):"
+msgstr "זמנים מוצעים (בלי %1):"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Suggested times:"
+msgstr "זמנים מוצעים:"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "No time free in the working hours of this day (not counting %1)."
+msgstr "אין זמן פנוי בשעות העבודה ביום זה (בלי %1)."
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No time free for everyone in the working hours of this day."
+msgstr "אין זמן פנוי לכולם בשעות העבודה של יום זה."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time"
+msgid "Not available"
+msgstr "לא זמין"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time: %1 = Google's reason"
+msgid "Not available (%1)"
+msgstr "לא זמין (%1)"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Previous day"
+msgstr "היום הקודם"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "Find a time: the day shown"
+msgid "ddd, d MMM"
+msgstr "ddd, d ב־MMM"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Next day"
+msgstr "היום הבא"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Go to Date"
+msgstr "מעבר לתאריך"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Go"
+msgstr "מעבר"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Eg: next friday, 15 nov, +2w"
+msgstr "לדוגמה: tomorrow, 2026-11-15, +2w"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "No day found in the text"
+msgstr "לא נמצא יום בטקסט"
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file."
+msgstr "לא ניתן לקרוא את הקובץ."
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading .ics files needs the Python icalendar module."
+msgstr "קריאת קובצי .ics דורשת את מודול Python בשם icalendar."
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file: %1"
+msgstr "לא ניתן לקרוא את הקובץ: %1"
+
+#: ../contents/ui/ImportView.qml
+msgid "Changed occurrence of a repeating event"
+msgstr "מופע שהשתנה של אירוע חוזר"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 day"
+msgid_plural "Every %1 days"
+msgstr[0] "כל יום (%1)"
+msgstr[1] "כל %1 ימים"
+msgstr[2] "כל %1 ימים"
+msgstr[3] "כל %1 ימים"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "כל שבוע (%1)"
+msgstr[1] "כל %1 שבועות"
+msgstr[2] "כל %1 שבועות"
+msgstr[3] "כל %1 שבועות"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml
+msgid "Weekly"
+msgstr "שבועי"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly / Every 2 weeks, %2 = days"
+msgid "%1 on %2"
+msgstr "%1 בימי %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 month"
+msgid_plural "Every %1 months"
+msgstr[0] "כל חודש (%1)"
+msgstr[1] "כל %1 חודשים"
+msgstr[2] "כל %1 חודשים"
+msgstr[3] "כל %1 חודשים"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml
+msgid "Monthly"
+msgstr "חודשי"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 year"
+msgid_plural "Every %1 years"
+msgstr[0] "כל שנה (%1)"
+msgstr[1] "כל %1 שנים"
+msgstr[2] "כל %1 שנים"
+msgstr[3] "כל %1 שנים"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml
+#: ../contents/ui/TaskDetailsBody.qml
+msgid "Yearly"
+msgstr "שנתי"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%2 = Weekly on Monday, ..."
+msgid "%2, %1 time"
+msgid_plural "%2, %1 times"
+msgstr[0] "%2, פעם אחת"
+msgstr[1] "%2, %1 פעמים"
+msgstr[2] "%2, %1 פעמים"
+msgstr[3] "%2, %1 פעמים"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly on Monday, ..., %2 = date"
+msgid "%1, until %2"
+msgstr "%1, עד %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 exception"
+msgid_plural "%1 exceptions"
+msgstr[0] "חריגה %1"
+msgstr[1] "%1 חריגות"
+msgstr[2] "%1 חריגות"
+msgstr[3] "%1 חריגות"
+
+#: ../contents/ui/ImportView.qml
+msgid "Close"
+msgstr "סגירה"
+
+#: ../contents/ui/ImportView.qml
+msgid "Import"
+msgstr "ייבוא"
+
+#: ../contents/ui/ImportView.qml
+msgid "No file chosen"
+msgstr "לא נבחר קובץ"
+
+#: ../contents/ui/ImportView.qml
+msgid "Choose File…"
+msgstr "בחירת קובץ…"
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading the file…"
+msgstr "הקובץ נקרא…"
+
+#: ../contents/ui/ImportView.qml
+msgid "No events in this file"
+msgstr "אין אירועים בקובץ זה"
+
+#: ../contents/ui/ImportView.qml
+msgid "(No title)"
+msgstr "(ללא כותרת)"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 cancelled event isn't imported."
+msgid_plural "%1 cancelled events aren't imported."
+msgstr[0] "%1 אירוע שבוטל לא מיובא."
+msgstr[1] "%1 אירועים שבוטלו לא מיובאים."
+msgstr[2] "%1 אירועים שבוטלו לא מיובאים."
+msgstr[3] "%1 אירועים שבוטלו לא מיובאים."
+
+#: ../contents/ui/ImportView.qml
+msgid "Calendar:"
+msgstr "לוח שנה:"
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Guests and the organizer aren't imported, and no invitations are sent. "
+"Importing the same event again updates it."
+msgstr ""
+"האורחים והמארגן לא מיובאים, ולא נשלחות הזמנות. ייבוא חוזר של אותו אירוע "
+"מעדכן אותו."
+
+#: ../contents/ui/ImportView.qml
+msgid ""
+"Importing needs a Google Calendar you can edit. Log in to Google Calendar in "
+"the settings."
+msgstr ""
+"לייבוא נדרש לוח שנה של Google Calendar שניתן לערוך. יש להתחבר ל־Google "
+"Calendar בהגדרות."
+
+#: ../contents/ui/ImportView.qml
+msgid "Importing… %1 of %2"
+msgstr "מתבצע ייבוא… %1 מתוך %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 event imported"
+msgid_plural "%1 events imported"
+msgstr[0] "אירוע %1 יובא"
+msgstr[1] "%1 אירועים יובאו"
+msgstr[2] "%1 אירועים יובאו"
+msgstr[3] "%1 אירועים יובאו"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 failed: %2"
+msgid_plural "%1 failed, eg: %2"
+msgstr[0] "%1 נכשל: %2"
+msgstr[1] "%1 נכשלו, למשל: %2"
+msgstr[2] "%1 נכשלו, למשל: %2"
+msgstr[3] "%1 נכשלו, למשל: %2"
+
+#: ../contents/ui/JoinPill.qml ../contents/ui/MeetingAlertContent.qml
+msgid "Join"
+msgstr "הצטרפות"
+
+#: ../contents/ui/lib/ConfigFontFamily.qml
+msgctxt "Use default font"
+msgid "Default"
+msgstr "ברירת המחדל"
+
+#: ../contents/ui/lib/ConfigFontFamily.qml
+msgid "Choose a Font"
+msgstr "בחירת גופן"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Play"
+msgstr "ניגון"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Choose a sound effect"
+msgstr "נא לבחור אפקט צליל"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Sound files (%1)"
+msgstr "קובצי שמע (%1)"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "All files (%1)"
+msgstr "כל הקבצים (%1)"
+
+#: ../contents/ui/lib/PythonModules.qml
+msgid ""
+"Couldn't install the modules. Install python3-icalendar (python-icalendar on "
+"Arch) with your package manager."
+msgstr ""
+"לא ניתן היה להתקין את המודולים. יש להתקין את python3-icalendar (python-"
+"icalendar ב־Arch) עם מנהל החבילות."
+
+#: ../contents/ui/lib/PythonModules.qml
+msgid "Couldn't install the modules: %1"
+msgstr "לא ניתן היה להתקין את המודולים: %1"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time on the hour (24 hour clock)"
+msgid "h"
+msgstr "h"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time (24 hour clock)"
+msgid "h:mm"
+msgstr "h:mm"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time on the hour (12 hour clock)"
+msgid "h AP"
+msgstr "h AP"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time (12 hour clock)"
+msgid "h:mm AP"
+msgstr "h:mm AP"
+
+#: ../contents/ui/LocaleFuncs.js
+msgid "All Day"
+msgstr "כל היום"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "from date/time %1 until date/time %2"
+msgid "%1 - %2"
+msgstr "%1 - %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event span, %1 = start, %2 = end"
+msgid "%1 – %2"
+msgstr "%1 – %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date"
+msgid "%1 · All day"
+msgstr "%1 · כל היום"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
+msgid "%1 · %2 – %3"
+msgstr "%1 · %2 – %3"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 hours"
+msgid "%1h"
+msgstr "%1 שע׳"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 minutes"
+msgid "%1m"
+msgstr "%1 דק׳"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 seconds"
+msgid "%1s"
+msgstr "%1 שנ׳"
+
+#: ../contents/ui/Logic.qml
+msgid "Could not connect."
+msgstr "לא ניתן להתחבר."
+
+#: ../contents/ui/Logic.qml
+msgid "The weather service is not available right now."
+msgstr "שירות מזג האוויר אינו זמין כרגע."
+
+#: ../contents/ui/Logic.qml
+msgid "Weather API limit reached"
+msgstr "הגעת למכסת ה־API של תחזית מזג האוויר"
+
+#: ../contents/ui/Logic.qml
+msgid ""
+"OpenWeatherMap refused the app id for One Call 3.0: subscribe to it, or "
+"choose Free (2.5) in Settings > Weather."
+msgstr ""
+"OpenWeatherMap דחה את מזהה היישום עבור One Call 3.0: יש להירשם למינוי או "
+"לבחור ב־Free (2.5) בהגדרות > מזג האוויר."
+
+#: ../contents/ui/Logic.qml
+msgid ""
+"OpenWeatherMap refused the app id. A new one takes up to 2 hours to work; "
+"check it in Settings > Weather."
+msgstr ""
+"OpenWeatherMap דחה את מזהה היישום. מזהה חדש מתחיל לעבוד תוך עד שעתיים; יש "
+"לבדוק אותו בהגדרות > מזג האוויר."
+
+#: ../contents/ui/Logic.qml
+msgctxt ""
+"The language code for OpenWeatherMap's weather texts, as listed on https://"
+"openweathermap.org/current#multi (eg: de, fr, pt_br, zh_cn); en if yours "
+"isn't there"
+msgid "en"
+msgstr "he"
+
+#: ../contents/ui/Logic.qml
+msgid ""
+"Google authorization expired or was revoked. Open Event Calendar Settings > "
+"Calendars > Google Calendar and sign in to that account again."
+msgstr ""
+"ההרשאה ל־Google פגה או נשללה. יש לפתוח את הגדרות לוח שנה עם אירועים > לוחות "
+"שנה > Google Calendar ולהיכנס שוב לחשבון הזה."
+
+#: ../contents/ui/Logic.qml
+msgid "Logged out of Google. Please login again."
+msgstr "מחוץ לחשבון Google. נא להיכנס שוב."
+
+#: ../contents/ui/Logic.qml ../contents/ui/UpcomingEvents.qml
+msgid "Event Calendar NG"
+msgstr "לוח שנה עם אירועים NG"
+
+#: ../contents/ui/Logic.qml
+msgid "Calendar is back in sync"
+msgstr "לוח השנה מסונכרן שוב"
+
+#: ../contents/ui/Logic.qml
+msgid "Calendar can't sync"
+msgstr "לא ניתן לסנכרן את לוח השנה"
+
+#: ../contents/ui/Logic.qml
+msgid "No connection. Showing the last loaded events; retrying automatically."
+msgstr "אין חיבור. מוצגים האירועים שנטענו לאחרונה; ניסיון חוזר יתבצע אוטומטית."
+
+#: ../contents/ui/main.qml
+msgctxt "%1 = event title, %2 = in 12 min / 25 min left"
+msgid "%1 · %2"
+msgstr "%1 · %2"
+
+#: ../contents/ui/main.qml
+msgid "Camera Check…"
+msgstr "בדיקת מצלמה…"
+
+#: ../contents/ui/main.qml ../contents/ui/PopupHeader.qml
+msgid "Refresh"
+msgstr "ריענון"
+
+#: ../contents/ui/main.qml
+msgid "Date and Time Formats…"
+msgstr "תבניות תאריך ושעה…"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Manage lists"
+msgstr "ניהול רשימות"
+
+#: ../contents/ui/ManageListsView.qml
+msgid "No lists"
+msgstr "אין רשימות"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "%1 open task"
+msgid_plural "%1 open tasks"
+msgstr[0] "משימה פתוחה %1"
+msgstr[1] "%1 משימות פתוחות"
+msgstr[2] "%1 משימות פתוחות"
+msgstr[3] "%1 משימות פתוחות"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Show in smart lists"
+msgstr "הצגה ברשימות חכמות"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Rename…"
+msgstr "שינוי שם…"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Clear completed"
+msgstr "ניקוי משימות שהושלמו"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgctxt "%2 = task list name"
+msgid "Delete the list \"%2\" and its %1 task? This can't be undone."
+msgid_plural "Delete the list \"%2\" and its %1 tasks? This can't be undone."
+msgstr[0] "למחוק את הרשימה “%2” ואת המשימה שבה? לא ניתן לבטל פעולה זו."
+msgstr[1] "למחוק את הרשימה “%2” ואת %1 המשימות שבה? לא ניתן לבטל פעולה זו."
+msgstr[2] "למחוק את הרשימה “%2” ואת %1 המשימות שבה? לא ניתן לבטל פעולה זו."
+msgstr[3] "למחוק את הרשימה “%2” ואת %1 המשימות שבה? לא ניתן לבטל פעולה זו."
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "New list name"
+msgstr "שם הרשימה החדשה"
+
+#: ../contents/ui/ManageListsView.qml
+msgid "Create"
+msgstr "יצירה"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Starting soon"
+msgstr "מתחיל בקרוב"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Starting now"
+msgstr "מתחיל עכשיו"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Show Less"
+msgstr "להציג פחות"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Microphone and Speaker…"
+msgstr "מיקרופון ורמקול…"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Choose the Camera…"
+msgstr "בחירת המצלמה…"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Snooze 1 min"
+msgstr "נודניק דקה"
+
+#: ../contents/ui/MeetingAlertContent.qml ../contents/ui/PopupView.qml
+msgid "Dismiss"
+msgstr "סגירה"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Return: join · Esc: dismiss"
+msgstr "Enter: הצטרפות · Esc: סגירה"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Esc: dismiss"
+msgstr "Esc: סגירה"
+
+#: ../contents/ui/MeetingAlertWindow.qml
+msgid "Meeting"
+msgstr "פגישה"
+
+#: ../contents/ui/MicMeter.qml
+msgid "Couldn't play the microphone on the speaker (pactl)."
+msgstr "לא ניתן היה להשמיע את המיקרופון ברמקול (pactl)."
+
+#: ../contents/ui/MicMeter.qml
+msgid "Hear yourself (use headphones: speakers would whistle)"
+msgstr "לשמוע את עצמך (יש להשתמש באוזניות: רמקולים ייצרו שריקה)"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "volume percentage, the widest"
+msgid "%1%"
+msgstr "%1%"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "the microphone's input level now"
+msgid "Level"
+msgstr "רמה"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "volume percentage"
+msgid "%1%"
+msgstr "%1%"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "the microphone's input volume"
+msgid "Sensitivity"
+msgstr "רגישות"
+
+#: ../contents/ui/MicMeter.qml
+msgid "The microphone is muted."
+msgstr "המיקרופון מושתק."
+
+#: ../contents/ui/MicMeter.qml
+msgid "Unmute"
+msgstr "ביטול השתקה"
+
+#: ../contents/ui/MicMeter.qml
+msgid "Test: play a sound on each side"
+msgstr "בדיקה: השמעת צליל בכל צד"
+
+#: ../contents/ui/MiniMonth.qml ../contents/ui/PopupHeader.qml
+msgid "Previous Month"
+msgstr "החודש הקודם"
+
+#: ../contents/ui/MiniMonth.qml ../contents/ui/PopupHeader.qml
+msgid "Next Month"
+msgstr "החודש הבא"
+
+#: ../contents/ui/MiniMonth.qml
+msgctxt "%2 = date"
+msgid "%2, %1 event"
+msgid_plural "%2, %1 events"
+msgstr[0] "%2, אירוע %1"
+msgstr[1] "%2, %1 אירועים"
+msgstr[2] "%2, %1 אירועים"
+msgstr[3] "%2, %1 אירועים"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "New moon"
+msgstr "מולד הירח"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waxing crescent"
+msgstr "סהר מתמלא"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "First quarter"
+msgstr "רבע ראשון"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waxing gibbous"
+msgstr "ירח מתמלא"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Full moon"
+msgstr "ירח מלא"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waning gibbous"
+msgstr "ירח מתמעט"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Last quarter"
+msgstr "רבע אחרון"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waning crescent"
+msgstr "סהר מתמעט"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon"
+msgid "Up all day"
+msgstr "מעל האופק כל היום"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon"
+msgid "Down all day"
+msgstr "מתחת לאופק כל היום"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 and %2 = times"
+msgid "Rises %1, sets %2"
+msgstr "זורח %1, שוקע %2"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 and %2 = times"
+msgid "Sets %1, rises %2"
+msgstr "שוקע %1, זורח %2"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = time"
+msgid "Rises %1"
+msgstr "זורח %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = time"
+msgid "Sets %1"
+msgstr "שוקע %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "%1 = date"
+msgid "Full moon %1"
+msgstr "ירח מלא %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "%1 = date"
+msgid "New moon %1"
+msgstr "מולד הירח %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase %1 at time %2"
+msgid "%1 at %2"
+msgstr "%1 ב־%2"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = percent"
+msgid "%1% lit"
+msgstr "%1% מואר"
+
+#: ../contents/ui/NewEventForm.qml
+msgid "Eg: 9am-5pm Work"
+msgstr "למשל: עבודה בשעות 9:00-‏17:00"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Buttons in the header"
+msgstr "כפתורים בכותרת"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Previous Week"
+msgstr "השבוע הקודם"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Previous Day"
+msgstr "היום הקודם"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Today (press and hold, or G: go to a date)"
+msgstr "היום (לחיצה ארוכה או G: מעבר לתאריך)"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Next Week"
+msgstr "השבוע הבא"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Next Day"
+msgstr "היום הבא"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "New Event (press and hold: a meeting now)"
+msgstr "אירוע חדש (לחיצה ארוכה: פגישה עכשיו)"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Start a Google Meet"
+msgstr "התחלת Google Meet"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Start a Zoom Meeting"
+msgstr "התחלת פגישת Zoom"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "More Actions"
+msgstr "פעולות נוספות"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Keep Open"
+msgstr "להשאיר פתוח"
+
+#: ../contents/ui/PopupView.qml
+msgid "Couldn't delete the event"
+msgstr "לא ניתן היה למחוק את האירוע"
+
+#: ../contents/ui/PopupView.qml
+msgid "Repeating event deleted"
+msgstr "האירוע החוזר נמחק"
+
+#: ../contents/ui/PopupView.qml
+msgid "Task deleted"
+msgstr "המשימה נמחקה"
+
+#: ../contents/ui/PopupView.qml
+msgid "Event deleted"
+msgstr "האירוע נמחק"
+
+#: ../contents/ui/PopupView.qml
+msgid "Couldn't delete the task"
+msgstr "לא ניתן היה למחוק את המשימה"
+
+#: ../contents/ui/PopupView.qml
+msgid "Loading calendars…"
+msgstr "טוען לוחות שנה…"
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying…"
+msgstr "בניסיון חוזר…"
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying in %1 second."
+msgid_plural "Retrying in %1 seconds."
+msgstr[0] "ניסיון חוזר בעוד שנייה."
+msgstr[1] "ניסיון חוזר בעוד %1 שניות."
+msgstr[2] "ניסיון חוזר בעוד %1 שניות."
+msgstr[3] "ניסיון חוזר בעוד %1 שניות."
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying in %1 minute."
+msgid_plural "Retrying in %1 minutes."
+msgstr[0] "ניסיון חוזר בעוד דקה."
+msgstr[1] "ניסיון חוזר בעוד %1 דקות."
+msgstr[2] "ניסיון חוזר בעוד %1 דקות."
+msgstr[3] "ניסיון חוזר בעוד %1 דקות."
+
+#: ../contents/ui/PopupView.qml
+msgid "Can't connect. Showing the last loaded events."
+msgstr "לא ניתן להתחבר. מוצגים האירועים שנטענו לאחרונה."
+
+#: ../contents/ui/PopupView.qml ../contents/ui/WeatherPanel.qml
+msgid "Retry Now"
+msgstr "ניסיון חוזר כעת"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml
+#: ../contents/ui/TasksView.qml
+msgid "Today"
+msgstr "היום"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml
+#: ../contents/ui/TasksView.qml
+msgid "Tomorrow"
+msgstr "מחר"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = weekday, %2 = short date"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every weekday"
+msgstr "כל יום עבודה"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "%1 = weekday"
+msgid "Every %1"
+msgstr "כל %1"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every day"
+msgid_plural "Every %1 days"
+msgstr[0] "כל יום"
+msgstr[1] "כל %1 ימים"
+msgstr[2] "כל %1 ימים"
+msgstr[3] "כל %1 ימים"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "כל שבוע"
+msgstr[1] "כל %1 שבועות"
+msgstr[2] "כל %1 שבועות"
+msgstr[3] "כל %1 שבועות"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every month"
+msgid_plural "Every %1 months"
+msgstr[0] "כל חודש"
+msgstr[1] "כל %1 חודשים"
+msgstr[2] "כל %1 חודשים"
+msgstr[3] "כל %1 חודשים"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every year"
+msgid_plural "Every %1 years"
+msgstr[0] "כל שנה"
+msgstr[1] "כל %1 שנים"
+msgstr[2] "כל %1 שנים"
+msgstr[3] "כל %1 שנים"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Couldn't add the task"
+msgstr "לא ניתן להוסיף את המשימה"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Add a task…"
+msgstr "הוספת משימה…"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = task list name"
+msgid "Add a task to %1"
+msgstr "הוספת משימה אל %1"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = task list name"
+msgid "Task list: %1"
+msgstr "רשימת משימות: %1"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "The list new tasks go to"
+msgstr "הרשימה שאליה נכנסות משימות חדשות"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = recognized day, time, …"
+msgid "%1 (not supported by Google Tasks)"
+msgstr "%1 (לא נתמך ב־Google Tasks)"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Not supported by Google Tasks"
+msgstr "לא נתמך ב־Google Tasks"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = the recognized words"
+msgid "Keep \"%1\" in the title"
+msgstr "השארת „%1” בכותרת"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Keep these words in the title"
+msgstr "השארת מילים אלה בכותרת"
+
+#: ../contents/ui/QuickAddView.qml
+msgid "Quick Add"
+msgstr "הוספה מהירה"
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "quick add example"
+msgid "Lunch with Anna tomorrow 13:00"
+msgstr "ארוחת צהריים עם אנה מחר 13:00"
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "The task is due on %1."
+msgstr "תאריך היעד של המשימה הוא %1."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date, %2 = time"
+msgid "The event is added on %1 at %2."
+msgstr "האירוע יתווסף ב־%1 בשעה %2."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "The event is added on %1, all day."
+msgstr "האירוע יתווסף ב־%1, כל היום."
+
+#: ../contents/ui/QuickAddView.qml
+msgid "Type what, when and where. Without a day, the event is added today."
+msgstr "יש להקליד מה, מתי ואיפה. ללא יום, האירוע יתווסף להיום."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "Type what, when and where. Without a day, the event is added on %1."
+msgstr "יש להקליד מה, מתי ואיפה. ללא יום, האירוע יתווסף ב־%1."
+
+#: ../contents/ui/QuickAddView.qml
+msgid "More options…"
+msgstr "אפשרויות נוספות…"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Yes"
+msgstr "כן"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Yes to All Events"
+msgstr "כן לכל האירועים"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Maybe"
+msgstr "אולי"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Maybe to All Events"
+msgstr "אולי לכל האירועים"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "No"
+msgstr "לא"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "No to All Events"
+msgstr "לא לכל האירועים"
+
+#: ../contents/ui/SearchView.qml
+msgid "Search events and tasks…"
+msgstr "חיפוש אירועים ומשימות…"
+
+#: ../contents/ui/SearchView.qml
+msgid "Type to search events and tasks"
+msgstr "יש להקליד כדי לחפש אירועים ומשימות"
+
+#: ../contents/ui/SearchView.qml
+msgid "Searching…"
+msgstr "מחפש…"
+
+#: ../contents/ui/SearchView.qml
+msgid "No events found"
+msgstr "לא נמצאו אירועים"
+
+#: ../contents/ui/SearchView.qml ../contents/ui/UpNextPanel.qml
+msgid "Show more"
+msgstr "הצג עוד"
+
+#: ../contents/ui/SearchView.qml
+msgid "Couldn't search Google Calendar"
+msgstr "לא ניתן לחפש ב־Google Calendar"
+
+#: ../contents/ui/SearchView.qml
+msgid "Searching Google Calendar…"
+msgstr "מחפש ב־Google Calendar…"
+
+#: ../contents/ui/TaskCheck.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Mark as not done"
+msgstr "סימון כלא הושלמה"
+
+#: ../contents/ui/TaskCheck.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Mark as done"
+msgstr "סימון כהושלמה"
+
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+msgid "Couldn't move the task"
+msgstr "לא ניתן להעביר את המשימה"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "task due: %1 = day (Today, Oct 28), %2 = time"
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "%1 = short date"
+msgid "Overdue · due %1"
+msgstr "באיחור · יעד: %1"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Task"
+msgstr "משימה"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Done"
+msgstr "הושלמה"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Not done"
+msgstr "לא הושלמה"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "checklist items done: %1 of %2"
+msgid "%1/%2"
+msgstr "%1/%2"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Hide subtasks"
+msgstr "הסתרת תת־משימות"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Show subtasks"
+msgstr "הצגת תת־משימות"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Due today"
+msgstr "יעד: היום"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Due tomorrow"
+msgstr "יעד: מחר"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "All"
+msgstr "הכול"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "Next 7 days"
+msgstr "7 הימים הבאים"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "Overdue"
+msgstr "באיחור"
+
+#: ../contents/ui/TasksView.qml
+msgid "Couldn't change the list's color"
+msgstr "לא ניתן לשנות את צבע הרשימה"
+
+#: ../contents/ui/TasksView.qml
+msgid "Couldn't clear the completed tasks"
+msgstr "לא ניתן לנקות את המשימות שהושלמו"
+
+#: ../contents/ui/TasksView.qml
+msgid "Tasks can only move to a list of the same account"
+msgstr "ניתן להעביר משימות רק לרשימה באותו חשבון"
+
+#: ../contents/ui/TasksView.qml
+msgid "The task was copied but couldn't be removed from its old list"
+msgstr "המשימה הועתקה אך לא ניתן היה להסיר אותה מהרשימה הקודמת"
+
+#: ../contents/ui/TasksView.qml
+msgid "Hide filters"
+msgstr "הסתרת מסננים"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show filters"
+msgstr "הצגת מסננים"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = tasks filter or list name"
+msgid "Show: %1"
+msgstr "הצגה: %1"
+
+#: ../contents/ui/TasksView.qml
+msgid "By date"
+msgstr "לפי תאריך"
+
+#: ../contents/ui/TasksView.qml
+msgid "By list"
+msgstr "לפי רשימה"
+
+#: ../contents/ui/TasksView.qml
+msgid "View options"
+msgstr "אפשרויות תצוגה"
+
+#: ../contents/ui/TasksView.qml
+msgid "Group by"
+msgstr "קיבוץ לפי"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "Date"
+msgstr "תאריך"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "List"
+msgstr "רשימה"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "None"
+msgstr "ללא"
+
+#: ../contents/ui/TasksView.qml
+msgid "Sort by"
+msgstr "מיון לפי"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Due date"
+msgstr "תאריך יעד"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Title"
+msgstr "כותרת"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "List order"
+msgstr "סדר הרשימה"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Priority"
+msgstr "עדיפות"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show details"
+msgstr "הצגת פרטים"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show completed"
+msgstr "הצגת משימות שהושלמו"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = task list name"
+msgid "Manage %1"
+msgstr "ניהול %1"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = account name"
+msgid "Account: %1"
+msgstr "חשבון: %1"
+
+#: ../contents/ui/TasksView.qml
+msgid "The account the new list goes to"
+msgstr "החשבון שאליו תתווסף הרשימה החדשה"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Red"
+msgstr "אדום"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Orange"
+msgstr "כתום"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Yellow"
+msgstr "צהוב"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Blue"
+msgstr "כחול"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Green"
+msgstr "ירוק"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Indigo"
+msgstr "אינדיגו"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Purple"
+msgstr "סגול"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Gray"
+msgstr "אפור"
+
+#: ../contents/ui/TasksView.qml
+msgid "This week"
+msgstr "השבוע"
+
+#: ../contents/ui/TasksView.qml
+msgid "Later"
+msgstr "מאוחר יותר"
+
+#: ../contents/ui/TasksView.qml
+msgid "No date"
+msgstr "ללא תאריך"
+
+#: ../contents/ui/TasksView.qml
+msgid "Completed"
+msgstr "הושלמו"
+
+#: ../contents/ui/TaskUndoBar.qml
+msgctxt "a task was checked"
+msgid "Completed"
+msgstr "הושלמה"
+
+#: ../contents/ui/TooltipView.qml
+msgctxt "high / low temperature"
+msgid "%1 / %2"
+msgstr "%1 / %2"
+
+#: ../contents/ui/TooltipView.qml
+msgctxt "precipitation in inches"
+msgid "%1 in"
+msgstr "%1 אינץ׳"
+
+#: ../contents/ui/TooltipView.qml ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation in mm"
+msgid "%1 mm"
+msgstr "%1 מ״מ"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Snooze 1 minute"
+msgid_plural "Snooze %1 minutes"
+msgstr[0] "נודניק לדקה"
+msgstr[1] "נודניק ל־%1 דקות"
+msgstr[2] "נודניק ל־%1 דקות"
+msgstr[3] "נודניק ל־%1 דקות"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 15 minutes, %2 = event title"
+msgid "In %1: %2"
+msgstr "בעוד %1: %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "invitation, %1 = organizer"
+msgid "From %1"
+msgstr "מאת %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title"
+msgid "Invitation: %1"
+msgstr "הזמנה: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, %1 = event title"
+msgid "All day: %1"
+msgstr "כל היום: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, more events"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+%1 נוסף"
+msgstr[1] "+%1 נוספים"
+msgstr[2] "+%1 נוספים"
+msgstr[3] "+%1 נוספים"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Today: %1 event"
+msgid_plural "Today: %1 events"
+msgstr[0] "היום: %1 אירוע"
+msgstr[1] "היום: %1 אירועים"
+msgstr[2] "היום: %1 אירועים"
+msgstr[3] "היום: %1 אירועים"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Nothing planned today"
+msgstr "אין תוכניות להיום"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Overdue"
+msgstr "באיחור"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = time"
+msgid "Due today %1"
+msgstr "יעד: היום %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Due today"
+msgstr "יעד: היום"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = time"
+msgid "Due tomorrow %1"
+msgstr "יעד: מחר %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Due tomorrow"
+msgstr "יעד: מחר"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = date (and time)"
+msgid "Due %1"
+msgstr "יעד: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Mark as done"
+msgstr "סימון כהושלמה"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "%1 task due today"
+msgid_plural "%1 tasks due today"
+msgstr[0] "משימה %1 שהיעד שלה היום"
+msgstr[1] "%1 משימות שהיעד שלהן היום"
+msgstr[2] "%1 משימות שהיעד שלהן היום"
+msgstr[3] "%1 משימות שהיעד שלהן היום"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "%1 overdue task"
+msgid_plural "%1 overdue tasks"
+msgstr[0] "משימה %1 באיחור"
+msgstr[1] "%1 משימות באיחור"
+msgstr[2] "%1 משימות באיחור"
+msgstr[3] "%1 משימות באיחור"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "tasks"
+msgid "%1 overdue"
+msgid_plural "%1 overdue"
+msgstr[0] "%1 באיחור"
+msgstr[1] "%1 באיחור"
+msgstr[2] "%1 באיחור"
+msgstr[3] "%1 באיחור"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 3 tasks due today, %2 = 2 overdue"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task summary, more tasks"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+%1 נוספת"
+msgstr[1] "+%1 נוספות"
+msgstr[2] "+%1 נוספות"
+msgstr[3] "+%1 נוספות"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Show Tasks"
+msgstr "הצגת משימות"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = time"
+msgid "tomorrow %1"
+msgstr "מחר %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 3h20m"
+msgid "(in %1)"
+msgstr "(בעוד %1)"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title, %2 = end time"
+msgid "Now: %1, until %2"
+msgstr "עכשיו: %1, עד %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title, %2 = when"
+msgid "Next: %1, %2"
+msgstr "הבא: %1, %2"
+
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "Up next: a day's heading"
+msgid "dddd, d MMM"
+msgstr "dddd, d MMM"
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Up next"
+msgstr "הבא בתור"
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Nothing tomorrow."
+msgid_plural "Nothing in the next %1 days."
+msgstr[0] "אין כלום מחר."
+msgstr[1] "אין כלום ביומיים הקרובים."
+msgstr[2] "אין כלום ב־%1 הימים הקרובים."
+msgstr[3] "אין כלום ב־%1 הימים הקרובים."
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Nothing planned in the coming days."
+msgstr "אין דבר מתוכנן בימים הקרובים."
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Clear"
+msgstr "בהיר"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Mainly clear"
+msgstr "בהיר ברובו"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Partly cloudy"
+msgstr "מעונן חלקית"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Overcast"
+msgstr "מעונן"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Fog"
+msgstr "ערפל"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rime fog"
+msgstr "ערפל קפוא"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light drizzle"
+msgstr "טפטוף קל"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Drizzle"
+msgstr "טפטוף"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy drizzle"
+msgstr "טפטוף כבד"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Freezing drizzle"
+msgstr "טפטוף קופא"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light rain"
+msgstr "גשם קל"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rain"
+msgstr "גשם"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy rain"
+msgstr "גשם כבד"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Freezing rain"
+msgstr "גשם קופא"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light snow"
+msgstr "שלג קל"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow"
+msgstr "שלג"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy snow"
+msgstr "שלג כבד"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow grains"
+msgstr "גרגירי שלג"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rain showers"
+msgstr "ממטרי גשם"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy rain showers"
+msgstr "ממטרי גשם כבדים"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow showers"
+msgstr "ממטרי שלג"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy snow showers"
+msgstr "ממטרי שלג כבדים"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Thunderstorm"
+msgstr "סופת רעמים"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Thunderstorm with hail"
+msgstr "סופת רעמים עם ברד"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Unknown"
+msgstr "לא ידוע"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "%1 = time"
+msgid "Sunrise %1"
+msgstr "זריחה %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "%1 = time"
+msgid "Sunset %1"
+msgstr "שקיעה %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "the sun up all day"
+msgid "Midnight sun"
+msgstr "שמש חצות"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "the sun down all day"
+msgid "Polar night"
+msgstr "לילה קוטבי"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Set a location in Settings > Weather to see the forecast here."
+msgstr "יש להגדיר מיקום בהגדרות > מזג האוויר כדי לראות כאן את התחזית."
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Loading weather…"
+msgstr "מזג האוויר נטען…"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Full forecast on the web"
+msgstr "התחזית המלאה ברשת"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "high / low temperature"
+msgid "High %1 · Low %2"
+msgstr "מרבית %1 · מזערית %2"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation during the day"
+msgid "Rain: %1"
+msgstr "גשם: %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "No forecast for this day."
+msgstr "אין תחזית ליום זה."
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Next hour"
+msgid_plural "Next %1 hours"
+msgstr[0] "השעה הבאה"
+msgstr[1] "השעתיים הבאות"
+msgstr[2] "%1 השעות הבאות"
+msgstr[3] "%1 השעות הבאות"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "weather by hour of the shown day"
+msgid "During the day"
+msgstr "במהלך היום"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation during the hours of the chart"
+msgid "Rain: %1"
+msgstr "גשם: %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Next days"
+msgstr "הימים הבאים"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "%1 = day and time, %2 = event title"
+msgid "Next: %1 · %2"
+msgstr "הבא: %1 · %2"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "the day before today"
+msgid "Yesterday"
+msgstr "אתמול"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "%1 = time zone, %2 = a date"
+msgid ""
+"%1\n"
+"The time difference changes during these days: the hours shown are those of "
+"%2."
+msgstr ""
+"%1\n"
+"הפרש השעות משתנה בימים אלה: השעות המוצגות הן של %2."
+
+#: ../contents/ui/WeekView.qml
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] "יום אחד"
+msgstr[1] "יומיים"
+msgstr[2] "%1 ימים"
+msgstr[3] "%1 ימים"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "more events not shown"
+msgid "+%1"
+msgstr "+%1"
+
+#: ../contents/ui/WeekView.qml
+msgid "No more events today"
+msgstr "אין עוד אירועים היום"
+
+#: ../contents/ui/WorkingLocationLabel.qml
+msgctxt "%1 = Home, Office, ..."
+msgid "Working location: %1"
+msgstr "מיקום עבודה: %1"
+
+#~ msgid "Forecast in the day headers and, in the Day view, a weather panel."
+#~ msgstr "תחזית בכותרות הימים, ובתצוגת יום – חלונית מזג אוויר."
+
+#~ msgid "Day view shows"
+#~ msgstr "תצוגת היום מציגה"
+
+#~ msgid "Meteogram above the agenda"
+#~ msgstr "מטאוגרמה מעל סדר היום"
+
+#~ msgid "The weather forecast chart above the Agenda's list"
+#~ msgstr "תרשים תחזית מזג האוויר מעל רשימת סדר היום"
+
+#~ msgid "Timer above the agenda"
+#~ msgstr "טיימר מעל סדר היום"
+
+#~ msgid "Timer sound"
+#~ msgstr "צליל הטיימר"
+
+#~ msgid "Meteogram / timer height"
+#~ msgstr "גובה המטאוגרמה / הטיימר"
+
+#~ msgid "Also the meteogram above the agenda"
+#~ msgstr "גם המטאוגרמה מעל סדר היום"
+
+#~ msgid "Today's chart in the Day view and the meteogram above the agenda"
+#~ msgstr "התרשים של היום בתצוגת היום והמטאוגרמה מעל סדר היום"
+
+#, no-c-format
+#~ msgid "%1mm"
+#~ msgstr "%1 מ״מ"
+
+#~ msgid ""
+#~ "Weather not configured.\n"
+#~ "Go to Weather in the config and set your city,\n"
+#~ "and/or disable the meteogram to hide this area."
+#~ msgstr ""
+#~ "לא הוגדרה תחזית מזג האוויר.\n"
+#~ "יש לבחור בלשונית מזג האוויר במסך ההגדרה ולבחור את העיר שלך,\n"
+#~ "ו/או להשבית את תחזית מזג האוויר כדי להסתיר את האזור הזה."
+
+#~ msgid "Error fetching weather."
+#~ msgstr "שגיאה במשיכת תחזית מזג האוויר."
+
+#~ msgid "&Start"
+#~ msgstr "ה&תחלה"
+
+#~ msgid "&Cancel"
+#~ msgstr "בי_טול"
+
+#~ msgid "Timer"
+#~ msgstr "טיימר"
+
+#~ msgid "Timer finished"
+#~ msgstr "הטיימר הסתיים"
+
+#~ msgid "%1 has passed"
+#~ msgstr "%1 עבר"
+
+#~ msgid "Repeat"
+#~ msgstr "חזרה"
+
+#~ msgid "Timer, %1 remaining. Activate to pause."
+#~ msgstr "טיימר, נותרו %1. יש להפעיל כדי להשהות."
+
+#~ msgid "Timer, %1 remaining. Activate to start."
+#~ msgstr "טיימר, נותרו %1. יש להפעיל כדי להתחיל."
+
+#~ msgid "Timer set to %1. Use plus or minus to change the duration."
+#~ msgstr ""
+#~ "הטיימר מוגדר ל־%1. ניתן להשתמש בפלוס או במינוס כדי לשנות את משך הזמן."
+
+#~ msgid "Pause Timer"
+#~ msgstr "השהיית הטיימר"
+
+#~ msgid "Start Timer"
+#~ msgstr "התחלת הטיימר"
+
+#~ msgid "Scroll or use plus and minus keys to adjust duration"
+#~ msgstr "ניתן לגלול או להשתמש במקשי הפלוס והמינוס כדי לכוונן את משך הזמן"
+
+#~ msgid "Set Timer"
+#~ msgstr "הגדרת טיימר"
+
+#~ msgctxt "the sun"
+#~ msgid "Up all day (midnight sun)"
+#~ msgstr "מעל האופק כל היום (שמש חצות)"
+
+#~ msgctxt "the sun"
+#~ msgid "Down all day (polar night)"
+#~ msgstr "מתחת לאופק כל היום (לילה קוטבי)"
+
+#~ msgid "Skipped %1 setting this version doesn't have: %2"
+#~ msgid_plural "Skipped %1 settings this version doesn't have: %2"
+#~ msgstr[0] "דולגה הגדרה %1 שאין בגרסה זו: %2"
+#~ msgstr[1] "דולגו %1 הגדרות שאין בגרסה זו: %2"
+#~ msgstr[2] "דולגו %1 הגדרות שאין בגרסה זו: %2"
+#~ msgstr[3] "דולגו %1 הגדרות שאין בגרסה זו: %2"
+
+#~ msgid ""
+#~ "Not selected now: %1. Select them on the PIM Events Plugin page of the "
+#~ "Digital Clock's settings."
+#~ msgstr ""
+#~ "לא נבחרו כעת: %1. בחרו אותם בעמוד PIM Events Plugin בהגדרות השעון "
+#~ "הדיגיטלי."
+
+#~ msgid "All the calendars Akonadi has now are selected."
+#~ msgstr "כל לוחות השנה שיש כעת ב־Akonadi נבחרו."
+
+#~ msgid ""
+#~ "Shown read-only. Which Akonadi calendars are shown is set on the PIM "
+#~ "Events Plugin page of the Digital Clock's settings (the plugin itself is "
+#~ "turned on in Calendars > Plasma calendars). In the popup's calendar menu "
+#~ "they are shown and hidden by color: calendars of one color together. The "
+#~ "Google calendars of an account signed in here are listed above, with the "
+#~ "account."
+#~ msgstr ""
+#~ "מוצגים לקריאה בלבד. אילו לוחות שנה של Akonadi מוצגים נקבע בעמוד תוסף "
+#~ "אירועי ה־PIM בהגדרות השעון הדיגיטלי (התוסף עצמו מופעל ב־לוחות שנה > לוחות "
+#~ "שנה של Plasma). בתפריט לוחות השנה של החלון הקופץ הם מוצגים ומוסתרים לפי "
+#~ "צבע: לוחות שנה באותו צבע יחד. לוחות השנה של Google של חשבון שמחובר כאן "
+#~ "מופיעים למעלה, יחד עם החשבון."
+
+#~ msgid "ICalendar (.ics)"
+#~ msgstr "ICalendar (.ics)"
+
+#~ msgid ""
+#~ "Reading .ics files needs the Python icalendar module (python-icalendar)."
+#~ msgstr ""
+#~ "קריאת קובצי ‎.ics דורשת את מודול ה־Python‏ icalendar ‏(python-icalendar)."
+
+#~ msgid ""
+#~ "Before you join a meeting with a video link: your camera, the "
+#~ "microphone's level and sensitivity, hearing yourself, and the speaker. "
+#~ "Nothing is recorded; they're on only while the alert is shown."
+#~ msgstr ""
+#~ "לפני הצטרפות לפגישה עם קישור וידאו: המצלמה, רמת המיקרופון ורגישותו, שמיעה "
+#~ "עצמית והרמקול. שום דבר לא מוקלט; הם פועלים רק כל עוד ההתראה מוצגת."
+
+#~ msgid "Full screen only for meetings with a video link"
+#~ msgstr "מסך מלא רק לפגישות עם קישור וידאו"
+
+#~ msgid "Show the camera"
+#~ msgstr "הצגת המצלמה"
+
+#~ msgid ""
+#~ "How you look before you join, for meetings with a video link. Nothing is "
+#~ "recorded; the camera is on only while the alert is shown."
+#~ msgstr ""
+#~ "איך את/ה נראה/ית לפני ההצטרפות, לפגישות עם קישור וידאו. שום דבר לא מוקלט; "
+#~ "המצלמה פועלת רק כל עוד ההתראה מוצגת."
+
+#~ msgid ""
+#~ "Nothing is saved. The camera and the microphone are used only while this "
+#~ "is open; a microphone test is kept in memory until it's played."
+#~ msgstr ""
+#~ "שום דבר לא נשמר. המצלמה והמיקרופון בשימוש רק כל עוד זה פתוח; בדיקת "
+#~ "מיקרופון נשמרת בזיכרון עד שהיא מושמעת."
+
+#~ msgid "Test: record %1 seconds and play them back"
+#~ msgstr "בדיקה: הקלטה של %1 שניות והשמעתן"
+
+#~ msgid "Recording… speak now"
+#~ msgstr "מקליט… אפשר לדבר"
+
+#~ msgid "Playing back…"
+#~ msgstr "משמיע…"
+
+#~ msgid "New Event…"
+#~ msgstr "אירוע חדש…"
+
+#~ msgid "Go to Date…"
+#~ msgstr "מעבר לתאריך…"
+
+#~ msgid "Import Events…"
+#~ msgstr "ייבוא אירועים…"
+
+#~ msgid "Open Google Calendar"
+#~ msgstr "פתיחת Google Calendar"
+
+#~ msgid "Copy Date and Time"
+#~ msgstr "העתקת התאריך והשעה"
+
+#~ msgid ""
+#~ "Google authorization expired or was revoked. Open Event Calendar Settings "
+#~ "> Google Calendar and sign in to that account again."
+#~ msgstr ""
+#~ "ההרשאה ל־Google פגה או נשללה. יש לפתוח את הגדרות לוח שנה עם אירועים > "
+#~ "Google Calendar ולהיכנס שוב לחשבון הזה."
+
+#~ msgid ""
+#~ "Shown read-only. Which Akonadi calendars are shown is set on the PIM "
+#~ "Events Plugin page of the Digital Clock's settings (the plugin itself is "
+#~ "turned on in Events > Plasma calendars). In the popup's calendar menu "
+#~ "they are shown and hidden by color: calendars of one color together. The "
+#~ "Google calendars of an account signed in here are listed above, with the "
+#~ "account."
+#~ msgstr ""
+#~ "מוצגים לקריאה בלבד. אילו לוחות שנה של Akonadi מוצגים נקבע בעמוד תוסף "
+#~ "אירועי ה־PIM בהגדרות השעון הדיגיטלי (התוסף עצמו מופעל ב־אירועים > לוחות "
+#~ "שנה של Plasma). בתפריט לוחות השנה של החלון הקופץ הם מוצגים ומוסתרים לפי "
+#~ "צבע: לוחות שנה באותו צבע יחד. לוחות השנה של Google של חשבון שמחובר כאן "
+#~ "מופיעים למעלה, יחד עם החשבון."
+
+#~ msgctxt "%1 = a few event titles"
+#~ msgid "Akonadi calendar: %1"
+#~ msgstr "לוח שנה של Akonadi: %1"
+
+#~ msgid ""
+#~ "Shown read-only. Which Akonadi calendars are shown is set on the settings "
+#~ "page of the PIM events plugin (Events > Plasma calendars). In the popup's "
+#~ "calendar menu they are shown and hidden by color: calendars of one color "
+#~ "together. The Google calendars of an account signed in here are listed "
+#~ "above, with the account."
+#~ msgstr ""
+#~ "מוצגים לקריאה בלבד. אילו לוחות שנה של Akonadi מוצגים נקבע בעמוד ההגדרות "
+#~ "של תוסף אירועי ה־PIM (אירועים > לוחות שנה של Plasma). בתפריט לוחות השנה "
+#~ "של החלון הקופץ הם מוצגים ומוסתרים לפי צבע: לוחות שנה באותו צבע יחד. לוחות "
+#~ "השנה של Google של חשבון שמחובר כאן מופיעים למעלה, יחד עם החשבון."
+
+#~ msgctxt "number of days"
+#~ msgid " days"
+#~ msgstr " ימים"
+
+#~ msgid "Up next lists"
+#~ msgstr "הבא מציג"
+
+#~ msgid "0 = as many as fit; the rest under \"Show more\""
+#~ msgstr "0 = כמה שנכנסים; השאר תחת „הצג עוד”"
+
+#~ msgctxt "number of events"
+#~ msgid " events"
+#~ msgstr " אירועים"
+
+#~ msgid "Meteogram shows"
+#~ msgstr "המטאוגרמה מציגה"
+
+#~ msgid ""
+#~ "Shown read-only. Which Akonadi calendars are shown is set on the settings "
+#~ "page of the PIM events plugin (Events > Plasma calendars). In the popup's "
+#~ "calendar menu they are one entry."
+#~ msgstr ""
+#~ "מוצגים לקריאה בלבד. אילו יומני Akonadi מוצגים נקבע בדף ההגדרות של תוסף "
+#~ "אירועי PIM (אירועים > יומני Plasma). בתפריט היומנים של החלון הקופץ הם "
+#~ "רשומה אחת."
+
+#~ msgid "Next 12 hours"
+#~ msgstr "12 השעות הבאות"
+
+#~ msgid "Task list shown"
+#~ msgstr "רשימת המשימות המוצגת"
+
+#~ msgctxt "%1 = Google Meet, Zoom, ..., %2 = event title, %3 = when"
+#~ msgid "Join %1: %2 (%3)"
+#~ msgstr "הצטרפות ל־%1: %2 (%3)"
+
+#~ msgctxt "%1 = event title"
+#~ msgid "Mark “%1” as Ended"
+#~ msgstr "סימון “%1” כהסתיים"
+
+#~ msgid "Open Agenda"
+#~ msgstr "פתיחת סדר היום"
+
+#~ msgid "Event Calendar"
+#~ msgstr "לוח שנה עם אירועים"
+
+#~ msgctxt "%1 = event title"
+#~ msgid "Delete “%1”"
+#~ msgstr "מחיקת “%1”"
+
+#~ msgid "Full-screen alert when a meeting starts"
+#~ msgstr "התראה במסך מלא כשפגישה מתחילה"
+
+#~ msgid ""
+#~ "On every screen, with Join, Snooze 1 min and Dismiss (Esc), instead of "
+#~ "the notification when it starts. Not for muted events."
+#~ msgstr ""
+#~ "בכל מסך, עם הצטרפות, נודניק דקה וסגירה (Esc), במקום ההתראה בתחילתה. לא "
+#~ "לאירועים מושתקים."
+
+#~ msgid ""
+#~ "On every screen, with Join, Snooze 1 min and Dismiss (Esc). Not for muted "
+#~ "events."
+#~ msgstr "בכל מסך, עם הצטרפות, נודניק דקה וסגירה (Esc). לא לאירועים מושתקים."
+
+#~ msgctxt "%1 = event title, %2 = in 5 min / 12 min left"
+#~ msgid "%1 · %2"
+#~ msgstr "%1 · %2"
+
+#~ msgid "View switcher in the header"
+#~ msgstr "בורר תצוגות בכותרת"
+
+#~ msgctxt "calendar title format for current month"
+#~ msgid "MMMM d, yyyy"
+#~ msgstr "ה־d MMMM, yyyy"
+
+#~ msgctxt "calendar title format for other months of current year"
+#~ msgid "MMMM"
+#~ msgstr "MMMM"
+
+#~ msgctxt "calendar title format for months not from current year"
+#~ msgid "MMMM, yyyy"
+#~ msgstr "MMMM, yyyy"
+
+#~ msgid "Not in progress"
+#~ msgstr "לא בתהליך"
+
+#~ msgctxt "%1 = date"
+#~ msgid "%1, has events"
+#~ msgstr "%1, יש אירועים"
+
+#~ msgid "Sounds"
+#~ msgstr "צלילים"
+
+#~ msgid "Reminder"
+#~ msgstr "תזכורת"
+
+#~ msgid "Event starts"
+#~ msgstr "תחילת אירוע"
+
+#~ msgid "Google Meet"
+#~ msgstr "Google Meet"
+
+#~ msgid "Open meeting links in"
+#~ msgstr "פתיחת קישורי פגישות ב"
+
+#~ msgid "Invitations"
+#~ msgstr "הזמנות"
+
+#~ msgid "Daily Agenda"
+#~ msgstr "סדר היום היומי"
+
+#~ msgid "All Event Notifications"
+#~ msgstr "כל התראות האירועים"
+
+#~ msgid "In the notification when a meeting starts."
+#~ msgstr "בהתראה כשפגישה מתחילה."
+
+#~ msgid "Popup width"
+#~ msgstr "רוחב החלון הקופץ"
+
+#~ msgid "Popup height"
+#~ msgstr "גובה החלון הקופץ"
+
+#~ msgid "Working hours start"
+#~ msgstr "תחילת שעות העבודה"
+
+#~ msgid "Working hours end"
+#~ msgstr "סוף שעות העבודה"
+
+#~ msgctxt "today's high / low temperature"
+#~ msgid "Today: high %1, low %2"
+#~ msgstr "היום: מרבית %1, מזערית %2"
+
+#~ msgctxt "precipitation"
+#~ msgid "rain %1"
+#~ msgstr "גשם %1"
+
+#~ msgctxt "current weather"
+#~ msgid "Now"
+#~ msgstr "עכשיו"
+
+#~ msgctxt "weather of the day shown in the Day view"
+#~ msgid "Forecast"
+#~ msgstr "תחזית"
+
+#~ msgid "Search events…"
+#~ msgstr "חיפוש אירועים…"
+
+#~ msgid "Type to search event titles, places and descriptions"
+#~ msgstr "יש להקליד כדי לחפש בכותרות, במיקומים ובתיאורים של אירועים"
+
+#~ msgctxt "%1 = task list name"
+#~ msgid "New task in %1"
+#~ msgstr "משימה חדשה ב־%1"
+
+#~ msgid "Done managing lists"
+#~ msgstr "סיום ניהול רשימות"
+
+#~ msgid "Done managing lists (shows the tasks by date)"
+#~ msgstr "סיום ניהול רשימות (מציג את המשימות לפי תאריך)"
+
+#~ msgid "Manage lists (shows the tasks by list)"
+#~ msgstr "ניהול רשימות (מציג את המשימות לפי רשימה)"
+
+#~ msgid "Hide completed tasks"
+#~ msgstr "הסתרת משימות שהושלמו"
+
+#~ msgid "Show completed tasks"
+#~ msgstr "הצגת משימות שהושלמו"
+
+#~ msgid ""
+#~ "Islands: the Day view's panels, the agenda days and the task sections "
+#~ "each sit in a rounded card."
+#~ msgstr ""
+#~ "איים: הלוחות של תצוגת היום, ימי סדר היום וקטעי המשימות נמצאים כל אחד "
+#~ "בכרטיס מעוגל."
+
+#~ msgid "Due %1"
+#~ msgstr "יעד: %1"
+
+#~ msgctxt "%1 is a date, %2 a time"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgctxt "%1 is a date"
+#~ msgid "Due %1"
+#~ msgstr "יעד: %1"
+
+#~ msgid "Delete Event"
+#~ msgstr "מחיקת האירוע"
+
+#~ msgid "Confirm Deletion"
+#~ msgstr "אישור מחיקה"
+
+#~ msgid "Edit in browser"
+#~ msgstr "עריכה בדפדפן"
+
+#~ msgid "Event Title"
+#~ msgstr "כותרת האירוע"
+
+#~ msgid "Add description"
+#~ msgstr "הוספת תיאור"
+
+#~ msgid "Add due date"
+#~ msgstr "הוספת תאריך יעד"
+
+#~ msgid "&Save"
+#~ msgstr "&שמירה"

@@ -124,6 +124,12 @@ ConfigPage {
 				]
 			}
 			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("Animations")
+				description: i18n("Views slide and fade in, cards open, the small month's days ease.")
+				configKey: 'animationsEnabled'
+			}
+			FormCard.FormDelegateSeparator {}
 			FormConfigCombo {
 				text: i18n("Event look")
 				configKey: 'eventLook'
@@ -327,6 +333,22 @@ ConfigPage {
 					}
 				}
 			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSpin {
+				label: i18n("Up next shows")
+				hint: i18n("The days after the shown one; later ones under \"Show more\"")
+				configKey: 'dayUpNextDays'
+				// The unit as the number asks for it (1 day, 2 days; in Polish 1 dzień, 2 dni, 5 dni).
+				unitFor: function(n) { return i18ncp("number of days, after the number", "day", "days", n) }
+				from: 1
+				to: 30
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("All-day events side by side")
+				description: i18n("In the Day view, three or more all-day events take a third of the width each, three in a row. Hovering one shows it in full.")
+				configKey: 'dayAllDayTiles'
+			}
 		}
 
 		//--- Agenda (classic mode only)
@@ -400,6 +422,17 @@ ConfigPage {
 				text: i18n("Keep events and tasks for offline start")
 				description: i18n("The last loaded events and tasks (no descriptions or notes) are stored in ~/.cache/plasma-eventcalendar and shown until the first refresh. Off: nothing is stored, and the stored copy is deleted.")
 				configKey: 'eventCacheEnabled'
+			}
+		}
+
+		//--- Troubleshooting
+		FormCard.FormHeader {
+			title: i18n("Troubleshooting")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				text: i18n("Debug logging and extra settings pages")
+				configKey: 'debugging'
 			}
 		}
 	}

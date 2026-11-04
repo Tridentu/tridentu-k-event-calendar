@@ -204,6 +204,10 @@ KCM.SimpleKCM {
 	property var cfg_clockNextEventSkipAllDayDefault
 	property var cfg_hideDuplicateEvents
 	property var cfg_hideDuplicateEventsDefault
+	property var cfg_meetingStartCommand
+	property var cfg_meetingStartCommandDefault
+	property var cfg_meetingEndCommand
+	property var cfg_meetingEndCommandDefault
 	property var cfg_meetingFullScreenAlert
 	property var cfg_meetingFullScreenAlertDefault
 	property var cfg_meetingFullScreenAlertLinkOnly
@@ -276,6 +280,10 @@ KCM.SimpleKCM {
 	property var cfg_eventLookDefault
 	property var cfg_uiStyle
 	property var cfg_uiStyleDefault
+	property var cfg_animationsEnabled
+	property var cfg_dayUpNextDays
+	property var cfg_dayUpNextDaysDefault
+	property var cfg_animationsEnabledDefault
 	property var cfg_googleColorPalette
 	property var cfg_googleColorPaletteDefault
 	property var cfg_googleHideGoalsDesc
@@ -284,6 +292,8 @@ KCM.SimpleKCM {
 	property var cfg_access_tokenDefault
 	property var cfg_openWeatherMapAppId
 	property var cfg_openWeatherMapAppIdDefault
+	property var cfg_openWeatherMapApi
+	property var cfg_openWeatherMapApiDefault
 	property var cfg_openWeatherMapCityId
 	property var cfg_openWeatherMapCityIdDefault
 	property var cfg_weatherCanadaCityId
@@ -292,6 +302,16 @@ KCM.SimpleKCM {
 	property var cfg_weatherServiceDefault
 	property var cfg_weatherUnits
 	property var cfg_weatherUnitsDefault
+	property var cfg_weatherIconStyle
+	property var cfg_weatherIconStyleDefault
+	property var cfg_weatherIconBackground
+	property var cfg_weatherIconBackgroundDefault
+	property var cfg_weatherChartStyle
+	property var cfg_weatherChartStyleDefault
+	property var cfg_weatherChartLargeIcons
+	property var cfg_weatherChartLargeIconsDefault
+	property var cfg_weatherChartRainAmounts
+	property var cfg_weatherChartRainAmountsDefault
 	property var cfg_meteogramHours
 	property var cfg_meteogramHoursDefault
 	property var cfg_eventCacheEnabled

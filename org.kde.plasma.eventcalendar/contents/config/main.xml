@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+	<kcfgfile name=""/>
+
+
+	<group name="General">
+		<entry name="debugging" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="pin" type="Bool">
+			<label>Whether the popup should remain open when another window is activated</label>
+			<default>false</default>
+		</entry>
+		<entry name="clockFontFamily" type="string">
+			<default></default>
+		</entry>
+		<entry name="clockTimeFormat1" type="string">
+			<!-- For Testing:  '&lt;font color="#888"&gt;'ddd'&lt;&gt;'d'&lt;/font&gt;' h:m:s'&lt;'AP'&gt;' -->
+			<default></default>
+		</entry>
+		<entry name="clockTimeFormat2" type="string">
+			<default></default>
+		</entry>
+		<entry name="clockShowLine2" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clockLine2HeightRatio" type="double">
+			<default>0.4</default>
+		</entry>
+		<entry name="clockLineBold1" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clockLineBold2" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="clockMaxHeight" type="int">
+			<default>0</default>
+		</entry>
+		<entry name="clockMouseWheel" type="string">
+			<default>RunCommands</default>
+		</entry>
+		<entry name="clockMouseWheelUp" type="string">
+			<default>dbus-send --session --type=method_call --dest=org.kde.kglobalaccel /component/kmix org.kde.kglobalaccel.Component.invokeShortcut string:increase_volume</default>
+		</entry>
+		<entry name="clockMouseWheelDown" type="string">
+			<default>dbus-send --session --type=method_call --dest=org.kde.kglobalaccel /component/kmix org.kde.kglobalaccel.Component.invokeShortcut string:decrease_volume</default>
+		</entry>
+		<entry name="showBackground" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="popupMode" type="string">
+			<!-- classic: agenda + calendar widgets. month: full month view with event titles, like mobile calendar apps. week: week view. today: one day. -->
+			<default>month</default>
+		</entry>
+		<entry name="popupOpenLastView" type="bool">
+			<!-- true: the popup opens in the view used last (popupLastView) instead of popupMode -->
+			<default>false</default>
+		</entry>
+		<entry name="popupLastView" type="string">
+			<!-- The view shown last, kept with popupOpenLastView (set by the popup, not in Settings: no cfg_ property on the pages, Apply would write back a stale value) -->
+			<default></default>
+		</entry>
+		<entry name="showViewTabs" type="bool">
+			<!-- Before 1.8.2: false hid the view switcher; now migrated to viewSwitcher = menu -->
+			<default>true</default>
+		</entry>
+		<entry name="hiddenHeaderButtons" type="StringList">
+			<!-- Action buttons left out of the popup header (a right click on it; no cfg_ property on the settings pages): calendars, search, new, refresh, configure -->
+			<default></default>
+		</entry>
+		<entry name="viewSwitcher" type="string">
+			<!-- tabs: a button per view; menu: one button with the view shown, the others in its menu -->
+			<default>tabs</default>
+		</entry>
+		<entry name="hiddenViewTabs" type="StringList">
+			<!-- Views left out of the header's view switcher: month, week, today, classic, tasks -->
+			<default></default>
+		</entry>
+		<entry name="eventFontScale" type="int">
+			<!-- Event text size in the views, percent of the theme font. -->
+			<default>100</default>
+		</entry>
+		<entry name="weekViewWorkWeek" type="bool">
+			<!-- Week view: only the locale's working days (Monday to Friday), in week order. -->
+			<default>false</default>
+		</entry>
+		<entry name="weekViewStartHour" type="int">
+			<default>7</default>
+		</entry>
+		<entry name="weekViewEndHour" type="int">
+			<default>20</default>
+		</entry>
+		<entry name="weekViewSecondTimeZone" type="String">
+			<!-- Week and Day views: hour labels of a second time zone (IANA id) in the hour column. Empty: none. -->
+			<default></default>
+		</entry>
+		<entry name="monthModeWidth" type="uint">
+			<default>700</default>
+		</entry>
+		<entry name="monthModeHeight" type="uint">
+			<default>600</default>
+		</entry>
+		<entry name="rightColumnWidth" type="uint">
+			<default>400</default>
+		</entry>
+		<!-- Added in: v73 -->
+		<entry name="v182Migration" type="bool">
+			<!-- 1.8.2: showViewTabs false => viewSwitcher menu, once -->
+			<default>false</default>
+		</entry>
+		<entry name="v73Migration" type="bool">
+			<default>false</default>
+		</entry>
+		<!-- Deprecated in: v72 -->
+		<entry name="v72Migration" type="bool">
+			<default>false</default>
+		</entry>
+		<!-- Removed in: v71
+		-->
+		<!-- Removed in: v33
+		-->
+	</group>
+
+	<group name="Tooltip">
+		<entry name="timezoneNames" type="string" stringType="base64json">
+			<!-- Own names of the tooltip's time zones: { "America/New_York": "Boston" } (#17). -->
+			<default></default>
+		</entry>
+		<entry name="selectedTimeZones" type="StringList">
+			<label>A list of the time zones available on mouse wheel. Requires wheelChangesTimezone to be true. Format is "Europe/London". Special entry "Local" indicates system time zone.</label>
+			<default>Local</default>
+		</entry>
+		<entry name="displayTimezoneAsCode" type="Bool">
+			<label>Whether the timezone is displayed as a code i.e. "GMT" or full text i.e. "London".</label>
+			<default>true</default>
+		</entry>
+	</group>
+	
+	<group name="Calendar">
+		<entry name="monthShowWeekNumbers" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="monthDayDoubleClick" type="string">
+			<default>GoogleCalWeb</default>
+		</entry>
+		<entry name="monthEventBadgeType" type="string">
+			<default>theme</default>
+		</entry>
+		<entry name="firstDayOfWeek" type="int">
+			<!-- Enum: -1 = Locale default, 0=Sunday, 1=Monday, ..., 6=Saturday -->
+			<default>-1</default>
+		</entry>
+	</group>
+
+	<group name="Agenda">
+		<entry name="agendaBreakupMultiDayEvents" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="agendaNewEventRememberCalendar" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaNewEventLastCalendarId" type="string">
+			<default></default>
+		</entry>
+		<entry name="agendaMaxDescriptionLines" type="uint">
+			<default>5</default>
+		</entry>
+		<entry name="agendaShowEventDescription" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaShowEventHangoutLink" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaCondensedAllDayEvent" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="agendaPlaceOverdueTasksOnToday" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="dayTasksListId" type="string">
+			<!-- Day view: the task list shown ("" = all selected lists). -->
+			<default></default>
+		</entry>
+		<entry name="dayTasksScope" type="string">
+			<!-- Day view: the tasks shown: 'day' (due that day, and on today the overdue ones) or 'all' (every open task, in progress apart). -->
+			<default>day</default>
+		</entry>
+		<entry name="tasksSmartHiddenLists" type="StringList">
+			<!-- Tasks view: lists left out of the smart filters (All, Today, ...), shown only on their own (like TickTick's "Someday"). -->
+			<default></default>
+		</entry>
+		<entry name="tasksInProgress" type="StringList">
+			<!-- Tasks marked "in progress" in the widget (Tasks.progressKey: "calendarId|taskId"); the services have no such state. -->
+			<default></default>
+		</entry>
+		<entry name="tasksSidebarCollapsed" type="bool">
+			<!-- Tasks view: the filters' side bar folded away (the header's filter button instead). -->
+			<default>false</default>
+		</entry>
+		<entry name="tasksShowCompleted" type="bool">
+			<!-- Tasks view: the done tasks (at the bottom of each list; islands: the Completed card). -->
+			<default>true</default>
+		</entry>
+		<entry name="tasksGroupBy" type="string">
+			<!-- Tasks view: 'date' (Overdue, Today, Tomorrow, This week, Later, No date), 'list' or 'none'. -->
+			<default>date</default>
+		</entry>
+		<entry name="tasksFilter" type="string">
+			<!-- Tasks view: the tasks shown: 'all', 'today', 'tomorrow', 'next7', 'overdue', 'nodate' or 'list:<id>'. -->
+			<default>all</default>
+		</entry>
+		<entry name="tasksSortBy" type="string">
+			<!-- Tasks view: the order within a section: 'due', 'title' or 'list'. -->
+			<default>due</default>
+		</entry>
+		<entry name="tasksShowDetails" type="bool">
+			<!-- Tasks view: the first line of the notes, and each task's list. -->
+			<default>true</default>
+		</entry>
+		<entry name="tasksSmartQuickAdd" type="bool">
+			<!-- "Add a task…" recognizes the day, time, priority (!high), list (#Name) and repeat in the text. -->
+			<default>true</default>
+		</entry>
+		<entry name="tasksLastListId" type="string">
+			<!-- The task list "Add a task…" last added to, where no list is given (Day view, by date). -->
+			<default></default>
+		</entry>
+	</group>
+
+
+	<group name="Events">
+		<entry name="eventsPollInterval" type="uint">
+			<default>10</default>
+		</entry>
+		<entry name="eventCacheEnabled" type="bool">
+			<!-- Keep the last loaded events and tasks in ~/.cache/plasma-eventcalendar for an offline start. -->
+			<default>true</default>
+		</entry>
+		<entry name="importRequest" type="string">
+			<!-- Settings > ICalendar > Import: "<time>|<file url>", the widget opens its import card for it (not a setting to keep) -->
+			<default></default>
+		</entry>
+		<entry name="caldavAccounts" type="string" stringType="base64json">
+			<!-- CalDAV accounts (Settings > CalDAV): [{ id, label, url, username, calendars: [{ href, name, color, writable, selected, userColor }] }]; passwords in the keyring -->
+			<default></default>
+		</entry>
+		<entry name="icalCalendarList" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+		<entry name="eventReminderNotificationEnabled" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventReminderSfxEnabled" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="eventReminderSfxPath" type="string">
+			<default>/usr/share/sounds/ocean/stereo/message-new-instant.oga</default>
+		</entry>
+		<entry name="eventReminderMinutesBefore" type="int">
+			<default>15</default>
+		</entry>
+		<entry name="eventStartingNotificationEnabled" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventStartingSfxEnabled" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventStartingSfxPath" type="string">
+			<default>/usr/share/sounds/ocean/stereo/message-new-instant.oga</default>
+		</entry>
+		<entry name="meetLinkCommand" type="string">
+			<!-- Command that opens Google Meet links (%u = the link), eg: a Meet web app. Empty: the default browser. -->
+			<default></default>
+		</entry>
+		<entry name="meetLinkAuthUser" type="string">
+			<!-- Google account to join Meet with: index (0, 1, ...) or email. Empty: the app's default. -->
+			<default></default>
+		</entry>
+		<entry name="invitationNotificationEnabled" type="bool">
+			<!-- Notify about unanswered invitations for today, with Yes / Maybe / No. -->
+			<default>true</default>
+		</entry>
+		<entry name="invitationsNotified" type="StringList">
+			<!-- "day|calendar|event|start" of invitations notified today, so they aren't repeated. -->
+			<default></default>
+		</entry>
+		<entry name="meetingPauseMedia" type="bool">
+			<!-- Pause the media players that are playing (MPRIS) when joining a meeting -->
+			<default>true</default>
+		</entry>
+		<entry name="meetingAutoJoin" type="bool">
+			<!-- Open the meeting link when a meeting (accepted or own, timed) starts. -->
+			<default>false</default>
+		</entry>
+		<entry name="meetingDoNotDisturb" type="bool">
+			<!-- Plasma's Do Not Disturb until a meeting's end, at its start (see FocusMode.qml). -->
+			<default>false</default>
+		</entry>
+		<entry name="meetingDoNotDisturbAcceptedOnly" type="bool">
+			<!-- Do Not Disturb only for meetings accepted or organized (else any not declined). -->
+			<default>true</default>
+		</entry>
+		<entry name="cameraDevice" type="string">
+			<!-- The camera check's camera, by its description (empty: the system default; see CameraMirror.qml). -->
+			<default></default>
+		</entry>
+		<entry name="cameraMirrored" type="bool">
+			<!-- The camera check shows the camera as a mirror. -->
+			<default>true</default>
+		</entry>
+		<entry name="dailyAgendaEnabled" type="bool">
+			<!-- A notification with today's events once a day (see DailyAgenda.js). -->
+			<default>false</default>
+		</entry>
+		<entry name="dailyAgendaTime" type="int">
+			<!-- When the daily agenda is shown: minutes since midnight. -->
+			<default>480</default>
+		</entry>
+		<entry name="dailyAgendaDay" type="string">
+			<!-- "yyyy-m-d" of the last daily agenda shown, so it's shown once a day. -->
+			<default></default>
+		</entry>
+		<entry name="dailyAgendaTasks" type="bool">
+			<!-- The daily agenda also lists today's and overdue open tasks. -->
+			<default>true</default>
+		</entry>
+		<entry name="taskRemindersEnabled" type="bool">
+			<!-- Notifications for tasks: their own reminders (due time, TickTick reminders), and the tasks of the day at the daily agenda time. -->
+			<default>true</default>
+		</entry>
+		<entry name="taskSummaryDay" type="string">
+			<!-- "yyyy-m-d" of the last morning task summary, so it's shown once a day. -->
+			<default></default>
+		</entry>
+		<entry name="clockShowNextEvent" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="clockNextEventMinutes" type="int">
+			<default>15</default>
+		</entry>
+		<entry name="clockNextEventSkipAllDay" type="bool">
+			<!-- All-day events (holidays, out of office) never take the chip; they stay in the agenda -->
+			<default>true</default>
+		</entry>
+		<entry name="clockNextEventLinkOnly" type="bool">
+			<!-- Only events with a meeting link (a video call) take the chip -->
+			<default>false</default>
+		</entry>
+		<entry name="clockNextEventAcceptedOnly" type="bool">
+			<!-- Invitations not accepted (maybe, not answered) never take the chip -->
+			<default>false</default>
+		</entry>
+		<entry name="clockNextEventMaxTitle" type="int">
+			<!-- The chip's title, at most this many characters (0: as much as fits) -->
+			<default>0</default>
+		</entry>
+		<entry name="meetingStartCommand" type="string">
+			<!-- Run when a meeting starts: sh -c; $1 title, $2 meeting link, $3 start, $4 end (ISO) -->
+			<default></default>
+		</entry>
+		<entry name="meetingEndCommand" type="string">
+			<!-- Run when it ends (or is marked as ended); the same arguments -->
+			<default></default>
+		</entry>
+		<entry name="meetingFullScreenAlert" type="bool">
+			<!-- The notification when an event starts, full screen (every screen) with Join, Snooze 1 min, Dismiss (eventStartingNotificationEnabled on) -->
+			<default>false</default>
+		</entry>
+		<entry name="meetingFullScreenAlertLinkOnly" type="bool">
+			<!-- Full screen only for meetings with a video link (other events: a notification) -->
+			<default>true</default>
+		</entry>
+		<entry name="meetingAlertCamera" type="bool">
+			<!-- The full-screen alert shows the camera as a mirror (CameraMirror.qml), on the first screen. -->
+			<default>false</default>
+		</entry>
+		<entry name="hideDuplicateEvents" type="bool">
+			<!-- The same event in two calendars (same iCalUID and start) shown once -->
+			<default>true</default>
+		</entry>
+		<entry name="mutedEventKeys" type="StringList">
+			<!-- Events muted from the event menu (calendarId|id|start ms): no notifications, no clock chip, no auto-join or full-screen alert; still in the views. Set from the popup: no cfg_ property on the settings pages. -->
+			<default></default>
+		</entry>
+		<entry name="clockHiddenCalendarIds" type="StringList">
+			<!-- Calendars whose events never take the chip (clock icon in the header calendars menu).
+			     They still show in the views and still send reminders. Set from the popup: no cfg_
+			     property on the settings pages (Apply would write back a stale list). -->
+			<default></default>
+		</entry>
+		<entry name="clockShowMeetingProgress" type="bool">
+			<!-- A progress bar under the next meeting chip while the meeting is on -->
+			<default>true</default>
+		</entry>
+		<entry name="monthClickOpensDay" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="glanceShareEvents" type="bool">
+			<!-- Today's and tomorrow's events sent to the Glance panel widget over D-Bus (GlancePublisher); off by default: opt in -->
+			<default>false</default>
+		</entry>
+		<entry name="showDeclinedEvents" type="bool">
+			<!-- Events the user declined: shown struck through (true) or left out of the views (false) -->
+			<default>true</default>
+		</entry>
+		<entry name="hiddenCalendarIds" type="StringList">
+			<!-- Calendars hidden in the popup's views (header calendars menu). A view filter only:
+			     their events are still fetched, and reminders still come. -->
+			<default></default>
+		</entry>
+		<entry name="eventClickAction" type="string">
+			<!-- details: event details in the widget. browser: open in Google Calendar. -->
+			<default>details</default>
+		</entry>
+		<entry name="eventReminderUseGoogle" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventReminderTimeout" type="int">
+			<!-- Reminders: 0 = keep until dismissed, N > 0 = hide after N seconds,
+			     -1 = Plasma's popup timeout (System Settings > Notifications). -->
+			<default>-1</default>
+		</entry>
+		<entry name="eventReminderSnoozeMinutes" type="int">
+			<!-- 0 = no Snooze button. -->
+			<default>5</default>
+		</entry>
+		<entry name="eventStartingPersistent" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventStartingCritical" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="eventNotificationActions" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventNotifySkipAllDay" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventNotifySkipDeclined" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="eventNotifyClockCalendarsOnly" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="enabledCalendarPlugins" type="StringList">
+			<!-- Filenames stored in: -->
+			<!-- Ubuntu: /usr/lib/x86_64-linux-gnu/qt5/plugins/plasmacalendarplugins/ -->
+			<!-- Arch: /usr/lib/qt/plugins/plasmacalendarplugins/ -->
+			<!-- Fedora: /usr/lib64/qt5/plugins/plasmacalendarplugins/ -->
+			<!-- Previously stored entire filepath before v72 migration -->
+			<label>A list of plugins where additional calendar event data can be sourced.</label>
+			<default>holidaysevents.so,pimevents.so</default>
+		</entry>
+		<entry name="enabledCalendarPluginsAllowEmpty" type="bool">
+			<label>Whether an empty enabledCalendarPlugins list is intentional and should disable all Plasma calendar plugins.</label>
+			<default>false</default>
+		</entry>
+	</group>
+
+
+	<group name="TickTick">
+		<!-- TickTick accounts: id, label, server, projectList, projectIdList. The API tokens are in
+		the system keyring (secret_store.py, scope ticktick-account), never here. -->
+		<entry name="tickTickAccounts" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+	</group>
+
+	<group name="Google Calendar">
+		<entry name="googleAccounts" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+		<entry name="googleActiveAccountId" type="string">
+			<default></default>
+		</entry>
+		<!-- Built-in secret-based OAuth client (works without Google Cloud setup); a custom client ID
+		     in the settings overrides it. The secretless "desktop" client is rejected by Google. -->
+		<entry name="latestClientId" type="string">
+		<default>179575196194-jljdfm9usprtffue48js64h70carpchl.apps.googleusercontent.com</default>
+	</entry>
+	<entry name="latestClientSecret" type="string">
+	<default>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</default>
+</entry>
+		<entry name="useDesktopClient" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="customClientId" type="string">
+			<default></default>
+		</entry>
+		<entry name="customClientSecret" type="string">
+			<default></default>
+		</entry>
+		<entry name="sessionClientId" type="string">
+			<default></default>
+		</entry>
+		<entry name="sessionClientSecret" type="string">
+			<default></default>
+		</entry>
+		<entry name="accessToken" type="string">
+			<default></default>
+		</entry>
+		<entry name="accessTokenType" type="string">
+			<default></default>
+		</entry>
+		<entry name="accessTokenExpiresAt" type="uint">
+			<default>0</default>
+		</entry>
+		<entry name="refreshToken" type="string">
+			<default></default>
+		</entry>
+		<entry name="calendarList" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+		<entry name="calendarIdList" type="string">
+			<default>primary</default>
+		</entry>
+		<entry name="tasklistList" type="string" stringType="base64json">
+			<default></default>
+		</entry>
+		<entry name="tasklistIdList" type="string">
+			<default></default>
+		</entry>
+		<entry name="googleEventClickAction" type="string">
+			<!-- enum: WebEventView, WebMonthView -->
+			<default>WebEventView</default>
+		</entry>
+		<entry name="eventLook" type="string">
+			<!-- solid: events filled in their color; bar: all-day events solid, timed events a light tint with a bar in their color -->
+			<default>bar</default>
+		</entry>
+		<entry name="uiStyle" type="string">
+			<!-- islands: the Day view's panels, the agenda days and the task sections in their own rounded cards; glass: those cards translucent (a faint wash, no border or shadow); flat: one surface -->
+			<default>islands</default>
+		</entry>
+		<entry name="animationsEnabled" type="bool">
+			<!-- Views sliding and fading in, cards opening, tiles easing (also off with Plasma's animation speed at instant) -->
+			<default>true</default>
+		</entry>
+		<entry name="googleColorPalette" type="string">
+			<!-- current: Google Calendar's current colors; classic: the old palette the API returns; system: nearest colors of the Plasma color scheme -->
+			<default>current</default>
+		</entry>
+		<entry name="googleHideGoalsDesc" type="bool">
+			<label>Remove "This event was added from Goals in Google Calendar" from description</label>
+			<default>true</default>
+		</entry>
+
+		<!-- Deprecated in: v71 -->
+		<entry name="access_token" type="string">
+			<default></default>
+		</entry>
+		<!-- Removed in: v71
+		-->
+		<!-- Removed in: v62
+		-->
+	</group>
+
+	<group name="Weather">
+		<!-- OpenWeatherMap -->
+		<entry name="openWeatherMapAppId" type="string">
+			<default>99e575d9aa8a8407bcee7693d5912c6a</default>
+		</entry>
+		<entry name="openWeatherMapCityId" type="uint">
+			<default>0</default>
+		</entry>
+		<entry name="openWeatherMapApi" type="string">
+			<!-- enum: free (2.5, any app id), onecall (3.0, the "One Call by Call" subscription) -->
+			<default>free</default>
+		</entry>
+		<!-- WeatherCanada -->
+		<entry name="weatherCanadaCityId" type="string">
+			<default></default>
+		</entry>
+		<!-- Settings -->
+		<entry name="openMeteoLatitude" type="double">
+			<default>0</default>
+		</entry>
+		<entry name="openMeteoLongitude" type="double">
+			<default>0</default>
+		</entry>
+		<entry name="openMeteoLocationName" type="string">
+			<default></default>
+		</entry>
+		<!-- Day view: the panels beside the hours (Settings > Views > Day view shows). -->
+		<entry name="dayShowMiniMonth" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="dayShowUpNext" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="dayUpNextDays" type="uint">
+			<!-- Day view's Up next: the days after the shown one it lists (as many events as fit), the rest under "Show more" -->
+			<default>14</default>
+		</entry>
+		<entry name="dayShowWeather" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="dayShowMoon" type="bool">
+			<!-- Off by default: the box takes room in the side column (and makes one without tasks or weather) -->
+			<default>false</default>
+		</entry>
+		<entry name="dayShowTasks" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="dayAllDayTiles" type="bool">
+			<!-- Day view: three all-day events or more side by side, three in a row (the tooltip has the full text). -->
+			<default>false</default>
+		</entry>
+		<entry name="weatherShowInViews" type="bool">
+			<default>true</default>
+		</entry>
+		<entry name="weatherService" type="string">
+			<!-- enum: OpenMeteo, OpenWeatherMap, WeatherCanada -->
+			<default>OpenMeteo</default>
+		</entry>
+		<entry name="weatherUnits" type="string">
+			<default>metric</default>
+		</entry>
+		<entry name="weatherIconStyle" type="string">
+			<!-- enum: system (the icon theme's), yr (bundled) -->
+			<default>system</default>
+		</entry>
+		<entry name="weatherChartStyle" type="string">
+			<!-- The Weather panel's hourly chart. enum: simple, fancy -->
+			<default>simple</default>
+		</entry>
+		<entry name="weatherChartLargeIcons" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="weatherChartRainAmounts" type="bool">
+			<default>false</default>
+		</entry>
+		<entry name="weatherIconBackground" type="string">
+			<!-- The Weather panel's current weather icon. enum: sky (colors after the weather), subtle, none -->
+			<default>sky</default>
+		</entry>
+		<entry name="meteogramHours" type="uint">
+			<default>24</default>
+		</entry>
+	</group>
+
+</kcfg>

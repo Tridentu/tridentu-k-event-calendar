@@ -1,0 +1,5217 @@
+# Translation of eventcalendar in fi
+# Copyright (C) 2022
+# This file is distributed under the same license as the eventcalendar package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: eventcalendar\n"
+"Report-Msgid-Bugs-To: https://github.com/divinae/plasma-applet-eventcalendar\n"
+"POT-Creation-Date: 2026-11-04 10:49+0100\n"
+"PO-Revision-Date: 2022-03-21 23:40+ZONE\n"
+"Last-Translator: Ilpo Kantonen <ilpo@iki.fi>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: fi_FI\n"
+"X-Source-Language: C\n"
+
+#: ../contents/config/config.qml
+msgid "Views"
+msgstr "Näkymät"
+
+#: ../contents/config/config.qml
+msgid "Clock"
+msgstr "Kello"
+
+#: ../contents/config/config.qml ../contents/ui/calendars/PlasmaCalendarManager.qml ../contents/ui/config/ConfigEvents.qml ../contents/ui/SearchView.qml
+msgid "Events"
+msgstr "Tapahtumat"
+
+#: ../contents/config/config.qml ../contents/ui/CalendarToggles.qml ../contents/ui/config/CalendarsGeneral.qml ../contents/ui/config/CalendarsGoogle.qml ../contents/ui/config/CalendarsICal.qml ../contents/ui/PopupHeader.qml
+msgid "Calendars"
+msgstr "Kalenterit"
+
+#: ../contents/config/config.qml ../contents/ui/config/ConfigViews.qml ../contents/ui/DayTasksPanel.qml ../contents/ui/PopupHeader.qml ../contents/ui/SearchView.qml
+msgid "Tasks"
+msgstr "Tehtävät"
+
+#: ../contents/config/config.qml ../contents/ui/config/ConfigViews.qml ../contents/ui/WeatherPanel.qml
+msgid "Weather"
+msgstr "Sää"
+
+#: ../contents/config/config.qml
+msgid "Time Zones"
+msgstr "Aikavyöhykkeet"
+
+#: ../contents/config/config.qml
+msgid "Advanced"
+msgstr "Lisäasetukset"
+
+#: ../contents/ui/AgendaEventItem.qml
+msgid "Calendar event"
+msgstr "Kalenteritapahtuma"
+
+#: ../contents/ui/AgendaEventItem.qml
+msgid "In progress"
+msgstr "Käynnissä"
+
+#: ../contents/ui/AgendaListItem.qml
+msgctxt "agenda day header, %1 = Fri, 16 Oct"
+msgid "Today · %1"
+msgstr "Tänään · %1"
+
+#: ../contents/ui/AgendaListItem.qml
+msgctxt "agenda day header, %1 = Sat, 17 Oct"
+msgid "Tomorrow · %1"
+msgstr "Huomenna · %1"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/EventEditView.qml ../contents/ui/PopupHeader.qml
+msgid "New Event"
+msgstr "Uusi tapahtuma"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/QuickAddView.qml
+msgid "New Task…"
+msgstr "Uusi tehtävä…"
+
+#: ../contents/ui/AgendaListItem.qml ../contents/ui/WeekView.qml
+msgid "No events"
+msgstr "Ei tapahtumia"
+
+#: ../contents/ui/badges/EventTitlesBadge.qml
+msgctxt "more events not shown in a month day cell"
+msgid "+%1"
+msgstr "+%1"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: %1 didn't accept the user name or password"
+msgstr "CalDAV: %1 ei hyväksynyt käyttäjänimeä tai salasanaa"
+
+#: ../contents/ui/calendars/CalDAVManager.qml ../contents/ui/calendars/GoogleCalendarManager.qml ../contents/ui/calendars/GoogleTasksManager.qml ../contents/ui/calendars/ICalManager.qml ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Could not connect"
+msgstr "Ei voitu yhdistää"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV needs Python modules: install them in Settings > Calendars > CalDAV"
+msgstr "CalDAV tarvitsee Python-moduuleja: asenna ne kohdassa Asetukset > Kalenterit > CalDAV"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "The event was changed elsewhere meanwhile; it's loaded again"
+msgstr "Tapahtumaa muutettiin sillä välin muualla; se ladattiin uudelleen"
+
+#: ../contents/ui/calendars/CalDAVManager.qml ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Unknown error"
+msgstr "Tuntematon virhe"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: %1"
+msgstr "CalDAV: %1"
+
+#: ../contents/ui/calendars/CalDAVManager.qml
+msgid "CalDAV: an unexpected answer"
+msgstr "CalDAV: odottamaton vastaus"
+
+#: ../contents/ui/calendars/CalDAVManager.qml ../contents/ui/EventModel.qml
+msgid "This calendar can't import events"
+msgstr "Tämä kalenteri ei voi tuoda tapahtumia"
+
+#: ../contents/ui/calendars/CalendarManager.qml
+msgctxt "event with no summary"
+msgid "(No title)"
+msgstr "(Ei otsikkoa)"
+
+#: ../contents/ui/CalendarSelector.qml
+msgid "[No Calendars]"
+msgstr "[Ei kalentereja]"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml ../contents/ui/calendars/GoogleTasksManager.qml ../contents/ui/calendars/TickTickTasksManager.qml ../contents/ui/Logic.qml
+msgid "HTTP Error %1: %2"
+msgstr "HTTP-virhe %1: %2"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml ../contents/ui/calendars/GoogleTasksManager.qml ../contents/ui/calendars/TickTickTasksManager.qml ../contents/ui/Logic.qml
+msgid "Will try again soon."
+msgstr "Yhdistää uudelleen pian."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml ../contents/ui/calendars/GoogleTasksManager.qml ../contents/ui/Logic.qml
+msgid "Widget has been updated. Please logout and login to Google Calendar again."
+msgstr "Kalenteri on päivitetty. Ole hyvä ja kirjaudu Google-kalenteriin uudelleen."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml ../contents/ui/calendars/GoogleTasksManager.qml ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Too many web requests. Will try again soon."
+msgstr "Liian monta web-pyyntöä. Yrittää uudelleen hetken kuluttua."
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml ../contents/ui/calendars/GoogleTasksManager.qml
+msgid "Google authentication failed: %1"
+msgstr "Google-tunnistautuminen epäonnistui: %1"
+
+#: ../contents/ui/calendars/GoogleCalendarManager.qml
+msgid "Could not get the free / busy times"
+msgstr "Vapaita / varattuja aikoja ei voitu hakea"
+
+#: ../contents/ui/calendars/ICalManager.qml ../contents/ui/config/ConfigCalendars.qml
+msgid "iCalendar"
+msgstr "iCalendar"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid "Reading .ics calendars needs Python modules: install them in Settings > Calendars > iCalendar"
+msgstr ".ics-kalenterien lukeminen vaatii Python-moduuleja: asenna ne kohdassa Asetukset > Kalenterit > iCalendar"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid "Unknown iCalendar helper error"
+msgstr "Tuntematon iCalendar-apuohjelman virhe"
+
+#: ../contents/ui/calendars/ICalManager.qml
+msgid "Could not load %1: %2"
+msgstr "Kohteen %1 lataaminen epäonnistui: %2"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml ../contents/ui/config/CalendarsGoogle.qml ../contents/ui/FindTimeView.qml
+msgctxt "separator of names in a list"
+msgid ", "
+msgstr ", "
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml ../contents/ui/config/PimCalendarList.qml
+msgid "KDE PIM (Akonadi)"
+msgstr "KDE PIM (Akonadi)"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml ../contents/ui/WeekView.qml
+msgid "%1 event"
+msgid_plural "%1 events"
+msgstr[0] "%1 tapahtuma"
+msgstr[1] "%1 tapahtumaa"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+msgctxt "%1 = calendar names"
+msgid "Akonadi: %1"
+msgstr "Akonadi: %1"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml ../contents/ui/EventModel.qml
+msgid "Holidays"
+msgstr "Pyhäpäivät"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml
+msgid "Todo"
+msgstr "Tehtävät"
+
+#: ../contents/ui/calendars/PlasmaCalendarManager.qml ../contents/ui/config/ConfigClock.qml
+msgid "Other"
+msgstr "Muut"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml ../contents/ui/config/ConfigTasks.qml
+msgid "Inbox"
+msgstr "Saapuneet"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "TickTick: sign in again"
+msgstr "TickTick: kirjaudu uudelleen"
+
+#: ../contents/ui/calendars/TickTickTasksManager.qml
+msgid "Connect the account again with a new API token in the Tasks settings."
+msgstr "Yhdistä tili uudelleen uudella API-tunnisteella Tehtävät-asetuksissa."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "No calendars selected in the settings."
+msgstr "Asetuksissa ei ole valittu kalentereita."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "In the clock's countdown. Click to leave it out."
+msgstr "Kellon lähtölaskennassa. Napsauta jättääksesi sen pois."
+
+#: ../contents/ui/CalendarToggles.qml
+msgid "Left out of the clock's countdown. Click to include it."
+msgstr "Jätetty kellon lähtölaskennan ulkopuolelle. Napsauta ottaaksesi sen mukaan."
+
+#: ../contents/ui/CalendarToggles.qml
+msgctxt "%1 = calendar name"
+msgid "Include %1 in the clock's countdown"
+msgstr "Ota %1 mukaan kellon lähtölaskentaan"
+
+#: ../contents/ui/CalendarToggles.qml ../contents/ui/UpcomingEvents.qml
+msgid "Show All"
+msgstr "Näytä kaikki"
+
+#: ../contents/ui/CameraCheckView.qml ../contents/ui/CameraCheckWindow.qml
+msgid "Camera Check"
+msgstr "Kameran tarkistus"
+
+#: ../contents/ui/CameraCheckView.qml ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml ../contents/ui/JoinPill.qml ../contents/ui/main.qml ../contents/ui/MeetingAlertContent.qml ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = Google Meet, Zoom, ..."
+msgid "Join %1"
+msgstr "Liity: %1"
+
+#: ../contents/ui/CameraCheckView.qml
+msgid "Nothing is recorded. The camera and the microphone are used only while this is open."
+msgstr "Mitään ei tallenneta. Kameraa ja mikrofonia käytetään vain, kun tämä on auki."
+
+#: ../contents/ui/CameraMirror.qml
+msgid "The camera can't be used"
+msgstr "Kameraa ei voi käyttää"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "No camera found"
+msgstr "Kameraa ei löytynyt"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "The camera can't be used. Another app may be using it."
+msgstr "Kameraa ei voi käyttää. Jokin toinen sovellus saattaa käyttää sitä."
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Starting the camera…"
+msgstr "Käynnistetään kameraa…"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Try Again"
+msgstr "Yritä uudelleen"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "No camera"
+msgstr "Ei kameraa"
+
+#: ../contents/ui/CameraMirror.qml
+msgid "Mirror the picture"
+msgstr "Peilaa kuva"
+
+#: ../contents/ui/CardHeader.qml ../contents/ui/config/CalendarEditDialog.qml ../contents/ui/config/CalendarsGoogle.qml ../contents/ui/config/ConfigTasks.qml ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Cancel"
+msgstr "Peru"
+
+#: ../contents/ui/ClockView.qml ../contents/ui/main.qml
+msgctxt "time left in the current meeting"
+msgid "%1 min left"
+msgid_plural "%1 min left"
+msgstr[0] "%1 min jäljellä"
+msgstr[1] "%1 min jäljellä"
+
+#: ../contents/ui/ClockView.qml
+msgctxt "time left in the current meeting, %1 = 1h20m"
+msgid "%1 left"
+msgstr "%1 jäljellä"
+
+#: ../contents/ui/ClockView.qml ../contents/ui/main.qml
+msgctxt "meeting starts in"
+msgid "in %1 min"
+msgid_plural "in %1 min"
+msgstr[0] "%1 min päästä"
+msgstr[1] "%1 min päästä"
+
+#: ../contents/ui/ClockView.qml
+msgctxt "meeting starts in, %1 = 1h20m"
+msgid "in %1"
+msgstr "%1 päästä"
+
+#: ../contents/ui/config/CalendarColorButton.qml ../contents/ui/config/CalendarEditDialog.qml ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Color"
+msgstr "Väri"
+
+#: ../contents/ui/config/CalendarColorButton.qml ../contents/ui/config/ConfigClock.qml ../contents/ui/EventEditView.qml
+msgid "Custom…"
+msgstr "Mukautettu…"
+
+#: ../contents/ui/config/CalendarColorButton.qml
+msgid "Calendar Color"
+msgstr "Kalenterin väri"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Edit Calendar"
+msgstr "Muokkaa kalenteria"
+
+#: ../contents/ui/config/CalendarEditDialog.qml ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Name"
+msgstr "Nimi"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Name in my list"
+msgstr "Nimi omassa luettelossa"
+
+#: ../contents/ui/config/CalendarEditDialog.qml
+msgid "Only you see this name. The calendar keeps its name for others."
+msgstr "Vain sinä näet tämän nimen. Muille kalenteri näkyy omalla nimellään."
+
+#: ../contents/ui/config/CalendarEditDialog.qml ../contents/ui/EventEditView.qml ../contents/ui/ManageListsView.qml
+msgid "Save"
+msgstr "Tallenna"
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid "Turn on the PIM Events plugin in the General tab (Plasma calendars) to show the calendars of KDE PIM (Akonadi)."
+msgstr "Ota PIM Events -liitännäinen käyttöön Yleiset-välilehdellä (Plasman kalenterit) näyttääksesi KDE PIM:n (Akonadi) kalenterit."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid "This version of KDE PIM can't change the selection here: choose the calendars on the PIM Events Plugin page of these settings."
+msgstr "Tämä KDE PIM -versio ei voi muuttaa valintaa täällä: valitse kalenterit näiden asetusten PIM Events -liitännäisen sivulla."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid "One calendar selected in the PIM events plugin no longer exists in Akonadi, eg because its account was set up anew, which gives its calendars new ids."
+msgid_plural "%1 calendars selected in the PIM events plugin no longer exist in Akonadi, eg because their account was set up anew, which gives its calendars new ids."
+msgstr[0] "Yhtä PIM-tapahtumaliitännäisessä valittua kalenteria ei enää ole Akonadissa, esim. koska sen tili määritettiin uudelleen, jolloin sen kalenterit saavat uudet tunnisteet."
+msgstr[1] "%1 PIM-tapahtumaliitännäisessä valittua kalenteria ei enää ole Akonadissa, esim. koska niiden tili määritettiin uudelleen, jolloin sen kalenterit saavat uudet tunnisteet."
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid "Forget the Missing Ones"
+msgstr "Unohda puuttuvat"
+
+#: ../contents/ui/config/CalendarsAkonadi.qml
+msgid "In the popup's calendar menu they are shown and hidden by color: calendars of one color together."
+msgstr "Ponnahdusikkunan kalenterivalikossa ne näytetään ja piilotetaan värin mukaan: samanväriset kalenterit yhdessä."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid "Installing…"
+msgstr "Asennetaan…"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "CalDAV needs the Python modules icalendar and recurring-ical-events."
+msgstr "CalDAV tarvitsee Python-moduulit icalendar ja recurring-ical-events."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "The server didn't accept the user name or password. Some services need an app password (iCloud, Fastmail, Nextcloud with two-factor sign-in)."
+msgstr "Palvelin ei hyväksynyt käyttäjänimeä tai salasanaa. Jotkin palvelut vaativat sovellussalasanan (iCloud, Fastmail, Nextcloud kaksivaiheisella kirjautumisella)."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Couldn't connect to the server. Check the address and your connection."
+msgstr "Palvelimeen ei saatu yhteyttä. Tarkista osoite ja verkkoyhteys."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "No CalDAV calendars at that address. Try the address your service gives for CalDAV."
+msgstr "Osoitteesta ei löytynyt CalDAV-kalentereita. Kokeile osoitetta, jonka palvelusi antaa CalDAVille."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "The server's answer couldn't be read"
+msgstr "Palvelimen vastausta ei voitu lukea"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Enter the server address (https://…), your user name and your password."
+msgstr "Anna palvelimen osoite (https://…), käyttäjänimesi ja salasanasi."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connecting…"
+msgstr "Yhdistetään…"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "The password couldn't be stored in the keyring: %1"
+msgstr "Salasanaa ei voitu tallentaa avainrenkaaseen: %1"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connected: %1 calendar"
+msgid_plural "Connected: %1 calendars"
+msgstr[0] "Yhdistetty: %1 kalenteri"
+msgstr[1] "Yhdistetty: %1 kalenteria"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Connected, but the account has no calendars for events."
+msgstr "Yhdistetty, mutta tilillä ei ole kalentereita tapahtumille."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml ../contents/ui/config/CalendarsICal.qml
+msgid "The Python modules icalendar and recurring-ical-events aren't all installed: calendars, or their repeating events, can be missing."
+msgstr "Python-moduuleja icalendar ja recurring-ical-events ei ole kaikkia asennettu: kalentereita tai niiden toistuvia tapahtumia voi puuttua."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid "Install"
+msgstr "Asenna"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml ../contents/ui/config/CalendarsICal.qml ../contents/ui/ImportView.qml
+msgid "Downloads icalendar and recurring-ical-events into the widget's own folder."
+msgstr "Lataa icalendarin ja recurring-ical-eventsin sovelman omaan kansioon."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Read-only"
+msgstr "Vain luku"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Server's Color"
+msgstr "Palvelimen väri"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Refresh Calendars"
+msgstr "Päivitä kalenterit"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml ../contents/ui/config/CalendarsGoogle.qml ../contents/ui/config/ConfigTasks.qml
+msgid "Remove Account"
+msgstr "Poista tili"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Add a CalDAV Account"
+msgstr "Lisää CalDAV-tili"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml ../contents/ui/config/ConfigTasks.qml
+msgid "Server"
+msgstr "Palvelin"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "eg: https://cloud.example.org/remote.php/dav"
+msgstr "esim. https://cloud.example.org/remote.php/dav"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "User name"
+msgstr "Käyttäjänimi"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Password"
+msgstr "Salasana"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml ../contents/ui/config/ConfigTasks.qml
+msgid "Connect"
+msgstr "Yhdistä"
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Plain http works only for a server on your own network; the password isn't encrypted on the way."
+msgstr "Salaamaton http toimii vain oman verkkosi palvelimen kanssa; salasanaa ei salata matkalla."
+
+#: ../contents/ui/config/CalendarsCalDAV.qml
+msgid "Nextcloud, Fastmail, iCloud (with an app password), Radicale, Baïkal and others. The password is kept in the system keyring. Repeating events are shown, but changed only in their own app for now."
+msgstr "Nextcloud, Fastmail, iCloud (sovellussalasanalla), Radicale, Baïkal ja muut. Salasana säilytetään järjestelmän avainrenkaassa. Toistuvat tapahtumat näytetään, mutta toistaiseksi niitä voi muuttaa vain omassa sovelluksessaan."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Import Events from a File…"
+msgstr "Tuo tapahtumia tiedostosta…"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Copy the events of an .ics file (exported from another calendar app) into one of your calendars. The widget shows them first, to pick the calendar."
+msgstr "Kopioi .ics-tiedoston tapahtumat (viety toisesta kalenterisovelluksesta) johonkin kalentereistasi. Sovelma näyttää ne ensin, jotta voit valita kalenterin."
+
+#: ../contents/ui/config/CalendarsGeneral.qml ../contents/ui/ImportView.qml ../contents/ui/main.qml
+msgid "Import Events"
+msgstr "Tuo tapahtumia"
+
+#: ../contents/ui/config/CalendarsGeneral.qml ../contents/ui/config/CalendarsICal.qml ../contents/ui/main.qml
+msgid "iCalendar (*.ics)"
+msgstr "iCalendar (*.ics)"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Share events with Glance"
+msgstr "Jaa tapahtumat Glancelle"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Today's and tomorrow's events, with meeting links, for the Glance panel widget. Only on this computer; no descriptions or guest addresses."
+msgstr "Tämän päivän ja huomisen tapahtumat kokouslinkkeineen Glance-paneelisovelmalle. Vain tällä tietokoneella; ei kuvauksia eikä vieraiden osoitteita."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Refresh every"
+msgstr "Päivitä joka"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgctxt "Polling interval in minutes"
+msgid " min"
+msgstr " min"
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Plasma calendar plugins are unavailable."
+msgstr "Plasman kalenteriliitännäiset eivät ole käytettävissä."
+
+#: ../contents/ui/config/CalendarsGeneral.qml
+msgid "Plasma calendars"
+msgstr "Plasma-kalenterit"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Google Account"
+msgstr "Google-tili"
+
+#: ../contents/ui/config/CalendarsGoogle.qml ../contents/ui/config/ConfigTasks.qml
+msgid "Google Account %1"
+msgstr "Google-tili %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login failed: %1"
+msgstr "Kirjautuminen epäonnistui: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login complete."
+msgstr "Kirjautuminen valmis."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Could not prepare Google login: %1"
+msgstr "Google-kirjautumisen valmistelu epäonnistui: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Waiting for browser callback..."
+msgstr "Odotetaan selaimen paluukutsua..."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign-in timed out. Try again."
+msgstr "Kirjautuminen aikakatkaistiin. Yritä uudelleen."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed. See logs for details."
+msgstr "Automaattinen kirjautuminen epäonnistui. Katso lisätiedot lokeista."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: invalid callback data."
+msgstr "Automaattinen kirjautuminen epäonnistui: virheelliset paluukutsun tiedot."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: %1"
+msgstr "Automaattinen kirjautuminen epäonnistui: %1"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Auto login failed: authorization code missing."
+msgstr "Automaattinen kirjautuminen epäonnistui: valtuutuskoodi puuttuu."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "The desktop could not open the browser automatically. Use the login link in Advanced sign-in options instead."
+msgstr "Työpöytä ei voinut avata selainta automaattisesti. Käytä sen sijaan kirjautumislinkkiä kohdassa Kirjautumisen lisäasetukset."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign in to show your Google calendars and task lists. Your browser opens to sign in; when access is granted the widget picks it up automatically."
+msgstr "Kirjaudu sisään, niin Google-kalenterisi ja tehtäväluettelosi näytetään. Selain avautuu kirjautumista varten; kun käyttöoikeus on myönnetty, sovelma huomaa sen automaattisesti."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgctxt "%1 = email addresses"
+msgid "KDE PIM (Akonadi) already brings in the Google calendars of %1, read-only. Sign in here as well to answer invitations, edit and delete events and join meetings from the widget. Events of an account synced both ways are shown once, from the sign-in here."
+msgstr "KDE PIM (Akonadi) tuo jo tilin %1 Google-kalenterit, vain luku. Kirjaudu myös tässä, jotta voit vastata kutsuihin, muokata ja poistaa tapahtumia sekä liittyä kokouksiin sovelmasta. Molempia teitä synkronoidun tilin tapahtumat näytetään kerran, tämän kirjautumisen kautta."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgctxt "%1 = email addresses"
+msgid "Also synced by KDE PIM (Akonadi): %1. Their events are shown once, from the sign-in here, where they can be answered and edited."
+msgstr "Myös KDE PIM (Akonadi) synkronoi: %1. Niiden tapahtumat näytetään kerran, tämän kirjautumisen kautta, jossa niihin voi vastata ja niitä voi muokata."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign In Again"
+msgstr "Kirjaudu uudelleen"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Reload calendars and task lists"
+msgstr "Lataa kalenterit ja tehtäväluettelot uudelleen"
+
+#: ../contents/ui/config/CalendarsGoogle.qml ../contents/ui/config/CalendarsICal.qml ../contents/ui/config/ConfigTasks.qml
+msgid "Remove"
+msgstr "Poista"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Google access for this account expired or was revoked. Sign in again to reconnect it (the account and its settings are kept)."
+msgstr "Tämän tilin Google-käyttöoikeus on vanhentunut tai peruttu. Yhdistä tili uudelleen kirjautumalla sisään (tili ja sen asetukset säilytetään)."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "The widget was updated. Sign in again to keep this account in sync."
+msgstr "Sovelma on päivitetty. Kirjaudu uudelleen, jotta tili pysyy synkronoituna."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "No calendars loaded yet. Use the reload button."
+msgstr "Kalentereita ei ole vielä ladattu. Käytä uudelleenlatauspainiketta."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Task lists are chosen on the Tasks page."
+msgstr "Tehtäväluettelot valitaan Tehtävät-sivulla."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Add Account…"
+msgstr "Lisää tili…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Sign in with Google…"
+msgstr "Kirjaudu Googlella…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Waiting for the browser sign-in…"
+msgstr "Odotetaan kirjautumista selaimessa…"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Advanced sign-in options"
+msgstr "Kirjautumisen lisäasetukset"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Your own Google OAuth client, or pasting the sign-in code by hand"
+msgstr "Oma Google OAuth -asiakas tai kirjautumiskoodin liittäminen käsin"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client Credentials"
+msgstr "Asiakkaan tunnistetiedot"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Using a previously stored Google OAuth client for compatibility. If login still fails, add your own client ID and client secret."
+msgstr "Käytetään yhteensopivuuden vuoksi aiemmin tallennettua Google OAuth -asiakasta. Jos kirjautuminen epäonnistuu edelleen, lisää oma asiakastunniste ja asiakassalaisuus."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Try desktop built-in client (no secret)"
+msgstr "Kokeile työpöydän sisäänrakennettua asiakasta (ei salaisuutta)"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client ID"
+msgstr "Asiakastunniste"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Optional"
+msgstr "Valinnainen"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Client Secret"
+msgstr "Asiakassalaisuus"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Leave these empty to use the built-in client. A custom client must be a Google Cloud OAuth Desktop client, or a Web client with its secret and the redirect URI set to %1."
+msgstr "Jätä nämä tyhjiksi, niin käytetään sisäänrakennettua asiakasta. Mukautetun asiakkaan on oltava Google Cloud OAuth -työpöytäasiakas tai verkkoasiakas, jolla on salaisuus ja jonka uudelleenohjaus-URI on %1."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "For a custom OAuth client, publish the OAuth consent screen to Production. Google expires refresh tokens for external apps left in Testing after seven days; Workspace session controls can also require reauthorization."
+msgstr "Julkaise mukautetun OAuth-asiakkaan OAuth-suostumusnäyttö tilaan Production. Google vanhentaa Testing-tilaan jätettyjen ulkoisten sovellusten päivitystunnukset seitsemän päivän jälkeen; myös Workspacen istuntohallinta voi vaatia uudelleenvaltuutuksen."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Manual Sign-in"
+msgstr "Manuaalinen kirjautuminen"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login (Auto) - Add Account"
+msgstr "Kirjaudu (automaattinen) - Lisää tili"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Login (Auto)"
+msgstr "Kirjaudu (automaattinen)"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, the browser redirects to a localhost URL. If auto-capture succeeds you can ignore the field below; otherwise copy the full URL (or just the code) and paste it."
+msgstr "Avaa <a href=\"%1\">%2</a> napsauttamalla Kirjaudu (automaattinen). Kun olet myöntänyt käyttöoikeuden, selain ohjaa localhost-osoitteeseen. Jos automaattinen kaappaus onnistuu, voit ohittaa alla olevan kentän; muussa tapauksessa kopioi koko URL (tai pelkkä koodi) ja liitä se."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "The desktop could not open the browser automatically."
+msgstr "Työpöytä ei voinut avata selainta automaattisesti."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Copy Link"
+msgstr "Kopioi linkki"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Helper page (optional): <a href=\"%1\">%1</a>"
+msgstr "Apusivu (valinnainen): <a href=\"%1\">%1</a>"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "If your browser shows a connection error, that's expected. Copy the URL from the address bar anyway and paste it below. If auto-capture works, you do not need to paste anything."
+msgstr "Jos selain näyttää yhteysvirheen, se on odotettua. Kopioi URL silti osoiteriviltä ja liitä se alle. Jos automaattinen kaappaus toimii, mitään ei tarvitse liittää."
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Paste the authorization code or redirect URL here"
+msgstr "Liitä valtuutuskoodi tai uudelleenohjaus-URL tähän"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Google authorization code or redirect URL"
+msgstr "Googlen valtuutuskoodi tai uudelleenohjaus-URL"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Paste the Google authorization code or the full redirect URL from the browser"
+msgstr "Liitä Googlen valtuutuskoodi tai selaimen koko uudelleenohjaus-URL"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Add Account"
+msgstr "Lisää tili"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Submit"
+msgstr "Lähetä"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Options"
+msgstr "Valinnat"
+
+#: ../contents/ui/config/CalendarsGoogle.qml
+msgid "Hide \"This event was added from Goals in Google Calendar\" description"
+msgstr "Piilota kuvaus \"Tämä tapahtuma lisättiin Google-kalenterin Tavoitteista\""
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Show this calendar"
+msgstr "Näytä tämä kalenteri"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Calendar Label"
+msgstr "Kalenterin otsikko"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "https:// URL or local %1/*.ics file"
+msgstr "https://-URL tai paikallinen %1/*.ics-tiedosto"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Browse"
+msgstr "Selaa"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "Add Calendar"
+msgstr "Lisää kalenteri"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "An .ics link or a file"
+msgstr ".ics-linkki tai tiedosto"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "New Calendar"
+msgstr "Uusi kalenteri"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid "A file in %1"
+msgstr "Tiedosto kansiossa %1"
+
+#: ../contents/ui/config/CalendarsICal.qml
+msgid ".ics files and links show here as calendars, read-only, offline too. Local files are read from %1. To add events to one of your calendars instead, import the file into a Google or CalDAV calendar (Calendars > General)."
+msgstr ".ics-tiedostot ja -linkit näkyvät täällä kalentereina, vain luku, myös ilman yhteyttä. Paikalliset tiedostot luetaan kansiosta %1. Jos haluat lisätä tapahtumat johonkin kalenteriisi, tuo tiedosto Google- tai CalDAV-kalenteriin (Kalenterit > Yleiset)."
+
+#: ../contents/ui/config/ConfigCalendars.qml ../contents/ui/config/ConfigTasks.qml
+msgid "General"
+msgstr "Yleiset"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "Google Calendar"
+msgstr "Google-kalenteri"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "Akonadi"
+msgstr "Akonadi"
+
+#: ../contents/ui/config/ConfigCalendars.qml
+msgid "CalDAV"
+msgstr "CalDAV"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Default (%1)"
+msgstr "Oletus (%1)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(24-hour)"
+msgstr "(24-tuntinen)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(12-hour)"
+msgstr "(12-tuntinen)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "(with seconds)"
+msgstr "(sekuntien kanssa)"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Time"
+msgstr "Aika"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Format"
+msgstr "Muoto"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Bold"
+msgstr "Vahvennus"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Font"
+msgstr "Fontti"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Maximum height"
+msgstr "Enimmäiskorkeus"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "0 = fit the panel"
+msgstr "0 = sovita paneeliin"
+
+#: ../contents/ui/config/ConfigClock.qml ../contents/ui/config/ConfigViews.qml
+msgid " px"
+msgstr " px"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Custom formats use the <a href=\"https://doc.qt.io/qt-6/qml-qtqml-qt.html#formatDateTime-method\">Qt date and time format</a>, eg: HH:mm, ddd d MMM."
+msgstr "Mukautetut muodot käyttävät <a href=\"https://doc.qt.io/qt-6/qml-qtqml-qt.html#formatDateTime-method\">Qt:n päiväys- ja aikamuotoa</a>, esim. HH:mm, ddd d MMM."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Second Line"
+msgstr "Toinen rivi"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show a second line"
+msgstr "Näytä toinen rivi"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Eg: the date"
+msgstr "Esim. päiväys"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Size"
+msgstr "Koko"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Next Meeting"
+msgstr "Seuraava kokous"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show next to the clock"
+msgstr "Näytä kellon vieressä"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "When it starts within"
+msgstr "Kun alkuun on enintään"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid " min"
+msgstr " min"
+
+#: ../contents/ui/config/ConfigClock.qml ../contents/ui/config/ConfigEvents.qml
+msgid "Skip all-day events"
+msgstr "Ohita koko päivän tapahtumat"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "They still show in the agenda."
+msgstr "Ne näkyvät edelleen asialistalla."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Only meetings with a video link"
+msgstr "Vain kokoukset, joissa on videolinkki"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Only accepted invitations"
+msgstr "Vain hyväksytyt kutsut"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Not the ones answered maybe or not answered yet."
+msgstr "Ei ehkä-vastattuja eikä vielä vastaamattomia."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Longest title"
+msgstr "Pisin otsikko"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "0: as much as fits."
+msgstr "0: niin paljon kuin mahtuu."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgctxt "characters, after a number"
+msgid " characters"
+msgstr " merkkiä"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Progress of the current meeting"
+msgstr "Käynnissä olevan kokouksen edistyminen"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "A thin bar under the meeting's name, in its calendar's color."
+msgstr "Ohut palkki kokouksen nimen alla, sen kalenterin värillä."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Middle-click the clock to join the current or next meeting."
+msgstr "Liity nykyiseen tai seuraavaan kokoukseen napsauttamalla kelloa keskipainikkeella."
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Show background"
+msgstr "Näytä tausta"
+
+#: ../contents/ui/config/ConfigClock.qml
+msgid "Desktop widget"
+msgstr "Työpöytäsovelma"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Clicking an event opens"
+msgstr "Tapahtuman napsautus avaa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Event details in the widget"
+msgstr "Tapahtuman tiedot sovelmassa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Google Calendar in the browser"
+msgstr "Google-kalenterin selaimessa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Reminder Before an Event"
+msgstr "Muistutus ennen tapahtumaa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Show a reminder"
+msgstr "Näytä muistutus"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Time before"
+msgstr "Aika ennen"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "Time in minutes"
+msgid " min"
+msgstr " min"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Use the reminder times set in Google Calendar"
+msgstr "Käytä Google-kalenterissa asetettuja muistutusaikoja"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Keep until dismissed"
+msgstr "Säilytä, kunnes suljetaan"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Hide after"
+msgstr "Piilota kun kulunut"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "notification shown for"
+msgid "%1 second"
+msgid_plural "%1 seconds"
+msgstr[0] "%1 sekunti"
+msgstr[1] "%1 sekuntia"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "notification timeout"
+msgid "System default"
+msgstr "Järjestelmän oletus"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "System default: as set in System Settings > Notifications. A reminder hidden after a set time isn't kept in the notification history."
+msgstr "Järjestelmän oletus: kuten Järjestelmäasetukset > Ilmoitukset määrää. Määräajan jälkeen piilotettu muistutus ei jää ilmoitushistoriaan."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Snooze"
+msgstr "Torkku"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "0 = no Snooze button"
+msgstr "0 = ei torkkupainiketta"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Sound"
+msgstr "Ääni"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "When an Event Starts"
+msgstr "Kun tapahtuma alkaa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Show a notification"
+msgstr "Näytä ilmoitus"
+
+#: ../contents/ui/config/ConfigEvents.qml ../contents/ui/config/ConfigViews.qml ../contents/ui/config/ConfigWeather.qml
+msgid "Style"
+msgstr "Tyyli"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "the notification's style"
+msgid "Notification"
+msgstr "Ilmoitus"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgctxt "the notification's style"
+msgid "Full screen"
+msgstr "Koko näyttö"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Full Screen"
+msgstr "Koko näyttö"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only for meetings with a video link"
+msgstr "Vain kokouksille, joissa on videolinkki"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other events: a notification. Muted events: none."
+msgstr "Muut tapahtumat: ilmoitus. Mykistetyt: ei mitään."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Camera check"
+msgstr "Kameran tarkistus"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Before you join a meeting with a video link: your camera, and on request the microphone and the speaker. Nothing is recorded; they're on only while the alert is shown."
+msgstr "Ennen kuin liityt kokoukseen, jossa on videolinkki: kamerasi ja pyynnöstä mikrofoni ja kaiutin. Mitään ei tallenneta; ne ovat päällä vain, kun ilmoitus näkyy."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Notification"
+msgstr "Ilmoitus"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For the events without a video link."
+msgstr "Tapahtumille, joissa ei ole videolinkkiä."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Critical"
+msgstr "Kriittinen"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Shown even in Do Not Disturb"
+msgstr "Näytetään myös Älä häiritse -tilassa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "\"Join meeting\" button"
+msgstr "\"Liity kokoukseen\" -painike"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Meetings"
+msgstr "Kokoukset"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open the meeting link when a meeting starts"
+msgstr "Avaa kokouslinkki, kun kokous alkaa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "For meetings you accepted or organize, not marked as ended."
+msgstr "Kokouksille, jotka olet hyväksynyt tai järjestät ja joita ei ole merkitty päättyneiksi."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command when a meeting starts"
+msgstr "Komento kokouksen alkaessa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Eg: notify-send \"In a meeting: $1\""
+msgstr "Esim.: notify-send \"Kokouksessa: $1\""
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command when it ends"
+msgstr "Komento sen päättyessä"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Run with sh: $1 is the meeting's title, $2 its link, $3 and $4 its start and end. For a meeting with guests or a link, not declined; it ends when it's over or marked as ended."
+msgstr "Ajetaan sh:lla: $1 on kokouksen otsikko, $2 sen linkki, $3 ja $4 alku ja loppu. Kokoukselle, jossa on vieraita tai linkki ja jota ei ole hylätty; se päättyy, kun se on ohi tai merkitty päättyneeksi."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Pause music and videos when joining a meeting"
+msgstr "Keskeytä musiikki ja videot, kun liityt kokoukseen"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Players that are playing (eg: Spotify, Elisa, a video in the browser), when a Join button opens a meeting or it opens when the meeting starts."
+msgstr "Soivat soittimet (esim. Spotify, Elisa, video selaimessa), kun Liity-painike avaa kokouksen tai se avautuu kokouksen alkaessa."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Do Not Disturb during meetings"
+msgstr "Älä häiritse -tila kokousten aikana"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Plasma's Do Not Disturb from the start until the end of a meeting with guests or a meeting link. Mark as Ended turns it off."
+msgstr "Plasman Älä häiritse -tila kokouksen alusta loppuun, kun kokouksessa on vieraita tai kokouslinkki. \"Merkitse päättyneeksi\" poistaa sen käytöstä."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only meetings I accepted"
+msgstr "Vain hyväksymäni kokoukset"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Open Google Meet links in"
+msgstr "Avaa Google Meet -linkit sovelluksessa"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Default browser"
+msgstr "Oletusselain"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other command…"
+msgstr "Muu komento…"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Command"
+msgstr "Komento"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Google account"
+msgstr "Google-tili"
+
+#: ../contents/ui/config/ConfigEvents.qml ../contents/ui/config/ConfigViews.qml
+msgid "Default"
+msgstr "Oletus"
+
+#: ../contents/ui/config/ConfigEvents.qml
+#, c-format
+msgid "Join buttons open Google Meet links there; other meeting links open in the default browser. In a command, %u stands for the meeting link. Google account: its number (0, 1, …) or email, as in Google's account switcher; empty uses the app's default."
+msgstr "Liity-painikkeet avaavat Google Meet -linkit siinä; muut kokouslinkit avautuvat oletusselaimessa. Komennossa %u tarkoittaa kokouslinkkiä. Google-tili: sen numero (0, 1, …) tai sähköposti kuten Googlen tilinvaihtajassa; tyhjä käyttää sovelluksen oletusta."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Other Notifications"
+msgstr "Muut ilmoitukset"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "New invitations for today"
+msgstr "Uudet kutsut tälle päivälle"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "A notification for each meeting today you haven't answered yet, with Yes, Maybe and No."
+msgstr "Ilmoitus jokaisesta tämän päivän tapaamisesta, johon et ole vielä vastannut, ja valinnat Kyllä, Ehkä ja Ei."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Today's events every morning"
+msgstr "Päivän tapahtumat joka aamu"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "A notification with today's events once a day, also when the computer is turned on later."
+msgstr "Ilmoitus päivän tapahtumista kerran päivässä, myös jos tietokone käynnistetään vasta myöhemmin."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "At"
+msgstr "Klo"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Skip events I declined"
+msgstr "Ohita tapahtumat, joista olen kieltäytynyt"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Only calendars in the clock's countdown"
+msgstr "Vain kellon lähtölaskennan kalenterit"
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Reminders and starting events only of the calendars with the clock button on in the popup's calendar menu."
+msgstr "Muistutukset ja alkavat tapahtumat vain kalentereista, joiden kellopainike on päällä ponnahdusikkunan kalenterivalikossa."
+
+#: ../contents/ui/config/ConfigEvents.qml
+msgid "Popups and sounds for each kind of notification can also be set in System Settings > Notifications > Event Calendar."
+msgstr "Kunkin ilmoitustyypin ponnahdukset ja äänet voi asettaa myös kohdassa Järjestelmäasetukset > Ilmoitukset > Event Calendar."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick did not accept the API token. Check it and try again."
+msgstr "TickTick ei hyväksynyt API-tunnistetta. Tarkista se ja yritä uudelleen."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Could not connect to TickTick. Check your connection and try again."
+msgstr "TickTickiin ei saatu yhteyttä. Tarkista verkkoyhteys ja yritä uudelleen."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick error: %1"
+msgstr "TickTick-virhe: %1"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Connecting to TickTick…"
+msgstr "Yhdistetään TickTickiin…"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Could not store the API token in the system keyring: %1"
+msgstr "API-tunnistetta ei voitu tallentaa järjestelmän avainrenkaaseen: %1"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick account added."
+msgstr "TickTick-tili lisätty."
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't rename the list"
+msgstr "Luettelon nimeäminen uudelleen epäonnistui"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't delete the list"
+msgstr "Luettelon poistaminen epäonnistui"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/TasksView.qml
+msgid "Couldn't create the list"
+msgstr "Luettelon luominen epäonnistui"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "List name"
+msgstr "Luettelon nimi"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Rename"
+msgstr "Nimeä uudelleen"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgctxt "%1 = task list name"
+msgid "Delete the list \"%1\" and all its tasks? This can't be undone."
+msgstr "Poistetaanko luettelo ”%1” ja kaikki sen tehtävät? Tätä ei voi kumota."
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml ../contents/ui/ManageListsView.qml ../contents/ui/TaskRow.qml ../contents/ui/TasksView.qml
+msgid "Delete"
+msgstr "Poista"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "New list"
+msgstr "Uusi luettelo"
+
+#: ../contents/ui/config/ConfigTasks.qml ../contents/ui/config/ConfigTimezones.qml ../contents/ui/QuickAddView.qml
+msgid "Add"
+msgstr "Lisää"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Overdue tasks on today"
+msgstr "Myöhässä olevat tehtävät tänään"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Open tasks due on an earlier day are shown on today, in every view."
+msgstr "Aiempana päivänä erääntyneet avoimet tehtävät näytetään tänään kaikissa näkymissä."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Smart recognition in Add a task"
+msgstr "Älykäs tunnistus kohdassa Lisää tehtävä"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Words like \"tomorrow 17:00\", \"!high\", \"#List\" or \"every week\" set the new task's day, time, priority, list and repeat."
+msgstr "Sanat kuten \"tomorrow 17:00\", \"!high\", \"#List\" or \"every week\" asettavat uuden tehtävän päivän, ajan, tärkeyden, listan ja toiston."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Notifications"
+msgstr "Ilmoitukset"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Task reminders"
+msgstr "Tehtävämuistutukset"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "A notification when a task with a due time or a reminder is due, and the tasks due today at the daily agenda time."
+msgstr "Ilmoitus, kun tehtävä, jolla on eräaika tai muistutus, erääntyy, sekä tänään erääntyvät tehtävät päivän agendan aikaan."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Tasks in the daily agenda"
+msgstr "Tehtävät päivän agendassa"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "The daily agenda notification also lists today's and overdue tasks."
+msgstr "Päivän agendan ilmoitus luettelee myös tämän päivän ja myöhässä olevat tehtävät."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Google Tasks"
+msgstr "Google Tasks"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Sign in on the Google Calendar page to choose the Google task lists shown here."
+msgstr "Kirjaudu sisään Google-kalenteri-sivulla valitaksesi tässä näytettävät Googlen tehtäväluettelot."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Task Lists"
+msgstr "Tehtäväluettelot"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "No task lists loaded yet. Reload the account on the Google Calendar page."
+msgstr "Tehtäväluetteloita ei ole vielä ladattu. Lataa tili uudelleen Google-kalenteri-sivulla."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick"
+msgstr "TickTick"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Reload projects"
+msgstr "Lataa projektit uudelleen"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "This account's API token is not in the system keyring. Remove the account and connect it again."
+msgstr "Tämän tilin API-tunniste ei ole järjestelmän avainrenkaassa. Poista tili ja yhdistä se uudelleen."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "No projects loaded yet. Use the reload button."
+msgstr "Projekteja ei ole vielä ladattu. Käytä uudelleenlatauspainiketta."
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "TickTick (ticktick.com)"
+msgstr "TickTick (ticktick.com)"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Dida365 (dida365.com)"
+msgstr "Dida365 (dida365.com)"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "API token"
+msgstr "API-tunniste"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Paste the API token"
+msgstr "Liitä API-tunniste"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Connect Another Account"
+msgstr "Yhdistä toinen tili"
+
+#: ../contents/ui/config/ConfigTasks.qml
+msgid "Create an API token on the TickTick website: Settings > Account > API Token (on dida365.com for Dida365). The token is kept in the system keyring (KWallet or Secret Service), not in the widget's settings."
+msgstr "Luo API-tunniste TickTickin verkkosivustolla: Settings > Account > API Token (Dida365:lle osoitteessa dida365.com). Tunniste säilytetään järjestelmän avainrenkaassa (KWallet tai Secret Service), ei sovelman asetuksissa."
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Local"
+msgstr "Paikallinen"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Extra Time Zones in the Tooltip"
+msgstr "Lisäaikavyöhykkeet työkaluvihjeessä"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "The name shown in the tooltip (empty: the city)"
+msgstr "Työkaluvihjeessä näkyvä nimi (tyhjä: kaupunki)"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Move up"
+msgstr "Siirrä ylös"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Move down"
+msgstr "Siirrä alas"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Remove time zone"
+msgstr "Poista aikavyöhyke"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Add a time zone, eg: America/New_York"
+msgstr "Lisää aikavyöhyke, esim. America/New_York"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Zones with the same time as yours are not shown."
+msgstr "Vyöhykkeitä, joissa on sama aika kuin sinulla, ei näytetä."
+
+#: ../contents/ui/config/ConfigTimezones.qml ../contents/ui/config/ConfigWeather.qml
+msgid "Display"
+msgstr "Näyttö"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Show time zones as"
+msgstr "Aikavyöhykkeiden esitys"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "City name"
+msgstr "Kaupungin nimi"
+
+#: ../contents/ui/config/ConfigTimezones.qml
+msgid "Abbreviation (eg: CEST)"
+msgstr "Lyhenne (esim. CEST)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Popup"
+msgstr "Ponnahdusikkuna"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Default view"
+msgstr "Oletusnäkymä"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Month"
+msgstr "Kuukausi"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Week"
+msgstr "Viikko"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgctxt "calendar view showing one day"
+msgid "Day"
+msgstr "Päivä"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Agenda"
+msgstr "Agenda"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Open in the last used view"
+msgstr "Avaa viimeksi käytetyssä näkymässä"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "View switcher"
+msgstr "Näkymän valitsin"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Tabs"
+msgstr "Välilehdet"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Drop-down menu"
+msgstr "Pudotusvalikko"
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/PopupHeader.qml
+msgid "Views offered"
+msgstr "Tarjolla olevat näkymät"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Popup size"
+msgstr "Ponnahdusikkunan koko"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Appearance"
+msgstr "Ulkoasu"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Islands: the calendar grids, the Day view's panels, the agenda days and the task sections each sit in a rounded card."
+msgstr "Saaret: kalenteriruudukot, päivänäkymän paneelit, asialistan päivät ja tehtäväosiot ovat kukin omalla pyöristetyllä kortillaan."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Islands (cards)"
+msgstr "Saaret (kortit)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Islands, translucent cards"
+msgstr "Saarekkeet, läpikuultavat kortit"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Flat"
+msgstr "Tasainen"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Animations"
+msgstr "Animaatiot"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Views slide and fade in, cards open, the small month's days ease."
+msgstr "Näkymät liukuvat ja häivyttyvät esiin, kortit avautuvat, pienen kuukauden päivät vaihtuvat pehmeästi."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event look"
+msgstr "Tapahtumien ulkoasu"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All-day filled, timed light with a color bar"
+msgstr "Koko päivän täytetty, kellonajalliset vaaleat väripalkilla"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Filled in the event color"
+msgstr "Täytetty tapahtuman värillä"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event colors"
+msgstr "Tapahtumien värit"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Google's API still returns an older palette; \"As in Google Calendar\" shows the current one. \"Follow the system color scheme\" uses the nearest colors of your Plasma color scheme."
+msgstr "Googlen API palauttaa yhä vanhemman paletin; ”Kuten Google-kalenterissa” näyttää nykyisen. ”Seuraa järjestelmän väriteemaa” käyttää Plasman väriteeman lähimpiä värejä."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "As in Google Calendar"
+msgstr "Kuten Google-kalenterissa"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Classic (as returned by Google)"
+msgstr "Klassiset (kuten Google ne palauttaa)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Follow the system color scheme"
+msgstr "Seuraa järjestelmän väriteemaa"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event text size"
+msgstr "Tapahtumien tekstin koko"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Calendar"
+msgstr "Kalenteri"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "First day of week"
+msgstr "Viikon ensimmäinen päivä"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Week numbers"
+msgstr "Viikkonumerot"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Clicking a day opens it in the Day view"
+msgstr "Päivän napsauttaminen avaa sen päivänäkymään"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Month view"
+msgstr "Kuukausinäkymä"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Double-clicking a day"
+msgstr "Päivän kaksoisnapsautus"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "New event in Google Calendar (browser)"
+msgstr "Uusi tapahtuma Google-kalenterissa (selain)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Do nothing"
+msgstr "Älä tee mitään"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Declined events"
+msgstr "Hylätyt tapahtumat"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show (struck through)"
+msgstr "Näytä (yliviivattuna)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "declined events"
+msgid "Hide"
+msgstr "Piilota"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Show an event in several calendars once"
+msgstr "Näytä useassa kalenterissa oleva tapahtuma kerran"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "A meeting in your calendar and in a shared one, for example."
+msgstr "Esimerkiksi kokous omassa ja jaetussa kalenterissa."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Week and Day"
+msgstr "Viikko ja päivä"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "week view setting"
+msgid "Days shown"
+msgstr "Näytettävät päivät"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "7 days"
+msgstr "7 päivää"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Work week (without the weekend)"
+msgstr "Työviikko (ilman viikonloppua)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Working hours"
+msgstr "Työaika"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Second time zone"
+msgstr "Toinen aikavyöhyke"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "no second time zone"
+msgid "None"
+msgstr "Ei mitään"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "No second time zone"
+msgstr "Ei toista aikavyöhykettä"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Its hours are shown next to the local ones in the Week and Day views."
+msgstr "Sen tunnit näytetään paikallisten vieressä viikko- ja päivänäkymissä."
+
+#: ../contents/ui/config/ConfigViews.qml ../contents/ui/EventEditView.qml
+msgid "Search time zones"
+msgstr "Hae aikavyöhykkeitä"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The forecast in the Week view's day headers, on each Agenda day, and the weather panel of the Day view and the Agenda."
+msgstr "Ennuste viikkonäkymän päiväotsikoissa, jokaisella esityslistan päivällä sekä päivänäkymän ja esityslistan sääpaneeli."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Day view and Agenda show"
+msgstr "Päivänäkymä ja esityslista näyttävät"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Small calendar"
+msgstr "Pieni kalenteri"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Up next (Day view)"
+msgstr "Seuraavaksi (päivänäkymä)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Moon"
+msgstr "Kuu"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Up next shows"
+msgstr "Seuraavaksi näyttää"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The days after the shown one; later ones under \"Show more\""
+msgstr "Näytetyn jälkeiset päivät; myöhemmät kohdassa \"Näytä lisää\""
+
+#: ../contents/ui/config/ConfigViews.qml
+msgctxt "number of days, after the number"
+msgid "day"
+msgid_plural "days"
+msgstr[0] "päivä"
+msgstr[1] "päivää"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All-day events side by side"
+msgstr "Koko päivän tapahtumat rinnakkain"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "In the Day view, three or more all-day events take a third of the width each, three in a row. Hovering one shows it in full."
+msgstr "Päivänäkymässä kolme tai useampi koko päivän tapahtuma vie kukin kolmanneksen leveydestä, kolme rivissä. Osoittimen vieminen tapahtuman päälle näyttää sen kokonaan."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Event descriptions"
+msgstr "Tapahtumien kuvaukset"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Meeting link button"
+msgstr "Kokouslinkin painike"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Multi-day events on every day"
+msgstr "Monipäiväiset tapahtumat joka päivänä"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Offline"
+msgstr "Offline"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Keep events and tasks for offline start"
+msgstr "Säilytä tapahtumat ja tehtävät offline-käynnistystä varten"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The last loaded events and tasks (no descriptions or notes) are stored in ~/.cache/plasma-eventcalendar and shown until the first refresh. Off: nothing is stored, and the stored copy is deleted."
+msgstr "Viimeksi ladatut tapahtumat ja tehtävät (ilman kuvauksia tai muistiinpanoja) tallennetaan kansioon ~/.cache/plasma-eventcalendar ja näytetään ensimmäiseen päivitykseen asti. Pois: mitään ei tallenneta, ja tallennettu kopio poistetaan."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Troubleshooting"
+msgstr "Vianmääritys"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Debug logging and extra settings pages"
+msgstr "Vianjäljityslokit ja lisäasetussivut"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Settings Backup"
+msgstr "Asetusten varmuuskopio"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Export Settings…"
+msgstr "Vie asetukset…"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "All settings of this widget to a file, without passwords and sign-ins"
+msgstr "Kaikki tämän sovelman asetukset tiedostoon, ilman salasanoja ja kirjautumisia"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Import Settings…"
+msgstr "Tuo asetukset…"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "From an exported file; press Apply or OK to keep them"
+msgstr "Viedystä tiedostosta; säilytä ne painamalla Käytä tai OK"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Accounts come back with their calendars. On this computer they stay signed in; on another one, sign in again (passwords and sign-ins stay in the system keyring)."
+msgstr "Tilit palaavat kalentereineen. Tällä tietokoneella ne pysyvät kirjautuneina; toisella kirjaudu uudelleen (salasanat ja kirjautumiset pysyvät järjestelmän avainnipussa)."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The file couldn't be written: %1"
+msgstr "Tiedostoa ei voitu kirjoittaa: %1"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Exported to %1"
+msgstr "Viety kohteeseen %1"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "The file couldn't be read: %1"
+msgstr "Tiedostoa ei voitu lukea: %1"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "This isn't a settings file of Event Calendar."
+msgstr "Tämä ei ole Event Calendarin asetustiedosto."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Imported %1 setting. Press Apply or OK to keep it."
+msgid_plural "Imported %1 settings. Press Apply or OK to keep them."
+msgstr[0] "Tuotiin %1 asetus. Säilytä se painamalla Käytä tai OK."
+msgstr[1] "Tuotiin %1 asetusta. Säilytä ne painamalla Käytä tai OK."
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Not imported (not in this version, a password or sign-in, or a value of another kind): %2"
+msgid_plural "%1 not imported (not in this version, passwords or sign-ins, or values of another kind): %2"
+msgstr[0] "Ei tuotu (ei tässä versiossa, salasana tai kirjautuminen tai erityyppinen arvo): %2"
+msgstr[1] "%1 ei tuotu (ei tässä versiossa, salasanoja tai kirjautumisia tai erityyppisiä arvoja): %2"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Export Settings"
+msgstr "Vie asetukset"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Settings (*.json)"
+msgstr "Asetukset (*.json)"
+
+#: ../contents/ui/config/ConfigViews.qml
+msgid "Import Settings"
+msgstr "Tuo asetukset"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "an API the app id may use"
+msgid "yes"
+msgstr "kyllä"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "an API the app id may not use"
+msgid "no"
+msgstr "ei"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "%1 = error"
+msgid "failed (%1)"
+msgstr "epäonnistui (%1)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current weather, 3 hour steps: %1"
+msgstr "Nykyinen sää, 3 tunnin välein: %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "16 days (paid plan): %1"
+msgstr "16 päivää (maksullinen tilaus): %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One Call 3.0: %1"
+msgstr "One Call 3.0: %1"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "OpenWeatherMap doesn't know this app id (a new one takes up to 2 hours)."
+msgstr "OpenWeatherMap ei tunne tätä sovellustunnistetta (uuden käyttöönotto kestää enintään 2 tuntia)."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Choose One Call 3.0 above: by the hour and 8 days."
+msgstr "Valitse yltä One Call 3.0: tunneittain ja 8 päivää."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Not subscribed to One Call 3.0: choose Free (2.5) above."
+msgstr "One Call 3.0 ei ole tilattuna: valitse yltä Free (2.5)."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Source"
+msgstr "Lähde"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Service"
+msgstr "Palvelu"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Open-Meteo (free, no API key)"
+msgstr "Open-Meteo (ilmainen, ei API-avainta)"
+
+#: ../contents/ui/config/ConfigWeather.qml ../contents/ui/EventEditView.qml
+msgid "Location"
+msgstr "Sijainti"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current location"
+msgstr "Nykyinen sijainti"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Not set"
+msgstr "Ei asetettu"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "City name, eg: Warszawa"
+msgstr "Kaupungin nimi, esim. Warszawa"
+
+#: ../contents/ui/config/ConfigWeather.qml ../contents/ui/config/WeatherCanadaCityDialog.qml ../contents/ui/PopupHeader.qml
+msgid "Search"
+msgstr "Etsi"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "No places found."
+msgstr "Paikkoja ei löytynyt."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "OpenWeatherMap"
+msgstr "OpenWeatherMap"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "City id"
+msgstr "Kaupungin tunniste"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "eg: 5983720"
+msgstr "esim. 5983720"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Find City…"
+msgstr "Etsi kaupunki…"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "API app id"
+msgstr "API-sovellustunniste"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Required for OpenWeatherMap"
+msgstr "Vaaditaan OpenWeatherMapia varten"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "API"
+msgstr "API"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Free (2.5)"
+msgstr "Free (2.5)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One Call 3.0"
+msgstr "One Call 3.0"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Checking…"
+msgstr "Tarkistetaan…"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Check App Id"
+msgstr "Tarkista sovellustunniste"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Free (2.5) works with any app id: the current weather and a forecast in 3 hour steps for 5 days. Its forecast for 16 days needs a paid plan; without one, the days are made from the 3 hour steps."
+msgstr "Free (2.5) toimii kaikilla sovellustunnisteilla: nykyinen sää ja ennuste 3 tunnin välein 5 päiväksi. 16 päivän ennuste vaatii maksullisen tilauksen; ilman sitä päivät muodostetaan 3 tunnin jaksoista."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One Call 3.0 needs the \"One Call by Call\" subscription on <a href=\"https://openweathermap.org/api/one-call-3\">openweathermap.org</a> (1000 calls a day are free, a payment card is required): the current weather, 48 hours by the hour and 8 days, in one call. The widget asks at most every 10 minutes, about 150 calls a day."
+msgstr "One Call 3.0 vaatii ”One Call by Call” -tilauksen sivustolla <a href=\"https://openweathermap.org/api/one-call-3\">openweathermap.org</a> (1000 kutsua päivässä on ilmaisia, maksukortti vaaditaan): nykyinen sää, 48 tuntia tunneittain ja 8 päivää yhdellä kutsulla. Sovelma kysyy enintään 10 minuutin välein, noin 150 kutsua päivässä."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "One app id works for both: Check App Id tells what yours may use."
+msgstr "Sama sovellustunniste toimii molemmissa: Tarkista sovellustunniste kertoo, mitä sinun tunnisteesi saa käyttää."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "The built-in app id is shared by everyone using this widget, and so is its request limit: the weather may stop updating at times. A free app id of your own: sign up at <a href=\"https://home.openweathermap.org/users/sign_up\">openweathermap.org</a>, then copy it from \"API keys\". Open-Meteo needs none."
+msgstr "Sisäänrakennettu sovellustunniste on yhteinen kaikille tämän sovelman käyttäjille, samoin sen pyyntöraja: sää voi ajoittain lakata päivittymästä. Oma ilmainen sovellustunniste: rekisteröidy sivustolla <a href=\"https://home.openweathermap.org/users/sign_up\">openweathermap.org</a> ja kopioi se kohdasta ”API keys”. Open-Meteo ei tarvitse tunnistetta."
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Weather Canada"
+msgstr "Weather Canada"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "eg: on-14"
+msgstr "esim. on-14"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Units"
+msgstr "Yksiköt"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Celsius"
+msgstr "Celcius"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Fahrenheit"
+msgstr "Fahrenheit"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Kelvin"
+msgstr "Kelvin"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Icons"
+msgstr "Kuvakkeet"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "System"
+msgstr "Järjestelmä"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Yr (MET Norway)"
+msgstr "Yr (MET Norway)"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Current weather icon background"
+msgstr "Nykyisen sään kuvakkeen tausta"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Sky, after the weather"
+msgstr "Taivas, sään mukaan"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Subtle"
+msgstr "Hienovarainen"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgctxt "no icon background"
+msgid "None"
+msgstr "Ei mitään"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Forecast chart"
+msgstr "Ennustekaavio"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Simple"
+msgstr "Yksinkertainen"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Fancy"
+msgstr "Näyttävä"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Hours shown"
+msgstr "Näytettävät tunnit"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Today's chart in the Day view and the Agenda"
+msgstr "Tämän päivän kaavio päivänäkymässä ja esityslistassa"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid " hours"
+msgstr " tuntia"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Larger icons"
+msgstr "Suuremmat kuvakkeet"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "In the chart and the next days"
+msgstr "Kaaviossa ja tulevissa päivissä"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "Rain amounts"
+msgstr "Sademäärät"
+
+#: ../contents/ui/config/ConfigWeather.qml
+msgid "The total above the chart, the amounts at the heaviest hours"
+msgstr "Kokonaismäärä kaavion yläpuolella, määrät sateisimpien tuntien kohdalla"
+
+#: ../contents/ui/config/GoogleLoginManager.qml
+msgid "Not signed in to this Google account. Sign in again."
+msgstr "Et ole kirjautunut tähän Google-tiliin. Kirjaudu uudelleen."
+
+#: ../contents/ui/config/GoogleLoginManager.qml
+msgid "Could not save the calendar: %1"
+msgstr "Kalenteria ei voitu tallentaa: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Select city"
+msgstr "Valitse kaupunki"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Fetched from <a href=\"%1\">%1</a>"
+msgstr "Haettu osoitteesta <a href=\"%1\">%1</a>"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "City name, eg: Berlin or Berlin, DE"
+msgstr "Kaupungin nimi, esim.: Berlin tai Berlin, DE"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml ../contents/ui/config/WeatherCanadaCityDialog.qml ../contents/ui/TaskRow.qml
+msgid "Open Link"
+msgstr "Avaa linkki"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "north"
+msgid "N"
+msgstr "P"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "south"
+msgid "S"
+msgstr "E"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "east"
+msgid "E"
+msgstr "I"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "west"
+msgid "W"
+msgstr "L"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgctxt "OpenWeatherMap city id"
+msgid "Id %1"
+msgstr "Tunnus %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "OpenWeatherMap didn't accept the app id: %1"
+msgstr "OpenWeatherMap ei hyväksynyt sovellustunnistetta: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "The search failed: %1"
+msgstr "Haku epäonnistui: %1"
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "No city found."
+msgstr "Kaupunkia ei löytynyt."
+
+#: ../contents/ui/config/OpenWeatherMapCityDialog.qml
+msgid "No app id set."
+msgstr "Sovellustunnistetta ei ole asetettu."
+
+#: ../contents/ui/config/PimCalendarList.qml
+msgid "Its events come from the account signed in to in the Google Calendar tab."
+msgstr "Sen tapahtumat tulevat Google-kalenteri-välilehdellä kirjautuneelta tililtä."
+
+#: ../contents/ui/config/SelectionRow.qml
+msgid "Edit calendar…"
+msgstr "Muokkaa kalenteria…"
+
+#: ../contents/ui/config/SelectionRow.qml
+msgid "Rename list…"
+msgstr "Nimeä luettelo uudelleen…"
+
+#: ../contents/ui/config/SelectionRow.qml ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Delete list…"
+msgstr "Poista luettelo…"
+
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "Id"
+msgstr "Id"
+
+#: ../contents/ui/config/WeatherCanadaCityDialog.qml
+msgid "City Webpage"
+msgstr "Kaupungin www-sivu"
+
+#: ../contents/ui/DateTimeSelector.qml ../contents/ui/EventEditView.qml
+msgctxt "event editor date format"
+msgid "d MMM, yyyy"
+msgstr "d MMM, yyyy"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Hide tasks"
+msgstr "Piilota tehtävät"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Show tasks"
+msgstr "Näytä tehtävät"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/EventEditView.qml ../contents/ui/PopupHeader.qml
+msgid "New Task"
+msgstr "Uusi tehtävä"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All lists"
+msgstr "Kaikki luettelot"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All open"
+msgstr "Kaikki avoimet"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Tasks shown"
+msgstr "Näytettävät tehtävät"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "Due this day"
+msgstr "Erääntyy tänä päivänä"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All open tasks"
+msgstr "Kaikki avoimet tehtävät"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TasksView.qml
+msgid "No open tasks"
+msgstr "Ei avoimia tehtäviä"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "All done"
+msgstr "Kaikki tehty"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "No tasks"
+msgstr "Ei tehtäviä"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TaskCheck.qml ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "In progress"
+msgstr "Käynnissä"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgctxt "tasks in the Day view, not in progress"
+msgid "To do"
+msgstr "Tehtävänä"
+
+#: ../contents/ui/DayTasksPanel.qml ../contents/ui/TasksView.qml
+msgid "Hide completed"
+msgstr "Piilota tehdyt"
+
+#: ../contents/ui/DayTasksPanel.qml
+msgid "%1 completed"
+msgid_plural "%1 completed"
+msgstr[0] "%1 valmis"
+msgstr[1] "%1 valmista"
+
+#: ../contents/ui/DurationSelector.qml
+msgid "to"
+msgstr "->"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Move to List"
+msgstr "Siirrä luetteloon"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Couldn't save the task"
+msgstr "Tehtävää ei voitu tallentaa"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml
+msgid "Priority"
+msgstr "Prioriteetti"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "High priority"
+msgstr "Korkea tärkeys"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "Medium priority"
+msgstr "Keskitason tärkeys"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml ../contents/ui/TaskRow.qml
+msgid "Low priority"
+msgstr "Matala tärkeys"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "task priority"
+msgid "No priority"
+msgstr "Ei prioriteettia"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventEditView.qml
+msgid "Due date"
+msgstr "Eräpäivä"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "tasks filter"
+msgid "Today"
+msgstr "Tänään"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "tasks filter"
+msgid "Tomorrow"
+msgstr "Huomenna"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Next week"
+msgstr "Ensi viikko"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "No date"
+msgstr "Ei päivämäärää"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "RSVP to an invitation"
+msgid "Respond"
+msgstr "Vastaa"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Not Done"
+msgstr "Merkitse tekemättömäksi"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Done"
+msgstr "Merkitse tehdyksi"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as Not in Progress"
+msgstr "Merkitse ei käynnissä olevaksi"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Mark as in Progress"
+msgstr "Merkitse käynnissä olevaksi"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Show Details"
+msgstr "Näytä tiedot"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Check Camera"
+msgstr "Tarkista kamera"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Copy Event Details"
+msgstr "Kopioi tapahtuman tiedot"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Copy Meeting Link"
+msgstr "Kopioi kokouslinkki"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Unmute Notifications"
+msgstr "Palauta ilmoitukset"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Mute Notifications"
+msgstr "Mykistä ilmoitukset"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Open in Google Calendar"
+msgstr "Avaa Google-kalenterissa"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/main.qml
+msgid "Mark as Ended"
+msgstr "Merkitse päättyneeksi"
+
+#: ../contents/ui/EventContextMenu.qml ../contents/ui/EventDetailsView.qml
+msgid "Email Guests…"
+msgstr "Lähetä sähköpostia vieraille…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Edit…"
+msgstr "Muokkaa…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgid "Duplicate…"
+msgstr "Monista…"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "%1 = event title"
+msgid "Delete Only This Occurrence of “%1”"
+msgstr "Poista vain tämä kerta tapahtumasta ”%1”"
+
+#: ../contents/ui/EventContextMenu.qml
+msgctxt "%1 = event title"
+msgid "Delete All Events of “%1”"
+msgstr "Poista kaikki tapahtumat ”%1”"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml ../contents/ui/EventModel.qml
+msgid "No due date"
+msgstr "Ei eräpäivää"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "a task's due date in its details"
+msgid "dddd, d MMMM"
+msgstr "dddd d. MMMM"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventModel.qml ../contents/ui/LocaleFuncs.js
+msgctxt "date (%1) with time (%2)"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TasksView.qml
+msgid "Overdue"
+msgstr "Myöhässä"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml ../contents/ui/EventMover.qml
+msgid "This event"
+msgstr "Tämä tapahtuma"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml ../contents/ui/EventMover.qml
+msgid "All events in the series"
+msgstr "Kaikki sarjan tapahtumat"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who accepted"
+msgid "%1 yes"
+msgstr "%1 kyllä"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who said maybe"
+msgid "%1 maybe"
+msgstr "%1 ehkä"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who declined"
+msgid "%1 no"
+msgstr "%1 ei"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "guests who haven't responded"
+msgid "%1 awaiting"
+msgstr "%1 odottaa"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "1 guest"
+msgid_plural "%1 guests"
+msgstr[0] "1 vieras"
+msgstr[1] "%1 vierasta"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "reminder at event start"
+msgid "at start"
+msgstr "alkaessa"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "%1 = 10m, 2m"
+msgid "Reminders: %1 before"
+msgstr "Muistutukset: %1 ennen"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/FindTimeView.qml ../contents/ui/ManageListsView.qml ../contents/ui/SearchView.qml
+msgid "Back"
+msgstr "Takaisin"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete:"
+msgstr "Poista:"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete this task?"
+msgstr "Poistetaanko tämä tehtävä?"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Delete this event?"
+msgstr "Poistetaanko tämä tapahtuma?"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "This Occurrence"
+msgstr "Tämä kerta"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "All Events"
+msgstr "Kaikki tapahtumat"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Deletes every occurrence of this repeating event."
+msgstr "Poistaa tämän toistuvan tapahtuman kaikki kerrat."
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Open in TickTick"
+msgstr "Avaa TickTickissä"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Open in Google Tasks"
+msgstr "Avaa Google Tasksissa"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskRow.qml
+msgid "Edit"
+msgstr "Muokkaa"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Duplicate"
+msgstr "Monista"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Private event"
+msgstr "Yksityinen tapahtuma"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgid "All day"
+msgstr "Koko päivä"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Repeats"
+msgstr "Toistuu"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = start and end time, %2 = city, %3 = time zone id"
+msgid "%1 %2 time (%3)"
+msgstr "%1, aikavyöhyke %2 (%3)"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "RSVP to an invitation"
+msgid "Going?"
+msgstr "Osallistutko?"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Out of office"
+msgstr "Poissa toimistolta"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Focus time"
+msgstr "Keskittymisaika"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines all meetings at this time"
+msgstr "Hylkää kaikki kokoukset tänä aikana"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Declines new invitations at this time"
+msgstr "Hylkää uudet kutsut tänä aikana"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = message sent when declining"
+msgid "Message: “%1”"
+msgstr "Viesti: ”%1”"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "%1 = titles of other events at the same time"
+msgid "Overlaps with: %1"
+msgstr "Päällekkäin: %1"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Write an email to the guests"
+msgstr "Kirjoita sähköpostia vieraille"
+
+#: ../contents/ui/EventDetailsView.qml
+msgctxt "event organizer"
+msgid "organizer"
+msgstr "järjestäjä"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgctxt "the current user in a guest list"
+msgid "you"
+msgstr "sinä"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/UpNextPanel.qml
+msgid "Show less"
+msgstr "Näytä vähemmän"
+
+#: ../contents/ui/EventDetailsView.qml
+msgid "Show 1 more"
+msgid_plural "Show all %1"
+msgstr[0] "Näytä 1 lisää"
+msgstr[1] "Näytä kaikki %1"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/TaskRow.qml
+msgctxt "checklist items done: %1 of %2"
+msgid "%1 of %2 subtasks done"
+msgstr "%1/%2 alitehtävää tehty"
+
+#: ../contents/ui/EventDetailsView.qml ../contents/ui/EventEditView.qml
+msgid "Subtasks"
+msgstr "Alitehtävät"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task reminder after the due day starts"
+msgid "%1 day later at %2"
+msgid_plural "%1 days later at %2"
+msgstr[0] "%1 päivä myöhemmin klo %2"
+msgstr[1] "%1 päivää myöhemmin klo %2"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task reminder: %1 = time"
+msgid "On the day at %1"
+msgstr "Samana päivänä klo %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = start and end time in the local time zone"
+msgid "%1 your time"
+msgstr "%1 sinun aikaasi"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Lavender"
+msgstr "Laventeli"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Sage"
+msgstr "Salvia"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Grape"
+msgstr "Viinirypäle"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Flamingo"
+msgstr "Flamingo"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Banana"
+msgstr "Banaani"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Tangerine"
+msgstr "Mandariini"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Peacock"
+msgstr "Riikinkukko"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Graphite"
+msgstr "Grafiitti"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Blueberry"
+msgstr "Mustikka"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Basil"
+msgstr "Basilika"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Calendar event color"
+msgid "Tomato"
+msgstr "Tomaatti"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Enter an email address, like name@example.com"
+msgstr "Anna sähköpostiosoite, esim. name@example.com"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "you, in Find a time"
+msgid "You"
+msgstr "Sinä"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/QuickAddView.qml
+msgctxt "%1 = task list name"
+msgid "%1 (tasks)"
+msgstr "%1 (tehtävät)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Task list"
+msgstr "Tehtäväluettelo"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Edit Task"
+msgstr "Muokkaa tehtävää"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Edit Event"
+msgstr "Muokkaa tapahtumaa"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send invitation emails to the guests?"
+msgstr "Lähetetäänkö vieraille kutsut sähköpostitse?"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send update emails to the guests?"
+msgstr "Lähetetäänkö vieraille päivitykset sähköpostitse?"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Send invitations"
+msgstr "Lähetä kutsut"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "send update emails to guests"
+msgid "Send"
+msgstr "Lähetä"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "don't send emails to guests"
+msgid "Don't send"
+msgstr "Älä lähetä"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Change:"
+msgstr "Muuta:"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Title"
+msgstr "Otsikko"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Due time"
+msgstr "Eräaika"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "Low priority"
+msgstr "Matala prioriteetti"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "Medium priority"
+msgstr "Keskitason prioriteetti"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "task priority"
+msgid "High priority"
+msgstr "Korkea prioriteetti"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Event"
+msgstr "Tapahtuma"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Out of office"
+msgstr "Poissa toimistolta"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event type"
+msgid "Focus time"
+msgstr "Keskittymisaika"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Event type"
+msgstr "Tapahtuman tyyppi"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Don't decline invitations"
+msgstr "Älä hylkää kutsuja"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new invitations in this time"
+msgstr "Hylkää uudet kutsut tänä aikana"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Decline new and existing invitations in this time"
+msgstr "Hylkää uudet ja olemassa olevat kutsut tänä aikana"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Automatically decline"
+msgstr "Hylkää automaattisesti"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Message for declined invitations"
+msgstr "Viesti hylätyille kutsuille"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Do not disturb"
+msgstr "Älä häiritse"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Google Chat status during focus time"
+msgid "Available"
+msgstr "Tavoitettavissa"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Do not disturb or Available"
+msgid "Chat status: %1"
+msgstr "Chatin tila: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Chat status"
+msgstr "Chatin tila"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Calendar color"
+msgstr "Kalenterin väri"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Local time"
+msgstr "Paikallinen aika"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = time zone id, eg: Europe/Warsaw"
+msgid "Time zone: %1"
+msgstr "Aikavyöhyke: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Time zone"
+msgstr "Aikavyöhyke"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Does not repeat"
+msgstr "Ei toistu"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Daily"
+msgstr "Päivittäin"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Every weekday (Monday to Friday)"
+msgstr "Joka arkipäivä (maanantaista perjantaihin)"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = day name"
+msgid "Weekly on %1"
+msgstr "Viikoittain: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = day of the month"
+msgid "Monthly on day %1"
+msgstr "Kuukausittain päivänä %1"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = date, eg: 16 October"
+msgid "Yearly on %1"
+msgstr "Vuosittain: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Custom (as set in TickTick)"
+msgstr "Mukautettu (kuten TickTickissä asetettu)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Custom (as set in Google Calendar)"
+msgstr "Mukautettu (Google-kalenterin asetusten mukaan)"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Loading…"
+msgstr "Ladataan…"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every [2] [weeks]"
+msgid "Every"
+msgstr "Toistuu"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "day"
+msgid_plural "days"
+msgstr[0] "päivän välein"
+msgstr[1] "päivän välein"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "viikon välein"
+msgstr[1] "viikon välein"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "month"
+msgid_plural "months"
+msgstr[0] "kuukauden välein"
+msgstr[1] "kuukauden välein"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat every N"
+msgid "year"
+msgid_plural "years"
+msgstr[0] "vuoden välein"
+msgstr[1] "vuoden välein"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends: never / on date / after N times"
+msgid "Ends:"
+msgstr "Päättyy:"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends"
+msgid "Never"
+msgstr "Ei koskaan"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends on [date]"
+msgid "On"
+msgstr "Päivänä"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends after [N] times"
+msgid "After"
+msgstr "Kun toistunut"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "Repeat ends after N"
+msgid "time"
+msgid_plural "times"
+msgstr[0] "kerran"
+msgstr[1] "kertaa"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add Google Meet video conferencing"
+msgstr "Lisää Google Meet -videoneuvottelu"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Video conferencing will be removed when you save"
+msgstr "Videoneuvottelu poistetaan, kun tallennat"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/PopupView.qml ../contents/ui/TaskUndoBar.qml
+msgid "Undo"
+msgstr "Kumoa"
+
+#: ../contents/ui/EventEditView.qml
+msgid "A Google Meet link will be created when you save"
+msgstr "Google Meet -linkki luodaan, kun tallennat"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Video conferencing"
+msgstr "Videoneuvottelu"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove video conferencing"
+msgstr "Poista videoneuvottelu"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Busy"
+msgstr "Varattu"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "show the event's time as"
+msgid "Free"
+msgstr "Vapaa"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Busy or Free"
+msgid "Show as: %1"
+msgstr "Näytä tilana: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Show as"
+msgstr "Näytä tilana"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Calendar default"
+msgstr "Kalenterin oletus"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Public"
+msgstr "Julkinen"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "event visibility"
+msgid "Private"
+msgstr "Yksityinen"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "%1 = Calendar default, Public or Private"
+msgid "Visibility: %1"
+msgstr "Näkyvyys: %1"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Visibility"
+msgstr "Näkyvyys"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Reminders"
+msgstr "Muistutukset"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Calendar's default"
+msgstr "Kalenterin oletus"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Set for this event"
+msgstr "Tälle tapahtumalle asetettu"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "minute before"
+msgid_plural "minutes before"
+msgstr[0] "minuutti ennen"
+msgstr[1] "minuuttia ennen"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "hour before"
+msgid_plural "hours before"
+msgstr[0] "tunti ennen"
+msgstr[1] "tuntia ennen"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "day before"
+msgid_plural "days before"
+msgstr[0] "päivä ennen"
+msgstr[1] "päivää ennen"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "reminder: N … before the event"
+msgid "week before"
+msgid_plural "weeks before"
+msgstr[0] "viikko ennen"
+msgstr[1] "viikkoa ennen"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove reminder"
+msgstr "Poista muistutus"
+
+#: ../contents/ui/EventEditView.qml
+msgid "No notification reminders"
+msgstr "Ei muistutuksia"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add Reminder"
+msgstr "Lisää muistutus"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Guests"
+msgstr "Vieraat"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Only the organizer can change the guest list"
+msgstr "Vain järjestäjä voi muuttaa vieraslistaa"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add guests by email"
+msgstr "Lisää vieraita sähköpostiosoitteella"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "add a guest"
+msgid "Add"
+msgstr "Lisää"
+
+#: ../contents/ui/EventEditView.qml
+msgctxt "guest suggestion: %1 = name, %2 = email"
+msgid "%1 <%2>"
+msgstr "%1 <%2>"
+
+#: ../contents/ui/EventEditView.qml ../contents/ui/FindTimeView.qml
+msgid "Find a Time"
+msgstr "Etsi aika"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Subtask"
+msgstr "Alitehtävä"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Remove subtask"
+msgstr "Poista alitehtävä"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Add a subtask…"
+msgstr "Lisää alitehtävä…"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Notes"
+msgstr "Muistiinpanot"
+
+#: ../contents/ui/EventEditView.qml
+msgid "Description"
+msgstr "Kuvaus"
+
+#: ../contents/ui/EventModel.qml ../contents/ui/LocaleFuncs.js ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml
+msgctxt "short month+date format"
+msgid "MMM d"
+msgstr "MMM-d"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "%1 = date"
+msgid "Due %1"
+msgstr "Erääntyy %1"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Home"
+msgstr "Koti"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Office"
+msgstr "Toimisto"
+
+#: ../contents/ui/EventModel.qml
+msgctxt "working location"
+msgid "Elsewhere"
+msgstr "Muualla"
+
+#: ../contents/ui/EventModel.qml
+msgid "This calendar can't show free / busy times"
+msgstr "Tämä kalenteri ei voi näyttää vapaita / varattuja aikoja"
+
+#: ../contents/ui/EventMover.qml
+msgid "Event moved"
+msgstr "Tapahtuma siirretty"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No suggestions: the guests' busy times aren't available."
+msgstr "Ei ehdotuksia: vieraiden varattuja aikoja ei ole saatavilla."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "Suggested times (not counting %1):"
+msgstr "Ehdotetut ajat (ei mukana: %1):"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Suggested times:"
+msgstr "Ehdotetut ajat:"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "%1 = names of people"
+msgid "No time free in the working hours of this day (not counting %1)."
+msgstr "Ei vapaata aikaa tämän päivän työaikana (ei mukana: %1)."
+
+#: ../contents/ui/FindTimeView.qml
+msgid "No time free for everyone in the working hours of this day."
+msgstr "Tämän päivän työaikana ei ole kaikille vapaata aikaa."
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time"
+msgid "Not available"
+msgstr "Ei käytettävissä"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "someone's calendar in Find a time: %1 = Google's reason"
+msgid "Not available (%1)"
+msgstr "Ei käytettävissä (%1)"
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Previous day"
+msgstr "Edellinen päivä"
+
+#: ../contents/ui/FindTimeView.qml
+msgctxt "Find a time: the day shown"
+msgid "ddd, d MMM"
+msgstr "ddd d.M."
+
+#: ../contents/ui/FindTimeView.qml
+msgid "Next day"
+msgstr "Seuraava päivä"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Go to Date"
+msgstr "Siirry päivään"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Go"
+msgstr "Siirry"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "Eg: next friday, 15 nov, +2w"
+msgstr "Esim.: perjantai, 15 marras, +2w"
+
+#: ../contents/ui/GoToDateView.qml
+msgid "No day found in the text"
+msgstr "Tekstistä ei löytynyt päivää"
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file."
+msgstr "Tiedoston lukeminen epäonnistui."
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading .ics files needs the Python icalendar module."
+msgstr ".ics-tiedostojen lukeminen vaatii Python-moduulin icalendar."
+
+#: ../contents/ui/ImportView.qml
+msgid "Could not read the file: %1"
+msgstr "Tiedoston lukeminen epäonnistui: %1"
+
+#: ../contents/ui/ImportView.qml
+msgid "Changed occurrence of a repeating event"
+msgstr "Toistuvan tapahtuman muutettu esiintymä"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 day"
+msgid_plural "Every %1 days"
+msgstr[0] "%1 päivän välein"
+msgstr[1] "%1 päivän välein"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "%1 viikon välein"
+msgstr[1] "%1 viikon välein"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Weekly"
+msgstr "Viikoittain"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly / Every 2 weeks, %2 = days"
+msgid "%1 on %2"
+msgstr "%1: %2"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 month"
+msgid_plural "Every %1 months"
+msgstr[0] "%1 kuukauden välein"
+msgstr[1] "%1 kuukauden välein"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Monthly"
+msgstr "Kuukausittain"
+
+#: ../contents/ui/ImportView.qml
+msgid "Every %1 year"
+msgid_plural "Every %1 years"
+msgstr[0] "%1 vuoden välein"
+msgstr[1] "%1 vuoden välein"
+
+#: ../contents/ui/ImportView.qml ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Yearly"
+msgstr "Vuosittain"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%2 = Weekly on Monday, ..."
+msgid "%2, %1 time"
+msgid_plural "%2, %1 times"
+msgstr[0] "%2, %1 kerta"
+msgstr[1] "%2, %1 kertaa"
+
+#: ../contents/ui/ImportView.qml
+msgctxt "%1 = Weekly on Monday, ..., %2 = date"
+msgid "%1, until %2"
+msgstr "%1, %2 asti"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 exception"
+msgid_plural "%1 exceptions"
+msgstr[0] "%1 poikkeus"
+msgstr[1] "%1 poikkeusta"
+
+#: ../contents/ui/ImportView.qml
+msgid "Close"
+msgstr "Sulje"
+
+#: ../contents/ui/ImportView.qml
+msgid "Import"
+msgstr "Tuo"
+
+#: ../contents/ui/ImportView.qml
+msgid "No file chosen"
+msgstr "Tiedostoa ei ole valittu"
+
+#: ../contents/ui/ImportView.qml
+msgid "Choose File…"
+msgstr "Valitse tiedosto…"
+
+#: ../contents/ui/ImportView.qml
+msgid "Reading the file…"
+msgstr "Luetaan tiedostoa…"
+
+#: ../contents/ui/ImportView.qml
+msgid "No events in this file"
+msgstr "Tiedostossa ei ole tapahtumia"
+
+#: ../contents/ui/ImportView.qml
+msgid "(No title)"
+msgstr "(Ei otsikkoa)"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 cancelled event isn't imported."
+msgid_plural "%1 cancelled events aren't imported."
+msgstr[0] "%1 peruttu tapahtuma jätetään tuomatta."
+msgstr[1] "%1 peruttua tapahtumaa jätetään tuomatta."
+
+#: ../contents/ui/ImportView.qml
+msgid "Calendar:"
+msgstr "Kalenteri:"
+
+#: ../contents/ui/ImportView.qml
+msgid "Guests and the organizer aren't imported, and no invitations are sent. Importing the same event again updates it."
+msgstr "Vieraita ja järjestäjää ei tuoda, eikä kutsuja lähetetä. Saman tapahtuman tuominen uudelleen päivittää sen."
+
+#: ../contents/ui/ImportView.qml
+msgid "Importing needs a Google Calendar you can edit. Log in to Google Calendar in the settings."
+msgstr "Tuominen vaatii Google-kalenterin, jota voit muokata. Kirjaudu Google-kalenteriin asetuksissa."
+
+#: ../contents/ui/ImportView.qml
+msgid "Importing… %1 of %2"
+msgstr "Tuodaan… %1/%2"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 event imported"
+msgid_plural "%1 events imported"
+msgstr[0] "%1 tapahtuma tuotu"
+msgstr[1] "%1 tapahtumaa tuotu"
+
+#: ../contents/ui/ImportView.qml
+msgid "%1 failed: %2"
+msgid_plural "%1 failed, eg: %2"
+msgstr[0] "%1 epäonnistui: %2"
+msgstr[1] "%1 epäonnistui, esim.: %2"
+
+#: ../contents/ui/JoinPill.qml ../contents/ui/MeetingAlertContent.qml
+msgid "Join"
+msgstr "Liity"
+
+#: ../contents/ui/lib/ConfigFontFamily.qml
+msgctxt "Use default font"
+msgid "Default"
+msgstr "Oletus"
+
+#: ../contents/ui/lib/ConfigFontFamily.qml
+msgid "Choose a Font"
+msgstr "Valitse fontti"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Play"
+msgstr "Toista"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Choose a sound effect"
+msgstr "Valitse ääni"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "Sound files (%1)"
+msgstr "Äänitiedostot (%1)"
+
+#: ../contents/ui/lib/ConfigSound.qml
+msgid "All files (%1)"
+msgstr "Kaikki tiedostot (%1)"
+
+#: ../contents/ui/lib/PythonModules.qml
+msgid "Couldn't install the modules. Install python3-icalendar (python-icalendar on Arch) with your package manager."
+msgstr "Moduuleja ei voitu asentaa. Asenna python3-icalendar (Archissa python-icalendar) paketinhallinnalla."
+
+#: ../contents/ui/lib/PythonModules.qml
+msgid "Couldn't install the modules: %1"
+msgstr "Moduuleja ei voitu asentaa: %1"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time on the hour (24 hour clock)"
+msgid "h"
+msgstr "h"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time (24 hour clock)"
+msgid "h:mm"
+msgstr "h:mm"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time on the hour (12 hour clock)"
+msgid "h AP"
+msgstr "g AP"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event time (12 hour clock)"
+msgid "h:mm AP"
+msgstr "h:mm AP"
+
+#: ../contents/ui/LocaleFuncs.js
+msgid "All Day"
+msgstr "Koko päivä"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "from date/time %1 until date/time %2"
+msgid "%1 - %2"
+msgstr "%1 - %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "event span, %1 = start, %2 = end"
+msgid "%1 – %2"
+msgstr "%1 – %2"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date"
+msgid "%1 · All day"
+msgstr "%1 · Koko päivä"
+
+#: ../contents/ui/LocaleFuncs.js
+msgctxt "search result, %1 = date, %2 = start time, %3 = end time"
+msgid "%1 · %2 – %3"
+msgstr "%1 · %2 – %3"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 hours"
+msgid "%1h"
+msgstr "%1 h"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 minutes"
+msgid "%1m"
+msgstr "%1 min"
+
+#: ../contents/ui/LocaleFuncs.js
+#, no-c-format
+msgctxt "short form for %1 seconds"
+msgid "%1s"
+msgstr "%1 s"
+
+#: ../contents/ui/Logic.qml
+msgid "Could not connect."
+msgstr "Yhteyden muodostaminen epäonnistui."
+
+#: ../contents/ui/Logic.qml
+msgid "The weather service is not available right now."
+msgstr "Säätiedot eivät ole juuri nyt saatavilla."
+
+#: ../contents/ui/Logic.qml
+msgid "Weather API limit reached"
+msgstr "Sään API-rajoitus saavutettu"
+
+#: ../contents/ui/Logic.qml
+msgid "OpenWeatherMap refused the app id for One Call 3.0: subscribe to it, or choose Free (2.5) in Settings > Weather."
+msgstr "OpenWeatherMap hylkäsi sovellustunnisteen One Call 3.0:lle: tilaa se tai valitse Free (2.5) kohdassa Asetukset > Sää."
+
+#: ../contents/ui/Logic.qml
+msgid "OpenWeatherMap refused the app id. A new one takes up to 2 hours to work; check it in Settings > Weather."
+msgstr "OpenWeatherMap hylkäsi sovellustunnisteen. Uusi alkaa toimia enintään 2 tunnin kuluessa; tarkista se kohdassa Asetukset > Sää."
+
+#: ../contents/ui/Logic.qml
+msgctxt "The language code for OpenWeatherMap's weather texts, as listed on https://openweathermap.org/current#multi (eg: de, fr, pt_br, zh_cn); en if yours isn't there"
+msgid "en"
+msgstr "fi"
+
+#: ../contents/ui/Logic.qml
+msgid "Google authorization expired or was revoked. Open Event Calendar Settings > Calendars > Google Calendar and sign in to that account again."
+msgstr "Googlen valtuutus on vanhentunut tai peruttu. Avaa Event Calendarin asetukset > Kalenterit > Google-kalenteri ja kirjaudu kyseiselle tilille uudelleen."
+
+#: ../contents/ui/Logic.qml
+msgid "Logged out of Google. Please login again."
+msgstr "Kirjauduttu ulos Googlesta. Ole hyvä ja kirjaudu uudelleen."
+
+#: ../contents/ui/Logic.qml ../contents/ui/UpcomingEvents.qml
+msgid "Event Calendar NG"
+msgstr "Tapahtumakalenteri NG"
+
+#: ../contents/ui/Logic.qml
+msgid "Calendar is back in sync"
+msgstr "Kalenteri on taas synkronoitu"
+
+#: ../contents/ui/Logic.qml
+msgid "Calendar can't sync"
+msgstr "Kalenteria ei voi synkronoida"
+
+#: ../contents/ui/Logic.qml
+msgid "No connection. Showing the last loaded events; retrying automatically."
+msgstr "Ei yhteyttä. Näytetään viimeksi ladatut tapahtumat; yritetään automaattisesti uudelleen."
+
+#: ../contents/ui/main.qml
+msgctxt "%1 = event title, %2 = in 12 min / 25 min left"
+msgid "%1 · %2"
+msgstr "%1 · %2"
+
+#: ../contents/ui/main.qml
+msgid "Camera Check…"
+msgstr "Kameran tarkistus…"
+
+#: ../contents/ui/main.qml ../contents/ui/PopupHeader.qml
+msgid "Refresh"
+msgstr "Päivitä"
+
+#: ../contents/ui/main.qml
+msgid "Date and Time Formats…"
+msgstr "Päiväys- ja aikamuodot…"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Manage lists"
+msgstr "Hallitse luetteloita"
+
+#: ../contents/ui/ManageListsView.qml
+msgid "No lists"
+msgstr "Ei listoja"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "%1 open task"
+msgid_plural "%1 open tasks"
+msgstr[0] "%1 avoin tehtävä"
+msgstr[1] "%1 avointa tehtävää"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Show in smart lists"
+msgstr "Näytä älyluetteloissa"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Rename…"
+msgstr "Nimeä uudelleen…"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "Clear completed"
+msgstr "Tyhjennä valmiit"
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgctxt "%2 = task list name"
+msgid "Delete the list \"%2\" and its %1 task? This can't be undone."
+msgid_plural "Delete the list \"%2\" and its %1 tasks? This can't be undone."
+msgstr[0] "Poistetaanko luettelo ”%2” ja sen %1 tehtävä? Tätä ei voi kumota."
+msgstr[1] "Poistetaanko luettelo ”%2” ja sen %1 tehtävää? Tätä ei voi kumota."
+
+#: ../contents/ui/ManageListsView.qml ../contents/ui/TasksView.qml
+msgid "New list name"
+msgstr "Uuden luettelon nimi"
+
+#: ../contents/ui/ManageListsView.qml
+msgid "Create"
+msgstr "Luo"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Starting soon"
+msgstr "Alkaa pian"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Starting now"
+msgstr "Alkaa nyt"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Show Less"
+msgstr "Näytä vähemmän"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Microphone and Speaker…"
+msgstr "Mikrofoni ja kaiutin…"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Choose the Camera…"
+msgstr "Valitse kamera…"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Snooze 1 min"
+msgstr "Torkku 1 min"
+
+#: ../contents/ui/MeetingAlertContent.qml ../contents/ui/PopupView.qml
+msgid "Dismiss"
+msgstr "Hylkää"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Return: join · Esc: dismiss"
+msgstr "Enter: liity · Esc: hylkää"
+
+#: ../contents/ui/MeetingAlertContent.qml
+msgid "Esc: dismiss"
+msgstr "Esc: hylkää"
+
+#: ../contents/ui/MeetingAlertWindow.qml
+msgid "Meeting"
+msgstr "Kokous"
+
+#: ../contents/ui/MicMeter.qml
+msgid "Couldn't play the microphone on the speaker (pactl)."
+msgstr "Mikrofonia ei voitu toistaa kaiuttimesta (pactl)."
+
+#: ../contents/ui/MicMeter.qml
+msgid "Hear yourself (use headphones: speakers would whistle)"
+msgstr "Kuule itsesi (käytä kuulokkeita: kaiuttimet kiertäisivät)"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "volume percentage, the widest"
+msgid "%1%"
+msgstr "%1 %"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "the microphone's input level now"
+msgid "Level"
+msgstr "Taso"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "volume percentage"
+msgid "%1%"
+msgstr "%1 %"
+
+#: ../contents/ui/MicMeter.qml
+msgctxt "the microphone's input volume"
+msgid "Sensitivity"
+msgstr "Herkkyys"
+
+#: ../contents/ui/MicMeter.qml
+msgid "The microphone is muted."
+msgstr "Mikrofoni on mykistetty."
+
+#: ../contents/ui/MicMeter.qml
+msgid "Unmute"
+msgstr "Poista mykistys"
+
+#: ../contents/ui/MicMeter.qml
+msgid "Test: play a sound on each side"
+msgstr "Testi: toista ääni kummallakin puolella"
+
+#: ../contents/ui/MiniMonth.qml ../contents/ui/PopupHeader.qml
+msgid "Previous Month"
+msgstr "Edellinen kuukausi"
+
+#: ../contents/ui/MiniMonth.qml ../contents/ui/PopupHeader.qml
+msgid "Next Month"
+msgstr "Seuraava kuukausi"
+
+#: ../contents/ui/MiniMonth.qml
+msgctxt "%2 = date"
+msgid "%2, %1 event"
+msgid_plural "%2, %1 events"
+msgstr[0] "%2, %1 tapahtuma"
+msgstr[1] "%2, %1 tapahtumaa"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "New moon"
+msgstr "Uusikuu"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waxing crescent"
+msgstr "Kasvava sirppi"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "First quarter"
+msgstr "Ensimmäinen neljännes"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waxing gibbous"
+msgstr "Kasvava kuu"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Full moon"
+msgstr "Täysikuu"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waning gibbous"
+msgstr "Vähenevä kuu"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Last quarter"
+msgstr "Viimeinen neljännes"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase"
+msgid "Waning crescent"
+msgstr "Vähenevä sirppi"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon"
+msgid "Up all day"
+msgstr "Taivaalla koko päivän"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon"
+msgid "Down all day"
+msgstr "Horisontin alla koko päivän"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 and %2 = times"
+msgid "Rises %1, sets %2"
+msgstr "Nousee %1, laskee %2"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 and %2 = times"
+msgid "Sets %1, rises %2"
+msgstr "Laskee %1, nousee %2"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = time"
+msgid "Rises %1"
+msgstr "Nousee %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = time"
+msgid "Sets %1"
+msgstr "Laskee %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "%1 = date"
+msgid "Full moon %1"
+msgstr "Täysikuu %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "%1 = date"
+msgid "New moon %1"
+msgstr "Uusikuu %1"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "moon phase %1 at time %2"
+msgid "%1 at %2"
+msgstr "%1 klo %2"
+
+#: ../contents/ui/MoonPanel.qml
+msgctxt "the moon, %1 = percent"
+msgid "%1% lit"
+msgstr "%1 % valaistu"
+
+#: ../contents/ui/NewEventForm.qml
+msgid "Eg: 9am-5pm Work"
+msgstr "Esim: 9 AP - 5 IP Työ"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Buttons in the header"
+msgstr "Otsikkopalkin painikkeet"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Previous Week"
+msgstr "Edellinen viikko"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Previous Day"
+msgstr "Edellinen päivä"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Today (press and hold, or G: go to a date)"
+msgstr "Tänään (pidä painettuna tai G: siirry päivään)"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Next Week"
+msgstr "Seuraava viikko"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Next Day"
+msgstr "Seuraava päivä"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "New Event (press and hold: a meeting now)"
+msgstr "Uusi tapahtuma (pidä painettuna: kokous heti)"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Start a Google Meet"
+msgstr "Aloita Google Meet"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Start a Zoom Meeting"
+msgstr "Aloita Zoom-kokous"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "More Actions"
+msgstr "Lisää toimintoja"
+
+#: ../contents/ui/PopupHeader.qml
+msgid "Keep Open"
+msgstr "Pidä auki"
+
+#: ../contents/ui/PopupView.qml
+msgid "Couldn't delete the event"
+msgstr "Tapahtumaa ei voitu poistaa"
+
+#: ../contents/ui/PopupView.qml
+msgid "Repeating event deleted"
+msgstr "Toistuva tapahtuma poistettu"
+
+#: ../contents/ui/PopupView.qml
+msgid "Task deleted"
+msgstr "Tehtävä poistettu"
+
+#: ../contents/ui/PopupView.qml
+msgid "Event deleted"
+msgstr "Tapahtuma poistettu"
+
+#: ../contents/ui/PopupView.qml
+msgid "Couldn't delete the task"
+msgstr "Tehtävää ei voitu poistaa"
+
+#: ../contents/ui/PopupView.qml
+msgid "Loading calendars…"
+msgstr "Ladataan kalentereita…"
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying…"
+msgstr "Yritetään uudelleen…"
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying in %1 second."
+msgid_plural "Retrying in %1 seconds."
+msgstr[0] "Yritetään uudelleen %1 sekunnin kuluttua."
+msgstr[1] "Yritetään uudelleen %1 sekunnin kuluttua."
+
+#: ../contents/ui/PopupView.qml
+msgid "Retrying in %1 minute."
+msgid_plural "Retrying in %1 minutes."
+msgstr[0] "Yritetään uudelleen %1 minuutin kuluttua."
+msgstr[1] "Yritetään uudelleen %1 minuutin kuluttua."
+
+#: ../contents/ui/PopupView.qml
+msgid "Can't connect. Showing the last loaded events."
+msgstr "Yhteyttä ei saada. Näytetään viimeksi ladatut tapahtumat."
+
+#: ../contents/ui/PopupView.qml ../contents/ui/WeatherPanel.qml
+msgid "Retry Now"
+msgstr "Yritä nyt uudelleen"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml ../contents/ui/TasksView.qml
+msgid "Today"
+msgstr "Tänään"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskRow.qml ../contents/ui/TasksView.qml
+msgid "Tomorrow"
+msgstr "Huomenna"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = weekday, %2 = short date"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every weekday"
+msgstr "Joka arkipäivä"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgctxt "%1 = weekday"
+msgid "Every %1"
+msgstr "Joka %1"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every day"
+msgid_plural "Every %1 days"
+msgstr[0] "Joka päivä"
+msgstr[1] "%1 päivän välein"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every week"
+msgid_plural "Every %1 weeks"
+msgstr[0] "Joka viikko"
+msgstr[1] "%1 viikon välein"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every month"
+msgid_plural "Every %1 months"
+msgstr[0] "Joka kuukausi"
+msgstr[1] "%1 kuukauden välein"
+
+#: ../contents/ui/QuickAddTaskRow.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Every year"
+msgid_plural "Every %1 years"
+msgstr[0] "Joka vuosi"
+msgstr[1] "%1 vuoden välein"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Couldn't add the task"
+msgstr "Tehtävän lisääminen epäonnistui"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Add a task…"
+msgstr "Lisää tehtävä…"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = task list name"
+msgid "Add a task to %1"
+msgstr "Lisää tehtävä luetteloon %1"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = task list name"
+msgid "Task list: %1"
+msgstr "Tehtäväluettelo: %1"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "The list new tasks go to"
+msgstr "Luettelo, johon uudet tehtävät lisätään"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = recognized day, time, …"
+msgid "%1 (not supported by Google Tasks)"
+msgstr "%1 (Google Tasks ei tue)"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Not supported by Google Tasks"
+msgstr "Google Tasks ei tue"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgctxt "%1 = the recognized words"
+msgid "Keep \"%1\" in the title"
+msgstr "Säilytä ”%1” otsikossa"
+
+#: ../contents/ui/QuickAddTaskRow.qml
+msgid "Keep these words in the title"
+msgstr "Säilytä nämä sanat otsikossa"
+
+#: ../contents/ui/QuickAddView.qml
+msgid "Quick Add"
+msgstr "Pikalisäys"
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "quick add example"
+msgid "Lunch with Anna tomorrow 13:00"
+msgstr "Lounas Annan kanssa huomenna 13:00"
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "The task is due on %1."
+msgstr "Tehtävä erääntyy %1."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date, %2 = time"
+msgid "The event is added on %1 at %2."
+msgstr "Tapahtuma lisätään %1 klo %2."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "The event is added on %1, all day."
+msgstr "Tapahtuma lisätään %1, koko päivä."
+
+#: ../contents/ui/QuickAddView.qml
+msgid "Type what, when and where. Without a day, the event is added today."
+msgstr "Kirjoita mitä, milloin ja missä. Ilman päivää tapahtuma lisätään tälle päivälle."
+
+#: ../contents/ui/QuickAddView.qml
+msgctxt "%1 = date"
+msgid "Type what, when and where. Without a day, the event is added on %1."
+msgstr "Kirjoita mitä, milloin ja missä. Ilman päivää tapahtuma lisätään päivälle %1."
+
+#: ../contents/ui/QuickAddView.qml
+msgid "More options…"
+msgstr "Lisää valintoja…"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Yes"
+msgstr "Kyllä"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Yes to All Events"
+msgstr "Kyllä kaikkiin tapahtumiin"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "Maybe"
+msgstr "Ehkä"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "Maybe to All Events"
+msgstr "Ehkä kaikkiin tapahtumiin"
+
+#: ../contents/ui/Responses.js ../contents/ui/UpcomingEvents.qml
+msgctxt "RSVP"
+msgid "No"
+msgstr "Ei"
+
+#: ../contents/ui/Responses.js
+msgctxt "RSVP"
+msgid "No to All Events"
+msgstr "Ei kaikkiin tapahtumiin"
+
+#: ../contents/ui/SearchView.qml
+msgid "Search events and tasks…"
+msgstr "Etsi tapahtumia ja tehtäviä…"
+
+#: ../contents/ui/SearchView.qml
+msgid "Type to search events and tasks"
+msgstr "Kirjoita etsiäksesi tapahtumia ja tehtäviä"
+
+#: ../contents/ui/SearchView.qml
+msgid "Searching…"
+msgstr "Etsitään…"
+
+#: ../contents/ui/SearchView.qml
+msgid "No events found"
+msgstr "Tapahtumia ei löytynyt"
+
+#: ../contents/ui/SearchView.qml ../contents/ui/UpNextPanel.qml
+msgid "Show more"
+msgstr "Näytä lisää"
+
+#: ../contents/ui/SearchView.qml
+msgid "Couldn't search Google Calendar"
+msgstr "Google-kalenterista ei voitu etsiä"
+
+#: ../contents/ui/SearchView.qml
+msgid "Searching Google Calendar…"
+msgstr "Etsitään Google-kalenterista…"
+
+#: ../contents/ui/TaskCheck.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Mark as not done"
+msgstr "Merkitse tekemättömäksi"
+
+#: ../contents/ui/TaskCheck.qml ../contents/ui/TaskDetailsBody.qml
+msgid "Mark as done"
+msgstr "Merkitse tehdyksi"
+
+#: ../contents/ui/TaskDetailsBody.qml ../contents/ui/TasksView.qml
+msgid "Couldn't move the task"
+msgstr "Tehtävän siirtäminen epäonnistui"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "task due: %1 = day (Today, Oct 28), %2 = time"
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "%1 = short date"
+msgid "Overdue · due %1"
+msgstr "Myöhässä · erääntyi %1"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Task"
+msgstr "Tehtävä"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Done"
+msgstr "Tehty"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Not done"
+msgstr "Ei tehty"
+
+#: ../contents/ui/TaskRow.qml
+msgctxt "checklist items done: %1 of %2"
+msgid "%1/%2"
+msgstr "%1/%2"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Hide subtasks"
+msgstr "Piilota alitehtävät"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Show subtasks"
+msgstr "Näytä alitehtävät"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Due today"
+msgstr "Erääntyy tänään"
+
+#: ../contents/ui/TaskRow.qml
+msgid "Due tomorrow"
+msgstr "Erääntyy huomenna"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "All"
+msgstr "Kaikki"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "Next 7 days"
+msgstr "Seuraavat 7 päivää"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "tasks filter"
+msgid "Overdue"
+msgstr "Myöhässä"
+
+#: ../contents/ui/TasksView.qml
+msgid "Couldn't change the list's color"
+msgstr "Luettelon värin vaihtaminen epäonnistui"
+
+#: ../contents/ui/TasksView.qml
+msgid "Couldn't clear the completed tasks"
+msgstr "Valmiiden tehtävien tyhjentäminen epäonnistui"
+
+#: ../contents/ui/TasksView.qml
+msgid "Tasks can only move to a list of the same account"
+msgstr "Tehtäviä voi siirtää vain saman tilin luetteloon"
+
+#: ../contents/ui/TasksView.qml
+msgid "The task was copied but couldn't be removed from its old list"
+msgstr "Tehtävä kopioitiin, mutta sitä ei voitu poistaa vanhasta luettelosta"
+
+#: ../contents/ui/TasksView.qml
+msgid "Hide filters"
+msgstr "Piilota suodattimet"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show filters"
+msgstr "Näytä suodattimet"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = tasks filter or list name"
+msgid "Show: %1"
+msgstr "Näytä: %1"
+
+#: ../contents/ui/TasksView.qml
+msgid "By date"
+msgstr "Päivämäärän mukaan"
+
+#: ../contents/ui/TasksView.qml
+msgid "By list"
+msgstr "Luettelon mukaan"
+
+#: ../contents/ui/TasksView.qml
+msgid "View options"
+msgstr "Näkymän asetukset"
+
+#: ../contents/ui/TasksView.qml
+msgid "Group by"
+msgstr "Ryhmittele"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "Date"
+msgstr "Päivämäärä"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "List"
+msgstr "Luettelo"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "group tasks by"
+msgid "None"
+msgstr "Ei mitään"
+
+#: ../contents/ui/TasksView.qml
+msgid "Sort by"
+msgstr "Lajittele"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Due date"
+msgstr "Eräpäivä"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Title"
+msgstr "Otsikko"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "List order"
+msgstr "Luettelon järjestys"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "sort tasks by"
+msgid "Priority"
+msgstr "Prioriteetti"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show details"
+msgstr "Näytä tiedot"
+
+#: ../contents/ui/TasksView.qml
+msgid "Show completed"
+msgstr "Näytä tehdyt"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = task list name"
+msgid "Manage %1"
+msgstr "Hallitse: %1"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "%1 = account name"
+msgid "Account: %1"
+msgstr "Tili: %1"
+
+#: ../contents/ui/TasksView.qml
+msgid "The account the new list goes to"
+msgstr "Tili, johon uusi luettelo luodaan"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Red"
+msgstr "Punainen"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Orange"
+msgstr "Oranssi"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Yellow"
+msgstr "Keltainen"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Blue"
+msgstr "Sininen"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Green"
+msgstr "Vihreä"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Indigo"
+msgstr "Indigo"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Purple"
+msgstr "Violetti"
+
+#: ../contents/ui/TasksView.qml
+msgctxt "color"
+msgid "Gray"
+msgstr "Harmaa"
+
+#: ../contents/ui/TasksView.qml
+msgid "This week"
+msgstr "Tällä viikolla"
+
+#: ../contents/ui/TasksView.qml
+msgid "Later"
+msgstr "Myöhemmin"
+
+#: ../contents/ui/TasksView.qml
+msgid "No date"
+msgstr "Ei päivämäärää"
+
+#: ../contents/ui/TasksView.qml
+msgid "Completed"
+msgstr "Valmiit"
+
+#: ../contents/ui/TaskUndoBar.qml
+msgctxt "a task was checked"
+msgid "Completed"
+msgstr "Tehty"
+
+#: ../contents/ui/TooltipView.qml
+msgctxt "high / low temperature"
+msgid "%1 / %2"
+msgstr "%1 / %2"
+
+#: ../contents/ui/TooltipView.qml
+msgctxt "precipitation in inches"
+msgid "%1 in"
+msgstr "%1 in"
+
+#: ../contents/ui/TooltipView.qml ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation in mm"
+msgid "%1 mm"
+msgstr "%1 mm"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Snooze 1 minute"
+msgid_plural "Snooze %1 minutes"
+msgstr[0] "Torku 1 minuutti"
+msgstr[1] "Torku %1 minuuttia"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 15 minutes, %2 = event title"
+msgid "In %1: %2"
+msgstr "%1 kuluttua: %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "invitation, %1 = organizer"
+msgid "From %1"
+msgstr "Lähettäjä %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title"
+msgid "Invitation: %1"
+msgstr "Kutsu: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, %1 = event title"
+msgid "All day: %1"
+msgstr "Koko päivän: %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "daily agenda, more events"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+%1 muu"
+msgstr[1] "+%1 muuta"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Today: %1 event"
+msgid_plural "Today: %1 events"
+msgstr[0] "Tänään: %1 tapahtuma"
+msgstr[1] "Tänään: %1 tapahtumaa"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Nothing planned today"
+msgstr "Ei mitään suunniteltua tänään"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Overdue"
+msgstr "Myöhässä"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = time"
+msgid "Due today %1"
+msgstr "Erääntyy tänään %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Due today"
+msgstr "Erääntyy tänään"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = time"
+msgid "Due tomorrow %1"
+msgstr "Erääntyy huomenna %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Due tomorrow"
+msgstr "Erääntyy huomenna"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder, %1 = date (and time)"
+msgid "Due %1"
+msgstr "Erääntyy %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task reminder"
+msgid "Mark as done"
+msgstr "Merkitse tehdyksi"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "%1 task due today"
+msgid_plural "%1 tasks due today"
+msgstr[0] "%1 tehtävä erääntyy tänään"
+msgstr[1] "%1 tehtävää erääntyy tänään"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "%1 overdue task"
+msgid_plural "%1 overdue tasks"
+msgstr[0] "%1 myöhässä oleva tehtävä"
+msgstr[1] "%1 myöhässä olevaa tehtävää"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "tasks"
+msgid "%1 overdue"
+msgid_plural "%1 overdue"
+msgstr[0] "%1 myöhässä"
+msgstr[1] "%1 myöhässä"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 3 tasks due today, %2 = 2 overdue"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "task summary, more tasks"
+msgid "+%1 more"
+msgid_plural "+%1 more"
+msgstr[0] "+%1 lisää"
+msgstr[1] "+%1 lisää"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgid "Show Tasks"
+msgstr "Näytä tehtävät"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = time"
+msgid "tomorrow %1"
+msgstr "huomenna %1"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = 3h20m"
+msgid "(in %1)"
+msgstr "(%1 kuluttua)"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title, %2 = end time"
+msgid "Now: %1, until %2"
+msgstr "Nyt: %1, %2 asti"
+
+#: ../contents/ui/UpcomingEvents.qml
+msgctxt "%1 = event title, %2 = when"
+msgid "Next: %1, %2"
+msgstr "Seuraavaksi: %1, %2"
+
+#: ../contents/ui/UpNextPanel.qml ../contents/ui/WeekView.qml
+msgctxt "Up next: a day's heading"
+msgid "dddd, d MMM"
+msgstr "dddd d. MMM"
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Up next"
+msgstr "Seuraavaksi"
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Nothing tomorrow."
+msgid_plural "Nothing in the next %1 days."
+msgstr[0] "Ei mitään huomenna."
+msgstr[1] "Ei mitään seuraavan %1 päivän aikana."
+
+#: ../contents/ui/UpNextPanel.qml
+msgid "Nothing planned in the coming days."
+msgstr "Ei mitään suunniteltua lähipäiville."
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Clear"
+msgstr "Selkeää"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Mainly clear"
+msgstr "Enimmäkseen selkeää"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Partly cloudy"
+msgstr "Puolipilvistä"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Overcast"
+msgstr "Pilvistä"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Fog"
+msgstr "Sumua"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rime fog"
+msgstr "Huurtavaa sumua"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light drizzle"
+msgstr "Heikkoa tihkusadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Drizzle"
+msgstr "Tihkusadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy drizzle"
+msgstr "Voimakasta tihkusadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Freezing drizzle"
+msgstr "Jäätävää tihkusadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light rain"
+msgstr "Heikkoa sadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rain"
+msgstr "Sade"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy rain"
+msgstr "Voimakasta sadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Freezing rain"
+msgstr "Jäätävää sadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Light snow"
+msgstr "Heikkoa lumisadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow"
+msgstr "Lumisadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy snow"
+msgstr "Voimakasta lumisadetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow grains"
+msgstr "Lumijyväsiä"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Rain showers"
+msgstr "Sadekuuroja"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy rain showers"
+msgstr "Voimakkaita sadekuuroja"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Snow showers"
+msgstr "Lumikuuroja"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Heavy snow showers"
+msgstr "Voimakkaita lumikuuroja"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Thunderstorm"
+msgstr "Ukkosta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Thunderstorm with hail"
+msgstr "Ukkosta ja raetta"
+
+#: ../contents/ui/weather/OpenMeteo.js
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "%1 = time"
+msgid "Sunrise %1"
+msgstr "Auringonnousu %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "%1 = time"
+msgid "Sunset %1"
+msgstr "Auringonlasku %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "the sun up all day"
+msgid "Midnight sun"
+msgstr "Yötön yö"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "the sun down all day"
+msgid "Polar night"
+msgstr "Kaamos"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Set a location in Settings > Weather to see the forecast here."
+msgstr "Aseta sijainti kohdassa Asetukset > Sää, niin ennuste näytetään tässä."
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Loading weather…"
+msgstr "Ladataan säätä…"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Full forecast on the web"
+msgstr "Koko ennuste verkossa"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "high / low temperature"
+msgid "High %1 · Low %2"
+msgstr "Ylin %1 · Alin %2"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation during the day"
+msgid "Rain: %1"
+msgstr "Sade: %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "No forecast for this day."
+msgstr "Tälle päivälle ei ole ennustetta."
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Next hour"
+msgid_plural "Next %1 hours"
+msgstr[0] "Seuraava tunti"
+msgstr[1] "Seuraavat %1 tuntia"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "weather by hour of the shown day"
+msgid "During the day"
+msgstr "Päivän aikana"
+
+#: ../contents/ui/WeatherPanel.qml
+msgctxt "precipitation during the hours of the chart"
+msgid "Rain: %1"
+msgstr "Sade: %1"
+
+#: ../contents/ui/WeatherPanel.qml
+msgid "Next days"
+msgstr "Seuraavat päivät"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "%1 = day and time, %2 = event title"
+msgid "Next: %1 · %2"
+msgstr "Seuraava: %1 · %2"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "the day before today"
+msgid "Yesterday"
+msgstr "Eilen"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "%1 = time zone, %2 = a date"
+msgid ""
+"%1\n"
+"The time difference changes during these days: the hours shown are those of %2."
+msgstr ""
+"%1\n"
+"Aikaero muuttuu näinä päivinä: näytetyt tunnit ovat päivän %2 mukaiset."
+
+#: ../contents/ui/WeekView.qml
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] "%1 päivä"
+msgstr[1] "%1 päivää"
+
+#: ../contents/ui/WeekView.qml
+msgctxt "more events not shown"
+msgid "+%1"
+msgstr "+%1"
+
+#: ../contents/ui/WeekView.qml
+msgid "No more events today"
+msgstr "Ei enää tapahtumia tänään"
+
+#: ../contents/ui/WorkingLocationLabel.qml
+msgctxt "%1 = Home, Office, ..."
+msgid "Working location: %1"
+msgstr "Työskentelypaikka: %1"
+
+#~ msgid "Forecast in the day headers and, in the Day view, a weather panel."
+#~ msgstr "Sääennuste päivien otsikoissa ja päivänäkymässä sääpaneeli."
+
+#~ msgid "Day view shows"
+#~ msgstr "Päivänäkymä näyttää"
+
+#~ msgid "Meteogram above the agenda"
+#~ msgstr "Meteogrammi agendan yläpuolella"
+
+#~ msgid "The weather forecast chart above the Agenda's list"
+#~ msgstr "Sääennustekaavio esityslistan yläpuolella"
+
+#~ msgid "Timer above the agenda"
+#~ msgstr "Ajastin agendan yläpuolella"
+
+#~ msgid "Timer sound"
+#~ msgstr "Ajastimen ääni"
+
+#~ msgid "Meteogram / timer height"
+#~ msgstr "Meteogrammin/ajastimen korkeus"
+
+#~ msgid "Also the meteogram above the agenda"
+#~ msgstr "Myös meteogrammi agendan yläpuolella"
+
+#~ msgid "Today's chart in the Day view and the meteogram above the agenda"
+#~ msgstr "Tämän päivän kaavio päivänäkymässä ja meteogrammi asialistan yläpuolella"
+
+#, no-c-format
+#~ msgid "%1mm"
+#~ msgstr "%1mm"
+
+#~ msgid ""
+#~ "Weather not configured.\n"
+#~ "Go to Weather in the config and set your city,\n"
+#~ "and/or disable the meteogram to hide this area."
+#~ msgstr ""
+#~ "Sääasetuksia ei ole tehty.\n"
+#~ "Mene asetuksissa Sää-kohtaan ja aseta kaupunkisi\n"
+#~ "ja/tai estä sääkartan piilottaa tämä alue."
+
+#~ msgid "Error fetching weather."
+#~ msgstr "Virhe säätietojen haussa."
+
+#~ msgid "&Start"
+#~ msgstr "&Aloita"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Keskeytä"
+
+#~ msgid "Timer"
+#~ msgstr "Ajastin"
+
+#~ msgid "Timer finished"
+#~ msgstr "Ajastin lopetti."
+
+#~ msgid "%1 has passed"
+#~ msgstr "%1 on kulunut"
+
+#~ msgid "Repeat"
+#~ msgstr "Toista"
+
+#~ msgid "Timer, %1 remaining. Activate to pause."
+#~ msgstr "Ajastin, %1 jäljellä. Keskeytä aktivoimalla."
+
+#~ msgid "Timer, %1 remaining. Activate to start."
+#~ msgstr "Ajastin, %1 jäljellä. Käynnistä aktivoimalla."
+
+#~ msgid "Timer set to %1. Use plus or minus to change the duration."
+#~ msgstr "Ajastimen kesto on %1. Muuta kestoa plus- tai miinusnäppäimellä."
+
+#~ msgid "Pause Timer"
+#~ msgstr "Tauota ajastin"
+
+#~ msgid "Start Timer"
+#~ msgstr "Aloita ajastin"
+
+#~ msgid "Scroll or use plus and minus keys to adjust duration"
+#~ msgstr "Säädä kestoa vierittämällä tai plus- ja miinusnäppäimillä"
+
+#~ msgid "Set Timer"
+#~ msgstr "Aseta ajastin"
+
+#~ msgctxt "the sun"
+#~ msgid "Up all day (midnight sun)"
+#~ msgstr "Taivaalla koko päivän (yötön yö)"
+
+#~ msgctxt "the sun"
+#~ msgid "Down all day (polar night)"
+#~ msgstr "Horisontin alla koko päivän (kaamos)"
+
+#~ msgid "Skipped %1 setting this version doesn't have: %2"
+#~ msgid_plural "Skipped %1 settings this version doesn't have: %2"
+#~ msgstr[0] "Ohitettiin %1 asetus, jota tässä versiossa ei ole: %2"
+#~ msgstr[1] "Ohitettiin %1 asetusta, joita tässä versiossa ei ole: %2"
+
+#~ msgid "Not selected now: %1. Select them on the PIM Events Plugin page of the Digital Clock's settings."
+#~ msgstr "Ei nyt valittuna: %1. Valitse ne Digitaalikellon asetusten PIM Events Plugin -sivulla."
+
+#~ msgid "All the calendars Akonadi has now are selected."
+#~ msgstr "Kaikki Akonadin nykyiset kalenterit on valittu."
+
+#~ msgid "Shown read-only. Which Akonadi calendars are shown is set on the PIM Events Plugin page of the Digital Clock's settings (the plugin itself is turned on in Calendars > Plasma calendars). In the popup's calendar menu they are shown and hidden by color: calendars of one color together. The Google calendars of an account signed in here are listed above, with the account."
+#~ msgstr ""
+#~ "Näytetään vain luku -tilassa. Näytettävät Akonadi-kalenterit valitaan Digitaalisen kellon asetusten PIM-tapahtumaliitännäisen sivulla (itse liitännäinen otetaan käyttöön kohdassa Kalenterit > Plasma-kalenterit). Ponnahdusikkunan kalenterivalikossa ne näytetään ja piilotetaan värin mukaan: samanväriset kalenterit yhdessä. Täällä kirjautuneen tilin Google-kalenterit näkyvät yllä tilin kohdalla."
+
+#~ msgid "ICalendar (.ics)"
+#~ msgstr "ICalendar (.ics)"
+
+#~ msgid "Reading .ics files needs the Python icalendar module (python-icalendar)."
+#~ msgstr ".ics-tiedostojen lukeminen vaatii Pythonin icalendar-moduulin (python-icalendar)."
+
+#~ msgid "Before you join a meeting with a video link: your camera, the microphone's level and sensitivity, hearing yourself, and the speaker. Nothing is recorded; they're on only while the alert is shown."
+#~ msgstr "Ennen kuin liityt kokoukseen, jossa on videolinkki: kamerasi, mikrofonin taso ja herkkyys, oman äänen kuuntelu ja kaiutin. Mitään ei tallenneta; ne ovat päällä vain, kun ilmoitus näkyy."
+
+#~ msgid "Full screen only for meetings with a video link"
+#~ msgstr "Koko näyttö vain kokouksille, joissa on videolinkki"
+
+#~ msgid "Show the camera"
+#~ msgstr "Näytä kamera"
+
+#~ msgid "How you look before you join, for meetings with a video link. Nothing is recorded; the camera is on only while the alert is shown."
+#~ msgstr "Miltä näytät ennen liittymistä, kokouksissa, joissa on videolinkki. Mitään ei tallenneta; kamera on päällä vain, kun ilmoitus näkyy."
+
+#~ msgid "Nothing is saved. The camera and the microphone are used only while this is open; a microphone test is kept in memory until it's played."
+#~ msgstr "Mitään ei tallenneta. Kameraa ja mikrofonia käytetään vain, kun tämä on auki; mikrofonitesti pidetään muistissa, kunnes se on toistettu."
+
+#~ msgid "Test: record %1 seconds and play them back"
+#~ msgstr "Testi: nauhoita %1 sekuntia ja toista ne"
+
+#~ msgid "Recording… speak now"
+#~ msgstr "Nauhoitetaan… puhu nyt"
+
+#~ msgid "Playing back…"
+#~ msgstr "Toistetaan…"
+
+#~ msgid "New Event…"
+#~ msgstr "Uusi tapahtuma…"
+
+#~ msgid "Go to Date…"
+#~ msgstr "Siirry päivään…"
+
+#~ msgid "Import Events…"
+#~ msgstr "Tuo tapahtumia…"
+
+#~ msgid "Open Google Calendar"
+#~ msgstr "Avaa Google-kalenteri"
+
+#~ msgid "Copy Date and Time"
+#~ msgstr "Kopioi päiväys ja aika"
+
+#~ msgid "Google authorization expired or was revoked. Open Event Calendar Settings > Google Calendar and sign in to that account again."
+#~ msgstr "Googlen valtuutus on vanhentunut tai peruttu. Avaa Event Calendarin asetukset > Google-kalenteri ja kirjaudu kyseiselle tilille uudelleen."
+
+#~ msgid "Shown read-only. Which Akonadi calendars are shown is set on the PIM Events Plugin page of the Digital Clock's settings (the plugin itself is turned on in Events > Plasma calendars). In the popup's calendar menu they are shown and hidden by color: calendars of one color together. The Google calendars of an account signed in here are listed above, with the account."
+#~ msgstr ""
+#~ "Näytetään vain luku -tilassa. Näytettävät Akonadi-kalenterit valitaan Digitaalisen kellon asetusten PIM-tapahtumaliitännäisen sivulla (itse liitännäinen otetaan käyttöön kohdassa Tapahtumat > Plasma-kalenterit). Ponnahdusikkunan kalenterivalikossa ne näytetään ja piilotetaan värin mukaan: samanväriset kalenterit yhdessä. Täällä kirjautuneen tilin Google-kalenterit näkyvät yllä tilin kohdalla."
+
+#~ msgctxt "%1 = a few event titles"
+#~ msgid "Akonadi calendar: %1"
+#~ msgstr "Akonadi-kalenteri: %1"
+
+#~ msgid "Shown read-only. Which Akonadi calendars are shown is set on the settings page of the PIM events plugin (Events > Plasma calendars). In the popup's calendar menu they are shown and hidden by color: calendars of one color together. The Google calendars of an account signed in here are listed above, with the account."
+#~ msgstr "Näytetään vain luku -tilassa. Näytettävät Akonadi-kalenterit valitaan PIM-tapahtumaliitännäisen asetussivulla (Tapahtumat > Plasma-kalenterit). Ponnahdusikkunan kalenterivalikossa ne näytetään ja piilotetaan värin mukaan: samanväriset kalenterit yhdessä. Täällä kirjautuneen tilin Google-kalenterit näkyvät yllä tilin kohdalla."
+
+#~ msgctxt "number of days"
+#~ msgid " days"
+#~ msgstr " päivää"
+
+#~ msgid "Up next lists"
+#~ msgstr "Seuraavaksi näyttää"
+
+#~ msgid "0 = as many as fit; the rest under \"Show more\""
+#~ msgstr "0 = niin monta kuin mahtuu; loput kohdassa \"Näytä lisää\""
+
+#~ msgctxt "number of events"
+#~ msgid " events"
+#~ msgstr " tapahtumaa"
+
+#~ msgid "Meteogram shows"
+#~ msgstr "Meteogrammi näyttää"
+
+#~ msgid "Shown read-only. Which Akonadi calendars are shown is set on the settings page of the PIM events plugin (Events > Plasma calendars). In the popup's calendar menu they are one entry."
+#~ msgstr "Näytetään vain luku -tilassa. Näytettävät Akonadi-kalenterit valitaan PIM-tapahtumaliitännäisen asetussivulla (Tapahtumat > Plasma-kalenterit). Ponnahdusikkunan kalenterivalikossa ne ovat yksi kohta."
+
+#~ msgid "Next 12 hours"
+#~ msgstr "Seuraavat 12 tuntia"
+
+#~ msgid "Task list shown"
+#~ msgstr "Näytettävä tehtäväluettelo"
+
+#~ msgctxt "%1 = Google Meet, Zoom, ..., %2 = event title, %3 = when"
+#~ msgid "Join %1: %2 (%3)"
+#~ msgstr "Liity (%1): %2 (%3)"
+
+#~ msgctxt "%1 = event title"
+#~ msgid "Mark “%1” as Ended"
+#~ msgstr "Merkitse ”%1” päättyneeksi"
+
+#~ msgid "Open Agenda"
+#~ msgstr "Avaa agenda"
+
+#~ msgid "Event Calendar"
+#~ msgstr "Tapahtumakalenteri"
+
+#~ msgctxt "%1 = event title"
+#~ msgid "Delete “%1”"
+#~ msgstr "Poista ”%1”"
+
+#~ msgid "Full-screen alert when a meeting starts"
+#~ msgstr "Koko näytön hälytys kokouksen alkaessa"
+
+#~ msgid "On every screen, with Join, Snooze 1 min and Dismiss (Esc), instead of the notification when it starts. Not for muted events."
+#~ msgstr "Kaikilla näytöillä: Liity, Torkku 1 min ja Hylkää (Esc), alkamisilmoituksen sijaan. Ei mykistetyille tapahtumille."
+
+#~ msgid "On every screen, with Join, Snooze 1 min and Dismiss (Esc). Not for muted events."
+#~ msgstr "Kaikilla näytöillä: Liity, Torkku 1 min ja Hylkää (Esc). Ei mykistetyille tapahtumille."
+
+#~ msgctxt "%1 = event title, %2 = in 5 min / 12 min left"
+#~ msgid "%1 · %2"
+#~ msgstr "%1 · %2"
+
+#~ msgid "View switcher in the header"
+#~ msgstr "Näkymän vaihdin otsakkeessa"
+
+#~ msgctxt "calendar title format for current month"
+#~ msgid "MMMM d, yyyy"
+#~ msgstr "MMMM d, yyyy"
+
+#~ msgctxt "calendar title format for other months of current year"
+#~ msgid "MMMM"
+#~ msgstr "MMMM"
+
+#~ msgctxt "calendar title format for months not from current year"
+#~ msgid "MMMM, yyyy"
+#~ msgstr "MMMM, yyyy"
+
+#~ msgid "Not in progress"
+#~ msgstr "Ei käynnissä"
+
+#~ msgctxt "%1 = date"
+#~ msgid "%1, has events"
+#~ msgstr "%1, tapahtumia"
+
+#~ msgid "Sounds"
+#~ msgstr "Äänet"
+
+#~ msgid "Reminder"
+#~ msgstr "Muistutus"
+
+#~ msgid "Event starts"
+#~ msgstr "Tapahtuma alkaa"
+
+#~ msgid "Google Meet"
+#~ msgstr "Google Meet"
+
+#~ msgid "Open meeting links in"
+#~ msgstr "Avaa kokouslinkit sovelluksessa"
+
+#~ msgid "Invitations"
+#~ msgstr "Kutsut"
+
+#~ msgid "Daily Agenda"
+#~ msgstr "Päivän agenda"
+
+#~ msgid "All Event Notifications"
+#~ msgstr "Kaikki tapahtumailmoitukset"
+
+#~ msgid "In the notification when a meeting starts."
+#~ msgstr "Ilmoituksessa, kun kokous alkaa."
+
+#~ msgid "Popup width"
+#~ msgstr "Ponnahdusikkunan leveys"
+
+#~ msgid "Popup height"
+#~ msgstr "Ponnahdusikkunan korkeus"
+
+#~ msgid "Working hours start"
+#~ msgstr "Työajan alku"
+
+#~ msgid "Working hours end"
+#~ msgstr "Työajan loppu"
+
+#~ msgctxt "today's high / low temperature"
+#~ msgid "Today: high %1, low %2"
+#~ msgstr "Tänään: ylin %1, alin %2"
+
+#~ msgctxt "precipitation"
+#~ msgid "rain %1"
+#~ msgstr "sade %1"
+
+#~ msgctxt "current weather"
+#~ msgid "Now"
+#~ msgstr "Nyt"
+
+#~ msgctxt "weather of the day shown in the Day view"
+#~ msgid "Forecast"
+#~ msgstr "Sääennuste"
+
+#~ msgid "Search events…"
+#~ msgstr "Etsi tapahtumia…"
+
+#~ msgid "Type to search event titles, places and descriptions"
+#~ msgstr "Kirjoita etsiäksesi tapahtumien otsikoista, paikoista ja kuvauksista"
+
+#~ msgctxt "%1 = task list name"
+#~ msgid "New task in %1"
+#~ msgstr "Uusi tehtävä luetteloon %1"
+
+#~ msgid "Done managing lists"
+#~ msgstr "Lopeta luetteloiden hallinta"
+
+#~ msgid "Done managing lists (shows the tasks by date)"
+#~ msgstr "Lopeta luetteloiden hallinta (näyttää tehtävät päivämäärän mukaan)"
+
+#~ msgid "Manage lists (shows the tasks by list)"
+#~ msgstr "Hallitse luetteloita (näyttää tehtävät luetteloittain)"
+
+#~ msgid "Hide completed tasks"
+#~ msgstr "Piilota tehdyt tehtävät"
+
+#~ msgid "Show completed tasks"
+#~ msgstr "Näytä tehdyt tehtävät"
+
+#~ msgid "Islands: the Day view's panels, the agenda days and the task sections each sit in a rounded card."
+#~ msgstr "Saaret: päivänäkymän paneelit, asialistan päivät ja tehtäväosiot ovat kukin omalla pyöristetyllä kortillaan."
+
+#~ msgid "Due %1"
+#~ msgstr "Erääntyy %1"
+
+#~ msgctxt "%1 is a date, %2 a time"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgctxt "%1 is a date"
+#~ msgid "Due %1"
+#~ msgstr "Erääntyy %1"
+
+#~ msgid "Delete Event"
+#~ msgstr "Poista tapahtuma"
+
+#~ msgid "Confirm Deletion"
+#~ msgstr "Vahvista poisto"
+
+#~ msgid "Edit in browser"
+#~ msgstr "Muokkaa selaimessa"
+
+#~ msgid "Event Title"
+#~ msgstr "Tapahtuman otsikko"
+
+#~ msgid "Add description"
+#~ msgstr "Lisää kuvaus"
+
+#~ msgid "Add due date"
+#~ msgstr "Lisää eräpäivä"
+
+#~ msgid "&Save"
+#~ msgstr "&Talleta"
+
+#~ msgid "Error fetching calendar: %1"
+#~ msgstr "Virhe kalenteria noudettaessa: %1"
+
+#~ msgid "Not logged in to Google Calendar"
+#~ msgstr "Ei kirjauduttu Google-kalenteriin"
+
+#~ msgid "Waiting for the helper page to send the code..."
+#~ msgstr "Odotetaan, että apusivu lähettää koodin..."
+
+#~ msgid "Click Login (Auto) to open <a href=\"%1\">%2</a>. After you grant access, the browser redirects to the helper page and will try to send the code back automatically. If it fails, copy the code and paste it below."
+#~ msgstr "Avaa <a href=\"%1\">%2</a> napsauttamalla Kirjaudu (automaattinen). Kun olet myöntänyt käyttöoikeuden, selain ohjaa apusivulle, joka yrittää lähettää koodin takaisin automaattisesti. Jos se epäonnistuu, kopioi koodi ja liitä se alle."
+
+#~ msgid "Helper page: <a href=\"%1\">%1</a>"
+#~ msgstr "Apusivu: <a href=\"%1\">%1</a>"
+
+#~ msgid "If auto-capture fails, copy the code from the helper page and paste it below."
+#~ msgstr "Jos automaattinen kaappaus epäonnistuu, kopioi koodi apusivulta ja liitä se alle."
+
+#~ msgid "Add location"
+#~ msgstr "Lisää paikka"
+
+#~ msgid "\"Join meeting\" and \"Open in Calendar\" buttons"
+#~ msgstr "\"Liity kokoukseen\"- ja \"Avaa kalenterissa\" -painikkeet"
+
+#~ msgid "Open in Calendar"
+#~ msgstr "Avaa kalenterissa"
+
+#~ msgctxt "calendar view showing a year"
+#~ msgid "Year"
+#~ msgstr "Vuosi"
+
+#~ msgid "Previous Year"
+#~ msgstr "Edellinen vuosi"
+
+#~ msgid "Next Year"
+#~ msgstr "Seuraava vuosi"
+
+#~ msgid "1 event"
+#~ msgid_plural "%1 events"
+#~ msgstr[0] "1 tapahtuma"
+#~ msgstr[1] "%1 tapahtumaa"
+
+#~ msgid "Vertical Panel"
+#~ msgstr "Pystypaneeli"
+
+#~ msgid "Date under the time"
+#~ msgstr "Päivämäärä kellonajan alla"
+
+#~ msgid "A small calendar tile with the weekday and the day."
+#~ msgstr "Pieni kalenteriruutu, jossa viikonpäivä ja päivä."
+
+#~ msgid "In a vertical panel: a dot in the meeting's color."
+#~ msgstr "Pystypaneelissa: piste tapaamisen värillä."
+
+#~ msgid "First hour shown"
+#~ msgstr "Ensimmäinen näytettävä tunti"
+
+#~ msgid "Last hour shown"
+#~ msgstr "Viimeinen näytettävä tunti"
+
+#~ msgid "Week and Today"
+#~ msgstr "Viikko ja Tänään"
+
+#~ msgid "Forecast in the day headers and, in the Today view, a weather panel."
+#~ msgstr "Sääennuste päivien otsakkeissa ja Tänään-näkymässä sääpaneeli."
+
+#~ msgid "Clicking a day shows its events"
+#~ msgstr "Päivän napsautus näyttää sen tapahtumat"
+
+#~ msgid "Add Event"
+#~ msgstr "Lisää tapahtuma"
+
+#~ msgid "Delete This Occurrence"
+#~ msgstr "Poista tämä esiintymä"
+
+#~ msgid "Deletes only this occurrence."
+#~ msgstr "Poistaa vain tämän esiintymän."
+
+#~ msgctxt "event in progress"
+#~ msgid "now"
+#~ msgstr "nyt"
+
+#~ msgctxt "%1 = event title, %2 = 5m / now"
+#~ msgid "%1 · %2"
+#~ msgstr "%1 · %2"
+
+#~ msgid "Layout"
+#~ msgstr "Asettelu"
+
+#~ msgid "Timezones"
+#~ msgstr "Aikavyöhykkeet"
+
+#~ msgid "Hangout"
+#~ msgstr "Hangout"
+
+#~ msgctxt "agenda date format line 1"
+#~ msgid "MMM d"
+#~ msgstr "MMM-d"
+
+#~ msgctxt "agenda date format line 2"
+#~ msgid "ddd"
+#~ msgstr "ddd"
+
+#~ msgid "Events Starting"
+#~ msgstr "Tapahtumat alkavat"
+
+#~ msgid "Events In Progress"
+#~ msgstr "Tpaahtumat käynnissä"
+
+#~ msgid "Upcoming Events"
+#~ msgstr "Tulevat tapahtumat"
+
+#~ msgctxt "%1 = 15 minutes"
+#~ msgid "Starting in %1"
+#~ msgstr "Alkaa %1 kuluttua"
+
+#~ msgid "Show agenda"
+#~ msgstr "Näytä Agenda"
+
+#~ msgid "Font Size:"
+#~ msgstr "Kirjasimen koko:"
+
+#~ msgid "px"
+#~ msgstr "px"
+
+#~ msgid " (0px = <b>System Settings > Fonts > General</b>)"
+#~ msgstr " (0px = <b>Järjestelmän asetukset > Kirjasimet > Yleiset</b>)"
+
+#~ msgid "Weather Icon"
+#~ msgstr "Sääkuvake"
+
+#~ msgid "Icon Outline"
+#~ msgstr "Kuvan siirtymä"
+
+#~ msgid "Weather Text"
+#~ msgstr "Sääteksti"
+
+#~ msgid "Position:"
+#~ msgstr "Paikka:"
+
+#~ msgid "Left"
+#~ msgstr "Vasen"
+
+#~ msgid "Right"
+#~ msgstr "Oikea"
+
+#~ msgid "Click Weather:"
+#~ msgstr "Napsauta Sää:"
+
+#~ msgid "Click Date:"
+#~ msgstr "Napsauta päivä:"
+
+#~ msgid "Event description"
+#~ msgstr "Tapahtuman kuvaus"
+
+#~ msgid "Hide 'All Day' text"
+#~ msgstr "Piilota 'koko päivä -teksti"
+
+#~ msgid "Google Hangouts link"
+#~ msgstr "Google-Hangouts -linkki"
+
+#~ msgid "Click Event:"
+#~ msgstr "Napsauta tapahtumaa:"
+
+#~ msgid "Show multi-day events:"
+#~ msgstr "Näytä useampipäiväiset tapahtumat:"
+
+#~ msgid "On all days"
+#~ msgstr "Koko päivän"
+
+#~ msgid "Only on the first and current day"
+#~ msgstr "Vain ensimmäinen ja nykyinen päivä"
+
+#~ msgid "Remember selected calendar in New Event Form"
+#~ msgstr "Muista valittu kalenteri uudessa tapahtumalomakkeessa"
+
+#~ msgid "Current Month"
+#~ msgstr "Nykyinen kuukausi"
+
+#~ msgid "Always show next 14 days"
+#~ msgstr "Näytä aina seuraavat 14 päivää"
+
+#~ msgid "Hide completed events"
+#~ msgstr "Piilota menneet tapahtumat"
+
+#~ msgid "Show all events of the current day (including completed events)"
+#~ msgstr "Näytä tämän päivän kaikki tapahtumat (sisältäen menneet tapahtumat)"
+
+#~ msgid "Colors"
+#~ msgstr "Värit"
+
+#~ msgid "In Progress"
+#~ msgstr "Käynnissä"
+
+#~ msgid "Day Spacing:"
+#~ msgstr "Päivän asemointi:"
+
+#~ msgid "Event Spacing:"
+#~ msgstr "Tapahtuman asemointi:"
+
+#~ msgid "Show calendar"
+#~ msgstr "Näytä kalenteri"
+
+#~ msgid "Scroll to event in Agenda"
+#~ msgstr "Vieritä tapahtumaan Agendassa"
+
+#~ msgid "Double-click on Date:"
+#~ msgstr "Kaksoisnapauta päivää:"
+
+#~ msgid "New Google Calendar Event (Web Browser)"
+#~ msgstr "Uusi Google-kalenterin tapahtuma (www-selain)"
+
+#~ msgid "Do Nothing"
+#~ msgstr "Älä tee mitään"
+
+#~ msgid "Current Month Title:"
+#~ msgstr "Nykyinen kuukausi otsikko:"
+
+#~ msgid "Show Borders"
+#~ msgstr "Näytä kehykset"
+
+#~ msgid "Show Week Numbers"
+#~ msgstr "Näytä viikon numero"
+
+#~ msgid "Highlight Current Day / Week"
+#~ msgstr "Korosta nykyinen päivä / viikko"
+
+#~ msgid "First day of week:"
+#~ msgstr "Viikon ensimmäinen päivä:"
+
+#~ msgid "Event Badge:"
+#~ msgstr "Tapahtuman kuvake:"
+
+#~ msgid "Theme"
+#~ msgstr "Teema"
+
+#~ msgid "Dots (3 Maximum)"
+#~ msgstr "Pisteet (max 3)"
+
+#~ msgid "Bottom Bar (Event Color)"
+#~ msgstr "Alapalkki (tapahtuman väri)"
+
+#~ msgid "Bottom Bar (Highlight)"
+#~ msgstr "Alapalkki (korostettu)"
+
+#~ msgid "Count"
+#~ msgstr "Määrä"
+
+#~ msgid "Radius:"
+#~ msgstr "Säde:"
+
+#~ msgid "Selected:"
+#~ msgstr "Valittu:"
+
+#~ msgid "Solid Color (Highlight)"
+#~ msgstr "Kiinteä väri (korostus)"
+
+#~ msgid "Today:"
+#~ msgstr "Tänään:"
+
+#~ msgid "Solid Color (Inverted)"
+#~ msgstr "Kiinteä väri (käänteinen)"
+
+#~ msgid "Big Number"
+#~ msgstr "Iso numero"
+
+#~ msgid "Event Calendar Plugins"
+#~ msgstr "Tapahumakalenterin liitännäinen"
+
+#~ msgid "Plasma Calendar Plugins"
+#~ msgstr "Plasma-kalenterin liitännäinen"
+
+#~ msgid "Misc"
+#~ msgstr "Sekalaiset"
+
+#~ msgid "Refresh events every: "
+#~ msgstr "Päivitä tapahtumat joka: "
+
+#~ msgctxt "Polling interval in minutes"
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Event Reminder"
+#~ msgstr "Tapahtuman muistutin"
+
+#~ msgid "Event Starting"
+#~ msgstr "Tapahtuma alkaa"
+
+#~ msgid "Widgets"
+#~ msgstr "Sovellukset"
+
+#~ msgid "Show/Hide widgets above the calendar. Toggle Agenda/Calendar on their respective tabs."
+#~ msgstr "Näytä/Piilota tietoja kalenterin edellä. Vaihda Agenda/Kalenteri niiden vastaavilla välilehdillä."
+
+#~ msgid "Meteogram"
+#~ msgstr "Säätila"
+
+#~ msgid "SFX:"
+#~ msgstr "Ääni:"
+
+#~ msgid "Time Format"
+#~ msgstr "Ajan muoto"
+
+#~ msgid "Time Format Documentation"
+#~ msgstr "Ajan muodon dokumentaatio"
+
+#~ msgid "The default font for the Breeze theme is Noto Sans which is hard to read with small text. Try using the Sans Serif font if you find the text too small when adding a second line."
+#~ msgstr "Oletuskirjasin Breeze-teemalle on Noto Sans, joka on vaikea lukea pienellä tekstillä. Kokeile käyttää Sans Serif -kirjasinta, jos teksti on liian pientä kun lisäät sekunnit riville."
+
+#~ msgid "You can also use %1 or %2 to style a section. Note the single quotes around the tags are used to bypass the time format."
+#~ msgstr "Voit käyttää myös %1 tai %2 muotoilla osiota. Huomaa, että yksinkertaisen lainausmerkit tunnisteen ympärillä käytetään ajan muodon ohitukseen."
+
+#~ msgid "Font:"
+#~ msgstr "Kirjasin:"
+
+#~ msgid "Fixed Clock Height: "
+#~ msgstr "Kiinteä kellon korkeus: "
+
+#~ msgid " (0px = scale to fit)"
+#~ msgstr " (0px = sovita)"
+
+#~ msgid "Line 1:"
+#~ msgstr "Rivi 1:"
+
+#~ msgid "Preset:"
+#~ msgstr "Esiasetettu"
+
+#~ msgid "Line 2:"
+#~ msgstr "Rivi 2:"
+
+#~ msgid "Height:"
+#~ msgstr "Korkeus:"
+
+#~ msgid "Mouse Wheel"
+#~ msgstr "Hiiren rulla"
+
+#~ msgid "Run Commands"
+#~ msgstr "Suorita komennot"
+
+#~ msgid "Scroll Up:"
+#~ msgstr "Vieritä ylös:"
+
+#~ msgid "Scroll Down:"
+#~ msgstr "Vieritä alas:"
+
+#~ msgid "Volume (No UI) (amixer)"
+#~ msgstr "Äänenvoimakkuus (ei UI) (amixer)"
+
+#~ msgid "Volume (UI) (qdbus)"
+#~ msgstr "Äänenvoimakkuus (UI) (qdbus)"
+
+#~ msgid "Desktop Widget: Show background"
+#~ msgstr "Työpöytäsovellus: Näytä tausta"
+
+#~ msgid "Debugging"
+#~ msgstr "Debuggaus"
+
+#~ msgid "Debugging will log sensitive information to:"
+#~ msgstr "Debuggaus kirjoittaa lokiin herkkää tietoa kohteeseen:"
+
+#~ msgid "Enable Debugging"
+#~ msgstr "Salli debuggaus"
+
+#~ msgid "To sync with Google Calendar"
+#~ msgstr "Google-kalenteriin yhdistäminen"
+
+#~ msgid "Calendar to the left of the Agenda (Two Columns)"
+#~ msgstr "Kalenteri Agendan vasemmalle puolelle (kaksi saraketta)"
+
+#~ msgid "Agenda below the Calendar (Single Column)"
+#~ msgstr "Agenda kalenterin alle (yksi sarake)"
+
+#~ msgid "Data"
+#~ msgstr "Tiedot"
+
+#~ msgid "API App Id:"
+#~ msgstr "API sovelluksen id:"
+
+#~ msgid "City Id:"
+#~ msgstr "Kaupungin id"
+
+#~ msgid "Eg: 5983720"
+#~ msgstr "Esim: 5983720"
+
+#~ msgid "Find City"
+#~ msgstr "Etsi kaupunki"
+
+#~ msgid "Eg: on-14"
+#~ msgstr "Esim: on-14"
+
+#~ msgid "Settings"
+#~ msgstr "Asetukset"
+
+#~ msgid "Update forecast every: "
+#~ msgstr "Päivitä muoto joka: "
+
+#~ msgid "Show next "
+#~ msgstr "Näytä seuraava "
+
+#~ msgid " hour"
+#~ msgid_plural " hours"
+#~ msgstr[0] " tunti "
+#~ msgstr[1] " tuntia "
+
+#  säätilassa.
+#~ msgid " in the meteogram."
+#~ msgstr " säätilassa."
+
+#~ msgid "Units:"
+#~ msgstr "Yksiköt:"
+
+#~ msgid "Text"
+#~ msgstr "Teksti"
+
+#~ msgid "Grid"
+#~ msgstr "Ruudukko"
+
+#~ msgid "Positive Temp"
+#~ msgstr "Lämpöasteet"
+
+#~ msgid "Negative Temp"
+#~ msgstr "Pakkasasteet"
+
+#~ msgid "<b>Version:</b> %1"
+#~ msgstr "<b>Versio:</b> %1"
+
+#~ msgid "Set Language…"
+#~ msgstr "Aseta kieli…"
+
+#~ msgid "Plasmoid for a calendar+agenda with weather that syncs to Google Calendar."
+#~ msgstr "Plasmoidi kalenteri + agenda säätietoineen synkronoitu Google Calendarin kanssa."
+
+#~ msgid "Open City Forecast In Browser"
+#~ msgstr "Avaa kaupungin sää selaimessa"
+
+#~ msgid "Open New Event In Browser"
+#~ msgstr "Avaa uusi tapahtuma selaimessa"
+
+#~ msgid "Open New Event Form"
+#~ msgstr "Avaa uusi tapahtumalomake"
+
+#~ msgid "Open Event In Browser"
+#~ msgstr "Avaa tapahtuma selaimessa"
+
+#~ msgid "Login"
+#~ msgstr "Kirjautuminen"
+
+#~ msgid "Currently Synched."
+#~ msgstr "Synkronissa tällä hetkellä."
+
+#~ msgid "Logout"
+#~ msgstr "Uloskirjautuminen"
+
+#~ msgid "Visit <a href=\"%1\">%2</a> (opens in your web browser). After you login and give permission to access your calendar, it will give you a code to paste below."
+#~ msgstr "Mene osoitteeseen <a href=\"%1\">%2</a> (avaa www-selaimeen). Kun olet kirjautunut ja antanut luvat kalenteriisi, sinulle annetaan koodi. Kopioi koodi alle."
+
+#~ msgid "Enter code here (Eg: %1)"
+#~ msgstr "Anna koodi tähän (Esim: %1)"
+
+#~ msgid "Invalid Google Authorization Code"
+#~ msgstr "Väärä Googlen valtuutuskoodi"
+
+#~ msgid "Tooltip"
+#~ msgstr "Vihje"
+
+#~ msgid "Cannot deselect Local time from the tooltip"
+#~ msgstr "Paikallista aikaa ei voi poistaa työkaluvihjeestä"
+
+#~ msgid "Set Locale…"
+#~ msgstr "Aseta paikka…"
+
+#~ msgid "Scroll to add to duration"
+#~ msgstr "Valitse lisätäksesi keston"

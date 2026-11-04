@@ -1,0 +1,432 @@
+import QtQuick
+import QtQuick.Controls as QQC2
+import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
+import org.kde.kirigamiaddons.formcard as FormCard
+
+import "../lib"
+import "../ScriptPath.js" as ScriptPath
+import "../Shared.js" as Shared
+
+// Clicking events, reminders, notifications, meetings.
+ConfigPage {
+	id: page
+
+	// Google Meet web apps that can open a meeting link: [{ name, command, authuser }]
+	property var meetApps: []
+	property bool meetAppsLoaded: false // Until then a saved app's command can't be matched
+	ExecUtil { id: meetAppFinder }
+	function findMeetApps() {
+		var script = ScriptPath.scriptPath("find_meet_apps.py")
+		meetAppFinder.execArgv(["python3", "-I", script], function(cmd, exitCode, exitStatus, stdout, stderr) {
+			var apps = []
+			try {
+				var parsed = JSON.parse(stdout)
+				apps = Array.isArray(parsed) ? parsed : []
+			} catch (e) {
+			}
+			page.meetAppsLoaded = true // Before the list: the combo matches the saved app on the change
+			page.meetApps = apps
+		})
+	}
+
+	// When an Event Starts: which of its two forms the options are shown for.
+	readonly property bool fullScreenStyle: startingEnabled.checked && startingStyle.configValue === true
+	readonly property bool startNotification: startingEnabled.checked && (!fullScreenStyle || fullScreenLinkOnly.checked)
+	readonly property bool multimediaAvailable: {
+		var probe = Qt.createComponent("../MultimediaProbe.qml", Component.PreferSynchronous)
+		var ok = probe.status === Component.Ready
+		probe.destroy()
+		return ok
+	}
+	Component.onCompleted: {
+		findMeetApps()
+	}
+
+	// A label and a ConfigSound (checkbox, preview, file, browse) in one FormCard row.
+	component SoundRow: FormCard.AbstractFormDelegate {
+		id: soundRow
+		property string label
+		property string sfxEnabledKey
+		property string sfxPathKey
+		property string sfxPathDefaultValue: '/usr/share/sounds/ocean/stereo/message-new-instant.oga'
+		background: null
+		contentItem: RowLayout {
+			spacing: Kirigami.Units.largeSpacing
+			QQC2.Label {
+				text: soundRow.label
+				Layout.minimumWidth: Kirigami.Units.gridUnit * 5
+			}
+			ConfigSound {
+				Layout.fillWidth: true
+				label: ""
+				sfxEnabledKey: soundRow.sfxEnabledKey
+				sfxPathKey: soundRow.sfxPathKey
+				sfxPathDefaultValue: soundRow.sfxPathDefaultValue
+			}
+		}
+	}
+
+	ColumnLayout {
+		Layout.fillWidth: true
+		spacing: 0
+
+		//--- Opening an event
+		FormCard.FormHeader {
+			title: i18n("Events")
+		}
+		FormCard.FormCard {
+			FormConfigCombo {
+				text: i18n("Clicking an event opens")
+				configKey: 'eventClickAction'
+				model: [
+					{ value: 'details', text: i18n("Event details in the widget") },
+					{ value: 'browser', text: i18n("Google Calendar in the browser") },
+				]
+			}
+		}
+
+		//--- Reminder (the options only while it's on)
+		FormCard.FormHeader {
+			title: i18n("Reminder Before an Event")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				id: reminderEnabled
+				text: i18n("Show a reminder")
+				configKey: 'eventReminderNotificationEnabled'
+			}
+			FormCard.FormDelegateSeparator { visible: reminderEnabled.checked }
+			FormConfigSpin {
+				visible: reminderEnabled.checked
+				label: i18n("Time before")
+				configKey: 'eventReminderMinutesBefore'
+				suffix: i18nc("Time in minutes", " min")
+				from: 1
+				to: 100000
+			}
+			FormCard.FormDelegateSeparator { visible: reminderEnabled.checked }
+			FormConfigSwitch {
+				visible: reminderEnabled.checked
+				text: i18n("Use the reminder times set in Google Calendar")
+				configKey: 'eventReminderUseGoogle'
+			}
+			FormCard.FormDelegateSeparator { visible: reminderEnabled.checked }
+			// eventReminderTimeout: 0 = keep until dismissed, N > 0 = hide after N seconds,
+			// -1 = Plasma's popup timeout (System Settings > Notifications).
+			FormCard.FormSwitchDelegate {
+				id: reminderKeep
+				visible: reminderEnabled.checked
+				text: i18n("Keep until dismissed")
+				checked: page.configBridge.read("eventReminderTimeout", -1) === 0
+				onToggled: page.configBridge.write("eventReminderTimeout", checked ? 0 : (reminderHideAfter.value > 0 ? reminderHideAfter.value : -1))
+			}
+			FormCard.FormDelegateSeparator { visible: reminderHideAfter.visible }
+			FormCard.FormSpinBoxDelegate {
+				id: reminderHideAfter
+				visible: reminderEnabled.checked && !reminderKeep.checked
+				label: i18n("Hide after")
+				// 0 shows as the system's timeout.
+				value: Math.max(0, page.configBridge.read("eventReminderTimeout", -1))
+				from: 0
+				to: 3600
+				textFromValue: function(value, locale) {
+					return value > 0 ? i18ncp("notification shown for", "%1 second", "%1 seconds", value) : i18nc("notification timeout", "System default")
+				}
+				valueFromText: function(text, locale) {
+					var n = parseInt(text, 10)
+					return isNaN(n) ? 0 : n
+				}
+				// onValueChanged (see FormConfigSpin): only a value that differs from the saved one, so
+				// 0 ("keep", shown as 0 here) isn't turned into -1.
+				onValueChanged: {
+					if (value !== Math.max(0, page.configBridge.read("eventReminderTimeout", -1))) {
+						page.configBridge.write("eventReminderTimeout", value > 0 ? value : -1)
+					}
+				}
+			}
+			FormCard.FormSectionText {
+				visible: reminderHideAfter.visible
+				text: i18n("System default: as set in System Settings > Notifications. A reminder hidden after a set time isn't kept in the notification history.")
+			}
+			FormCard.FormDelegateSeparator { visible: reminderEnabled.checked }
+			FormConfigSpin {
+				visible: reminderEnabled.checked
+				label: i18n("Snooze")
+				hint: i18n("0 = no Snooze button")
+				configKey: 'eventReminderSnoozeMinutes'
+				suffix: i18nc("Time in minutes", " min")
+				from: 0
+				to: 120
+			}
+			FormCard.FormDelegateSeparator { visible: reminderEnabled.checked }
+			SoundRow {
+				visible: reminderEnabled.checked
+				label: i18n("Sound")
+				sfxEnabledKey: 'eventReminderSfxEnabled'
+				sfxPathKey: 'eventReminderSfxPath'
+			}
+		}
+
+		//--- Event starting
+		FormCard.FormHeader {
+			title: i18n("When an Event Starts")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				id: startingEnabled
+				text: i18n("Show a notification")
+				configKey: 'eventStartingNotificationEnabled'
+			}
+			// The same notification in another form: full screen (MeetingAlertContent), on every
+			// screen, with Join, Snooze 1 min and Dismiss.
+			FormCard.FormDelegateSeparator { visible: startingEnabled.checked }
+			FormConfigCombo {
+				id: startingStyle
+				visible: startingEnabled.checked
+				text: i18n("Style")
+				configKey: 'meetingFullScreenAlert'
+				model: [
+					{ value: false, text: i18nc("the notification's style", "Notification") },
+					{ value: true, text: i18nc("the notification's style", "Full screen") },
+				]
+			}
+		}
+
+		// The full-screen style's own options (MeetingAlertContent): it comes instead of the
+		// notification, without a sound.
+		FormCard.FormHeader {
+			visible: page.fullScreenStyle
+			title: i18n("Full Screen")
+		}
+		FormCard.FormCard {
+			visible: page.fullScreenStyle
+			FormConfigSwitch {
+				id: fullScreenLinkOnly
+				text: i18n("Only for meetings with a video link")
+				description: i18n("Other events: a notification. Muted events: none.")
+				configKey: 'meetingFullScreenAlertLinkOnly'
+			}
+			// The camera as a mirror in the full-screen alert (needs Qt Multimedia, see
+			// MultimediaProbe.qml): off by default, the camera turning on by itself is a surprise.
+			FormCard.FormDelegateSeparator { visible: alertCamera.visible }
+			FormConfigSwitch {
+				id: alertCamera
+				visible: page.multimediaAvailable
+				text: i18n("Camera check")
+				description: i18n("Before you join a meeting with a video link: your camera, and on request the microphone and the speaker. Nothing is recorded; they're on only while the alert is shown.")
+				configKey: 'meetingAlertCamera'
+			}
+		}
+
+		// The notification's options: with the notification style, or full screen only for meetings
+		// with a link (the other events still get the notification).
+		FormCard.FormHeader {
+			visible: page.startNotification
+			title: i18n("Notification")
+		}
+		FormCard.FormCard {
+			visible: page.startNotification
+			FormCard.FormTextDelegate {
+				visible: page.fullScreenStyle
+				description: i18n("For the events without a video link.")
+			}
+			FormCard.FormDelegateSeparator { visible: page.fullScreenStyle }
+			FormConfigSwitch {
+				text: i18n("Keep until dismissed")
+				configKey: 'eventStartingPersistent'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("Critical")
+				description: i18n("Shown even in Do Not Disturb")
+				configKey: 'eventStartingCritical'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("\"Join meeting\" button")
+				configKey: 'eventNotificationActions'
+			}
+			FormCard.FormDelegateSeparator {}
+			SoundRow {
+				label: i18n("Sound")
+				sfxEnabledKey: 'eventStartingSfxEnabled'
+				sfxPathKey: 'eventStartingSfxPath'
+			}
+		}
+
+		//--- Meetings, and which app opens Google Meet links (Join buttons)
+		FormCard.FormHeader {
+			title: i18n("Meetings")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				text: i18n("Open the meeting link when a meeting starts")
+				description: i18n("For meetings you accepted or organize, not marked as ended.")
+				configKey: 'meetingAutoJoin'
+			}
+
+			FormCard.FormDelegateSeparator {}
+			FormConfigText {
+				label: i18n("Command when a meeting starts")
+				configKey: 'meetingStartCommand'
+				placeholderText: i18n("Eg: notify-send \"In a meeting: $1\"")
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigText {
+				label: i18n("Command when it ends")
+				configKey: 'meetingEndCommand'
+			}
+			FormCard.FormSectionText {
+				text: i18n("Run with sh: $1 is the meeting's title, $2 its link, $3 and $4 its start and end. For a meeting with guests or a link, not declined; it ends when it's over or marked as ended.")
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("Pause music and videos when joining a meeting")
+				description: i18n("Players that are playing (eg: Spotify, Elisa, a video in the browser), when a Join button opens a meeting or it opens when the meeting starts.")
+				configKey: 'meetingPauseMedia'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				id: meetingDoNotDisturb
+				text: i18n("Do Not Disturb during meetings")
+				description: i18n("Plasma's Do Not Disturb from the start until the end of a meeting with guests or a meeting link. Mark as Ended turns it off.")
+				configKey: 'meetingDoNotDisturb'
+			}
+			FormCard.FormDelegateSeparator { visible: meetingDoNotDisturb.checked }
+			FormConfigSwitch {
+				visible: meetingDoNotDisturb.checked
+				text: i18n("Only meetings I accepted")
+				configKey: 'meetingDoNotDisturbAcceptedOnly'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormCard.FormComboBoxDelegate {
+				id: meetAppCombo
+				text: i18n("Open Google Meet links in")
+				textRole: "text"
+				// Default browser, the Meet web apps found (scripts/find_meet_apps.py), a command.
+				model: [{ text: i18n("Default browser"), command: "" }]
+					.concat(page.meetApps.map(function(app) { return { text: app.name, command: app.command, authuser: app.authuser } }))
+					.concat([{ text: i18n("Other command…"), custom: true }])
+				function syncIndex() {
+					var command = String(page.configBridge.read("meetLinkCommand", "") || "")
+					if (!command) {
+						currentIndex = 0
+						return
+					}
+					if (!page.meetAppsLoaded) {
+						currentIndex = -1 // Not "Other command…" while the apps are still being looked up
+						return
+					}
+					for (var i = 1; i < model.length - 1; i++) {
+						if (model[i].command === command) {
+							currentIndex = i
+							return
+						}
+					}
+					currentIndex = model.length - 1
+				}
+				// Later: the inner ComboBox gets the new model after this handler and resets its index.
+				onModelChanged: Qt.callLater(syncIndex)
+				Component.onCompleted: syncIndex()
+				onActivated: function(index) {
+					var entry = model[index]
+					if (entry.custom) {
+						meetCommandField.forceActiveFocus()
+						return
+					}
+					page.configBridge.write("meetLinkCommand", entry.command)
+					meetCommandField.text = entry.command
+					// A web app brings its own account (or none); the browser keeps what's set.
+					if (index > 0) {
+						page.configBridge.write("meetLinkAuthUser", entry.authuser || "")
+						meetAuthUserField.text = entry.authuser || ""
+					}
+				}
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigText {
+				id: meetCommandField
+				visible: page.meetAppsLoaded && meetAppCombo.currentIndex === meetAppCombo.count - 1
+				label: i18n("Command")
+				configKey: 'meetLinkCommand'
+				placeholderText: "vivaldi-stable --app=%u"
+			}
+			FormCard.FormDelegateSeparator { visible: meetCommandField.visible }
+			FormConfigText {
+				id: meetAuthUserField
+				label: i18n("Google account")
+				configKey: 'meetLinkAuthUser'
+				placeholderText: i18n("Default")
+			}
+		}
+		FormCard.FormSectionText {
+			text: i18n("Join buttons open Google Meet links there; other meeting links open in the default browser. In a command, %u stands for the meeting link. Google account: its number (0, 1, …) or email, as in Google's account switcher; empty uses the app's default.")
+		}
+
+		//--- Other notifications: invitations, the daily agenda (DailyAgenda.js), what's left out
+		FormCard.FormHeader {
+			title: i18n("Other Notifications")
+		}
+		FormCard.FormCard {
+			FormConfigSwitch {
+				text: i18n("New invitations for today")
+				description: i18n("A notification for each meeting today you haven't answered yet, with Yes, Maybe and No.")
+				configKey: 'invitationNotificationEnabled'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				id: dailyAgendaEnabled
+				text: i18n("Today's events every morning")
+				description: i18n("A notification with today's events once a day, also when the computer is turned on later.")
+				configKey: 'dailyAgendaEnabled'
+			}
+			FormCard.FormDelegateSeparator { visible: dailyAgendaEnabled.checked }
+			// dailyAgendaTime: minutes since midnight, shown as a time.
+			FormCard.FormSpinBoxDelegate {
+				visible: dailyAgendaEnabled.checked
+				label: i18n("At")
+				value: page.configBridge.read("dailyAgendaTime", 480)
+				from: 0
+				to: 24 * 60 - 15
+				stepSize: 15
+				textFromValue: function(value, locale) {
+					return Shared.formatTime(new Date(2000, 0, 1, Math.floor(value / 60), value % 60), Qt.locale().timeFormat(Locale.ShortFormat))
+				}
+				valueFromText: function(text, locale) {
+					var match = /(\d{1,2})\D*(\d{2})?\s*(am|pm)?/i.exec(String(text))
+					if (!match) {
+						return 480
+					}
+					var hours = Number(match[1]) % 24
+					if (match[3] && match[3].toLowerCase() === 'pm' && hours < 12) {
+						hours += 12
+					} else if (match[3] && match[3].toLowerCase() === 'am' && hours === 12) {
+						hours = 0
+					}
+					return Math.min(24 * 60 - 1, hours * 60 + Number(match[2] || 0))
+				}
+				onValueChanged: page.configBridge.write("dailyAgendaTime", value) // See FormConfigSpin
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("Skip all-day events")
+				configKey: 'eventNotifySkipAllDay'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("Skip events I declined")
+				configKey: 'eventNotifySkipDeclined'
+			}
+			FormCard.FormDelegateSeparator {}
+			FormConfigSwitch {
+				text: i18n("Only calendars in the clock's countdown")
+				description: i18n("Reminders and starting events only of the calendars with the clock button on in the popup's calendar menu.")
+				configKey: 'eventNotifyClockCalendarsOnly'
+			}
+		}
+		FormCard.FormSectionText {
+			text: i18n("Popups and sounds for each kind of notification can also be set in System Settings > Notifications > Event Calendar.")
+		}
+	}
+}

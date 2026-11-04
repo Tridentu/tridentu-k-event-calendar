@@ -1,0 +1,727 @@
+.pragma library
+
+//--- Dates and times in the system's language. Qt 6's Qt.formatDate / formatTime / formatDateTime
+// always use English names (and an ISO date / a time with seconds for Locale.ShortFormat), so
+// "ddd, d MMM" showed "Tue, 27 Oct" in a Polish locale. format: a format string ("ddd d MMM",
+// "HH:mm") or a Locale format (Locale.ShortFormat, …); a date, or anything new Date() takes.
+function asDate(d) {
+	return d instanceof Date ? d : new Date(d)
+}
+function formatDateTime(d, format) {
+	return typeof format === 'number' ? asDate(d).toLocaleString(Qt.locale(), format) : asDate(d).toLocaleString(Qt.locale(), String(format))
+}
+function formatDate(d, format) {
+	return typeof format === 'number' ? asDate(d).toLocaleDateString(Qt.locale(), format) : asDate(d).toLocaleString(Qt.locale(), String(format))
+}
+function formatTime(d, format) {
+	return typeof format === 'number' ? asDate(d).toLocaleTimeString(Qt.locale(), format) : asDate(d).toLocaleString(Qt.locale(), String(format))
+}
+
+function openGoogleCalendarNewEventUrl(date) {
+	function dateString(year, month, day) {
+		var s = '' + year
+		s += (month < 10 ? '0' : '') + month
+		s += (day < 10 ? '0' : '') + day
+		return s
+	}
+
+	var nextDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+
+	var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+	var startDate = dateString(date.getFullYear(), date.getMonth() + 1, date.getDate())
+	var endDate = dateString(nextDay.getFullYear(), nextDay.getMonth() + 1, nextDay.getDate())
+	url += '&dates=' + startDate + '/' + endDate
+	openExternalUrl(url)
+}
+
+// Midnight at the start of the day of d.
+function startOfDay(d) {
+	return new Date(d.getFullYear(), d.getMonth(), d.getDate())
+}
+function isSameDate(a, b) {
+	return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+}
+function isDateEarlier(a, b) {
+	return a < startOfDay(b)
+}
+function isDateAfter(a, b) {
+	var c = new Date(b.getFullYear(), b.getMonth(), b.getDate() + 1) // midnight of next day after b
+	return a >= c
+}
+function dateTimeString(d) {
+	return d.toISOString()
+}
+function dateString(d) {
+	return d.toISOString().substr(0, 10)
+}
+function localeDateString(d) {
+	return formatDateTime(d, 'yyyy-MM-dd')
+}
+function isValidDate(d) {
+	if (d === null) {
+		return false
+	} else if (isNaN(d)) {
+		return false
+	} else {
+		return true
+	}
+}
+
+// The web links in raw text: each passed to linkHtml(url), which returns its HTML; the rest escaped.
+function linkify(raw, linkHtml) {
+	var rUrl = /https?:\/\/[^\s<>"]+/gi
+	var out = ''
+	var lastIndex = 0
+	var match
+	while ((match = rUrl.exec(raw)) !== null) {
+		var href = urlEnd(match[0])
+		out += escapeHtml(raw.slice(lastIndex, match.index)) + linkHtml(href)
+		lastIndex = match.index + href.length
+		rUrl.lastIndex = lastIndex
+	}
+	return out + escapeHtml(raw.slice(lastIndex))
+}
+// A URL found in text without the sentence's punctuation or quotes after it; a ")" stays when it
+// closes a "(" of the URL (eg: Wikipedia's Foo_(bar)).
+function urlEnd(url) {
+	for (;;) {
+		var trimmed = url.replace(/[.,;:!?'"\u2018\u2019\u201c\u201d\]]+$/, '')
+		if (/\)$/.test(trimmed) && (trimmed.split('(').length < trimmed.split(')').length)) {
+			trimmed = trimmed.slice(0, -1)
+		}
+		if (trimmed === url) {
+			return url
+		}
+		url = trimmed
+	}
+}
+// <a> for a web link (else the label alone). href: StyledText doesn't decode entities there (&amp;
+// would reach the browser); the URL pattern has no quotes or angle brackets, so it's safe as is.
+function anchor(href, labelHtml) {
+	return isSafeExternalUrl(href) ? '<a href="' + href + '">' + labelHtml + '</a>' : labelHtml
+}
+
+// Event description / task notes as safe StyledText: Google stores descriptions as HTML, which
+// could load remote images (tracking) or carry odd markup. Reduce it to text (keeping link
+// targets), escape it, then link URLs and keep line breaks.
+function renderText(text) {
+	if (typeof text === 'undefined' || text === null) {
+		return ''
+	}
+	var raw = String(text)
+	if (/<[a-z][^>]*>/i.test(raw)) {
+		raw = raw
+			// <a href="X">label</a>: keep the target, it's often the whole point (eg: a meeting link).
+			.replace(/<a\s[^>]*href\s*=\s*"([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi, function(m, href, label) {
+				var plainLabel = label.replace(/<[^>]*>/g, '')
+				return plainLabel && plainLabel !== href ? plainLabel + ' (' + href + ')' : href
+			})
+			.replace(/<br\s*\/?>/gi, '\n')
+			.replace(/<\/(p|div|li|h[1-6])>/gi, '\n')
+			.replace(/<[^>]*>/g, '')
+			.replace(/&nbsp;/g, ' ')
+			.replace(/&lt;/g, '<')
+			.replace(/&gt;/g, '>')
+			.replace(/&quot;/g, '"')
+			.replace(/&#39;/g, "'")
+			.replace(/&amp;/g, '&')
+	}
+	var out = linkify(raw, function(href) { return anchor(href, escapeHtml(href)) })
+	out = out.replace(/\r\n?/g, '\n').replace(/\n/g, '<br>')
+	// Remove leading new lines, as Google sometimes adds them.
+	out = out.replace(/^(<br>)+/, '')
+	return out
+}
+
+// Merge values of objB into objA
+function merge(objA, objB) {
+	var keys = Object.keys(objB)
+	for (var i = 0; i < keys.length; i++) {
+		var key = keys[i]
+		objA[key] = objB[key]
+	}
+}
+
+// Remove keys from objA that are missing in objB
+function removeMissingKeys(objA, objB) {
+	var keys = Object.keys(objA)
+	for (var i = 0; i < keys.length; i++) {
+		var key = keys[i]
+		if (typeof objB[key] === 'undefined') {
+			delete objA[key]
+		}
+	}
+}
+
+// Black or white text, whichever reads better on the given background color.
+function contrastTextColor(bg) {
+	var c = Qt.color(bg)
+	var luminance = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b
+	return luminance > 0.6 ? "#202124" : "#ffffff"
+}
+
+function plainText(html) {
+	return String(html || '')
+		.replace(/<br\s*\/?>/gi, '\n')
+		.replace(/<[^>]*>/g, '')
+		.replace(/&nbsp;/g, ' ')
+		.replace(/&amp;/g, '&')
+		.trim()
+}
+
+// Non-working day for the current locale. Qt.locale().weekDays uses 1..7 (Monday..Sunday),
+// Date.getDay() uses 0 for Sunday.
+function isWeekend(date) {
+	var workingDays = Qt.locale().weekDays
+	var day = date.getDay()
+	return workingDays.indexOf(day) < 0 && !(day === 0 && workingDays.indexOf(7) >= 0)
+}
+
+// Work week columns: the offsets (0..6) from a week's first day of its working days, in week
+// order. firstWeekday: Date.getDay() of the week's first day (0 = Sunday). workingDays:
+// Qt.locale().weekDays (1..7, Monday..Sunday); none given: Monday to Friday.
+function workDayOffsets(firstWeekday, workingDays) {
+	var days = workingDays && workingDays.length ? workingDays : [1, 2, 3, 4, 5]
+	var working = {}
+	for (var i = 0; i < days.length; i++) {
+		working[Number(days[i]) % 7] = true // 7 (Sunday) -> 0, like getDay()
+	}
+	var offsets = []
+	for (var offset = 0; offset < 7; offset++) {
+		if (working[(firstWeekday + offset) % 7]) {
+			offsets.push(offset)
+		}
+	}
+	return offsets.length ? offsets : [0, 1, 2, 3, 4, 5, 6]
+}
+
+// Consecutive runs of true values: [true, false, true, true] -> [{ first: 0, count: 1 }, { first: 2, count: 2 }]
+// Used to draw adjacent weekend days as one strip.
+function runsOf(flags) {
+	var runs = []
+	for (var i = 0; i < flags.length; i++) {
+		if (!flags[i]) {
+			continue
+		}
+		if (runs.length && runs[runs.length - 1].first + runs[runs.length - 1].count === i) {
+			runs[runs.length - 1].count++
+		} else {
+			runs.push({ first: i, count: 1 })
+		}
+	}
+	return runs
+}
+
+// Array or array-like list. Event data passed through a `var` signal argument (Qt 6.12+) has
+// array-like sequences for nested arrays, for which Array.isArray() is false.
+function isList(value) {
+	return !!value && typeof value !== 'string' && typeof value.length === 'number'
+}
+function toArray(value) {
+	return isList(value) ? Array.prototype.slice.call(value) : []
+}
+
+// The signed-in user's answer to an invitation: 'needsAction', 'tentative', 'declined', 'accepted',
+// or '' when not invited (no attendees, or the user organizes it). attendees is an array, or a
+// ListModel once the event has been put in one (agenda).
+function myResponse(eventItem) {
+	if (eventItem && typeof eventItem.attendeeResponse === 'string') {
+		return eventItem.attendeeResponse // Summed up beforehand (withPlainSummary)
+	}
+	return attendeeSummary(eventItem ? eventItem.attendees : null).response
+}
+
+// The attendees in one pass: response (myResponse) and guestCount (anyone besides the user, not
+// rooms). attendees: an array or a ListModel.
+function attendeeSummary(attendees) {
+	var summary = { response: '', guestCount: 0 }
+	if (!attendees) {
+		return summary
+	}
+	var isModel = typeof attendees.get === 'function' && typeof attendees.count === 'number'
+	var count = isModel ? attendees.count : (isList(attendees) ? attendees.length : 0)
+	for (var i = 0; i < count; i++) {
+		var attendee = isModel ? attendees.get(i) : attendees[i]
+		if (attendee && attendee.self) {
+			summary.response = attendee.organizer ? '' : String(attendee.responseStatus || '')
+		} else if (attendee && !attendee.resource) {
+			summary.guestCount++
+		}
+	}
+	return summary
+}
+
+// A copy of an event with its nested lists summed up as plain values, for a ListModel (the agenda):
+// read there, a nested ListModel's get() in a binding loops (Qt 6.12) and froze Plasma (issue #3).
+// attendeeResponse (myResponse), attendeeGuestCount, conflictTitlesText (conflictTitles, one per
+// line), meetingUrl / meetingLabel (meeting: MeetingLink.find's, or null). The widget's own fields
+// (EventFields.widgetFields): never sent to the server.
+function withPlainSummary(eventItem, meeting) {
+	var copy = Object.assign({}, eventItem)
+	var attendees = attendeeSummary(eventItem.attendees)
+	copy.attendeeResponse = attendees.response
+	copy.attendeeGuestCount = attendees.guestCount
+	copy.conflictTitlesText = conflictTitles(eventItem).join('\n')
+	copy.meetingUrl = meeting ? String(meeting.url || '') : ''
+	copy.meetingLabel = meeting ? String(meeting.label || '') : ''
+	return copy
+}
+
+// Left out of the views (and the panel's next meeting) when declined events are set to Hide.
+function isHiddenDeclined(eventItem, showDeclined) {
+	return !showDeclined && myResponse(eventItem) === 'declined'
+}
+
+// The popup's calendar menu (EventModel.getSelectedCalendars, [{ id, group, ... }]) in sections,
+// each entry's in its section: 0 the accounts' calendars (a group: Google, TickTick), 1 Akonadi's
+// (plasma_Events...), 2 the others (holidays, iCalendar files). In their order within a section.
+function calendarMenuSections(entries) {
+	function section(entry) {
+		if (entry.group) {
+			return 0
+		}
+		return String(entry.id).indexOf("plasma_Events") === 0 ? 1 : 2
+	}
+	var sections = [[], [], []]
+	;(entries || []).forEach(function(entry) {
+		entry.section = section(entry)
+		sections[entry.section].push(entry)
+	})
+	return sections[0].concat(sections[1], sections[2])
+}
+
+// Hidden with the popup header's calendar toggles (hiddenCalendarIds). A view filter: the events
+// are still fetched and their reminders still come.
+function isHiddenCalendar(calendarId, hiddenCalendarIds) {
+	if (!hiddenCalendarIds || !calendarId) {
+		return false
+	}
+	var id = String(calendarId)
+	// The Akonadi events were one calendar (plasma_Events) before they came by color
+	// (plasma_EventsColor_rrggbb): hidden then, all of them stay hidden.
+	var akonadiByColor = id.indexOf("plasma_EventsColor_") === 0
+	for (var i = 0; i < hiddenCalendarIds.length; i++) {
+		if (hiddenCalendarIds[i] === id || (akonadiByColor && hiddenCalendarIds[i] === "plasma_Events")) {
+			return true
+		}
+	}
+	return false
+}
+
+// Titles of the events this one overlaps (EventModel sets conflictsWith, see Conflicts.js). It holds
+// { summary } objects, not strings: a ListModel (agenda) drops plain strings from nested lists.
+function conflictTitles(eventItem) {
+	if (eventItem && typeof eventItem.conflictTitlesText === 'string') {
+		return eventItem.conflictTitlesText ? eventItem.conflictTitlesText.split('\n') : [] // withPlainSummary
+	}
+	var list = eventItem ? eventItem.conflictsWith : null
+	if (!list) {
+		return []
+	}
+	var isModel = typeof list.get === 'function' && typeof list.count === 'number'
+	var count = isModel ? list.count : (isList(list) ? list.length : 0)
+	var titles = []
+	for (var i = 0; i < count; i++) {
+		var entry = isModel ? list.get(i) : list[i]
+		if (entry) {
+			titles.push(String(entry.summary || ''))
+		}
+	}
+	return titles
+}
+
+// What an event is or has set, as small icons after its time: 'needsAction' (an invitation not
+// answered yet, see isAwaitingAnswer; EventBar shows its icon before the title instead),
+// 'outOfOffice' / 'focusTime' (Google event types, see EventTypes.js), 'conflict' (overlaps another meeting),
+// 'location', 'meeting' (a join link, found by the caller with MeetingLink.find), 'guests' (anyone
+// besides the user), 'repeat' and 'description'. Keys in hide are left out, eg: when the view
+// already shows the location. attendees may be an array or a ListModel (agenda).
+var EVENT_INDICATOR_ICONS = {
+	needsAction: 'dialog-question',
+	outOfOffice: 'im-user-away',
+	focusTime: 'audio-headphones',
+	conflict: 'dialog-warning',
+	location: 'mark-location',
+	meeting: 'call-start',
+	guests: 'group',
+	repeat: 'media-playlist-repeat',
+	description: 'view-list-text',
+}
+// Icons that fill their whole box (Breeze's pin) are drawn smaller to match the others.
+var EVENT_INDICATOR_SCALE = {
+	location: 0.75,
+}
+// Pixel size of an indicator icon: even, so a scaled 16 px icon stays crisp (16 -> 12).
+function eventIndicatorIconSize(key, size) {
+	var scale = EVENT_INDICATOR_SCALE[key] || 1
+	return scale === 1 ? size : 2 * Math.round(size * scale / 2)
+}
+// An invitation the user hasn't answered yet (the question mark icon), from Shared.myResponse.
+function isAwaitingAnswer(response) {
+	return response === 'needsAction'
+}
+function eventIndicatorKeys(eventItem, hasMeeting, hide) {
+	if (!eventItem) {
+		return []
+	}
+	hide = hide || {}
+	var attendees = typeof eventItem.attendeeGuestCount === 'number'
+		? { response: myResponse(eventItem), guestCount: eventItem.attendeeGuestCount } // withPlainSummary
+		: attendeeSummary(eventItem.attendees)
+	var response = attendees.response
+	var guestCount = attendees.guestCount
+	var keys = []
+	function add(key, isSet) {
+		if (isSet && !hide[key]) {
+			keys.push(key)
+		}
+	}
+	add('needsAction', isAwaitingAnswer(response))
+	add('outOfOffice', eventItem.eventType === 'outOfOffice')
+	add('focusTime', eventItem.eventType === 'focusTime')
+	add('conflict', conflictTitles(eventItem).length > 0)
+	add('location', !!eventItem.location)
+	add('meeting', !!hasMeeting)
+	add('guests', guestCount > 0)
+	add('repeat', !!eventItem.recurringEventId || !!(eventItem.recurrence && (eventItem.recurrence.length || eventItem.recurrence.count)))
+	add('description', !!String(eventItem.description || '').trim())
+	return keys
+}
+
+// Not (yet) a yes: shown outlined like Google Calendar, with stripes for maybe.
+function isUnconfirmedResponse(response) {
+	return response === 'needsAction' || response === 'tentative' || response === 'declined'
+}
+
+// Number identifying a calendar day, eg: for weather lookups. Month is 0-based like Date.
+function dayKey(d) {
+	return d.getFullYear() * 10000 + d.getMonth() * 100 + d.getDate()
+}
+
+// How many events of items are on each day from..to (dates, to excluded): { dayKey: count }. An
+// all-day event counts on each of its days (its end date excluded), a timed one on each day it
+// touches.
+function eventDayCounts(items, from, to) {
+	var counts = {}
+	forEachEventDay(items, from, to, function(key) {
+		counts[key] = (counts[key] || 0) + 1
+	})
+	return counts
+}
+// Calls fn(dayKey, item) for each day from..to an event of items is on (see eventDayCounts).
+function forEachEventDay(items, from, to, fn) {
+	var first = startOfDay(from)
+	var last = startOfDay(to)
+	;(items || []).forEach(function(item) {
+		if (!item || !item.startDateTime || !item.endDateTime) {
+			return
+		}
+		var start = new Date(item.startDateTime)
+		var end = new Date(item.endDateTime)
+		// The last day it's on: an all-day end is the next day; a timed one ending at midnight too.
+		var lastDay = end > start ? startOfDay(new Date(end.getTime() - 1)) : startOfDay(start)
+		var day = startOfDay(start)
+		if (day < first) {
+			day = new Date(first)
+		}
+		for (var n = 0; day <= lastDay && day < last && n < 62; n++) {
+			fn(dayKey(day), item)
+			day = addDays(day, 1)
+		}
+	})
+}
+// The colors of the events on each day from..to: { dayKey: { color: count } } ("": no color).
+function eventDayColors(items, from, to) {
+	var colors = {}
+	forEachEventDay(items, from, to, function(key, item) {
+		var color = item.backgroundColor ? String(item.backgroundColor) : ""
+		var day = colors[key] || (colors[key] = {})
+		day[color] = (day[color] || 0) + 1
+	})
+	return colors
+}
+// The colors of a day's dots (dots: how many): each of its colors once, the most used ones first,
+// as many as there are dots; dots left over have the most used color, next to its first one.
+function dotColors(colorCounts, dots) {
+	var colors = Object.keys(colorCounts || {}).sort(function(a, b) {
+		return colorCounts[b] - colorCounts[a] || (a < b ? -1 : a > b ? 1 : 0)
+	}).slice(0, dots)
+	var list = []
+	for (var i = 0; i < colors.length; i++) {
+		var repeat = i === 0 ? dots - colors.length + 1 : 1
+		for (var j = 0; j < repeat; j++) {
+			list.push(colors[i])
+		}
+	}
+	return list
+}
+// The days with an event (eventDayCounts), { dayKey: true }.
+function eventDayKeys(items, from, to) {
+	var counts = eventDayCounts(items, from, to)
+	var keys = {}
+	for (var key in counts) {
+		keys[key] = true
+	}
+	return keys
+}
+// The events of items starting from after (a date) on, earliest first, at most limit: [{ item, day }]
+// (day: its start's day). For "Up next" and the Day view's "Next: …".
+function upcomingEvents(items, after, limit) {
+	var from = new Date(after).getTime()
+	var list = (items || []).filter(function(item) {
+		return !!item && !!item.startDateTime && new Date(item.startDateTime).getTime() >= from
+	}).sort(function(a, b) {
+		return new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime()
+	})
+	return list.slice(0, limit > 0 ? limit : list.length).map(function(item) {
+		return { item: item, day: startOfDay(new Date(item.startDateTime)) }
+	})
+}
+
+function pad2(n) {
+	return (n < 10 ? '0' : '') + n
+}
+// "2026-10-19" of the local date of d (an all-day event's Google date).
+function localDateString(d) {
+	return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate())
+}
+// Local midnight of a "2026-10-19" date.
+function parseLocalDate(s) {
+	var p = s.split('-')
+	return new Date(+p[0], +p[1] - 1, +p[2])
+}
+// d moved by `days` calendar days, keeping its local time of day (also over a daylight saving change).
+function addDays(d, days) {
+	var r = new Date(d)
+	r.setDate(r.getDate() + days)
+	return r
+}
+
+// Before today (midnight).
+function isPastDay(d, now) {
+	return d < startOfDay(now)
+}
+
+function formatTemp(t) {
+	return isFinite(t) ? Math.round(t) + '°' : ''
+}
+
+// "09:45 – 10:00", format: a Qt time format, eg: appletConfig.timeFormat
+function formatTimeRange(start, end, format) {
+	return formatTime(start, format) + ' – ' + formatTime(end, format)
+}
+
+// Monochrome variant of a (weather) icon: readable on any background. Use with `fallback: name`.
+function symbolicIcon(name) {
+	return name ? name + '-symbolic' : ''
+}
+
+// Unset or empty string.
+function isEmpty(s) {
+	return typeof s === 'undefined' || s === null || s === ''
+}
+// Edit forms: a field changed (unset and empty count as equal). Loose != on purpose: '5' vs 5.
+function hasChanged(a, b) {
+	return a != b && !(isEmpty(a) && isEmpty(b))
+}
+
+//--- Location links
+function isUrl(text) {
+	return /^https?:\/\/\S+$/i.test(String(text || '').trim())
+}
+function escapeHtml(text) {
+	if (typeof text === 'undefined' || text === null) {
+		return ''
+	}
+	return String(text)
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;')
+}
+// Only web links are opened from event text (no file:, javascript:, custom schemes).
+function isSafeExternalUrl(url) {
+	return typeof url === 'string' && /^(https?):\/\/[^\s]+$/i.test(url.trim())
+}
+function openExternalUrl(url) {
+	if (!isSafeExternalUrl(url)) {
+		console.warn('[eventcalendar] Refusing to open unsafe URL', url)
+		return false
+	}
+	Qt.openUrlExternally(url.trim())
+	return true
+}
+// A mailto: link (eg: Guests.mailtoUrl) in the user's mail app. Nothing else, no spaces.
+function openMailtoUrl(url) {
+	if (typeof url !== 'string' || !/^mailto:[^\s]+$/i.test(url)) {
+		return false
+	}
+	Qt.openUrlExternally(url)
+	return true
+}
+// A URL location opens as is, anything else as a Google Maps search.
+function locationUrl(location) {
+	var text = String(location || '').trim()
+	if (isUrl(text)) {
+		return text
+	}
+	// Search path form: no '&' needed, and Maps pins the place it finds.
+	return 'https://www.google.com/maps/search/' + encodeURIComponent(text)
+}
+// Location as a link (for a Text with textFormat: Text.StyledText).
+// StyledText doesn't decode entities in href (&amp; would reach the browser): only quotes are escaped.
+function locationLink(location) {
+	var href = locationUrl(location).replace(/"/g, '%22')
+	return '<a href="' + href + '">' + escapeHtml(location) + '</a>'
+}
+
+//--- Links in a title (a task named after its ticket's URL)
+// A link's short name: a ticket's key (Jira "CSS-2175", Linear "ENG-12"), "repo#12" (GitHub and
+// GitHub Enterprise issues and pull requests, GitLab issues; "repo!12" for a merge request), else ''.
+function linkShortName(url) {
+	var u = String(url || '')
+	var m = u.match(/\/browse\/([A-Z][A-Z0-9_]*-\d+)(?:[\/?#]|$)/i) || u.match(/[?&]selectedIssue=([A-Z][A-Z0-9_]*-\d+)/i)
+		|| u.match(/^https?:\/\/linear\.app\/[^\/]+\/issue\/([A-Z][A-Z0-9]*-\d+)/i)
+	if (m) {
+		return m[1].toUpperCase()
+	}
+	m = u.match(/\/([^\/]+)\/-\/(issues|merge_requests)\/(\d+)(?:[\/?#]|$)/)
+	if (m) {
+		return m[1] + (m[2] === 'issues' ? '#' : '!') + m[3]
+	}
+	m = u.match(/^https?:\/\/[^\/]+\/[^\/]+\/([^\/]+)\/(?:issues|pull)\/(\d+)(?:[\/?#]|$)/)
+	if (m) {
+		return m[1] + '#' + m[2]
+	}
+	return ''
+}
+// The first web link in text, or ''.
+function firstLink(text) {
+	var m = String(text || '').match(/https?:\/\/[^\s<>"]+/i)
+	return m ? urlEnd(m[0]) : ''
+}
+// A title as shown: its ticket links by their short names (linkShortName), as plain text.
+function displayTitle(text) {
+	return String(text || '').replace(/https?:\/\/[^\s<>"]+/gi, function(found) {
+		var url = urlEnd(found)
+		var name = linkShortName(url)
+		return name ? name + found.slice(url.length) : found
+	})
+}
+// text with its web links as <a> (for a Text with textFormat: Text.StyledText): a ticket's link
+// shows its short name (linkShortName), others the URL; the rest escaped, line breaks kept. '' without
+// a link.
+function linkifiedText(text) {
+	text = String(text || '')
+	if (!firstLink(text)) {
+		return ''
+	}
+	return linkify(text, function(url) { return anchor(url, escapeHtml(linkShortName(url) || url)) })
+		.replace(/\r\n?/g, '\n').replace(/\n/g, '<br>').replace(/  /g, ' &nbsp;')
+}
+// text with its links' names (as linkifiedText's) in color, not clickable (a list row: a click opens
+// the row). '' without a link.
+function coloredLinkText(text, color) {
+	text = String(text || '')
+	if (!firstLink(text)) {
+		return ''
+	}
+	return linkify(text, function(url) {
+		return '<font color="' + String(color) + '">' + escapeHtml(linkShortName(url) || url) + '</font>'
+	})
+}
+
+//--- Event span ("All day", "14 – 16 Oct", "14 Oct 22:00 – 16 Oct 02:00")
+// Days an event covers. All-day events end at midnight the next day (exclusive); a timed event
+// counts every day it touches.
+function eventDayCount(e) {
+	var start = startOfDay(new Date(e.startDateTime))
+	var end = new Date(e.endDateTime)
+	var isAllDay = !!(e.start && e.start.date)
+	var last = startOfDay(new Date(Math.max(start.getTime(), end.getTime() - (isAllDay ? 1 : 0))))
+	if (!isAllDay && end.getTime() === last.getTime() && end > start) {
+		last.setDate(last.getDate() - 1) // Timed event ending exactly at midnight
+	}
+	return Math.round((last - start) / 86400000) + 1
+}
+// A Qt date format without its year, the word before it (es / pt / ca "'de'") and after it (ru
+// "'г'.", ja "年", ko "년"): "dddd, d MMMM yyyy" -> "dddd, d MMMM", "yyyy年M月d日dddd" -> "M月d日dddd",
+// "dddd, d 'de' MMMM 'de' yyyy" -> "dddd, d 'de' MMMM".
+function formatWithoutYear(format) {
+	return String(format).replace(/[\s,.\/-]*('[^']*'\s*)?y+\s*(年|년|'г'\.?)?[\s,.\/-]*/g, " ").replace(/\s+/g, " ").trim()
+}
+
+// Date format for a span: the year only when it isn't the current one (or the span crosses years).
+function spanDateFormat(a, b, now) {
+	var sameYear = a.getFullYear() === b.getFullYear() && a.getFullYear() === now.getFullYear()
+	return sameYear ? 'd MMM' : 'd MMM yyyy'
+}
+// { allDay, multiDay, days, startText, endText } for an event; the caller words it with i18n.
+// timeFormat: Qt time format for timed events (eg: appletConfig.timeFormat).
+function eventSpan(e, timeFormat, now) {
+	var isAllDay = !!(e.start && e.start.date)
+	var days = eventDayCount(e)
+	var start = new Date(e.startDateTime)
+	var end = new Date(e.endDateTime)
+	var result = { allDay: isAllDay, multiDay: days > 1, days: days, startText: '', endText: '' }
+	if (isAllDay) {
+		var last = new Date(end)
+		last.setDate(last.getDate() - 1)
+		var dateFormat = spanDateFormat(start, last, now || new Date())
+		result.startText = formatDate(start, dateFormat)
+		result.endText = formatDate(last, dateFormat)
+	} else if (days > 1) {
+		var timedFormat = spanDateFormat(start, end, now || new Date()) + ' ' + timeFormat
+		result.startText = formatDateTime(start, timedFormat)
+		result.endText = formatDateTime(end, timedFormat)
+	} else {
+		result.startText = formatTime(start, timeFormat)
+		result.endText = formatTime(end, timeFormat)
+	}
+	return result
+}
+
+// The same event in more than one calendar (a meeting in your calendar and a shared one, or a
+// calendar subscribed twice): { index: true } for the copies to leave out. Same iCalUID (else id)
+// and start, in other calendars: one calendar's copies are kept, the best one's: preferred(e) first
+// (eg: shown where it's used), then one you can edit, then one with your answer, then the first.
+// Copies within one calendar are separate events, never left out. Tasks are left alone.
+function duplicateEvents(events, preferred) {
+	function rank(e) {
+		return (preferred && preferred(e) ? 4 : 0) + (e.canEdit ? 2 : (myResponse(e) ? 1 : 0))
+	}
+	var groups = {} // key -> { best: index, calendars: { calendarId: [indexes] } }
+	var order = []
+	for (var i = 0; i < events.length; i++) {
+		var e = events[i]
+		if (!e || e.kind === 'tasks#task' || !(e.iCalUID || e.id)) {
+			continue
+		}
+		var start = new Date(e.startDateTime).getTime()
+		if (!isFinite(start)) {
+			continue
+		}
+		var key = String(e.iCalUID || e.id) + '|' + start
+		var group = groups[key]
+		if (!group) {
+			group = groups[key] = { best: i, calendars: {} }
+			order.push(key)
+		} else if (rank(e) > rank(events[group.best])) {
+			group.best = i
+		}
+		var calendarId = String(e.calendarId || '')
+		;(group.calendars[calendarId] = group.calendars[calendarId] || []).push(i)
+	}
+	var drop = {}
+	order.forEach(function(key) {
+		var group = groups[key]
+		var keep = String(events[group.best].calendarId || '')
+		for (var calendarId in group.calendars) {
+			if (calendarId !== keep) {
+				group.calendars[calendarId].forEach(function(index) { drop[index] = true })
+			}
+		}
+	})
+	return drop
+}

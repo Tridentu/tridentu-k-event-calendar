@@ -44,6 +44,21 @@ PlasmoidItem {
 		onMeetingAlertRequested: function(eventItem) { root.showMeetingAlert(eventItem) }
 	}
 
+	// The popup opened in a view (a notification's Show All / Show Tasks): after it opens in the
+	// Default view, this one.
+	function openPopupIn(view) {
+		root.expanded = true
+		Qt.callLater(function() {
+			var popupItem = root.fullRepresentationItem
+			if (popupItem && typeof popupItem.viewOffered === 'function' && popupItem.viewOffered(view)) {
+				popupItem.currentView = view
+				if (view === 'today') {
+					Qt.callLater(function() { popupItem.goToDay(new Date()) }) // Today, not the day last shown
+				}
+			}
+		})
+	}
+
 	//--- Full-screen meeting alert (UpcomingEvents.meetingAlertRequested), as the Fokus plasmoid's
 	// break overlay: one window per screen, made only while the alert is up (windows made at startup
 	// are a risk to plasmashell's start). Above panels and on every desktop through layer-shell when
@@ -334,29 +349,85 @@ PlasmoidItem {
 		}
 	}
 
+	// The panel's right-click menu: the next meeting first (a heading with its name and time, then
+	// what to do with it), then planning, then the clock's own actions. Plasma adds Configure.
+	readonly property var menuEvent: upcomingEvents.nextEvent
+	readonly property var menuMeetingLink: upcomingEvents.nextEventMeetingLink
+	readonly property bool menuHasTaskLists: !!eventModel && eventModel.getSelectedTaskLists().length > 0
+	function openPopupAndCall(fn) {
+		root.expanded = true
+		Qt.callLater(function() {
+			var popupItem = root.fullRepresentationItem
+			if (popupItem) {
+				fn(popupItem)
+			}
+		})
+	}
+	// Copies text (QML has no clipboard API: a TextEdit made for it).
+	function copyToClipboard(text) {
+		var edit = Qt.createQmlObject('import QtQuick; TextEdit { visible: false }', root)
+		edit.text = text
+		edit.selectAll()
+		edit.copy()
+		edit.destroy()
+	}
 	Plasmoid.contextualActions: [
+		// "Design review · in 12 min" / "· 25 min left": a heading.
 		PlasmaCore.Action {
-			text: upcomingEvents.nextEventMeetingLink && upcomingEvents.nextEvent
-				? i18nc("%1 = Google Meet, Zoom, ..., %2 = event title, %3 = when", "Join %1: %2 (%3)",
-					upcomingEvents.nextEventMeetingLink.label, upcomingEvents.nextEvent.summary,
-					upcomingEvents.formatTooltipStart(upcomingEvents.nextEvent, timeModel.currentTime))
+			isSeparator: true
+			visible: !!root.menuEvent
+			text: root.menuEvent
+				? i18nc("%1 = event title, %2 = in 12 min / 25 min left", "%1 · %2", root.menuEvent.summary,
+					upcomingEvents.nextEventInProgress
+						? i18ncp("time left in the current meeting", "%1 min left", "%1 min left", upcomingEvents.nextEventMinutesLeft)
+						: upcomingEvents.nextEventMinutesUntil < 60
+						? i18ncp("meeting starts in", "in %1 min", "in %1 min", Math.max(1, upcomingEvents.nextEventMinutesUntil))
+						: upcomingEvents.formatTooltipStart(root.menuEvent, timeModel.currentTime))
 				: ""
+		},
+		PlasmaCore.Action {
+			text: root.menuMeetingLink ? i18nc("%1 = Google Meet, Zoom, ...", "Join %1", root.menuMeetingLink.label) : ""
 			icon.name: "call-start"
-			visible: !!upcomingEvents.nextEventMeetingLink
+			visible: !!root.menuMeetingLink
 			onTriggered: upcomingEvents.joinNextEvent()
 		},
 		PlasmaCore.Action {
-			text: upcomingEvents.nextEventInProgress && upcomingEvents.nextEvent
-				? i18nc("%1 = event title", "Mark “%1” as Ended", upcomingEvents.nextEvent.summary)
-				: ""
+			text: i18n("Copy Meeting Link")
+			icon.name: "edit-copy"
+			visible: !!root.menuMeetingLink
+			onTriggered: root.copyToClipboard(root.menuMeetingLink.url)
+		},
+		PlasmaCore.Action {
+			text: i18n("Mute Notifications")
+			icon.name: "notifications-disabled"
+			visible: !!root.menuEvent
+			onTriggered: upcomingEvents.setMuted(root.menuEvent, true)
+		},
+		PlasmaCore.Action {
+			text: i18n("Mark as Ended")
 			icon.name: "dialog-ok"
-			visible: upcomingEvents.nextEventInProgress
-			onTriggered: upcomingEvents.markEnded(upcomingEvents.nextEvent)
+			visible: !!root.menuEvent && upcomingEvents.nextEventInProgress
+			onTriggered: upcomingEvents.markEnded(root.menuEvent)
+		},
+		PlasmaCore.Action {
+			isSeparator: true
+			visible: !!root.menuEvent
 		},
 		PlasmaCore.Action {
 			text: i18n("New Event…")
 			icon.name: "list-add"
 			onTriggered: root.openPopupAndNewEvent()
+		},
+		PlasmaCore.Action {
+			text: i18n("New Task…")
+			icon.name: "view-task-add"
+			visible: root.menuHasTaskLists
+			onTriggered: root.openPopupAndCall(function(popupItem) { popupItem.newTask(timeModel.currentTime, "") })
+		},
+		PlasmaCore.Action {
+			text: i18n("Go to Date…")
+			icon.name: "go-jump"
+			onTriggered: root.openPopupAndCall(function(popupItem) { popupItem.openGoToDate() })
 		},
 		PlasmaCore.Action {
 			text: i18n("Import Events…")
@@ -376,7 +447,7 @@ PlasmoidItem {
 		PlasmaCore.Action {
 			text: i18n("Refresh")
 			icon.name: "view-refresh"
-			onTriggered: logic.update()
+			onTriggered: logic.reload()
 		},
 		PlasmaCore.Action {
 			id: clipboardAction

@@ -1,0 +1,185 @@
+import QtQuick
+import QtQuick.Controls as QQC2
+import org.kde.kirigami as Kirigami
+
+import "Shared.js" as Shared
+
+Item {
+	id: agendaView
+
+	signal newEventFormOpened(var agendaItem, var calendarSelector)
+	signal submitNewEventForm(string calendarId, var date, string text)
+	// Scrolled to the end: the next month below (Logic.loadMoreAgenda).
+	signal endReached()
+	// The first and last day in sight (the small month beside it marks them).
+	property date topDate: new Date(NaN)
+	// The header's title (#16): the day at the top of the list, following the scroll, in the
+	// locale's long format; the year only when it's another one.
+	readonly property string title: {
+		var day = isNaN(topDate.getTime()) ? timeModel.currentTime : topDate
+		var format = Qt.locale().dateFormat(Locale.LongFormat)
+		if (day.getFullYear() === timeModel.currentTime.getFullYear()) {
+			format = Shared.formatWithoutYear(format)
+		}
+		return Shared.formatDate(day, format)
+	}
+	property date bottomDate: new Date(NaN)
+	function rowAt(y) {
+		var index = agendaList.indexAt(0, y)
+		if (index < 0) {
+			index = agendaList.indexAt(0, y + agendaList.spacing + 1)
+		}
+		return index >= 0 && index < root.agendaModel.count ? index : -1
+	}
+	function dateAt(y) {
+		var index = rowAt(y)
+		var agendaItem = index >= 0 ? root.agendaModel.get(index) : null
+		return agendaItem && agendaItem.date ? agendaItem.date : null
+	}
+	function updateTopDate() {
+		var top = dateAt(agendaList.contentY + 1)
+		var bottom = dateAt(agendaList.contentY + agendaList.height - agendaList.spacing - 2) || (agendaList.count > 0 ? root.agendaModel.get(agendaList.count - 1).date : null)
+		if (top && top.getTime() !== topDate.getTime()) {
+			topDate = top
+		}
+		if (bottom && bottom.getTime() !== bottomDate.getTime()) {
+			bottomDate = bottom
+		}
+	}
+
+	// The days in a ListView: only the days in sight (and a screen's worth around them) are
+	// built, not the whole month at once (a busy calendar has hundreds of event tiles; building
+	// them all froze Plasma, issue #3). The thin scroll bar over the days' right edge.
+	ListView {
+		id: agendaList
+		anchors.fill: parent
+		clip: true
+		model: root.agendaModel
+		spacing: appletConfig.islands ? appletConfig.cardGap : appletConfig.agendaDaySpacing
+		cacheBuffer: Math.max(0, height)
+		boundsBehavior: Flickable.StopAtBounds
+		// Days added at the end (the next month, by scrolling there) fade in.
+		add: Transition {
+			NumberAnimation { property: "opacity"; from: 0; to: 1; duration: appletConfig.longDuration; easing.type: Easing.OutCubic }
+		}
+		// At the end after scrolling (not a short list that fits): the next month.
+		onContentYChanged: agendaView.updateTopDate()
+		onCountChanged: {
+			Qt.callLater(agendaView.updateTopDate)
+			Qt.callLater(agendaView.follow)
+		}
+		onContentHeightChanged: Qt.callLater(agendaView.follow)
+		onMovementStarted: agendaView.stopFollowing()
+		onHeightChanged: Qt.callLater(agendaView.updateTopDate)
+		onAtYEndChanged: {
+			if (atYEnd && contentHeight > height && count > 0) {
+				agendaView.endReached()
+			}
+		}
+		// Not flicked with the mouse (as Plasma's ScrollView); wheel and touchpad as there.
+		interactive: Kirigami.Settings.hasTransientTouchInput
+		QQC2.ScrollBar.vertical: OverlayScrollBar {
+			onPressedChanged: if (pressed) agendaView.stopFollowing()
+		}
+		Kirigami.WheelHandler {
+			target: agendaList
+			filterMouseEvents: true
+			keyNavigationEnabled: false
+			onWheel: agendaView.stopFollowing()
+		}
+
+		delegate: AgendaListItem {
+			// As wide as the list. Not width: parent.width, the parent is null while a delegate
+			// is removed.
+			width: ListView.view ? ListView.view.width : 0
+		}
+	}
+
+	// TODO: properly detect when all events have completed loading
+	Timer {
+		id: scrollToIndexTimer
+		property int itemIndex: -1
+		interval: 400 // Give events time to populate
+		onTriggered: updatePosition()
+		function scrollTo(i) {
+			itemIndex = i
+			restart()
+		}
+		function updatePosition() {
+			agendaList.positionViewAtIndex(itemIndex, ListView.Beginning)
+		}
+	}
+
+	// The header's arrows and Today in the agenda (#16): day by day through the listed days (those
+	// with something on them). false: at the first one (the popup goes a month back then).
+	function goPrevious() {
+		stopFollowing()
+		var i = rowAt(agendaList.contentY + 1) // Now: the list may have changed since the last scroll
+		if (i <= 0) {
+			return false
+		}
+		agendaList.positionViewAtIndex(i - 1, ListView.Beginning)
+		return true
+	}
+	function goNext() {
+		stopFollowing()
+		var i = rowAt(agendaList.contentY + 1)
+		if (i >= 0 && i + 1 < root.agendaModel.count) {
+			agendaList.positionViewAtIndex(i + 1, ListView.Beginning)
+		} else {
+			agendaList.positionViewAtEnd() // More months load at the end (endReached)
+		}
+	}
+	function goToday() {
+		scrollToDate(timeModel.currentTime)
+	}
+
+	// A day scrolled to (scrollToDate) stays at the top while the list settles: it fills in parts,
+	// the days take their real height only as they're built (a long description: much taller, seconds
+	// later), their weather comes later; each moved the day away. Until the user scrolls (wheel,
+	// dragging, the scroll bar, the header's arrows) or another day is scrolled to.
+	property var followDate: null
+	function stopFollowing() {
+		followDate = null
+	}
+	function follow() {
+		if (!followDate) {
+			return
+		}
+		positionAtDate(followDate)
+	}
+	Connections {
+		target: root.agendaModel
+		function onPopulatingChanged() {
+			if (!root.agendaModel.populating) {
+				Qt.callLater(agendaView.follow)
+			}
+		}
+	}
+
+	function scrollToDate(date) {
+		followDate = date
+		positionAtDate(date)
+	}
+	function positionAtDate(date) {
+		for (var i = 0; i < root.agendaModel.count; i++) {
+			var agendaItem = root.agendaModel.get(i)
+			if (Shared.isSameDate(date, agendaItem.date)) {
+				agendaList.positionViewAtIndex(i, ListView.Beginning)
+				scrollToIndexTimer.scrollTo(i)
+				return
+			} else if (Shared.isDateEarlier(date, agendaItem.date)) {
+				// If the date is smaller than the current agendaItem.date, scroll to the previous agendaItem.
+				if (i > 0) {
+					agendaList.positionViewAtIndex(i-1, ListView.Beginning)
+					scrollToIndexTimer.scrollTo(i-1)
+				} else {
+					agendaList.positionViewAtBeginning()
+				}
+				return
+			}
+		}
+		// If the date is greater than any item in the agenda, scroll to the bottom.
+		agendaList.positionViewAtEnd()
+	}
+}

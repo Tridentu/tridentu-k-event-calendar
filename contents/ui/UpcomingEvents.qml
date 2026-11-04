@@ -10,6 +10,7 @@ import "MeetingRules.js" as MeetingRules
 import "Shared.js" as Shared
 import "Tasks.js" as Tasks
 import "./calendars"
+import "./lib"
 
 CalendarManager {
 	id: upcomingEvents
@@ -144,7 +145,7 @@ CalendarManager {
 		}
 
 		notificationManager.notify({
-			appName: i18n("Event Calendar"),
+			appName: i18n("Event Calendar NG"),
 			appIcon: "view-calendar-upcoming-events",
 			event: args.event,
 			expireTimeout: args.expireTimeout,
@@ -256,13 +257,14 @@ CalendarManager {
 		var dayKey = DailyAgenda.dayKey(now)
 		plasmoid.configuration.dailyAgendaDay = dayKey
 		var items = allEventItems()
-		var agenda = DailyAgenda.summarize(items, now, 5)
+		// Short: a few lines, "+N more", and Show All (the Day view) for the rest.
+		var agenda = DailyAgenda.summarize(items, now, 3)
 		// Today's and overdue tasks: all of them with dailyAgendaTasks, else the morning task
 		// summary (checkTaskSummary), merged here so there's one notification.
 		var tasks = null
 		var withTasks = !!plasmoid.configuration.dailyAgendaTasks
 		if (withTasks || plasmoid.configuration.taskRemindersEnabled) {
-			tasks = DailyAgenda.summarizeTasks(items, now, 3, withTasks)
+			tasks = DailyAgenda.summarizeTasks(items, now, 2, withTasks)
 			plasmoid.configuration.taskSummaryDay = dayKey
 		}
 		logger.log('notification: daily agenda,', agenda.count, 'events,', tasks ? tasks.count : 0, 'tasks') // No titles in the log
@@ -288,7 +290,7 @@ CalendarManager {
 			lines = lines.concat(taskSummaryLines(tasks))
 		}
 		notificationManager.notify({
-			appName: i18n("Event Calendar"),
+			appName: i18n("Event Calendar NG"),
 			appIcon: "view-calendar-day",
 			event: 'dailyAgenda',
 			expireTimeout: -1,
@@ -296,10 +298,10 @@ CalendarManager {
 				: hasTasks ? taskSummaryTitle(tasks)
 				: i18n("Nothing planned today"),
 			body: lines.join('<br />'),
-			actions: ['agenda,' + i18n("Open Agenda")],
+			actions: ['all,' + i18n("Show All")],
 		}, function(actionId) {
-			if (actionId === 'default' || actionId === 'agenda') {
-				root.expanded = true
+			if (actionId === 'default' || actionId === 'all') {
+				root.openPopupIn('today') // The Day view: today's events and tasks
 			}
 		})
 	}
@@ -364,6 +366,7 @@ CalendarManager {
 			return
 		}
 		var key = meetingKey(eventItem)
+		startMeetingCommand(eventItem, key)
 		// The notification, full screen: a timed meeting (with a video link), not declined, not of a
 		// calendar left out of the clock's countdown.
 		// Settings > Events > When an Event Starts: the notification, full screen.
@@ -386,6 +389,64 @@ CalendarManager {
 			}
 		}
 		startDoNotDisturb(eventItem, sent, now)
+	}
+
+	//--- Your commands at a meeting's start and end (Settings > Events > Meetings), like MeetingBar's
+	// scripts: a meeting is a timed event with guests or a link, not declined (as for Do Not
+	// Disturb). The event goes to the command as arguments ($1 title, $2 link, $3 start, $4 end, ISO),
+	// never into its text: sh -c 'command' eventcalendar "$title" … Nothing about it in the log.
+	property var commandRunner: ExecUtil {}
+	property var commandMeetings: ({}) // key -> { end: ms, argv: [...] }: started, end command due
+	function meetingCommandArgs(eventItem) {
+		var link = MeetingLink.find(eventItem)
+		return [String(eventItem.summary || ''), link ? link.url : '',
+			new Date(eventItem.startDateTime).toISOString(), new Date(eventItem.endDateTime).toISOString()]
+	}
+	function runMeetingCommand(command, args) {
+		command = String(command || '').trim()
+		if (!command) {
+			return
+		}
+		commandRunner.execArgv(['sh', '-c', command, 'eventcalendar'].concat(args), function(cmd, exitCode) {
+			if (exitCode !== 0) {
+				logger.log('meeting command: exit code', exitCode)
+			}
+		})
+	}
+	function startMeetingCommand(eventItem, key) {
+		var start = plasmoid.configuration.meetingStartCommand
+		var end = plasmoid.configuration.meetingEndCommand
+		if ((!start && !end) || key in commandMeetings) {
+			return
+		}
+		if (!MeetingRules.isDoNotDisturbMeeting(eventItem, !!MeetingLink.find(eventItem), false)) {
+			return
+		}
+		var args = meetingCommandArgs(eventItem)
+		var running = Object.assign({}, commandMeetings)
+		running[key] = { end: new Date(eventItem.endDateTime).getTime(), args: args }
+		commandMeetings = running
+		logger.log('meeting command: start') // No title in the log
+		runMeetingCommand(start, args)
+	}
+	function endMeetingCommand(key) {
+		if (!(key in commandMeetings)) {
+			return
+		}
+		var args = commandMeetings[key].args
+		var running = Object.assign({}, commandMeetings)
+		delete running[key]
+		commandMeetings = running
+		logger.log('meeting command: end')
+		runMeetingCommand(plasmoid.configuration.meetingEndCommand, args)
+	}
+	function checkMeetingCommandEnds() {
+		var now = timeModel.currentTime.getTime()
+		for (var key in commandMeetings) {
+			if (commandMeetings[key].end <= now) {
+				endMeetingCommand(key)
+			}
+		}
 	}
 
 	//--- Do Not Disturb during meetings (FocusMode.qml): at the start, and on startup / sync for a
@@ -509,11 +570,11 @@ CalendarManager {
 			actions.push('snooze,' + i18np("Snooze 1 minute", "Snooze %1 minutes", upcomingEvents.snoozeMinutes))
 		}
 		notificationManager.notify({
-			appName: i18n("Event Calendar"),
+			appName: i18n("Event Calendar NG"),
 			appIcon: "view-task",
 			event: 'taskReminder',
 			expireTimeout: upcomingEvents.reminderExpireTimeout(),
-			summary: task.summary || task.title || '',
+			summary: Shared.displayTitle(task.summary || task.title || ''),
 			body: Shared.escapeHtml(taskDueText(task)),
 			soundFile: plasmoid.configuration.eventReminderSfxEnabled ? plasmoid.configuration.eventReminderSfxPath : '',
 			actions: actions,
@@ -579,7 +640,7 @@ CalendarManager {
 			return
 		}
 		plasmoid.configuration.taskSummaryDay = DailyAgenda.dayKey(now)
-		var tasks = DailyAgenda.summarizeTasks(allEventItems(), now, 3, false)
+		var tasks = DailyAgenda.summarizeTasks(allEventItems(), now, 2, false)
 		logger.log('notification: task summary,', tasks.count, 'tasks') // No titles in the log
 		if (tasks.count > 0) {
 			sendTaskSummaryNotification(tasks)
@@ -601,7 +662,7 @@ CalendarManager {
 	// The titles (escaped) and "+N more".
 	function taskSummaryLines(tasks) {
 		var lines = tasks.titles.map(function(title) {
-			return Shared.escapeHtml(title)
+			return Shared.escapeHtml(Shared.displayTitle(title))
 		})
 		if (tasks.more > 0) {
 			lines.push(i18ncp("task summary, more tasks", "+%1 more", "+%1 more", tasks.more))
@@ -611,15 +672,16 @@ CalendarManager {
 
 	function sendTaskSummaryNotification(tasks) {
 		notificationManager.notify({
-			appName: i18n("Event Calendar"),
+			appName: i18n("Event Calendar NG"),
 			appIcon: "view-task",
 			event: 'taskReminder',
 			expireTimeout: -1,
 			summary: taskSummaryTitle(tasks),
 			body: taskSummaryLines(tasks).join('<br />'),
+			actions: ['tasks,' + i18n("Show Tasks")],
 		}, function(actionId) {
-			if (actionId === 'default') {
-				root.expanded = true
+			if (actionId === 'default' || actionId === 'tasks') {
+				root.openPopupIn('tasks')
 			}
 		})
 	}
@@ -643,6 +705,7 @@ CalendarManager {
 		return !!endedEvents[endedKey(eventItem)]
 	}
 	function markEnded(eventItem) {
+		endMeetingCommand(meetingKey(eventItem)) // Its end command now, not at the planned end
 		var now = timeModel.currentTime.getTime()
 		var kept = {}
 		for (var key in endedEvents) {
@@ -800,6 +863,7 @@ CalendarManager {
 
 	function tick() {
 		checkForEventsStarting()
+		checkMeetingCommandEnds()
 		checkDailyAgenda()
 		checkTaskSummary()
 		updateNextEvent()

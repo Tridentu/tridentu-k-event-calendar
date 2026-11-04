@@ -1,0 +1,141 @@
+// Version 5
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import "ConfigUtils.js" as ConfigUtils
+
+/*
+** Example:
+**
+ConfigComboBox {
+	configKey: "appDescription"
+	model: [
+		{ value: "a", text: i18n("A") },
+		{ value: "b", text: i18n("B") },
+		{ value: "c", text: i18n("C") },
+	]
+}
+ConfigComboBox {
+	configKey: "appDescription"
+	isPopulated: false
+	onPopulate: {
+		model = [
+			{ value: "a", text: i18n("A") },
+			{ value: "b", text: i18n("B") },
+			{ value: "c", text: i18n("C") },
+		]
+	}
+}
+*/
+RowLayout {
+	id: configComboBox
+
+	property string configKey: ''
+	readonly property var currentItem: comboBox.model[comboBox.currentIndex]
+	readonly property string value: currentItem ? currentItem[valueRole] : ""
+	property var configBridge: null
+	readonly property string configValue: {
+		if (!configKey) {
+			return ""
+		}
+		if (configBridge) {
+			var bridged = configBridge.read(configKey, "")
+			return (bridged === undefined || bridged === null) ? "" : String(bridged)
+		}
+		if (typeof plasmoid !== "undefined" && plasmoid.configuration) {
+			var directValue = plasmoid.configuration[configKey]
+			return (directValue === undefined || directValue === null) ? "" : String(directValue)
+		}
+		return ""
+	}
+	onConfigValueChanged: {
+		if (!comboBox.focus && value != configValue) {
+			selectValue(configValue)
+		}
+	}
+
+	property alias textRole: comboBox.textRole
+	property alias valueRole: comboBox.valueRole
+	property alias model: comboBox.model
+
+	property alias before: labelBefore.text
+	property alias after: labelAfter.text
+
+	signal populate()
+	property bool isPopulated: true
+
+	Component.onCompleted: {
+		configBridge = ConfigUtils.findBridge(configComboBox)
+		populate()
+		selectValue(configValue)
+	}
+
+	Label {
+		id: labelBefore
+		text: ""
+		visible: text
+	}
+
+	ComboBox {
+		id: comboBox
+		textRole: "text" // Doesn't autodeduce from model if we manually populate it
+		valueRole: "value"
+
+		model: []
+
+		onCurrentIndexChanged: {
+			if (typeof model !== 'number' && 0 <= currentIndex && currentIndex < count) {
+				var item = model[currentIndex]
+				if (typeof item !== "undefined") {
+					var val = item[valueRole]
+					if (configKey && (typeof val !== "undefined") && isPopulated) {
+						if (configBridge) {
+							configBridge.write(configKey, val)
+						} else if (typeof plasmoid !== "undefined" && plasmoid.configuration) {
+							plasmoid.configuration[configKey] = val
+							if (typeof kcm !== "undefined") {
+								kcm.needsSave = true
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	Label {
+		id: labelAfter
+		text: ""
+		visible: text
+	}
+
+	function size() {
+		if (typeof model === "number") {
+			return model
+		} else if (typeof model.count === "number") {
+			return model.count
+		} else if (typeof model.length === "number") {
+			return model.length
+		} else {
+			return 0
+		}
+	}
+
+	function findValue(val) {
+		for (var i = 0; i < size(); i++) {
+			if (model[i][valueRole] == val) {
+				return i
+			}
+		}
+		return -1
+	}
+
+	function selectValue(val) {
+		var index = findValue(val)
+		if (index >= 0) {
+			comboBox.currentIndex = index
+		}
+	}
+}
